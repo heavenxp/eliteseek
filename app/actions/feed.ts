@@ -43,6 +43,31 @@ export async function toggleLike(postId: string): Promise<FeedActionResult> {
   return null;
 }
 
+export async function toggleFollow(followingId: string): Promise<FeedActionResult> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "Not authenticated" };
+  if (user.id === followingId) return { error: "Cannot follow yourself" };
+
+  const { data: existing } = await supabase
+    .from("follows")
+    .select("follower_id")
+    .eq("follower_id", user.id)
+    .eq("following_id", followingId)
+    .maybeSingle();
+
+  if (existing) {
+    await supabase.from("follows").delete()
+      .eq("follower_id", user.id)
+      .eq("following_id", followingId);
+  } else {
+    await supabase.from("follows").insert({ follower_id: user.id, following_id: followingId });
+  }
+
+  revalidatePath("/feed");
+  return null;
+}
+
 export async function createComment(postId: string, content: string): Promise<FeedActionResult> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();

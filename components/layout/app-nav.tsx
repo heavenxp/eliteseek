@@ -22,7 +22,7 @@ const COMPANION_NAV = [
   { label: "Browse", href: "/browse", icon: "eye" },
   { label: "Availability", href: "/companion/posts", icon: "calendar" },
   { label: "Bookings", href: "/companion/bookings", icon: "check" },
-  { label: "Earnings", href: "/account/earnings", icon: "diamond" },
+  { label: "Requests", href: "/companion/access-requests", icon: "lock" },
 ];
 
 export function AppNav({ user }: { user: NavUser }) {

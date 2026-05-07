@@ -105,6 +105,8 @@ export default async function HostProfilePage({
 
   const lockStatus = companion.visibility as "public" | "locked" | "elite_only";
 
+  // Unauthenticated guests can only see public profiles
+  const isGuest = !user;
   const isFullyVisible =
     isOwner ||
     lockStatus === "public" ||
@@ -267,16 +269,20 @@ export default async function HostProfilePage({
       <div className="relative mx-auto max-w-5xl px-4 pb-16 pt-8 md:px-6">
         {/* Lock gate overlay */}
         {!isFullyVisible && (
-          <LockGate
-            companionName={displayName}
-            username={username}
-            lockStatus={lockStatus}
-            profileUnlockFee={companion.profile_unlock_fee}
-            companionId={companion.id}
-            accessRequestStatus={accessRequestStatus}
-            isEliteBlocked={isEliteBlocked}
-            clientTier={clientMembershipTier}
-          />
+          isGuest ? (
+            <GuestLockGate username={username} lockStatus={lockStatus} />
+          ) : (
+            <LockGate
+              companionName={displayName}
+              username={username}
+              lockStatus={lockStatus}
+              profileUnlockFee={companion.profile_unlock_fee}
+              companionId={companion.id}
+              accessRequestStatus={accessRequestStatus}
+              isEliteBlocked={isEliteBlocked}
+              clientTier={clientMembershipTier}
+            />
+          )
         )}
 
         {/* Visible content */}
@@ -549,7 +555,52 @@ export default async function HostProfilePage({
   );
 }
 
-// ── Lock Gate component ─────────────────────────────────────────────────────
+// ── Guest lock gate ─────────────────────────────────────────────────────────
+
+function GuestLockGate({
+  username,
+  lockStatus,
+}: {
+  username: string;
+  lockStatus: "public" | "locked" | "elite_only";
+}) {
+  return (
+    <div className="relative overflow-hidden rounded-2xl border border-[rgba(212,175,55,0.18)]">
+      <div className="companion-placeholder h-48 w-full blur-md" style={{ opacity: 0.4 }} />
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-[rgba(8,8,16,0.75)] px-6 py-10 text-center backdrop-blur-md">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[rgba(212,175,55,0.3)] bg-[rgba(8,8,16,0.8)]">
+          <Icon name="lock" className="h-7 w-7 text-gold/70" />
+        </div>
+        <p className="text-2xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+          {lockStatus === "elite_only" ? "Elite Members Only" : `@${username}'s profile is locked`}
+        </p>
+        <p className="max-w-sm text-sm text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          {lockStatus === "elite_only"
+            ? "Create an account and upgrade to Elite membership to access this profile."
+            : "Sign in to unlock this profile or request free access."}
+        </p>
+        <div className="flex flex-wrap justify-center gap-3">
+          <a
+            href="/signup"
+            className="btn-gold rounded-xl px-8 py-2.5 text-sm"
+            style={{ fontFamily: "var(--font-dm-sans)" }}
+          >
+            Join EliteSeek
+          </a>
+          <a
+            href="/login"
+            className="btn-ghost rounded-xl px-6 py-2.5 text-sm"
+            style={{ fontFamily: "var(--font-dm-sans)" }}
+          >
+            Sign in
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Authenticated lock gate ──────────────────────────────────────────────────
 
 function LockGate({
   companionName,

@@ -7,7 +7,7 @@ const CATEGORY_LABELS: Record<AvailabilityCategory, string> = {
   private_dining: "Private Dining",
   business_coaching: "Business Coaching",
   social_coaching: "Social Coaching",
-  travel_companion: "Travel Elite Host",
+  travel_companion: "Travel Experience",
   event_plus_one: "Event Plus-One",
   yacht_luxury: "Yacht / Luxury Event",
   gallery_art: "Gallery & Art Event",

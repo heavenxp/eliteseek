@@ -1,9 +1,26 @@
 import { Suspense } from "react";
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { CompanionCard } from "@/components/browse/companion-card";
 import { BrowseShell } from "@/components/browse/browse-shell";
 import { Pagination } from "@/components/browse/pagination";
 import type { CompanionCard as CompanionCardType } from "@/lib/database.types";
+
+export const metadata: Metadata = {
+  title: "Browse Elite Hosts — EliteSeek",
+  description: "Discover and book verified Elite Hosts for private dinners, travel, events, and exclusive social experiences.",
+  openGraph: {
+    title: "Browse Elite Hosts — EliteSeek",
+    description: "Discover handpicked Elite Hosts for every occasion.",
+    type: "website",
+    url: "https://eliteseek.com/browse",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Browse Elite Hosts — EliteSeek",
+    description: "Discover handpicked Elite Hosts for every occasion.",
+  },
+};
 
 const PAGE_SIZE = 12;
 

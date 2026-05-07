@@ -72,8 +72,7 @@ export function LandingPage() {
 
       {/* ── Hero ── */}
       <section className="relative z-10 mx-auto max-w-7xl px-6 pb-20 pt-24">
-        <div className="grid items-center gap-16 lg:grid-cols-[1fr_440px]">
-          {/* Left */}
+        <div className="mx-auto max-w-3xl text-center">
           <div className="space-y-8">
             <div className="badge-verified inline-flex items-center gap-2 rounded-full px-4 py-1.5">
               <span className="h-1.5 w-1.5 rounded-full bg-[#d4af37]" />
@@ -99,7 +98,7 @@ export function LandingPage() {
               Private dinners, exclusive events, travel, and more — on your terms.
             </p>
 
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap justify-center gap-3">
               <Link
                 href="/browse"
                 className="btn-gold flex items-center gap-2 rounded-full px-7 py-3.5 text-sm"
@@ -118,9 +117,9 @@ export function LandingPage() {
             </div>
 
             {/* Stats */}
-            <div className="flex gap-10 pt-2">
+            <div className="flex justify-center gap-12 pt-2">
               {heroStats.map((stat) => (
-                <div key={stat.label}>
+                <div key={stat.label} className="text-center">
                   <p
                     className="text-2xl font-medium text-gold"
                     style={{ fontFamily: "var(--font-cormorant)" }}
@@ -132,70 +131,6 @@ export function LandingPage() {
                   </p>
                 </div>
               ))}
-            </div>
-          </div>
-
-          {/* Right — Featured companion preview */}
-          <div className="relative hidden lg:block">
-            <GlassCard gold className="relative overflow-hidden p-0.5">
-              <div className="companion-placeholder h-[480px] w-full rounded-[14px]">
-                {/* Decorative companion silhouette */}
-                <div className="flex h-full flex-col justify-end p-6">
-                  <div className="space-y-3">
-                    <div className="badge-select inline-flex items-center gap-1.5 rounded-full px-3 py-1">
-                      <Icon name="star" className="h-3 w-3" />
-                      EliteSeek Select
-                    </div>
-                    <div>
-                      <p
-                        className="text-2xl font-light text-foreground"
-                        style={{ fontFamily: "var(--font-cormorant)" }}
-                      >
-                        Isabelle M.
-                      </p>
-                      <p className="text-sm text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>
-                        Monaco · Art, Dinners, Travel
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      {[...Array(5)].map((_, i) => (
-                        <IconStar key={i} className="h-3.5 w-3.5 text-[#d4af37]" />
-                      ))}
-                      <span className="ml-1 text-xs text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>
-                        5.0 · 48 reviews
-                      </span>
-                    </div>
-                    <button
-                      className="btn-gold w-full rounded-xl py-2.5 text-sm"
-                      style={{ fontFamily: "var(--font-dm-sans)" }}
-                    >
-                      View Profile
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </GlassCard>
-
-            {/* Floating accent card */}
-            <div className="absolute -left-10 top-12">
-              <GlassCard className="w-48 p-4">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(212,175,55,0.1)]">
-                    <Icon name="calendar" className="h-5 w-5 text-gold" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>
-                      Next available
-                    </p>
-                    <p
-                      className="text-sm font-medium text-foreground"
-                      style={{ fontFamily: "var(--font-dm-sans)" }}
-                    >
-                      Tomorrow, 7PM
-                    </p>
-                  </div>
-                </div>
-              </GlassCard>
             </div>
           </div>
         </div>

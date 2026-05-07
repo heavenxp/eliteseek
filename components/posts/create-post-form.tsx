@@ -11,7 +11,7 @@ const CATEGORIES: { value: AvailabilityCategory; label: string; icon: string }[]
   { value: "private_dining",    label: "Private Dining",      icon: "🕯️" },
   { value: "business_coaching", label: "Business Coaching",   icon: "💼" },
   { value: "social_coaching",   label: "Social Coaching",     icon: "✨" },
-  { value: "travel_companion",  label: "Travel Elite Host",   icon: "✈️" },
+  { value: "travel_companion",  label: "Travel Experience",   icon: "✈️" },
   { value: "event_plus_one",    label: "Event Plus-One",      icon: "🎭" },
   { value: "yacht_luxury",      label: "Yacht / Luxury",      icon: "⚓" },
   { value: "gallery_art",       label: "Gallery & Art",       icon: "🖼️" },

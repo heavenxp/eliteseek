@@ -1,10 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.redirect(new URL("/login", request.url));
+
+  const { limited } = await checkRateLimit(supabase, user.id, "access_request", 5, 3600);
+  if (limited) {
+    return NextResponse.json(
+      { error: "Too many requests. Please wait before sending another access request." },
+      { status: 429 }
+    );
+  }
 
   const formData = await request.formData();
   const companionId = formData.get("companion_id") as string;

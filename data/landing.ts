@@ -2,7 +2,6 @@ export const navLinks = [
   { label: "Discover", href: "/browse" },
   { label: "Experiences", href: "/browse?type=experience" },
   { label: "How It Works", href: "#how-it-works" },
-  { label: "Membership", href: "#membership" },
 ];
 
 export const heroStats = [

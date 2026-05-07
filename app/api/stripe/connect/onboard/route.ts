@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getStripe, getOrigin } from "@/lib/stripe";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
@@ -14,6 +15,14 @@ export async function GET() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
     return NextResponse.redirect(new URL("/login", getOrigin()));
+  }
+
+  const { limited } = await checkRateLimit(supabase, user.id, "stripe_connect_onboard", 3, 3600);
+  if (limited) {
+    return NextResponse.json(
+      { error: "Too many onboarding attempts. Please try again later." },
+      { status: 429 }
+    );
   }
 
   // Verify this is a companion

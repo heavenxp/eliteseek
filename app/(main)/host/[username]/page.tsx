@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { Icon } from "@/components/icons";
 import { PostCard } from "@/components/posts/post-card";
@@ -20,12 +21,52 @@ const CATEGORY_LABELS: Record<AvailabilityCategory, string> = {
   private_dining: "Private Dining",
   business_coaching: "Business Coaching",
   social_coaching: "Social Coaching",
-  travel_companion: "Travel Elite Host",
+  travel_companion: "Travel Experience",
   event_plus_one: "Event Plus-One",
   yacht_luxury: "Yacht / Luxury",
   gallery_art: "Gallery & Art",
   weekend_getaway: "Weekend Getaway",
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ username: string }>;
+}): Promise<Metadata> {
+  const { username } = await params;
+  const supabase = await createClient();
+
+  const { data } = await supabase
+    .from("companion_profiles")
+    .select("display_name, tagline, bio, cover_image_url")
+    .eq("username", username)
+    .single();
+
+  if (!data) {
+    return { title: "Elite Host — EliteSeek" };
+  }
+
+  const name = data.display_name ?? username;
+  const description = data.tagline ?? data.bio?.slice(0, 155) ?? `Book ${name} for exclusive social experiences on EliteSeek.`;
+
+  return {
+    title: `${name} — Elite Host on EliteSeek`,
+    description,
+    openGraph: {
+      title: `${name} — Elite Host on EliteSeek`,
+      description,
+      type: "profile",
+      url: `https://eliteseek.com/@${username}`,
+      ...(data.cover_image_url ? { images: [{ url: data.cover_image_url, width: 1200, height: 630, alt: name }] } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${name} — Elite Host on EliteSeek`,
+      description,
+      ...(data.cover_image_url ? { images: [data.cover_image_url] } : {}),
+    },
+  };
+}
 
 export default async function HostProfilePage({
   params,

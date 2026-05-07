@@ -8,7 +8,7 @@ import type { AvailabilityPost, AvailabilityCategory } from "@/lib/database.type
 const CATEGORY_LABELS: Record<AvailabilityCategory, string> = {
   lunch: "Lunch", dinner: "Dinner", private_dining: "Private Dining",
   business_coaching: "Business Coaching", social_coaching: "Social Coaching",
-  travel_companion: "Travel Elite Host", event_plus_one: "Event Plus-One",
+  travel_companion: "Travel Experience", event_plus_one: "Event Plus-One",
   yacht_luxury: "Yacht / Luxury", gallery_art: "Gallery & Art",
   weekend_getaway: "Weekend Getaway",
 };

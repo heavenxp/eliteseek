@@ -71,6 +71,23 @@ export async function toggleFollow(followingId: string): Promise<FeedActionResul
   return null;
 }
 
+export async function deletePost(postId: string): Promise<FeedActionResult> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "Not authenticated" };
+
+  const { error } = await supabase
+    .from("posts")
+    .delete()
+    .eq("id", postId)
+    .eq("user_id", user.id);
+
+  if (error) return { error: error.message };
+
+  refresh();
+  return null;
+}
+
 export async function createComment(postId: string, content: string): Promise<FeedActionResult> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();

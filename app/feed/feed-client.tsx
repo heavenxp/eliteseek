@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useActionState, useOptimistic, useTransition, useState, useRef } from "react";
-import { createPost, toggleLike, toggleFollow, createComment } from "@/app/actions/feed";
+import { createPost, toggleLike, toggleFollow, createComment, deletePost } from "@/app/actions/feed";
 import { formatDistanceToNowStrict } from "date-fns";
 
 // ── Types ──────────────────────────────────────────────────────
@@ -274,6 +274,7 @@ function CommentSection({
 // ── Post card ──────────────────────────────────────────────────
 function PostCard({ post, currentUserId }: { post: FeedPost; currentUserId: string | null }) {
   const [showComments, setShowComments] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [optimisticPost, applyLikeOptimistic] = useOptimistic(post, (state, liked: boolean) => ({
     ...state,
@@ -282,6 +283,16 @@ function PostCard({ post, currentUserId }: { post: FeedPost; currentUserId: stri
   }));
 
   const isOwnPost = currentUserId === post.author_id;
+
+  if (isDeleted) return null;
+
+  function handleDelete() {
+    startTransition(async () => {
+      setIsDeleted(true);
+      const result = await deletePost(post.id);
+      if (result?.error) setIsDeleted(false);
+    });
+  }
 
   function handleLike() {
     if (!currentUserId) return;
@@ -315,7 +326,18 @@ function PostCard({ post, currentUserId }: { post: FeedPost; currentUserId: stri
                 {formatDistanceToNowStrict(new Date(post.created_at), { addSuffix: true })}
               </span>
             </div>
-            {!isOwnPost && currentUserId && (
+            {isOwnPost ? (
+              <button
+                onClick={handleDelete}
+                disabled={isPending}
+                className="p-1 text-white/20 hover:text-red-400 transition-colors disabled:opacity-30"
+                aria-label="Delete post"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                </svg>
+              </button>
+            ) : currentUserId && (
               <FollowButton authorId={post.author_id} isFollowing={post.is_following} />
             )}
           </div>

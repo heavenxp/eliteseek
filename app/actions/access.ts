@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { sendAccessApprovalEmail } from "@/lib/email";
 
 async function requireUser() {
   const supabase = await createClient();
@@ -81,6 +82,43 @@ export async function respondToAccessRequest(
       : "Your access request was not approved.",
     data: { companion_id: req.companion_id },
   });
+
+  // Fire-and-forget: email client if their access was approved
+  if (action === "approved") {
+    void (async () => {
+      try {
+        const { createAdminClient } = await import("@/lib/supabase/admin");
+        const admin = createAdminClient();
+        const [clientAuthRes, companionProfileRes] = await Promise.all([
+          admin.auth.admin.getUserById(req.client_id),
+          supabase
+            .from("companion_profiles")
+            .select("username, user_id")
+            .eq("id", req.companion_id)
+            .single(),
+        ]);
+        const clientEmail = clientAuthRes.data?.user?.email;
+        const clientName = clientAuthRes.data?.user?.user_metadata?.full_name as string | undefined
+          ?? "Member";
+        const companionUserId = companionProfileRes.data?.user_id;
+        const companionUsername = companionProfileRes.data?.username ?? null;
+        const companionNameRes = companionUserId
+          ? await supabase.from("profiles").select("full_name").eq("id", companionUserId).single()
+          : null;
+        const companionName = companionNameRes?.data?.full_name ?? "Your host";
+        if (clientEmail) {
+          await sendAccessApprovalEmail({
+            clientEmail,
+            clientName,
+            companionName,
+            companionUsername,
+          });
+        }
+      } catch (emailErr) {
+        console.error("[email] sendAccessApprovalEmail failed:", emailErr);
+      }
+    })();
+  }
 
   return { success: true };
 }

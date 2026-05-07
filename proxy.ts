@@ -45,7 +45,7 @@ export async function proxy(request: NextRequest) {
   }
 
   // Protected routes — redirect unauthenticated users to login
-  const protectedPrefixes = ["/browse", "/booking", "/content", "/gifts", "/messages", "/membership", "/account", "/onboarding"];
+  const protectedPrefixes = ["/browse", "/booking", "/bookings", "/content", "/gifts", "/messages", "/membership", "/account", "/onboarding", "/companion", "/admin", "/payment"];
   const isProtected = protectedPrefixes.some((prefix) => pathname.startsWith(prefix));
 
   if (!user && isProtected) {

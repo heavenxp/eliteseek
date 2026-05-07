@@ -1,9 +1,11 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useState, useRef, useTransition } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { createBrowserClient } from "@supabase/ssr";
 import { Icon } from "@/components/icons";
-import { updateCompanionSettings } from "@/app/actions/settings";
+import { updateCompanionSettings, updateClientSettings } from "@/app/actions/settings";
 import type { VisibilityLevel } from "@/lib/database.types";
 
 type CompanionData = {
@@ -16,11 +18,16 @@ type CompanionData = {
   tagline: string | null;
   location: string | null;
   is_available: boolean;
+  cover_image_url: string | null;
+  stripe_account_id: string | null;
 } | null;
 
 type Props = {
   role: "companion" | "client";
   companion: CompanionData;
+  clientFullName?: string;
+  clientPhone?: string | null;
+  avatarUrl?: string | null;
 };
 
 const VISIBILITY_OPTIONS: { value: VisibilityLevel; label: string; desc: string; icon: string }[] = [
@@ -44,36 +51,131 @@ const VISIBILITY_OPTIONS: { value: VisibilityLevel; label: string; desc: string;
   },
 ];
 
-export function SettingsForm({ role, companion }: Props) {
-  const [state, formAction, isPending] = useActionState(updateCompanionSettings, null);
-  const [visibility, setVisibility] = useState<VisibilityLevel>(companion?.visibility ?? "public");
+// ── Photo upload component ────────────────────────────────────
 
-  if (role === "client") {
-    return (
-      <div className="rounded-2xl border border-[rgba(212,175,55,0.1)] bg-[rgba(255,255,255,0.02)] p-6 text-center">
-        <p className="text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
-          Client account settings coming soon.
-        </p>
-        <Link
-          href="/membership"
-          className="btn-gold mt-4 inline-block rounded-xl px-6 py-2.5 text-sm"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+function createSupabase() {
+  return createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+}
+
+type PhotoUploadProps = {
+  label: string;
+  currentUrl: string | null | undefined;
+  uploadPath: string;
+  onUploaded: (url: string) => void;
+  aspect?: "square" | "wide";
+};
+
+function PhotoUpload({ label, currentUrl, uploadPath, onUploaded, aspect = "square" }: PhotoUploadProps) {
+  const [uploading, setUploading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(currentUrl ?? null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadError(null);
+    setUploading(true);
+
+    try {
+      const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
+      const path = uploadPath.replace("{ext}", ext);
+
+      const supabase = createSupabase();
+      const { error } = await supabase.storage
+        .from("profile-photos")
+        .upload(path, file, { upsert: true, contentType: file.type });
+
+      if (error) {
+        setUploadError(error.message);
+        return;
+      }
+
+      const { data: urlData } = supabase.storage
+        .from("profile-photos")
+        .getPublicUrl(path);
+
+      const publicUrl = urlData.publicUrl;
+      setPreviewUrl(publicUrl);
+      onUploaded(publicUrl);
+    } catch {
+      setUploadError("Upload failed. Please try again.");
+    } finally {
+      setUploading(false);
+      // Reset so the same file can be re-selected
+      if (inputRef.current) inputRef.current.value = "";
+    }
+  }
+
+  const isWide = aspect === "wide";
+
+  return (
+    <div>
+      <p className="mb-2 text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        {label}
+      </p>
+      <button
+        type="button"
+        onClick={() => inputRef.current?.click()}
+        disabled={uploading}
+        className={[
+          "relative flex items-center justify-center overflow-hidden rounded-xl border border-dashed border-[rgba(212,175,55,0.25)] bg-[rgba(255,255,255,0.02)] transition-colors hover:border-[rgba(212,175,55,0.45)] hover:bg-[rgba(212,175,55,0.03)] disabled:cursor-not-allowed",
+          isWide ? "h-32 w-full" : "h-28 w-28",
+        ].join(" ")}
+      >
+        {previewUrl ? (
+          <Image
+            src={previewUrl}
+            alt={label}
+            fill
+            className="object-cover"
+            unoptimized
+          />
+        ) : null}
+
+        {/* Overlay */}
+        <div
+          className={[
+            "absolute inset-0 flex flex-col items-center justify-center gap-1 transition-opacity",
+            previewUrl && !uploading ? "opacity-0 hover:opacity-100" : "opacity-100",
+            previewUrl ? "bg-[rgba(0,0,0,0.45)]" : "",
+          ].join(" ")}
         >
-          Manage Membership
-        </Link>
-      </div>
-    );
-  }
+          {uploading ? (
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-gold border-t-transparent" />
+          ) : (
+            <>
+              <Icon name="camera" className="h-5 w-5 text-gold/70" />
+              <span className="text-[10px] text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                {previewUrl ? "Change" : "Upload"}
+              </span>
+            </>
+          )}
+        </div>
+      </button>
+      {uploadError && (
+        <p className="mt-1 text-xs text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>{uploadError}</p>
+      )}
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        className="sr-only"
+        onChange={handleFileChange}
+        aria-label={`Upload ${label}`}
+      />
+    </div>
+  );
+}
 
-  if (!companion) {
-    return (
-      <div className="rounded-2xl border border-[rgba(212,175,55,0.1)] bg-[rgba(255,255,255,0.02)] p-6 text-center">
-        <p className="text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
-          Complete your profile setup first.
-        </p>
-      </div>
-    );
-  }
+// ── Client settings form ──────────────────────────────────────
+
+function ClientSettingsForm({ clientFullName, clientPhone }: { clientFullName?: string; clientPhone?: string | null }) {
+  const [state, formAction, isPending] = useActionState(updateClientSettings, null);
 
   return (
     <form action={formAction} className="space-y-8">
@@ -91,6 +193,204 @@ export function SettingsForm({ role, companion }: Props) {
           <p className="text-sm text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>{state.error}</p>
         </div>
       )}
+
+      {/* ── Account info ── */}
+      <section>
+        <h2 className="mb-1 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+          Account Details
+        </h2>
+        <p className="mb-4 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          Your name and contact information.
+        </p>
+        <div className="space-y-4">
+          <div>
+            <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              Display name
+            </label>
+            <input
+              name="full_name"
+              type="text"
+              required
+              defaultValue={clientFullName ?? ""}
+              placeholder="Your full name"
+              className="auth-input w-full"
+              style={{ fontFamily: "var(--font-dm-sans)" }}
+            />
+          </div>
+          <div>
+            <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              Phone number <span className="normal-case text-muted/30">(optional)</span>
+            </label>
+            <input
+              name="phone"
+              type="tel"
+              defaultValue={clientPhone ?? ""}
+              placeholder="+1 555 000 0000"
+              className="auth-input w-full"
+              style={{ fontFamily: "var(--font-dm-sans)" }}
+            />
+          </div>
+        </div>
+      </section>
+
+      <div className="gold-divider" />
+
+      {/* ── Notification preferences ── */}
+      <section>
+        <h2 className="mb-1 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+          Notification Preferences
+        </h2>
+        <p className="mb-4 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          Choose which emails you receive from EliteSeek.
+        </p>
+        <div className="space-y-3">
+          {[
+            { name: "notify_new_bookings", label: "Email me about new bookings" },
+            { name: "notify_booking_confirmed", label: "Email me when bookings are confirmed" },
+            { name: "notify_host_content", label: "Email me about new content from hosts I follow" },
+          ].map(({ name, label }) => (
+            <label
+              key={name}
+              className="flex cursor-pointer items-center gap-3 rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.02)] px-4 py-3 transition-colors hover:border-[rgba(212,175,55,0.18)]"
+            >
+              <input
+                type="checkbox"
+                name={name}
+                value="1"
+                defaultChecked
+                className="h-4 w-4 accent-[#d4af37]"
+              />
+              <span className="text-sm text-foreground/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                {label}
+              </span>
+            </label>
+          ))}
+        </div>
+      </section>
+
+      <div className="gold-divider" />
+
+      {/* ── Membership ── */}
+      <section>
+        <h2 className="mb-1 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+          Membership
+        </h2>
+        <p className="mb-4 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          Upgrade your membership to access exclusive companions and features.
+        </p>
+        <Link
+          href="/membership"
+          className="btn-gold inline-block rounded-xl px-6 py-2.5 text-sm"
+          style={{ fontFamily: "var(--font-dm-sans)" }}
+        >
+          Manage Membership
+        </Link>
+      </section>
+
+      <button
+        type="submit"
+        disabled={isPending}
+        className="btn-gold w-full rounded-xl py-3 text-sm disabled:opacity-60"
+        style={{ fontFamily: "var(--font-dm-sans)" }}
+      >
+        {isPending ? "Saving…" : "Save Settings"}
+      </button>
+    </form>
+  );
+}
+
+// ── Companion settings form ───────────────────────────────────
+
+function CompanionSettingsForm({
+  companion,
+  avatarUrl,
+}: {
+  companion: NonNullable<CompanionData>;
+  avatarUrl?: string | null;
+}) {
+  const [state, formAction, isPending] = useActionState(updateCompanionSettings, null);
+  const [visibility, setVisibility] = useState<VisibilityLevel>(companion.visibility ?? "public");
+
+  // Photo upload state — tracked client-side; URLs are saved via direct Supabase client
+  const [currentAvatarUrl, setCurrentAvatarUrl] = useState<string | null>(avatarUrl ?? null);
+  const [currentCoverUrl, setCurrentCoverUrl] = useState<string | null>(companion.cover_image_url ?? null);
+
+  // We need to persist uploaded URLs back to DB via a transition after upload
+  const [, startTransition] = useTransition();
+
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+
+  function handleAvatarUploaded(url: string) {
+    setCurrentAvatarUrl(url);
+    startTransition(async () => {
+      // Update profile avatar_url
+      await supabase.auth.getUser().then(async ({ data: { user } }) => {
+        if (user) {
+          await supabase.from("profiles").update({ avatar_url: url }).eq("id", user.id);
+        }
+      });
+    });
+  }
+
+  function handleCoverUploaded(url: string) {
+    setCurrentCoverUrl(url);
+    startTransition(async () => {
+      await supabase.from("companion_profiles").update({ cover_image_url: url }).eq("id", companion.id);
+    });
+  }
+
+  // Stripe connect section
+  const stripeConnected = !!companion.stripe_account_id;
+
+  return (
+    <form action={formAction} className="space-y-8">
+      {/* Success / error banner */}
+      {state?.success && (
+        <div className="flex items-center gap-3 rounded-xl border border-[rgba(52,211,153,0.25)] bg-[rgba(52,211,153,0.06)] px-4 py-3">
+          <Icon name="check" className="h-4 w-4 text-emerald-400" />
+          <p className="text-sm text-emerald-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            Settings saved successfully.
+          </p>
+        </div>
+      )}
+      {state?.error && (
+        <div className="rounded-xl border border-[rgba(248,113,113,0.25)] bg-[rgba(248,113,113,0.06)] px-4 py-3">
+          <p className="text-sm text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>{state.error}</p>
+        </div>
+      )}
+
+      {/* ── Profile Photos ── */}
+      <section>
+        <h2 className="mb-1 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+          Profile Photos
+        </h2>
+        <p className="mb-4 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          Upload your avatar and cover banner. Changes are saved immediately on upload.
+        </p>
+        <div className="flex flex-wrap gap-6">
+          <PhotoUpload
+            label="Profile photo"
+            currentUrl={currentAvatarUrl}
+            uploadPath={`${companion.id}/avatar.{ext}`}
+            onUploaded={handleAvatarUploaded}
+            aspect="square"
+          />
+          <div className="flex-1 min-w-[180px]">
+            <PhotoUpload
+              label="Cover image"
+              currentUrl={currentCoverUrl}
+              uploadPath={`${companion.id}/cover.{ext}`}
+              onUploaded={handleCoverUploaded}
+              aspect="wide"
+            />
+          </div>
+        </div>
+      </section>
+
+      <div className="gold-divider" />
 
       {/* ── Profile lock ── */}
       <section>
@@ -295,6 +595,45 @@ export function SettingsForm({ role, companion }: Props) {
         </label>
       </section>
 
+      <div className="gold-divider" />
+
+      {/* ── Payouts (Stripe Connect) ── */}
+      <section>
+        <h2 className="mb-1 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+          Payouts
+        </h2>
+        <p className="mb-4 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          Connect a Stripe account to receive payouts from bookings and subscriptions.
+        </p>
+
+        {stripeConnected ? (
+          <div className="flex items-center gap-3 rounded-xl border border-[rgba(52,211,153,0.25)] bg-[rgba(52,211,153,0.06)] px-4 py-4">
+            <Icon name="check" className="h-5 w-5 shrink-0 text-emerald-400" />
+            <div>
+              <p className="text-sm font-medium text-emerald-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                Stripe account connected
+              </p>
+              <p className="mt-0.5 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                Payouts will be sent to your connected Stripe account after each completed booking.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.02)] px-4 py-4">
+            <p className="mb-3 text-sm text-foreground/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              You need a Stripe account to receive payments. The setup takes about 5 minutes and is handled securely by Stripe.
+            </p>
+            <a
+              href="/api/stripe/connect/onboard"
+              className="btn-gold inline-block rounded-xl px-6 py-2.5 text-sm"
+              style={{ fontFamily: "var(--font-dm-sans)" }}
+            >
+              Connect Stripe Account
+            </a>
+          </div>
+        )}
+      </section>
+
       <button
         type="submit"
         disabled={isPending}
@@ -305,4 +644,24 @@ export function SettingsForm({ role, companion }: Props) {
       </button>
     </form>
   );
+}
+
+// ── Main export ───────────────────────────────────────────────
+
+export function SettingsForm({ role, companion, clientFullName, clientPhone, avatarUrl }: Props) {
+  if (role === "client") {
+    return <ClientSettingsForm clientFullName={clientFullName} clientPhone={clientPhone} />;
+  }
+
+  if (!companion) {
+    return (
+      <div className="rounded-2xl border border-[rgba(212,175,55,0.1)] bg-[rgba(255,255,255,0.02)] p-6 text-center">
+        <p className="text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          Complete your profile setup first.
+        </p>
+      </div>
+    );
+  }
+
+  return <CompanionSettingsForm companion={companion} avatarUrl={avatarUrl} />;
 }

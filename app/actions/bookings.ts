@@ -2,6 +2,10 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import {
+  sendBookingRequestEmail,
+  sendBookingResponseEmail,
+} from "@/lib/email";
 
 async function requireClient() {
   const supabase = await createClient();
@@ -86,6 +90,38 @@ export async function createBookingRequest(
       body: `You have a new booking request for ${new Date(scheduledAt).toLocaleDateString("en-GB", { day: "numeric", month: "long" })}.`,
       data: { booking_id: booking!.id },
     });
+
+    // Fire-and-forget: email companion about the new request
+    void (async () => {
+      try {
+        const { createAdminClient } = await import("@/lib/supabase/admin");
+        const admin = createAdminClient();
+        const [companionAuthRes, clientProfileRes, currentUserRes] = await Promise.all([
+          admin.auth.admin.getUserById(companionProfile.user_id),
+          supabase.from("profiles").select("full_name").eq("id", userId).single(),
+          supabase.auth.getUser(),
+        ]);
+        const companionEmail = companionAuthRes.data?.user?.email;
+        const companionName = companionAuthRes.data?.user?.user_metadata?.full_name as string | undefined
+          ?? "Host";
+        const clientName = clientProfileRes.data?.full_name
+          ?? currentUserRes.data?.user?.user_metadata?.full_name as string | undefined
+          ?? "A member";
+        if (companionEmail) {
+          await sendBookingRequestEmail({
+            companionEmail,
+            companionName,
+            clientName,
+            bookingType,
+            scheduledAt,
+            durationHours,
+            totalAmount,
+          });
+        }
+      } catch (emailErr) {
+        console.error("[email] sendBookingRequestEmail failed:", emailErr);
+      }
+    })();
   }
 
   return { success: true, bookingId: booking!.id };
@@ -129,6 +165,37 @@ export async function respondToBooking(
         : `Your booking request for ${dateStr} was not accepted.`,
       data: { booking_id: bookingId },
     });
+
+    // Fire-and-forget: email client about the booking response
+    void (async () => {
+      try {
+        const { createAdminClient } = await import("@/lib/supabase/admin");
+        const admin = createAdminClient();
+        const [clientAuthRes, companionProfileRes] = await Promise.all([
+          admin.auth.admin.getUserById(bookingData.client_id),
+          supabase
+            .from("profiles")
+            .select("full_name")
+            .eq("id", userId)
+            .single(),
+        ]);
+        const clientEmail = clientAuthRes.data?.user?.email;
+        const clientName = clientAuthRes.data?.user?.user_metadata?.full_name as string | undefined
+          ?? "Member";
+        const companionName = companionProfileRes.data?.full_name ?? "Your host";
+        if (clientEmail) {
+          await sendBookingResponseEmail({
+            clientEmail,
+            clientName,
+            companionName,
+            status: action,
+            scheduledAt: bookingData.scheduled_at,
+          });
+        }
+      } catch (emailErr) {
+        console.error("[email] sendBookingResponseEmail failed:", emailErr);
+      }
+    })();
   }
 
   return { success: true };

@@ -11,7 +11,7 @@ export default async function SettingsPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, role")
+    .select("full_name, role, phone, avatar_url")
     .eq("id", user.id)
     .single();
 
@@ -23,7 +23,8 @@ export default async function SettingsPage() {
       .from("companion_profiles")
       .select(`
         id, visibility, profile_unlock_fee, subscription_price,
-        booking_rate_hourly, bio, tagline, location, is_available
+        booking_rate_hourly, bio, tagline, location, is_available,
+        cover_image_url, stripe_account_id
       `)
       .eq("user_id", user.id)
       .single();
@@ -44,6 +45,9 @@ export default async function SettingsPage() {
       <SettingsForm
         role={profile.role as "companion" | "client"}
         companion={companion}
+        clientFullName={profile.full_name}
+        clientPhone={profile.phone}
+        avatarUrl={profile.avatar_url}
       />
     </div>
   );

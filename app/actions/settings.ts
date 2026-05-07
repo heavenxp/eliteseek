@@ -55,3 +55,27 @@ export async function updateCompanionSettings(
   revalidatePath("/account/settings");
   return { success: true };
 }
+
+export async function updateClientSettings(
+  _: SettingsState,
+  formData: FormData
+): Promise<SettingsState> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+
+  const full_name = (formData.get("full_name") as string)?.trim();
+  const phone = (formData.get("phone") as string)?.trim() || null;
+
+  if (!full_name) return { error: "Display name is required." };
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ full_name, phone })
+    .eq("id", user.id);
+
+  if (error) return { error: error.message };
+
+  revalidatePath("/account/settings");
+  return { success: true };
+}

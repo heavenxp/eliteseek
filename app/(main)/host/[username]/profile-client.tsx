@@ -4,11 +4,13 @@ import { useState, useCallback } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/icons";
 import { BookingModal } from "@/components/booking/booking-modal";
+import { MessageButton } from "@/components/messages/message-button";
 import type { AvailabilityPost } from "@/lib/database.types";
 
 export type ProfileActionButtonsProps = {
   companionId: string;
   companionName: string;
+  companionUserId: string;
   username: string;
   subscriptionPrice: number | null;
   bookingRate: number | null;
@@ -25,6 +27,7 @@ export type ProfileActionButtonsProps = {
 export function ProfileActionButtons({
   companionId,
   companionName,
+  companionUserId,
   username,
   subscriptionPrice,
   bookingRate,
@@ -182,6 +185,7 @@ export function ProfileActionButtons({
             Subscribe · ${subscriptionPrice}/mo
           </button>
         )}
+        <MessageButton otherUserId={companionUserId} />
         <Link
           href={`/gifts?companion=${companionId}`}
           className="text-sm text-gold/60 underline underline-offset-2 hover:text-gold"

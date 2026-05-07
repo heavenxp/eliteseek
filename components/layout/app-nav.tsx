@@ -14,15 +14,15 @@ type NavUser = {
 const CLIENT_NAV = [
   { label: "Browse", href: "/browse", icon: "eye" },
   { label: "Experiences", href: "/browse/experiences", icon: "calendar" },
+  { label: "Messages", href: "/messages", icon: "message" },
   { label: "Bookings", href: "/bookings", icon: "check" },
-  { label: "Gifts", href: "/gifts", icon: "gift" },
 ];
 
 const COMPANION_NAV = [
   { label: "Browse", href: "/browse", icon: "eye" },
   { label: "Availability", href: "/companion/posts", icon: "calendar" },
+  { label: "Messages", href: "/messages", icon: "message" },
   { label: "Bookings", href: "/companion/bookings", icon: "check" },
-  { label: "Requests", href: "/companion/access-requests", icon: "lock" },
 ];
 
 export function AppNav({ user }: { user: NavUser }) {

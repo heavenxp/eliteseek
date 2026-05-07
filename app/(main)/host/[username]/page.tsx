@@ -245,6 +245,7 @@ export default async function HostProfilePage({
                 <ProfileActionButtons
                   companionId={companion.id}
                   companionName={displayName}
+                  companionUserId={companion.user_id}
                   username={username}
                   subscriptionPrice={companion.subscription_price}
                   bookingRate={companion.booking_rate_hourly}

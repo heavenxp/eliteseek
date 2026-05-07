@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useTransition } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/icons";
 import { BookingModal } from "@/components/booking/booking-modal";
 import { MessageButton } from "@/components/messages/message-button";
 import { SubscribeButton } from "@/components/subscriptions/subscribe-button";
+import { createUnlockCheckout } from "@/app/actions/stripe";
 import type { AvailabilityPost } from "@/lib/database.types";
 
 export type ProfileActionButtonsProps = {
@@ -22,6 +23,7 @@ export type ProfileActionButtonsProps = {
   accessRequestStatus: string | null;
   lockStatus: "public" | "locked" | "elite_only";
   clientTier: string;
+  stripeConfigured?: boolean;
   post?: AvailabilityPost;
 };
 
@@ -39,13 +41,24 @@ export function ProfileActionButtons({
   accessRequestStatus,
   lockStatus,
   clientTier,
+  stripeConfigured = false,
   post,
 }: ProfileActionButtonsProps) {
   const [showModal, setShowModal] = useState(false);
+  const [unlockPending, startUnlockTransition] = useTransition();
+  const [unlockError, setUnlockError] = useState<string | null>(null);
 
   const handleSuccess = useCallback(() => {
     setShowModal(false);
   }, []);
+
+  function handleUnlock() {
+    setUnlockError(null);
+    startUnlockTransition(async () => {
+      const result = await createUnlockCheckout(companionId);
+      if (result?.error) setUnlockError(result.error);
+    });
+  }
 
   // Owner buttons
   if (isOwner) {
@@ -75,21 +88,21 @@ export function ProfileActionButtons({
   if (lockStatus === "locked" && !hasUnlocked) {
     return (
       <div className="flex flex-wrap items-center gap-3">
-        <form action="/api/access/unlock" method="post">
-          <input type="hidden" name="companion_id" value={companionId} />
-          <input
-            type="hidden"
-            name="amount_paid"
-            value={String(profileUnlockFee ?? 0)}
-          />
-          <button
-            type="submit"
-            className="btn-gold rounded-xl px-6 py-2.5 text-sm"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
-          >
-            Unlock Profile{profileUnlockFee ? ` · $${profileUnlockFee}` : ""}
-          </button>
-        </form>
+        <button
+          onClick={handleUnlock}
+          disabled={unlockPending}
+          className="btn-gold rounded-xl px-6 py-2.5 text-sm disabled:opacity-50"
+          style={{ fontFamily: "var(--font-dm-sans)" }}
+        >
+          {unlockPending
+            ? "Redirecting…"
+            : `Unlock Profile${profileUnlockFee ? ` · $${profileUnlockFee}` : ""}`}
+        </button>
+        {unlockError && (
+          <span className="text-xs text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            {unlockError}
+          </span>
+        )}
         {accessRequestStatus === null && (
           <form action="/api/access/request" method="post">
             <input type="hidden" name="companion_id" value={companionId} />
@@ -179,7 +192,11 @@ export function ProfileActionButtons({
           </button>
         )}
         {subscriptionPrice && !isSubscribed && (
-          <SubscribeButton companionId={companionId} price={subscriptionPrice} />
+          <SubscribeButton
+            companionId={companionId}
+            price={subscriptionPrice}
+            stripeConfigured={stripeConfigured}
+          />
         )}
         <MessageButton otherUserId={companionUserId} />
         <Link
@@ -199,6 +216,7 @@ export function ProfileActionButtons({
           hourlyRate={bookingRate}
           onClose={() => setShowModal(false)}
           onSuccess={handleSuccess}
+          stripeConfigured={stripeConfigured}
         />
       )}
     </>

@@ -5,6 +5,7 @@ import { PostCard } from "@/components/posts/post-card";
 import { PhotoGallery } from "@/components/profile/photo-gallery";
 import { WishlistPreview } from "@/components/profile/wishlist-preview";
 import { ProfileActionButtons } from "./profile-client";
+import { stripeConfigured } from "@/lib/stripe";
 import type {
   AvailabilityPost,
   AvailabilityCategory,
@@ -256,6 +257,7 @@ export default async function HostProfilePage({
                   accessRequestStatus={accessRequestStatus}
                   lockStatus={lockStatus}
                   clientTier={clientMembershipTier}
+                  stripeConfigured={stripeConfigured()}
                 />
               </div>
             </div>

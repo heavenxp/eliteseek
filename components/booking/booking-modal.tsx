@@ -1,8 +1,9 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useState, useTransition } from "react";
 import { Icon } from "@/components/icons";
 import { createBookingRequest } from "@/app/actions/bookings";
+import { createBookingDepositCheckout } from "@/app/actions/stripe";
 import type { AvailabilityPost, AvailabilityCategory } from "@/lib/database.types";
 
 const BOOKING_TYPE_MAP: Record<AvailabilityCategory, string> = {
@@ -25,16 +26,19 @@ type Props = {
   hourlyRate?: number | null;
   onClose: () => void;
   onSuccess: () => void;
+  stripeConfigured?: boolean;
 };
 
 const DURATIONS = [1, 2, 3, 4, 6, 8];
 
-export function BookingModal({ companionId, companionName, post, hourlyRate, onClose, onSuccess }: Props) {
+export function BookingModal({ companionId, companionName, post, hourlyRate, onClose, onSuccess, stripeConfigured = false }: Props) {
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [date, setDate] = useState(post?.date_from ? post.date_from.slice(0, 16) : "");
   const [duration, setDuration] = useState(2);
   const [notes, setNotes] = useState("");
   const [location, setLocation] = useState(post?.location_city ?? "");
+  const [stripeError, setStripeError] = useState<string | null>(null);
+  const [stripePending, startStripeTransition] = useTransition();
 
   const rate = post?.price ?? hourlyRate ?? 0;
   const totalAmount = post ? post.price : rate * duration;
@@ -46,11 +50,23 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
   const [state, formAction, isPending] = useActionState(createBookingRequest, null);
 
   useEffect(() => {
-    if (state?.success) {
+    if (state?.success && state.bookingId) {
+      if (stripeConfigured) {
+        // Redirect to Stripe deposit checkout
+        setStripeError(null);
+        startStripeTransition(async () => {
+          const result = await createBookingDepositCheckout(state.bookingId!);
+          if (result?.error) setStripeError(result.error);
+        });
+      } else {
+        setStep(3);
+        setTimeout(onSuccess, 2000);
+      }
+    } else if (state?.success) {
       setStep(3);
       setTimeout(onSuccess, 2000);
     }
-  }, [state?.success, onSuccess]);
+  }, [state?.success, state?.bookingId, onSuccess, stripeConfigured]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
@@ -223,9 +239,9 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
               />
             </div>
 
-            {state?.error && (
+            {(state?.error || stripeError) && (
               <p className="text-xs text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
-                {state.error}
+                {state?.error ?? stripeError}
               </p>
             )}
 
@@ -241,11 +257,17 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
               </button>
               <button
                 type="submit"
-                disabled={isPending}
+                disabled={isPending || stripePending}
                 className="btn-gold flex-1 rounded-xl py-3 text-sm disabled:opacity-60"
                 style={{ fontFamily: "var(--font-dm-sans)" }}
               >
-                {isPending ? "Sending request…" : "Send Booking Request"}
+                {stripePending
+                  ? "Redirecting to payment…"
+                  : isPending
+                    ? "Creating booking…"
+                    : stripeConfigured
+                      ? "Continue to Deposit"
+                      : "Send Booking Request"}
               </button>
             </div>
           </form>

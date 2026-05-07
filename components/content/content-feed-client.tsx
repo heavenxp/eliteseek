@@ -5,16 +5,18 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Icon } from "@/components/icons";
 import { purchaseContent, subscribeToCompanion } from "@/app/actions/content";
+import { createPpvCheckout, createSubscriptionCheckout } from "@/app/actions/stripe";
 import type { FeedPost } from "@/app/(main)/content/page";
 
 type Props = {
   posts: FeedPost[];
   currentUserId: string;
+  stripeConfigured?: boolean;
 };
 
 type Filter = "all" | "free" | "subscribed";
 
-export function ContentFeedClient({ posts, currentUserId }: Props) {
+export function ContentFeedClient({ posts, currentUserId, stripeConfigured = false }: Props) {
   const [filter, setFilter] = useState<Filter>("all");
 
   const filtered = posts.filter((p) => {
@@ -65,7 +67,7 @@ export function ContentFeedClient({ posts, currentUserId }: Props) {
         ) : (
           <div className="space-y-5">
             {filtered.map((post) => (
-              <ContentCard key={post.id} post={post} />
+              <ContentCard key={post.id} post={post} stripeConfigured={stripeConfigured} />
             ))}
           </div>
         )}
@@ -74,7 +76,7 @@ export function ContentFeedClient({ posts, currentUserId }: Props) {
   );
 }
 
-function ContentCard({ post }: { post: FeedPost }) {
+function ContentCard({ post, stripeConfigured }: { post: FeedPost; stripeConfigured: boolean }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [localUnlocked, setLocalUnlocked] = useState(false);
@@ -95,6 +97,11 @@ function ContentCard({ post }: { post: FeedPost }) {
   function handlePurchase() {
     setError(null);
     startTransition(async () => {
+      if (stripeConfigured) {
+        const result = await createPpvCheckout(post.id);
+        if (result?.error) setError(result.error);
+        return; // server redirects on success
+      }
       const result = await purchaseContent(post.id);
       if (result.error) { setError(result.error); return; }
       setLocalUnlocked(true);
@@ -105,6 +112,11 @@ function ContentCard({ post }: { post: FeedPost }) {
   function handleSubscribe() {
     setError(null);
     startTransition(async () => {
+      if (stripeConfigured) {
+        const result = await createSubscriptionCheckout(post.companion_id);
+        if (result?.error) setError(result.error);
+        return; // server redirects on success
+      }
       const result = await subscribeToCompanion(post.companion_id);
       if (result.error) { setError(result.error); return; }
       router.refresh();

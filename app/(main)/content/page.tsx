@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ContentFeedClient } from "@/components/content/content-feed-client";
+import { stripeConfigured } from "@/lib/stripe";
 import type { MediaItem } from "@/app/actions/content";
 
 export type FeedPost = {
@@ -96,5 +97,5 @@ export default async function ContentFeedPage() {
     };
   });
 
-  return <ContentFeedClient posts={posts} currentUserId={user.id} />;
+  return <ContentFeedClient posts={posts} currentUserId={user.id} stripeConfigured={stripeConfigured()} />;
 }

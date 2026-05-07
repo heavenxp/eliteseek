@@ -13,13 +13,13 @@ type NavUser = {
 
 const CLIENT_NAV = [
   { label: "Browse", href: "/browse", icon: "eye" },
-  { label: "Experiences", href: "/browse/experiences", icon: "calendar" },
+  { label: "Content", href: "/content", icon: "photo" },
   { label: "Messages", href: "/messages", icon: "message" },
   { label: "Bookings", href: "/bookings", icon: "check" },
 ];
 
 const COMPANION_NAV = [
-  { label: "Browse", href: "/browse", icon: "eye" },
+  { label: "Content", href: "/companion/content", icon: "photo" },
   { label: "Availability", href: "/companion/posts", icon: "calendar" },
   { label: "Messages", href: "/messages", icon: "message" },
   { label: "Bookings", href: "/companion/bookings", icon: "check" },

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Icon } from "@/components/icons";
 import { BookingModal } from "@/components/booking/booking-modal";
 import { MessageButton } from "@/components/messages/message-button";
+import { SubscribeButton } from "@/components/subscriptions/subscribe-button";
 import type { AvailabilityPost } from "@/lib/database.types";
 
 export type ProfileActionButtonsProps = {
@@ -178,12 +179,7 @@ export function ProfileActionButtons({
           </button>
         )}
         {subscriptionPrice && !isSubscribed && (
-          <button
-            className="btn-ghost flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
-          >
-            Subscribe · ${subscriptionPrice}/mo
-          </button>
+          <SubscribeButton companionId={companionId} price={subscriptionPrice} />
         )}
         <MessageButton otherUserId={companionUserId} />
         <Link

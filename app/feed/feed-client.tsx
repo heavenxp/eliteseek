@@ -44,9 +44,9 @@ export function ComposeBox() {
     <form
       ref={ref}
       action={async (fd) => {
+        await formAction(fd);
         ref.current?.reset();
         setChars(0);
-        await formAction(fd);
       }}
       className="border-b border-white/[0.06] px-4 py-4"
     >

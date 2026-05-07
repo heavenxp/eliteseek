@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, refresh } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
@@ -15,9 +15,12 @@ export async function createPost(_: FeedActionResult, formData: FormData): Promi
   if (!content || content.length > 500) return { error: "Post must be 1–500 characters." };
 
   const { error } = await supabase.from("posts").insert({ user_id: user.id, content });
-  if (error) return { error: error.message };
+  if (error) {
+    console.error("[createPost] insert error:", error.message);
+    return { error: error.message };
+  }
 
-  revalidatePath("/feed");
+  refresh();
   return null;
 }
 

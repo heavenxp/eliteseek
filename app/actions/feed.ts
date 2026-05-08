@@ -14,7 +14,10 @@ export async function createPost(_: FeedActionResult, formData: FormData): Promi
   const content = (formData.get("content") as string)?.trim();
   if (!content || content.length > 500) return { error: "Post must be 1–500 characters." };
 
-  const { error } = await supabase.from("posts").insert({ user_id: user.id, content });
+  const tagsRaw = (formData.get("tags") as string | null) ?? "";
+  const tags = tagsRaw.split(",").map((t) => t.trim().toLowerCase()).filter(Boolean).slice(0, 3);
+
+  const { error } = await supabase.from("posts").insert({ user_id: user.id, content, tags });
   if (error) {
     console.error("[createPost] insert error:", error.message);
     return { error: error.message };

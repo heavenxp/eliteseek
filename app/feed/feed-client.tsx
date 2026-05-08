@@ -23,6 +23,7 @@ export type FeedPost = {
   like_count: number;
   is_liked: boolean;
   is_following: boolean;
+  tags: string[];
   comments: FeedComment[];
   comment_count: number;
 };
@@ -35,6 +36,8 @@ type Props = {
   activeTab: FeedTab;
 };
 
+const PRESET_TAGS = ["Travel", "Dining", "Events", "Nightlife", "Wellness", "Business", "Art", "Sports"];
+
 // ── Compose box ────────────────────────────────────────────────
 export function ComposeBox() {
   const router = useRouter();
@@ -42,10 +45,18 @@ export function ComposeBox() {
   const [chars, setChars] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  function toggleTag(tag: string) {
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : prev.length < 3 ? [...prev, tag] : prev
+    );
+  }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
+    if (selectedTags.length > 0) fd.set("tags", selectedTags.join(","));
     startTransition(async () => {
       const result = await createPost(null, fd);
       if (result?.error) {
@@ -54,17 +65,14 @@ export function ComposeBox() {
         setError(null);
         ref.current?.reset();
         setChars(0);
+        setSelectedTags([]);
         router.refresh();
       }
     });
   }
 
   return (
-    <form
-      ref={ref}
-      onSubmit={handleSubmit}
-      className="border-b border-white/[0.06] px-4 py-4"
-    >
+    <form ref={ref} onSubmit={handleSubmit} className="border-b border-white/[0.06] px-4 py-4">
       <textarea
         name="content"
         rows={3}
@@ -74,6 +82,32 @@ export function ComposeBox() {
         className="w-full resize-none bg-transparent text-[15px] text-white/90 placeholder:text-white/25 focus:outline-none"
         style={{ fontFamily: "var(--font-dm-sans)" }}
       />
+      {/* Tag selector */}
+      <div className="mt-2.5 flex flex-wrap gap-1.5">
+        {PRESET_TAGS.map((tag) => {
+          const active = selectedTags.includes(tag);
+          const disabled = !active && selectedTags.length >= 3;
+          return (
+            <button
+              key={tag}
+              type="button"
+              onClick={() => toggleTag(tag)}
+              disabled={disabled}
+              className={[
+                "rounded-full border px-2.5 py-0.5 text-[11px] font-medium transition-all",
+                active
+                  ? "border-[#d4af37]/50 bg-[#d4af37]/10 text-[#d4af37]"
+                  : disabled
+                  ? "border-white/[0.04] text-white/15"
+                  : "border-white/10 text-white/30 hover:border-white/20 hover:text-white/50",
+              ].join(" ")}
+              style={{ fontFamily: "var(--font-dm-sans)" }}
+            >
+              {tag}
+            </button>
+          );
+        })}
+      </div>
       <div className="mt-2 flex items-center justify-between">
         <span
           className={`text-xs ${chars > 450 ? "text-red-400" : "text-white/25"}`}
@@ -364,6 +398,21 @@ function PostCard({ post, currentUserId }: { post: FeedPost; currentUserId: stri
           >
             {post.content}
           </p>
+
+          {/* Tags */}
+          {post.tags.length > 0 && (
+            <div className="mt-1.5 flex flex-wrap gap-1">
+              {post.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-[#d4af37]/20 bg-[#d4af37]/[0.06] px-2 py-0.5 text-[11px] text-[#d4af37]/60"
+                  style={{ fontFamily: "var(--font-dm-sans)" }}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
 
           {/* Actions */}
           <div className="mt-3 flex items-center gap-5">

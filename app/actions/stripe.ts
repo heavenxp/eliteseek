@@ -32,7 +32,7 @@ export async function createUnlockCheckout(
   }
 
   const cancelUrl = companion.username
-    ? `${getOrigin()}/@${companion.username}`
+    ? `${getOrigin()}/profile/${companion.username}`
     : `${getOrigin()}/companion/${companionId}`;
 
   const session = await stripe.checkout.sessions.create({
@@ -150,7 +150,7 @@ export async function createSubscriptionCheckout(
   });
 
   const cancelUrl = companion.username
-    ? `${getOrigin()}/@${companion.username}`
+    ? `${getOrigin()}/profile/${companion.username}`
     : `${getOrigin()}/companion/${companionId}`;
 
   const session = await stripe.checkout.sessions.create({

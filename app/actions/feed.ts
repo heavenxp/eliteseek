@@ -15,9 +15,26 @@ export async function createPost(_: FeedActionResult, formData: FormData): Promi
   if (!content || content.length > 500) return { error: "Post must be 1–500 characters." };
 
   const tagsRaw = (formData.get("tags") as string | null) ?? "";
-  const tags = tagsRaw.split(",").map((t) => t.trim().toLowerCase()).filter(Boolean).slice(0, 3);
+  const tags = tagsRaw.split(",").map((t) => t.trim().toLowerCase()).filter(Boolean).slice(0, 5);
 
-  const { error } = await supabase.from("posts").insert({ user_id: user.id, content, tags });
+  let image_url: string | null = null;
+  const imageFile = formData.get("image") as File | null;
+  if (imageFile && imageFile.size > 0) {
+    if (imageFile.size > 10 * 1024 * 1024) return { error: "Image must be under 10 MB." };
+    const ext = imageFile.name.split(".").pop()?.toLowerCase() ?? "jpg";
+    const path = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { error: uploadError } = await supabase.storage
+      .from("post-images")
+      .upload(path, imageFile, { contentType: imageFile.type, upsert: false });
+    if (uploadError) {
+      console.error("[createPost] image upload error:", uploadError.message);
+      return { error: "Image upload failed." };
+    }
+    const { data: { publicUrl } } = supabase.storage.from("post-images").getPublicUrl(path);
+    image_url = publicUrl;
+  }
+
+  const { error } = await supabase.from("posts").insert({ user_id: user.id, content, tags, image_url });
   if (error) {
     console.error("[createPost] insert error:", error.message);
     return { error: error.message };

@@ -12,8 +12,8 @@ type NavUser = {
 };
 
 const CLIENT_NAV = [
-  { label: "Browse", href: "/browse", icon: "eye" },
   { label: "Feed", href: "/feed", icon: "feed" },
+  { label: "Browse", href: "/browse", icon: "eye" },
   { label: "Content", href: "/content", icon: "photo" },
   { label: "Messages", href: "/messages", icon: "message" },
   { label: "Bookings", href: "/bookings", icon: "check" },

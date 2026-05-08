@@ -25,12 +25,12 @@ export async function proxy(request: NextRequest) {
     }
   );
 
-  // Rewrite /@username → /host/{username} before any auth checks
+  // Rewrite /@username → /profile/{username} before any auth checks
   const { pathname } = request.nextUrl;
   if (pathname.startsWith("/@") && pathname.length > 2) {
     const username = pathname.slice(2).split("/")[0];
     const url = request.nextUrl.clone();
-    url.pathname = `/host/${username}`;
+    url.pathname = `/profile/${username}`;
     return NextResponse.rewrite(url);
   }
 

@@ -147,7 +147,7 @@ function BookingCard({ booking }: { booking: BookingRow }) {
   const date = new Date(booking.scheduled_at);
   const profileHref = booking.host
     ? booking.host.username
-      ? `/@${booking.host.username}`
+      ? `/profile/${booking.host.username}`
       : `/companion/${booking.host.id}`
     : "#";
 

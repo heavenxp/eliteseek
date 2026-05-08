@@ -1,44 +1,52 @@
 import Link from "next/link";
 import { Icon } from "@/components/icons";
-import type { CompanionCard as CompanionCardType, VisibilityLevel } from "@/lib/database.types";
+import type { CompanionCard as CompanionCardType, LockLevel, MembershipTier } from "@/lib/database.types";
 
-function PricingHint({ companion }: { companion: CompanionCardType }) {
-  if (companion.booking_rate_hourly) {
-    return (
-      <span className="text-xs text-muted/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
-        from <span className="text-foreground/80">${companion.booking_rate_hourly.toLocaleString()}</span>/hr
-      </span>
-    );
-  }
-  if (companion.subscription_price) {
-    return (
-      <span className="text-xs text-muted/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
-        subscribe from <span className="text-foreground/80">${companion.subscription_price}</span>/mo
-      </span>
-    );
-  }
-  return null;
+// ── Lock level helpers ─────────────────────────────────────────
+
+const LOCK_LABELS: Record<Exclude<LockLevel, "public">, string> = {
+  request: "Request Only",
+  silver:  "Silver+ Required",
+  elite:   "Elite Required",
+};
+
+const LOCK_REQUIREMENTS: Partial<Record<LockLevel, string>> = {
+  silver: "Silver membership required",
+  elite:  "Elite membership required",
+};
+
+function canRequest(lockLevel: LockLevel, clientTier: MembershipTier): boolean {
+  if (lockLevel === "public")  return true;
+  if (lockLevel === "request") return true;
+  if (lockLevel === "silver")  return clientTier === "silver" || clientTier === "elite";
+  if (lockLevel === "elite")   return clientTier === "elite";
+  return false;
 }
 
-type LockStatus = "unlocked" | "locked" | "elite_only";
+// ── Card component ─────────────────────────────────────────────
 
 export function CompanionCard({
   companion,
-  lockStatus = "unlocked",
+  clientTier = "bronze",
 }: {
   companion: CompanionCardType;
-  lockStatus?: LockStatus;
+  clientTier?: MembershipTier;
 }) {
-  const isSelect = companion.verification_tier === "select";
-  const isLocked = companion.visibility === "locked";
-  const isEliteOnly = companion.visibility === "elite_only";
-  const showLockOverlay = lockStatus === "locked" || lockStatus === "elite_only";
+  const isSelect   = companion.verification_tier === "select";
+  const lockLevel  = (companion.lock_level ?? "public") as LockLevel;
+  const isLocked   = lockLevel !== "public";
+  const qualifies  = canRequest(lockLevel, clientTier);
+  const lockLabel  = isLocked ? LOCK_LABELS[lockLevel as Exclude<LockLevel, "public">] : null;
+  const reqMessage = isLocked && !qualifies ? (LOCK_REQUIREMENTS[lockLevel] ?? null) : null;
+
+  const profileHref = companion.username
+    ? `/profile/${companion.username}`
+    : `/companion/${companion.id}`;
 
   const card = (
     <div className="group block overflow-hidden rounded-2xl border border-[rgba(212,175,55,0.12)] bg-[rgba(255,255,255,0.03)] transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(212,175,55,0.28)] hover:shadow-[0_8px_32px_rgba(212,175,55,0.08)]">
       {/* Image area */}
-      <div className={`companion-placeholder relative h-64 w-full overflow-hidden ${showLockOverlay ? "blur-[3px]" : ""}`}>
-        {/* Gradient overlay at bottom */}
+      <div className={`companion-placeholder relative h-64 w-full overflow-hidden ${isLocked ? "blur-[3px]" : ""}`}>
         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[rgba(8,8,16,0.7)] to-transparent" />
 
         {/* Top badges */}
@@ -56,7 +64,7 @@ export function CompanionCard({
           )}
         </div>
 
-        {/* Tier badge */}
+        {/* Verification tier badge */}
         <div className="absolute right-3 top-3">
           {isSelect ? (
             <span className="badge-select rounded-full px-2.5 py-1 text-[10px]">
@@ -66,21 +74,9 @@ export function CompanionCard({
               </span>
             </span>
           ) : companion.verification_tier === "verified" ? (
-            <span className="badge-verified rounded-full px-2.5 py-1 text-[10px]">
-              Verified
-            </span>
+            <span className="badge-verified rounded-full px-2.5 py-1 text-[10px]">Verified</span>
           ) : null}
         </div>
-
-        {/* Lock indicator */}
-        {(isLocked || isEliteOnly) && lockStatus === "unlocked" && (
-          <div className="absolute bottom-3 right-3">
-            <span className="flex items-center gap-1 rounded-full bg-[rgba(8,8,16,0.7)] px-2.5 py-1 text-[10px] text-gold/80 backdrop-blur-sm" style={{ fontFamily: "var(--font-dm-sans)" }}>
-              <Icon name="lock" className="h-3 w-3" />
-              {isEliteOnly ? "Elite Only" : "Locked"}
-            </span>
-          </div>
-        )}
 
         {/* Location */}
         <div className="absolute bottom-3 left-3">
@@ -91,7 +87,7 @@ export function CompanionCard({
       </div>
 
       {/* Card body */}
-      <div className={`p-4 ${showLockOverlay ? "blur-[2px]" : ""}`}>
+      <div className={`p-4 ${isLocked ? "blur-[2px]" : ""}`}>
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
             <p className="truncate text-lg font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
@@ -139,8 +135,7 @@ export function CompanionCard({
           </div>
         )}
 
-        <div className="mt-4 flex items-center justify-between">
-          <PricingHint companion={companion} />
+        <div className="mt-4 flex items-center justify-end">
           <span className="text-xs text-gold/70 transition-all duration-200 group-hover:text-gold group-hover:translate-x-0.5" style={{ fontFamily: "var(--font-dm-sans)" }}>
             View profile →
           </span>
@@ -148,39 +143,41 @@ export function CompanionCard({
       </div>
 
       {/* Lock overlay */}
-      {showLockOverlay && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-2xl bg-[rgba(8,8,16,0.55)] backdrop-blur-[1px]">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(212,175,55,0.3)] bg-[rgba(8,8,16,0.8)]">
+      {isLocked && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-2xl bg-[rgba(8,8,16,0.62)] backdrop-blur-[1px]">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(212,175,55,0.3)] bg-[rgba(8,8,16,0.85)]">
             <Icon name="lock" className="h-5 w-5 text-gold/80" />
           </div>
-          <div className="text-center">
-            <p className="text-sm font-light text-foreground/90" style={{ fontFamily: "var(--font-cormorant)" }}>
-              {lockStatus === "elite_only" ? "Elite Members Only" : "Locked Profile"}
+
+          <p
+            className="text-sm font-light text-foreground/90"
+            style={{ fontFamily: "var(--font-cormorant)" }}
+          >
+            {lockLabel}
+          </p>
+
+          {qualifies ? (
+            <span
+              className="rounded-full border border-[rgba(212,175,55,0.45)] bg-[rgba(212,175,55,0.1)] px-4 py-1.5 text-xs text-gold transition-colors hover:bg-[rgba(212,175,55,0.2)]"
+              style={{ fontFamily: "var(--font-dm-sans)" }}
+            >
+              Request Access
+            </span>
+          ) : (
+            <p
+              className="px-6 text-center text-xs text-muted/55"
+              style={{ fontFamily: "var(--font-dm-sans)" }}
+            >
+              {reqMessage}
             </p>
-            {companion.profile_unlock_fee && lockStatus === "locked" && (
-              <p className="text-xs text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
-                Unlock for ${companion.profile_unlock_fee}
-              </p>
-            )}
-          </div>
-          <span className="text-xs text-gold/60 underline underline-offset-2" style={{ fontFamily: "var(--font-dm-sans)" }}>
-            {lockStatus === "elite_only" ? "Upgrade membership" : "View options →"}
-          </span>
+          )}
         </div>
       )}
     </div>
   );
 
-  const profileHref = companion.username
-    ? `/@${companion.username}`
-    : `/companion/${companion.id}`;
-
-  return showLockOverlay ? (
-    <Link href={profileHref} className="relative block">
-      {card}
-    </Link>
-  ) : (
-    <Link href={profileHref} className="block">
+  return (
+    <Link href={profileHref} className={`${isLocked ? "relative " : ""}block`}>
       {card}
     </Link>
   );

@@ -28,20 +28,16 @@ export function ContentFeedClient({ posts, currentUserId, stripeConfigured = fal
   return (
     <div className="page-bg min-h-screen">
       <div className="mx-auto max-w-2xl px-4 py-8">
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6">
           <h1
             className="text-3xl font-light text-foreground"
             style={{ fontFamily: "var(--font-cormorant)" }}
           >
             Content
           </h1>
-          <Link
-            href="/browse"
-            className="text-sm text-gold/60 hover:text-gold"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
-          >
-            Browse Hosts
-          </Link>
+          <p className="mt-1 text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            Explore exclusive content from Elite Hosts
+          </p>
         </div>
 
         {/* Filter tabs */}
@@ -57,7 +53,7 @@ export function ContentFeedClient({ posts, currentUserId, stripeConfigured = fal
               }`}
               style={{ fontFamily: "var(--font-dm-sans)" }}
             >
-              {f === "subscribed" ? "My Subs" : f.charAt(0).toUpperCase() + f.slice(1)}
+              {f === "subscribed" ? "My Subscriptions" : f.charAt(0).toUpperCase() + f.slice(1)}
             </button>
           ))}
         </div>
@@ -91,7 +87,7 @@ function ContentCard({ post, stripeConfigured }: { post: FeedPost; stripeConfigu
   const firstMedia = post.media[0] ?? null;
   const hasMultiple = post.media.length > 1;
   const companionHref = post.companion?.username
-    ? `/@${post.companion.username}`
+    ? `/profile/${post.companion.username}`
     : null;
 
   function handlePurchase() {
@@ -307,25 +303,14 @@ function EmptyFeed({ filter }: { filter: Filter }) {
         className="text-xl font-light text-foreground/60"
         style={{ fontFamily: "var(--font-cormorant)" }}
       >
-        {filter === "subscribed"
-          ? "No subscriptions yet"
-          : "No content yet"}
+        {filter === "subscribed" ? "No subscribed content yet" : "Nothing here yet"}
       </p>
       <p
-        className="text-sm text-muted/40"
+        className="max-w-xs text-sm text-muted/40"
         style={{ fontFamily: "var(--font-dm-sans)" }}
       >
-        {filter === "subscribed"
-          ? "Subscribe to Elite Hosts to see their exclusive content."
-          : "Elite Hosts will publish content here."}
+        Hosts haven&apos;t posted content yet — check back soon
       </p>
-      <Link
-        href="/browse"
-        className="btn-gold mt-2 rounded-xl px-6 py-2.5 text-sm"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
-      >
-        Browse Elite Hosts
-      </Link>
     </div>
   );
 }

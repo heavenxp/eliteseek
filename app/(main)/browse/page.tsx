@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { CompanionCard } from "@/components/browse/companion-card";
 import { BrowseShell } from "@/components/browse/browse-shell";
 import { Pagination } from "@/components/browse/pagination";
-import type { CompanionCard as CompanionCardType } from "@/lib/database.types";
+import type { CompanionCard as CompanionCardType, MembershipTier } from "@/lib/database.types";
 
 export const metadata: Metadata = {
   title: "Browse Elite Hosts — EliteSeek",
@@ -73,11 +73,8 @@ export default async function BrowsePage({
 
   query = query.range(offset, offset + PAGE_SIZE - 1);
 
-  const [{ data, count, error }, unlocksResult, membershipResult] = await Promise.all([
+  const [{ data, count, error }, membershipResult] = await Promise.all([
     query,
-    user
-      ? supabase.from("profile_unlocks").select("companion_id").eq("client_id", user.id)
-      : Promise.resolve({ data: null }),
     user
       ? supabase.from("client_profiles").select("membership_tier").eq("user_id", user.id).maybeSingle()
       : Promise.resolve({ data: null }),
@@ -88,19 +85,7 @@ export default async function BrowsePage({
   const totalPages = Math.ceil(totalCount / PAGE_SIZE);
   const activeFilters = (tags.length > 0 ? 1 : 0) + (tier ? 1 : 0) + (available ? 1 : 0);
 
-  const unlockedIds = new Set(
-    (unlocksResult.data ?? []).map((u: { companion_id: string }) => u.companion_id)
-  );
-  const clientTier = membershipResult.data?.membership_tier ?? "bronze";
-
-  function getLockStatus(companion: CompanionCardType): "unlocked" | "locked" | "elite_only" {
-    if (companion.visibility === "public") return "unlocked";
-    if (unlockedIds.has(companion.id)) return "unlocked";
-    if (companion.visibility === "elite_only") {
-      return clientTier === "elite" ? "unlocked" : "elite_only";
-    }
-    return "locked";
-  }
+  const clientTier = (membershipResult.data?.membership_tier ?? "bronze") as MembershipTier;
 
   return (
     <Suspense>
@@ -121,7 +106,7 @@ export default async function BrowsePage({
                 <CompanionCard
                   key={companion.id}
                   companion={companion}
-                  lockStatus={getLockStatus(companion)}
+                  clientTier={clientTier}
                 />
               ))}
             </div>

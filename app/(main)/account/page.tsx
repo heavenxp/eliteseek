@@ -175,7 +175,7 @@ function CompanionLinks({ username }: { username: string | null }) {
     { href: "/account/earnings", icon: "star", label: "Earnings", desc: "Revenue & payouts" },
     { href: "/account/settings", icon: "camera", label: "Settings", desc: "Profile & pricing" },
     ...(username
-      ? [{ href: `/@${username}`, icon: "eye" as const, label: "View My Profile", desc: `/@${username}` }]
+      ? [{ href: `/profile/${username}`, icon: "eye" as const, label: "View My Profile", desc: `/profile/${username}` }]
       : []),
   ];
   return <QuickLinkList links={links} />;

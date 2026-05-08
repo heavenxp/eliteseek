@@ -1,7 +1,7 @@
 export const navLinks = [
-  { label: "Discover", href: "/browse" },
-  { label: "Experiences", href: "/browse?type=experience" },
   { label: "Feed", href: "/feed" },
+  { label: "Browse", href: "/browse" },
+  { label: "Experiences", href: "/browse?type=experience" },
   { label: "Profile", href: "/account" },
   { label: "How It Works", href: "#how-it-works" },
 ];

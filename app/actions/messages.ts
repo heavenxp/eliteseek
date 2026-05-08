@@ -21,12 +21,19 @@ export async function getOrCreateConversation(otherUserId: string): Promise<stri
   const clientId = myProfile.role === "client" ? user.id : otherUserId;
   const companionId = myProfile.role === "companion" ? user.id : otherUserId;
 
+  // Try existing conversation first (upsert without UPDATE policy returns nothing on conflict)
+  const { data: existing } = await supabase
+    .from("conversations")
+    .select("id")
+    .eq("client_id", clientId)
+    .eq("companion_id", companionId)
+    .maybeSingle();
+
+  if (existing) return existing.id;
+
   const { data, error } = await supabase
     .from("conversations")
-    .upsert(
-      { client_id: clientId, companion_id: companionId },
-      { onConflict: "client_id,companion_id" }
-    )
+    .insert({ client_id: clientId, companion_id: companionId })
     .select("id")
     .single();
 

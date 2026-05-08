@@ -3,6 +3,7 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 // ── Enums ────────────────────────────────────────────────────
 export type UserRole             = "client" | "companion";
 export type VisibilityLevel      = "public" | "locked" | "elite_only";
+export type LockLevel            = "public" | "request" | "silver" | "elite";
 export type VerificationTier     = "unverified" | "verified" | "select";
 export type MembershipTier       = "bronze" | "silver" | "elite";
 export type BookingStatus        = "pending" | "confirmed" | "cancelled" | "completed" | "disputed";
@@ -26,6 +27,7 @@ export type AvailabilityCategory =
 export interface Profile {
   id: string;
   full_name: string;
+  username: string | null;
   role: UserRole;
   avatar_url: string | null;
   phone: string | null;
@@ -49,6 +51,7 @@ export interface CompanionProfile {
   languages: string[];
   tags: string[];
   visibility: VisibilityLevel;
+  lock_level: LockLevel;
   verification_tier: VerificationTier;
   profile_unlock_fee: number | null;
   subscription_price: number | null;
@@ -279,6 +282,7 @@ export interface CompanionCard {
   tags: string[];
   languages: string[];
   visibility: VisibilityLevel;
+  lock_level: LockLevel;
   verification_tier: VerificationTier;
   is_featured: boolean;
   is_available: boolean;

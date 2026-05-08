@@ -331,7 +331,7 @@ function WishlistCard({
   onSend: (item: WishlistItemWithCompanion) => void;
 }) {
   const companionHref = item.companion?.username
-    ? `/@${item.companion.username}`
+    ? `/profile/${item.companion.username}`
     : null;
 
   return (

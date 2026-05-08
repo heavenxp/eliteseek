@@ -15,28 +15,33 @@ export default async function ConversationPage({
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  // Fetch conversation + participant profiles
+  // Fetch conversation — RLS ensures only participants can read it
   const { data: conv } = await supabase
     .from("conversations")
-    .select(`
-      id, client_id, companion_id,
-      client_profile:profiles!client_id (id, full_name),
-      companion_profile:profiles!companion_id (id, full_name)
-    `)
+    .select("id, client_id, companion_id")
     .eq("id", conversationId)
-    .or(`client_id.eq.${user.id},companion_id.eq.${user.id}`)
-    .single();
+    .maybeSingle();
 
   if (!conv) notFound();
 
-  const clientProfile = Array.isArray(conv.client_profile) ? conv.client_profile[0] : conv.client_profile;
-  const companionProfile = Array.isArray(conv.companion_profile) ? conv.companion_profile[0] : conv.companion_profile;
+  // Verify the current user is a participant (belt-and-suspenders on top of RLS)
+  const isParticipant = conv.client_id === user.id || conv.companion_id === user.id;
+  if (!isParticipant) notFound();
+
+  // Fetch participant profiles separately
+  const profileIds = Array.from(new Set([conv.client_id, conv.companion_id]));
+  const { data: profiles } = await supabase
+    .from("profiles")
+    .select("id, full_name")
+    .in("id", profileIds);
+
+  const profileMap = new Map((profiles ?? []).map((p) => [p.id, p.full_name]));
 
   const isClient = conv.client_id === user.id;
-  const otherProfile = isClient ? companionProfile : clientProfile;
-  const otherName = (otherProfile as { full_name: string } | null)?.full_name ?? "Unknown";
+  const otherUserId = isClient ? conv.companion_id : conv.client_id;
+  const otherName = profileMap.get(otherUserId) ?? "Unknown";
 
-  // Fetch companion username separately (no direct FK from conversations to companion_profiles)
+  // Fetch companion username for the back-link
   const { data: companionMeta } = await supabase
     .from("companion_profiles")
     .select("username")
@@ -56,7 +61,6 @@ export default async function ConversationPage({
     .order("created_at", { ascending: true })
     .limit(100);
 
-  // Mark incoming messages as read
   await markConversationRead(conversationId);
 
   return (

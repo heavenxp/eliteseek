@@ -22,22 +22,22 @@ export default async function MessagesLayout({
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  // Fetch conversations with participant profiles
+  // Fetch conversations — RLS filters to only conversations the user participates in
   const { data: rawConvs } = await supabase
     .from("conversations")
-    .select(`
-      id, client_id, companion_id, last_message_at,
-      client_profile:profiles!client_id (full_name),
-      companion_profile:profiles!companion_id (full_name)
-    `)
-    .or(`client_id.eq.${user.id},companion_id.eq.${user.id}`)
+    .select("id, client_id, companion_id, last_message_at")
     .order("last_message_at", { ascending: false, nullsFirst: false });
 
   const convs = rawConvs ?? [];
   const convIds = convs.map((c) => c.id);
 
-  // Fetch last message + unread count per conversation
-  const [msgsResult, unreadResult] = await Promise.all([
+  // Collect all unique participant IDs to batch-fetch names
+  const participantIds = Array.from(
+    new Set(convs.flatMap((c) => [c.client_id, c.companion_id]))
+  );
+
+  // Fetch last message + unread count + profile names in parallel
+  const [msgsResult, unreadResult, profilesResult] = await Promise.all([
     convIds.length > 0
       ? supabase
           .from("messages")
@@ -53,7 +53,17 @@ export default async function MessagesLayout({
           .neq("sender_id", user.id)
           .eq("is_read", false)
       : Promise.resolve({ data: [] }),
+    participantIds.length > 0
+      ? supabase
+          .from("profiles")
+          .select("id, full_name")
+          .in("id", participantIds)
+      : Promise.resolve({ data: [] }),
   ]);
+
+  const profileMap = new Map(
+    (profilesResult.data ?? []).map((p) => [p.id, p.full_name])
+  );
 
   // Last message per conversation
   const lastMsgMap = new Map<string, string>();
@@ -70,17 +80,14 @@ export default async function MessagesLayout({
   }
 
   const conversations: ConversationItem[] = convs.map((c) => {
-    const clientProfile = Array.isArray(c.client_profile) ? c.client_profile[0] : c.client_profile;
-    const companionProfile = Array.isArray(c.companion_profile) ? c.companion_profile[0] : c.companion_profile;
     const isClient = c.client_id === user.id;
-    const otherProfile = isClient ? companionProfile : clientProfile;
-
+    const otherUserId = isClient ? c.companion_id : c.client_id;
     return {
       id: c.id,
       client_id: c.client_id,
       companion_id: c.companion_id,
       last_message_at: c.last_message_at,
-      other_name: (otherProfile as { full_name: string } | null)?.full_name ?? "Unknown",
+      other_name: profileMap.get(otherUserId) ?? "Unknown",
       last_message: lastMsgMap.get(c.id) ?? null,
       unread_count: unreadMap.get(c.id) ?? 0,
     };

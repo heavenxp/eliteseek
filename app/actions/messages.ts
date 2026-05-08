@@ -5,40 +5,51 @@ import { createClient } from "@/lib/supabase/server";
 
 export type MessageState = { error?: string; success?: boolean } | null;
 
-export async function getOrCreateConversation(otherUserId: string): Promise<string | null> {
+export type ConversationResult =
+  | { id: string; error: null }
+  | { id: null; error: string };
+
+export async function getOrCreateConversation(otherUserId: string): Promise<ConversationResult> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: myProfile } = await supabase
+  const { data: myProfile, error: profileError } = await supabase
     .from("profiles")
     .select("role")
     .eq("id", user.id)
     .single();
 
-  if (!myProfile) return null;
+  if (!myProfile) {
+    return { id: null, error: `Profile not found: ${profileError?.message ?? "unknown"}` };
+  }
 
   const clientId = myProfile.role === "client" ? user.id : otherUserId;
   const companionId = myProfile.role === "companion" ? user.id : otherUserId;
 
-  // Try existing conversation first (upsert without UPDATE policy returns nothing on conflict)
-  const { data: existing } = await supabase
+  // Try existing conversation first
+  const { data: existing, error: selectError } = await supabase
     .from("conversations")
     .select("id")
     .eq("client_id", clientId)
     .eq("companion_id", companionId)
     .maybeSingle();
 
-  if (existing) return existing.id;
+  if (existing) return { id: existing.id, error: null };
+  if (selectError) {
+    return { id: null, error: `SELECT failed: ${selectError.message}` };
+  }
 
-  const { data, error } = await supabase
+  const { data, error: insertError } = await supabase
     .from("conversations")
     .insert({ client_id: clientId, companion_id: companionId })
     .select("id")
     .single();
 
-  if (error || !data) return null;
-  return data.id;
+  if (insertError || !data) {
+    return { id: null, error: `INSERT failed: ${insertError?.message ?? "no data returned"}` };
+  }
+  return { id: data.id, error: null };
 }
 
 export async function sendMessage(

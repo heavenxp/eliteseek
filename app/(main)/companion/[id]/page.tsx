@@ -31,8 +31,7 @@ export default async function CompanionProfilePage({
       id, user_id, display_name, bio, tagline, location, age,
       tags, languages, visibility, verification_tier,
       is_featured, is_available, average_rating, total_reviews,
-      booking_rate_hourly, subscription_price, profile_unlock_fee, cover_image_url,
-      profiles!inner(full_name)
+      booking_rate_hourly, subscription_price, profile_unlock_fee, cover_image_url
     `)
     .eq("id", id)
     .single();
@@ -95,7 +94,7 @@ export default async function CompanionProfilePage({
     : { data: null };
 
   const upcomingPosts = (posts ?? []) as AvailabilityPost[];
-  const profile = companion.profiles as unknown as { full_name: string };
+  const displayName = companion.display_name ?? "Elite Host";
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 md:px-6 md:py-12">
@@ -113,7 +112,7 @@ export default async function CompanionProfilePage({
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-3">
             <h1 className="text-3xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
-              {companion.display_name ?? profile.full_name}
+              {displayName}
               {companion.age && (
                 <span className="ml-2 text-2xl text-muted/40">{companion.age}</span>
               )}
@@ -166,7 +165,7 @@ export default async function CompanionProfilePage({
       {!isFullyVisible && (
         <LockGate
           companionId={id}
-          companionName={companion.display_name ?? profile.full_name}
+          companionName={displayName}
           visibility={companion.visibility as string}
           unlockFee={companion.profile_unlock_fee}
           accessRequestStatus={accessRequestStatus ?? "none"}
@@ -277,7 +276,7 @@ export default async function CompanionProfilePage({
                     key={post.id}
                     post={post}
                     companionId={id}
-                    companionName={companion.display_name ?? profile.full_name}
+                    companionName={displayName}
                     hourlyRate={companion.booking_rate_hourly}
                     isOwner={isOwner}
                   />
@@ -292,7 +291,7 @@ export default async function CompanionProfilePage({
               <div className="gold-divider mb-6" />
               <ProfileActions
                 companionId={id}
-                companionName={companion.display_name ?? profile.full_name}
+                companionName={displayName}
                 hourlyRate={companion.booking_rate_hourly}
                 isOwner={false}
               />

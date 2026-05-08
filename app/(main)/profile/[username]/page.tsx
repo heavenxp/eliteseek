@@ -66,16 +66,14 @@ export default async function ProfilePage({
        tags, languages, verification_tier, is_available,
        average_rating, total_reviews, booking_rate_hourly,
        subscription_price, profile_unlock_fee, cover_image_url,
-       username, available_from, available_until, visibility,
-       profiles!inner(full_name)`
+       username, available_from, available_until, visibility`
     )
     .eq("username", username)
     .single();
 
   if (!companion) notFound();
 
-  const profile = companion.profiles as unknown as { full_name: string };
-  const displayName = companion.display_name ?? profile.full_name;
+  const displayName = companion.display_name ?? username;
   const isOwner = user?.id === companion.user_id;
   const lockStatus = companion.visibility as "public" | "locked" | "elite_only";
 

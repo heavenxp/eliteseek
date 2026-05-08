@@ -20,7 +20,6 @@ export async function createPost(_: FeedActionResult, formData: FormData): Promi
     return { error: error.message };
   }
 
-  refresh();
   return null;
 }
 

@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useOptimistic, useTransition, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { useOptimistic, useTransition, useState, useRef } from "react";
 import { createPost, toggleLike, toggleFollow, createComment, deletePost } from "@/app/actions/feed";
 import { formatDistanceToNowStrict } from "date-fns";
 
@@ -36,18 +37,32 @@ type Props = {
 
 // ── Compose box ────────────────────────────────────────────────
 export function ComposeBox() {
-  const [state, formAction, isPending] = useActionState(createPost, null);
+  const router = useRouter();
   const ref = useRef<HTMLFormElement>(null);
   const [chars, setChars] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    startTransition(async () => {
+      const result = await createPost(null, fd);
+      if (result?.error) {
+        setError(result.error);
+      } else {
+        setError(null);
+        ref.current?.reset();
+        setChars(0);
+        router.refresh();
+      }
+    });
+  }
 
   return (
     <form
       ref={ref}
-      action={async (fd) => {
-        await formAction(fd);
-        ref.current?.reset();
-        setChars(0);
-      }}
+      onSubmit={handleSubmit}
       className="border-b border-white/[0.06] px-4 py-4"
     >
       <textarea
@@ -67,9 +82,9 @@ export function ComposeBox() {
           {chars}/500
         </span>
         <div className="flex items-center gap-3">
-          {state?.error && (
+          {error && (
             <span className="text-xs text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
-              {state.error}
+              {error}
             </span>
           )}
           <button

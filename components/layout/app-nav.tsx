@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Icon } from "@/components/icons";
 import { NotificationBell } from "@/components/layout/notification-bell";
 import { createClient } from "@/lib/supabase/client";
@@ -35,7 +35,6 @@ function AccountMenu({ fullName, compact = false }: { fullName: string; compact?
   const [open, setOpen] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const router = useRouter();
   const initial = fullName.charAt(0).toUpperCase();
   const firstName = fullName.split(" ")[0];
 
@@ -51,7 +50,7 @@ function AccountMenu({ fullName, compact = false }: { fullName: string; compact?
     setSigningOut(true);
     const supabase = createClient();
     await supabase.auth.signOut();
-    router.push("/");
+    window.location.href = "/";
   }
 
   const avatar = (

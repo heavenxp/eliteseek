@@ -169,15 +169,11 @@ function ClientLinks({ tier }: { tier: string }) {
 function CompanionLinks({ username }: { username: string | null }) {
   const links: { href: string; icon: Parameters<typeof Icon>[0]["name"]; label: string; desc: string }[] = [
     { href: "/companion/posts/new", icon: "plus", label: "New Availability Post", desc: "Share when you're available" },
-    { href: "/companion/bookings", icon: "calendar", label: "Bookings", desc: "Manage booking requests" },
     { href: "/companion/access-requests", icon: "lock", label: "Access Requests", desc: "Profile access queue" },
-    { href: "/messages", icon: "message", label: "Messages", desc: "Your conversations" },
     { href: "/account/earnings", icon: "star", label: "Earnings", desc: "Revenue & payouts" },
     { href: "/account/settings", icon: "camera", label: "Settings", desc: "Profile & pricing" },
-    ...(username
-      ? [{ href: `/profile/${username}`, icon: "eye" as const, label: "View My Profile", desc: `/profile/${username}` }]
-      : []),
   ];
+  void username;
   return <QuickLinkList links={links} />;
 }
 

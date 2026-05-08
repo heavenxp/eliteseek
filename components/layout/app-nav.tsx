@@ -11,22 +11,14 @@ type NavUser = {
   fullName: string;
   role: "companion" | "client";
   avatarUrl?: string | null;
+  username: string | null;
 };
 
 const CLIENT_NAV = [
-  { label: "Feed", href: "/feed", icon: "feed" },
   { label: "Browse", href: "/browse", icon: "eye" },
-  { label: "Content", href: "/content", icon: "photo" },
-  { label: "Messages", href: "/messages", icon: "message" },
-  { label: "Bookings", href: "/bookings", icon: "check" },
-];
-
-const COMPANION_NAV = [
   { label: "Feed", href: "/feed", icon: "feed" },
-  { label: "Content", href: "/companion/content", icon: "photo" },
-  { label: "Availability", href: "/companion/posts", icon: "calendar" },
+  { label: "Bookings", href: "/bookings", icon: "check" },
   { label: "Messages", href: "/messages", icon: "message" },
-  { label: "Bookings", href: "/companion/bookings", icon: "check" },
 ];
 
 // ── Account dropdown ──────────────────────────────────────────
@@ -142,7 +134,16 @@ function AccountMenu({ fullName, compact = false }: { fullName: string; compact?
 
 export function AppNav({ user }: { user: NavUser }) {
   const pathname = usePathname();
-  const links = user.role === "companion" ? COMPANION_NAV : CLIENT_NAV;
+
+  const companionNav = [
+    { label: "My Profile", href: `/profile/${user.username ?? ""}`, icon: "user" },
+    { label: "Feed", href: "/feed", icon: "feed" },
+    { label: "Availability", href: "/companion/posts", icon: "calendar" },
+    { label: "Bookings", href: "/companion/bookings", icon: "check" },
+    { label: "Messages", href: "/messages", icon: "message" },
+  ];
+
+  const links = user.role === "companion" ? companionNav : CLIENT_NAV;
 
   const isActive = (href: string) =>
     href === "/browse" ? pathname === href : pathname.startsWith(href);

@@ -22,6 +22,16 @@ export default async function MainLayout({
 
   if (!profile) redirect("/login");
 
+  let companionUsername: string | null = null;
+  if (profile.role === "companion") {
+    const { data: cp } = await supabase
+      .from("companion_profiles")
+      .select("username")
+      .eq("user_id", user.id)
+      .maybeSingle();
+    companionUsername = cp?.username ?? null;
+  }
+
   return (
     <div className="page-bg min-h-screen">
       <AppNav
@@ -29,6 +39,7 @@ export default async function MainLayout({
           fullName: profile.full_name,
           role: profile.role as "companion" | "client",
           avatarUrl: profile.avatar_url,
+          username: companionUsername,
         }}
       />
       {/* Offset for fixed top nav on desktop, bottom nav on mobile */}

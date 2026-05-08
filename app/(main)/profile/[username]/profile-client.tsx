@@ -8,16 +8,10 @@ import { toggleFollow } from "@/app/actions/feed";
 import { BookingModal } from "@/components/booking/booking-modal";
 import { MessageButton } from "@/components/messages/message-button";
 import { SubscribeButton } from "@/components/subscriptions/subscribe-button";
+import { PostCard } from "@/components/posts/post-card";
+import type { AvailabilityPost } from "@/lib/database.types";
 
 // ── Types ──────────────────────────────────────────────────────
-
-type FeedPostPreview = {
-  id: string;
-  content: string;
-  image_url: string | null;
-  tags: string[];
-  created_at: string;
-};
 
 type ContentPostPreview = {
   id: string;
@@ -77,7 +71,7 @@ type ProfileBodyProps = {
   followerCount: number;
   followingCount: number;
   postCount: number;
-  feedPosts: FeedPostPreview[];
+  availabilityPosts: AvailabilityPost[];
   contentPosts: ContentPostPreview[];
   stripeConfigured: boolean;
   ownerData?: OwnerData;
@@ -93,7 +87,7 @@ export function ProfileBody({
   followerCount: initialFollowerCount,
   followingCount,
   postCount,
-  feedPosts,
+  availabilityPosts,
   contentPosts,
   stripeConfigured,
   ownerData,
@@ -106,6 +100,7 @@ export function ProfileBody({
   const [followPending, startFollowTransition] = useTransition();
   const [optionsOpen, setOptionsOpen] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [selectedPost, setSelectedPost] = useState<AvailabilityPost | null>(null);
   const optionsRef = useRef<HTMLDivElement>(null);
 
   const isSelect = companion.verification_tier === "select";
@@ -230,7 +225,7 @@ export function ProfileBody({
             ) : null}
 
             {/* Options ••• — only for authenticated users */}
-            {(isOwner || viewerUserId) && <div className="relative" ref={optionsRef}>
+            {(isOwner || (viewerUserId && vd?.isFullyVisible)) && <div className="relative" ref={optionsRef}>
               <button
                 onClick={() => setOptionsOpen((o) => !o)}
                 className="flex h-9 w-9 items-center justify-center rounded-xl border border-[rgba(212,175,55,0.2)] bg-[rgba(255,255,255,0.03)] text-muted/70 transition-colors hover:border-[rgba(212,175,55,0.35)] hover:text-muted"
@@ -261,25 +256,6 @@ export function ProfileBody({
                     </>
                   ) : (
                     <>
-                      {companion.booking_rate_hourly && vd?.isFullyVisible && (
-                        <OptionsItem
-                          onClick={() => { setShowBookingModal(true); setOptionsOpen(false); }}
-                        >
-                          <Icon name="calendar" className="h-4 w-4" /> Request Booking
-                        </OptionsItem>
-                      )}
-                      <div className="px-1 py-0.5" onClick={() => setOptionsOpen(false)}>
-                        <MessageButton otherUserId={companion.user_id} />
-                      </div>
-                      {companion.subscription_price && !vd?.isSubscribed && vd?.isFullyVisible && (
-                        <div className="px-1 py-0.5" onClick={() => setOptionsOpen(false)}>
-                          <SubscribeButton
-                            companionId={companion.id}
-                            price={companion.subscription_price}
-                            stripeConfigured={stripeConfigured}
-                          />
-                        </div>
-                      )}
                       {vd?.isFullyVisible && (
                         <OptionsItem href={`/gifts?companion=${companion.id}`}>
                           <Icon name="gift" className="h-4 w-4" /> Send Gift
@@ -348,6 +324,30 @@ export function ProfileBody({
             </div>
           )}
         </div>
+
+        {/* CTA */}
+        {!isOwner && viewerUserId && (
+          <div className="mt-4 flex flex-wrap items-center gap-2.5">
+            {vd?.isFullyVisible && companion.booking_rate_hourly && (
+              <button
+                onClick={() => setShowBookingModal(true)}
+                className="btn-gold flex items-center gap-1.5 rounded-xl px-5 py-2.5 text-sm"
+                style={{ fontFamily: "var(--font-dm-sans)" }}
+              >
+                <Icon name="calendar" className="h-4 w-4" />
+                Book
+              </button>
+            )}
+            <MessageButton otherUserId={companion.user_id} label="Message" />
+            {vd?.isFullyVisible && companion.subscription_price && !vd?.isSubscribed && (
+              <SubscribeButton
+                companionId={companion.id}
+                price={companion.subscription_price}
+                stripeConfigured={stripeConfigured}
+              />
+            )}
+          </div>
+        )}
 
         {/* Bio */}
         {companion.bio && (
@@ -496,7 +496,11 @@ export function ProfileBody({
         {/* ── Tab content ── */}
         <div className="pb-20 pt-4">
           {activeTab === "posts" && (
-            <PostsTab posts={feedPosts} isOwner={isOwner} />
+            <PostsTab
+              posts={availabilityPosts}
+              isOwner={isOwner}
+              onBook={(post) => setSelectedPost(post)}
+            />
           )}
           {activeTab === "media" && (
             <MediaTab
@@ -516,13 +520,14 @@ export function ProfileBody({
       </div>
 
       {/* Booking modal */}
-      {showBookingModal && companion.booking_rate_hourly && (
+      {(showBookingModal || selectedPost !== null) && (
         <BookingModal
           companionId={companion.id}
           companionName={companion.displayName}
+          post={selectedPost ?? undefined}
           hourlyRate={companion.booking_rate_hourly}
-          onClose={() => setShowBookingModal(false)}
-          onSuccess={() => setShowBookingModal(false)}
+          onClose={() => { setShowBookingModal(false); setSelectedPost(null); }}
+          onSuccess={() => { setShowBookingModal(false); setSelectedPost(null); }}
           stripeConfigured={stripeConfigured}
         />
       )}
@@ -733,21 +738,23 @@ function LockNotice({
 function PostsTab({
   posts,
   isOwner,
+  onBook,
 }: {
-  posts: FeedPostPreview[];
+  posts: AvailabilityPost[];
   isOwner: boolean;
+  onBook: (post: AvailabilityPost) => void;
 }) {
   if (posts.length === 0) {
     return (
       <div className="flex flex-col items-center gap-3 py-16 text-center">
         <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.04)]">
-          <Icon name="feed" className="h-5 w-5 text-gold/30" />
+          <Icon name="calendar" className="h-5 w-5 text-gold/30" />
         </div>
         <p
           className="text-sm text-muted/40"
           style={{ fontFamily: "var(--font-dm-sans)" }}
         >
-          {isOwner ? "You haven't posted anything yet" : "No posts yet"}
+          {isOwner ? "You haven't posted any availability yet" : "No upcoming availability"}
         </p>
         {isOwner && (
           <Link
@@ -765,48 +772,12 @@ function PostsTab({
   return (
     <div className="space-y-4">
       {posts.map((post) => (
-        <FeedPostCard key={post.id} post={post} />
-      ))}
-    </div>
-  );
-}
-
-function FeedPostCard({ post }: { post: FeedPostPreview }) {
-  return (
-    <div className="glass-card overflow-hidden rounded-2xl px-4 py-4">
-      <p
-        className="text-sm leading-relaxed text-foreground/80"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
-      >
-        {post.content}
-      </p>
-      {post.image_url && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={post.image_url}
-          alt=""
-          className="mt-3 max-h-[400px] w-full rounded-xl object-cover"
+        <PostCard
+          key={post.id}
+          post={post}
+          onBook={isOwner ? undefined : () => onBook(post)}
         />
-      )}
-      {post.tags.length > 0 && (
-        <div className="mt-2.5 flex flex-wrap gap-1.5">
-          {post.tags.map((tag) => (
-            <span
-              key={tag}
-              className="rounded-full bg-[rgba(212,175,55,0.07)] px-2 py-0.5 text-[10px] text-muted/60"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
-            >
-              #{tag}
-            </span>
-          ))}
-        </div>
-      )}
-      <p
-        className="mt-2 text-[10px] text-muted/30"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
-      >
-        {formatDate(post.created_at)}
-      </p>
+      ))}
     </div>
   );
 }
@@ -947,14 +918,3 @@ function VideosTab({
   );
 }
 
-// ── Helpers ────────────────────────────────────────────────────
-
-function formatDate(iso: string) {
-  const d = new Date(iso);
-  const now = new Date();
-  const diffDays = Math.floor((now.getTime() - d.getTime()) / 86400000);
-  if (diffDays === 0) return "Today";
-  if (diffDays === 1) return "Yesterday";
-  if (diffDays < 7) return d.toLocaleDateString("en-US", { weekday: "long" });
-  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-}

@@ -32,12 +32,44 @@ export interface Profile {
   avatar_url: string | null;
   phone: string | null;
   date_of_birth: string | null;
+  country: string | null;
   kyc_status: KycStatus;
   kyc_session_id: string | null;
   is_suspended: boolean;
   suspension_reason: string | null;
+  is_admin: boolean;
   created_at: string;
   updated_at: string;
+}
+
+export interface Post {
+  id: string;
+  user_id: string;
+  content: string;
+  tags: string[];
+  image_url: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PostLike {
+  post_id: string;
+  user_id: string;
+  created_at: string;
+}
+
+export interface PostComment {
+  id: string;
+  post_id: string;
+  user_id: string;
+  content: string;
+  created_at: string;
+}
+
+export interface Follow {
+  follower_id: string;
+  following_id: string;
+  created_at: string;
 }
 
 export interface CompanionProfile {

@@ -107,16 +107,18 @@ export function ProfileBody({
   visitorData,
 }: ProfileBodyProps) {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<"posts" | "media" | "videos">("posts");
+  const [activeTab, setActiveTab] = useState<"posts" | "availability" | "media" | "videos">("posts");
   const [isFollowing, setIsFollowing] = useState(visitorData?.isFollowing ?? false);
   const [followerCount, setFollowerCount] = useState(initialFollowerCount);
   const [followPending, startFollowTransition] = useTransition();
   const [optionsOpen, setOptionsOpen] = useState(false);
+  const [newPostOpen, setNewPostOpen] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [followersModalOpen, setFollowersModalOpen] = useState(false);
   const [followingModalOpen, setFollowingModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState<AvailabilityPost | null>(null);
   const optionsRef = useRef<HTMLDivElement>(null);
+  const newPostRef = useRef<HTMLDivElement>(null);
 
   const isSelect = companion.verification_tier === "select";
   const isVerified = companion.verification_tier === "verified";
@@ -136,6 +138,9 @@ export function ProfileBody({
     function handleClick(e: MouseEvent) {
       if (optionsRef.current && !optionsRef.current.contains(e.target as Node)) {
         setOptionsOpen(false);
+      }
+      if (newPostRef.current && !newPostRef.current.contains(e.target as Node)) {
+        setNewPostOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClick);
@@ -208,14 +213,37 @@ export function ProfileBody({
           <div className="mb-2 flex items-center gap-2">
             {isOwner ? (
               <>
-                <Link
-                  href="/companion/posts/new"
-                  className="btn-gold flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
-                >
-                  <Icon name="plus" className="h-4 w-4" />
-                  New Post
-                </Link>
+                <div className="relative" ref={newPostRef}>
+                  <button
+                    onClick={() => setNewPostOpen((o) => !o)}
+                    className="btn-gold flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm"
+                    style={{ fontFamily: "var(--font-dm-sans)" }}
+                  >
+                    <Icon name="plus" className="h-4 w-4" />
+                    New Post
+                    <Icon name="chevron-down" className="h-3 w-3 ml-0.5 opacity-70" />
+                  </button>
+                  {newPostOpen && (
+                    <div className="absolute right-0 top-11 z-30 min-w-[180px] overflow-hidden rounded-xl border border-[rgba(212,175,55,0.15)] bg-[rgba(12,12,24,0.97)] shadow-xl backdrop-blur-sm">
+                      <Link
+                        href="/feed"
+                        onClick={() => setNewPostOpen(false)}
+                        className="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm text-muted/70 transition-colors hover:bg-[rgba(212,175,55,0.06)] hover:text-foreground"
+                        style={{ fontFamily: "var(--font-dm-sans)" }}
+                      >
+                        <Icon name="feed" className="h-4 w-4" /> Social Post
+                      </Link>
+                      <Link
+                        href="/companion/posts/new"
+                        onClick={() => setNewPostOpen(false)}
+                        className="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm text-muted/70 transition-colors hover:bg-[rgba(212,175,55,0.06)] hover:text-foreground"
+                        style={{ fontFamily: "var(--font-dm-sans)" }}
+                      >
+                        <Icon name="calendar" className="h-4 w-4" /> Availability Post
+                      </Link>
+                    </div>
+                  )}
+                </div>
                 <Link
                   href="/account/settings"
                   className="btn-ghost rounded-xl px-4 py-2 text-sm"
@@ -501,7 +529,7 @@ export function ProfileBody({
         {/* ── Tabs ── */}
         <div className="sticky top-[65px] z-20 mt-6 -mx-4 bg-[rgba(8,8,16,0.95)] px-4 backdrop-blur-sm">
           <div className="flex border-b border-[rgba(255,255,255,0.06)]">
-            {(["posts", "media", "videos"] as const).map((tab) => (
+            {(["posts", "availability", "media", "videos"] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -522,6 +550,13 @@ export function ProfileBody({
         <div className="relative overflow-hidden pb-20 pt-4">
           {activeTab === "posts" && (
             <PostsTab feedPosts={feedPosts} isOwner={isOwner} />
+          )}
+          {activeTab === "availability" && (
+            <AvailabilityTab
+              posts={availabilityPosts}
+              isOwner={isOwner}
+              onBook={(post) => setSelectedPost(post)}
+            />
           )}
           {activeTab === "media" && (
             <MediaTab
@@ -957,6 +992,109 @@ function FollowListModal({
           </ul>
         )}
       </div>
+    </div>
+  );
+}
+
+// ── Availability tab ───────────────────────────────────────────
+
+const CATEGORY_LABELS: Record<string, string> = {
+  lunch: "Lunch",
+  dinner: "Dinner",
+  private_dining: "Private Dining",
+  business_coaching: "Business Coaching",
+  social_coaching: "Social Coaching",
+  travel_companion: "Travel Experience",
+  event_plus_one: "Event Plus-One",
+  yacht_luxury: "Yacht / Luxury",
+  gallery_art: "Gallery & Art",
+  weekend_getaway: "Weekend Getaway",
+};
+
+function AvailabilityTab({
+  posts,
+  isOwner,
+  onBook,
+}: {
+  posts: AvailabilityPost[];
+  isOwner: boolean;
+  onBook: (post: AvailabilityPost) => void;
+}) {
+  if (posts.length === 0) {
+    return (
+      <div className="flex flex-col items-center gap-3 py-16 text-center">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.04)]">
+          <Icon name="calendar" className="h-5 w-5 text-gold/30" />
+        </div>
+        <p className="text-sm text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          {isOwner ? "No upcoming availability posts" : "No upcoming availability"}
+        </p>
+        {isOwner && (
+          <Link
+            href="/companion/posts/new"
+            className="btn-gold rounded-xl px-5 py-2 text-sm"
+            style={{ fontFamily: "var(--font-dm-sans)" }}
+          >
+            Add Availability
+          </Link>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-3 pb-6">
+      {posts.map((post) => (
+        <div
+          key={post.id}
+          className="rounded-2xl border border-[rgba(212,175,55,0.12)] bg-[rgba(255,255,255,0.02)] p-4"
+        >
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex-1 min-w-0">
+              <p
+                className="text-sm font-medium text-foreground/90"
+                style={{ fontFamily: "var(--font-cormorant)" }}
+              >
+                {post.title}
+              </p>
+              <p className="mt-0.5 text-xs text-gold/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                {CATEGORY_LABELS[post.category] ?? post.category}
+              </p>
+              <div
+                className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted/50"
+                style={{ fontFamily: "var(--font-dm-sans)" }}
+              >
+                <span>
+                  {new Date(post.date_from).toLocaleDateString("en-GB", {
+                    weekday: "short",
+                    day: "numeric",
+                    month: "short",
+                  })}
+                </span>
+                {post.location_city && <span>{post.location_city}</span>}
+                <span className="text-gold/70">${post.price.toLocaleString()}</span>
+              </div>
+            </div>
+            {!isOwner && (
+              <button
+                onClick={() => onBook(post)}
+                className="shrink-0 btn-gold rounded-xl px-4 py-2 text-sm"
+                style={{ fontFamily: "var(--font-dm-sans)" }}
+              >
+                Book
+              </button>
+            )}
+          </div>
+          {post.description && (
+            <p
+              className="mt-2 text-xs leading-relaxed text-muted/50 whitespace-pre-wrap"
+              style={{ fontFamily: "var(--font-dm-sans)" }}
+            >
+              {post.description}
+            </p>
+          )}
+        </div>
+      ))}
     </div>
   );
 }

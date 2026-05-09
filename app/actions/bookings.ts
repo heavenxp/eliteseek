@@ -50,6 +50,7 @@ export async function createBookingRequest(
   const location = (formData.get("location") as string)?.trim() || null;
   const notes = (formData.get("notes") as string)?.trim() || null;
   const totalAmount = parseFloat(formData.get("total_amount") as string);
+  const availabilityPostId = (formData.get("availability_post_id") as string) || null;
 
   if (!companionId || !scheduledAt || !bookingType) {
     return { error: "Missing required booking details." };
@@ -83,6 +84,15 @@ export async function createBookingRequest(
     .single();
 
   if (error) return { error: error.message };
+
+  // Mark the availability post as booked so it no longer shows as available
+  if (availabilityPostId) {
+    await supabase
+      .from("availability_posts")
+      .update({ is_booked: true })
+      .eq("id", availabilityPostId)
+      .eq("companion_id", companionId);
+  }
 
   // Notify the companion
   const { data: companionProfile } = await supabase

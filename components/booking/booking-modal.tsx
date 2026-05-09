@@ -194,6 +194,7 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
             <input type="hidden" name="booking_type" value={bookingType} />
             <input type="hidden" name="location" value={location} />
             <input type="hidden" name="total_amount" value={String(totalAmount)} />
+            <input type="hidden" name="availability_post_id" value={post?.id ?? ""} />
 
             {/* Summary */}
             <div className="rounded-xl border border-[rgba(212,175,55,0.12)] bg-[rgba(255,255,255,0.02)] p-4 space-y-2">

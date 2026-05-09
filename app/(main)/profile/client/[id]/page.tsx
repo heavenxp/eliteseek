@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { toggleFollow } from "@/app/actions/feed";
+import { MessageButton } from "@/components/messages/message-button";
 
 export async function generateMetadata({
   params,
@@ -107,19 +108,22 @@ export default async function ClientProfilePage({
           </div>
 
           {viewerIsCompanion && viewer?.id !== id && (
-            <form action={handleFollow} className="mb-2">
-              <button
-                type="submit"
-                className={`rounded-xl px-5 py-2 text-sm transition-colors ${
-                  isFollowing
-                    ? "border border-[rgba(212,175,55,0.3)] bg-transparent text-gold hover:bg-[rgba(212,175,55,0.06)]"
-                    : "btn-gold"
-                }`}
-                style={{ fontFamily: "var(--font-dm-sans)" }}
-              >
-                {isFollowing ? "Following" : "Follow"}
-              </button>
-            </form>
+            <div className="mb-2 flex items-center gap-2">
+              <form action={handleFollow}>
+                <button
+                  type="submit"
+                  className={`rounded-xl px-5 py-2 text-sm transition-colors ${
+                    isFollowing
+                      ? "border border-[rgba(212,175,55,0.3)] bg-transparent text-gold hover:bg-[rgba(212,175,55,0.06)]"
+                      : "btn-gold"
+                  }`}
+                  style={{ fontFamily: "var(--font-dm-sans)" }}
+                >
+                  {isFollowing ? "Following" : "Follow"}
+                </button>
+              </form>
+              <MessageButton otherUserId={id} label="Message" />
+            </div>
           )}
         </div>
 

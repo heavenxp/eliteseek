@@ -24,8 +24,9 @@ export async function getOrCreateConversation(otherUserId: string): Promise<Conv
     return { id: null, error: `Profile not found: ${profileError?.message ?? "unknown"}` };
   }
 
-  const clientId = myProfile.role === "client" ? user.id : otherUserId;
-  const companionId = myProfile.role === "companion" ? user.id : otherUserId;
+  const isClient = myProfile.role === "client";
+  const clientId = isClient ? user.id : otherUserId;
+  const companionId = isClient ? otherUserId : user.id;
 
   // Try existing conversation first
   const { data: existing, error: selectError } = await supabase

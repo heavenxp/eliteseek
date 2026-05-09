@@ -4,7 +4,7 @@ import { useState, useTransition, useRef, useEffect, useActionState } from "reac
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Icon } from "@/components/icons";
-import { toggleFollow } from "@/app/actions/feed";
+import { toggleFollow, deletePost } from "@/app/actions/feed";
 import { sendAccessRequest, type AccessState } from "@/app/actions/access";
 import { BookingModal } from "@/components/booking/booking-modal";
 import { MessageButton } from "@/components/messages/message-button";
@@ -33,6 +33,8 @@ type ContentPostPreview = {
   is_subscribers_only: boolean;
   published_at: string | null;
 };
+
+type FeedImageItem = { url: string; post: FeedPostItem };
 
 type CompanionData = {
   id: string;
@@ -123,11 +125,9 @@ export function ProfileBody({
   const isSelect = companion.verification_tier === "select";
   const isVerified = companion.verification_tier === "verified";
 
-  const mediaItems = contentPosts.flatMap((p) =>
-    (Array.isArray(p.media_urls) ? p.media_urls : [])
-      .filter((m) => !m.type.includes("video"))
-      .map((m) => ({ ...m, post: p }))
-  );
+  const mediaItems: FeedImageItem[] = feedPosts
+    .filter((p): p is FeedPostItem & { image_url: string } => p.image_url != null)
+    .map((p) => ({ url: p.image_url, post: p }));
   const videoItems = contentPosts.flatMap((p) =>
     (Array.isArray(p.media_urls) ? p.media_urls : [])
       .filter((m) => m.type.includes("video"))
@@ -549,7 +549,11 @@ export function ProfileBody({
         {/* ── Tab content ── */}
         <div className="relative overflow-hidden pb-20 pt-4">
           {activeTab === "posts" && (
-            <PostsTab feedPosts={feedPosts} isOwner={isOwner} />
+            <PostsTab
+              feedPosts={feedPosts}
+              isOwner={isOwner}
+              onDelete={async (postId) => { await deletePost(postId); router.refresh(); }}
+            />
           )}
           {activeTab === "availability" && (
             <AvailabilityTab
@@ -561,7 +565,6 @@ export function ProfileBody({
           {activeTab === "media" && (
             <MediaTab
               items={mediaItems}
-              isSubscribed={vd?.isSubscribed ?? true}
               isFullyVisible={isOwner || (vd?.isFullyVisible ?? false)}
             />
           )}
@@ -1101,7 +1104,17 @@ function AvailabilityTab({
 
 // ── Posts tab ──────────────────────────────────────────────────
 
-function PostsTab({ feedPosts, isOwner }: { feedPosts: FeedPostItem[]; isOwner: boolean }) {
+function PostsTab({
+  feedPosts,
+  isOwner,
+  onDelete,
+}: {
+  feedPosts: FeedPostItem[];
+  isOwner: boolean;
+  onDelete: (id: string) => Promise<void>;
+}) {
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
   if (feedPosts.length === 0) {
     return (
       <div className="flex flex-col items-center gap-3 py-16 text-center">
@@ -1167,10 +1180,30 @@ function PostsTab({ feedPosts, isOwner }: { feedPosts: FeedPostItem[]; isOwner: 
                 ))}
               </div>
             )}
-            {isOwner && post.audience !== "public" && (
-              <p className="mt-2 text-[10px] text-muted/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
-                {post.audience === "followers" ? "· Followers only" : "· Only you"}
-              </p>
+            {isOwner && (
+              <div className="mt-2 flex items-center justify-between">
+                <span className="text-[10px] text-muted/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                  {post.audience === "public"
+                    ? "Public"
+                    : post.audience === "followers"
+                    ? "Followers only"
+                    : "Only me"}
+                </span>
+                <button
+                  onClick={async () => {
+                    setDeletingId(post.id);
+                    await onDelete(post.id);
+                    setDeletingId(null);
+                  }}
+                  disabled={deletingId === post.id}
+                  className="p-1 text-muted/30 transition-colors hover:text-red-400/70 disabled:opacity-40"
+                  aria-label="Delete post"
+                >
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                  </svg>
+                </button>
+              </div>
             )}
           </div>
         );
@@ -1181,15 +1214,11 @@ function PostsTab({ feedPosts, isOwner }: { feedPosts: FeedPostItem[]; isOwner: 
 
 // ── Media tab ──────────────────────────────────────────────────
 
-type MediaItem = { url: string; type: string; post: ContentPostPreview };
-
 function MediaTab({
   items,
-  isSubscribed,
   isFullyVisible,
 }: {
-  items: MediaItem[];
-  isSubscribed: boolean;
+  items: FeedImageItem[];
   isFullyVisible: boolean;
 }) {
   if (items.length === 0) {
@@ -1198,11 +1227,8 @@ function MediaTab({
         <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.04)]">
           <Icon name="photo" className="h-5 w-5 text-gold/30" />
         </div>
-        <p
-          className="text-sm text-muted/40"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
-        >
-          No media yet
+        <p className="text-sm text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          No photos yet
         </p>
       </div>
     );
@@ -1210,45 +1236,30 @@ function MediaTab({
 
   return (
     <div className="grid grid-cols-3 gap-1">
-      {items.map((item, i) => {
-        const locked =
-          !isFullyVisible &&
-          (item.post.is_ppv || (item.post.is_subscribers_only && !isSubscribed));
-        return (
-          <div key={i} className="relative aspect-square overflow-hidden rounded-lg">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={item.url}
-              alt=""
-              className={`h-full w-full object-cover transition-all ${
-                locked ? "blur-xl scale-110 brightness-50" : ""
-              }`}
-            />
-            {locked && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Icon name="lock" className="h-4 w-4 text-gold/60" />
-              </div>
-            )}
-            {item.post.is_ppv && !locked && (
-              <div className="absolute bottom-1 right-1 rounded bg-black/50 px-1 py-0.5 text-[9px] text-gold">
-                PPV
-              </div>
-            )}
-          </div>
-        );
-      })}
+      {items.map((item, i) => (
+        <div key={i} className="relative aspect-square overflow-hidden rounded-lg">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={item.url}
+            alt=""
+            className="h-full w-full object-cover"
+          />
+        </div>
+      ))}
     </div>
   );
 }
 
 // ── Videos tab ─────────────────────────────────────────────────
 
+type VideoItem = { url: string; type: string; post: ContentPostPreview };
+
 function VideosTab({
   items,
   isSubscribed,
   isFullyVisible,
 }: {
-  items: MediaItem[];
+  items: VideoItem[];
   isSubscribed: boolean;
   isFullyVisible: boolean;
 }) {

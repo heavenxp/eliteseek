@@ -23,10 +23,14 @@ export async function generateMetadata({
 
 export default async function ClientProfilePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ tab?: string }>;
 }) {
   const { id } = await params;
+  const { tab } = await searchParams;
+  const activeTab = tab === "media" ? "media" : "posts";
   const admin = createAdminClient();
   const supabase = await createClient();
   const { data: { user: viewer } } = await supabase.auth.getUser();
@@ -36,7 +40,7 @@ export default async function ClientProfilePage({
     admin.from("client_profiles").select("membership_tier").eq("user_id", id).maybeSingle(),
     supabase
       .from("posts")
-      .select("id, content, created_at, image_url, tags")
+      .select("id, content, created_at, image_url, tags, audience")
       .eq("user_id", id)
       .order("created_at", { ascending: false })
       .limit(20),
@@ -57,6 +61,16 @@ export default async function ClientProfilePage({
 
   const viewerIsCompanion = viewerRoleRes.data?.role === "companion";
   const isFollowing = !!followRes.data;
+  const isOwner = viewer?.id === id;
+
+  async function deletePostAction(postId: string) {
+    "use server";
+    const supabase = await createClient();
+    const { data: { user: authedUser } } = await supabase.auth.getUser();
+    if (!authedUser || authedUser.id !== id) return;
+    await supabase.from("posts").delete().eq("id", postId).eq("user_id", id);
+    revalidatePath(`/profile/client/${id}`);
+  }
 
   async function handleFollow() {
     "use server";
@@ -151,29 +165,65 @@ export default async function ClientProfilePage({
         {/* Divider */}
         <div className="mt-5 border-b border-[rgba(255,255,255,0.06)]" />
 
-        {/* Posts */}
-        <div className="py-5">
-          <p
-            className="mb-4 text-xs uppercase tracking-[0.1em] text-muted/40"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
-          >
-            Posts · {posts.length}
-          </p>
-
-          {posts.length === 0 ? (
-            <p
-              className="py-12 text-center text-sm text-muted/30"
+        {/* Tabs */}
+        <div className="flex border-b border-[rgba(255,255,255,0.06)]">
+          {(["posts", "media"] as const).map((t) => (
+            <a
+              key={t}
+              href={t === "posts" ? `/profile/client/${id}` : `/profile/client/${id}?tab=media`}
+              className={`flex-1 py-3 text-center text-sm capitalize transition-colors ${
+                activeTab === t
+                  ? "border-b-2 border-gold font-medium text-gold"
+                  : "text-muted/50 hover:text-muted/80"
+              }`}
               style={{ fontFamily: "var(--font-dm-sans)" }}
             >
-              No posts yet
-            </p>
-          ) : (
-            <div className="space-y-3 pb-24">
-              {posts.map((post) => (
-                <ClientPost key={post.id} post={post} />
-              ))}
-            </div>
+              {t}
+            </a>
+          ))}
+        </div>
+
+        {/* Tab content */}
+        <div className="pb-24 pt-4">
+          {activeTab === "posts" && (
+            posts.length === 0 ? (
+              <p className="py-12 text-center text-sm text-muted/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                No posts yet
+              </p>
+            ) : (
+              <div className="space-y-3">
+                {posts.map((post) => (
+                  <ClientPost
+                    key={post.id}
+                    post={post}
+                    isOwner={isOwner}
+                    deleteAction={deletePostAction}
+                  />
+                ))}
+              </div>
+            )
           )}
+          {activeTab === "media" && (() => {
+            const mediaItems = posts.filter((p) => p.image_url != null);
+            return mediaItems.length === 0 ? (
+              <p className="py-12 text-center text-sm text-muted/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                No photos yet
+              </p>
+            ) : (
+              <div className="grid grid-cols-3 gap-1">
+                {mediaItems.map((post) => (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <div key={post.id} className="relative aspect-square overflow-hidden rounded-lg">
+                    <img
+                      src={post.image_url!}
+                      alt=""
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            );
+          })()}
         </div>
       </div>
     </div>
@@ -186,9 +236,18 @@ type RawPost = {
   created_at: string;
   image_url: string | null;
   tags: string[] | null;
+  audience: string | null;
 };
 
-function ClientPost({ post }: { post: RawPost }) {
+function ClientPost({
+  post,
+  isOwner,
+  deleteAction,
+}: {
+  post: RawPost;
+  isOwner: boolean;
+  deleteAction?: (postId: string) => Promise<void>;
+}) {
   const diff = Date.now() - new Date(post.created_at).getTime();
   const mins = Math.floor(diff / 60000);
   const timeAgo =
@@ -234,6 +293,30 @@ function ClientPost({ post }: { post: RawPost }) {
               #{tag}
             </span>
           ))}
+        </div>
+      )}
+      {isOwner && (
+        <div className="mt-2 flex items-center justify-between">
+          <span className="text-[10px] text-muted/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            {post.audience === "public"
+              ? "Public"
+              : post.audience === "followers"
+              ? "Followers only"
+              : "Only me"}
+          </span>
+          {deleteAction && (
+            <form action={deleteAction.bind(null, post.id)}>
+              <button
+                type="submit"
+                aria-label="Delete post"
+                className="p-1 text-muted/30 transition-colors hover:text-red-400/70"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                </svg>
+              </button>
+            </form>
+          )}
         </div>
       )}
     </div>

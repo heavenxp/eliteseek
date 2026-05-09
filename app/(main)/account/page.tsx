@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -25,8 +26,7 @@ type ActivityPost = {
   user_id: string;
   image_url: string | null;
   tags: string[];
-  authorName: string;
-  authorUsername: string | null;
+  audience: "public" | "followers" | "private";
 };
 
 type BookingItem = {
@@ -232,23 +232,12 @@ export default async function AccountPage({
       : Promise.resolve({
           data: [] as { id: string; display_name: string | null; username: string | null }[],
         }),
-    followingUserIds.length > 0
-      ? supabase
-          .from("posts")
-          .select("id, content, created_at, user_id, image_url, tags")
-          .in("user_id", followingUserIds)
-          .order("created_at", { ascending: false })
-          .limit(30)
-      : Promise.resolve({
-          data: [] as {
-            id: string;
-            content: string;
-            created_at: string;
-            user_id: string;
-            image_url: string | null;
-            tags: string[] | null;
-          }[],
-        }),
+    supabase
+      .from("posts")
+      .select("id, content, created_at, user_id, image_url, tags, audience")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(30),
     bookingCompanionIds.length > 0
       ? admin
           .from("companion_profiles")
@@ -303,19 +292,15 @@ export default async function AccountPage({
     };
   });
 
-  const activityPosts: ActivityPost[] = (activityPostsRes.data ?? []).map((p) => {
-    const cp = followingCompMap.get(p.user_id);
-    return {
-      id: p.id,
-      content: p.content,
-      created_at: p.created_at,
-      user_id: p.user_id,
-      image_url: p.image_url,
-      tags: (p.tags ?? []) as string[],
-      authorName: cp?.display_name ?? "Host",
-      authorUsername: cp?.username ?? null,
-    };
-  });
+  const activityPosts: ActivityPost[] = (activityPostsRes.data ?? []).map((p) => ({
+    id: p.id,
+    content: p.content,
+    created_at: p.created_at,
+    user_id: p.user_id,
+    image_url: p.image_url,
+    tags: (p.tags ?? []) as string[],
+    audience: ((p as { audience?: string }).audience ?? "public") as ActivityPost["audience"],
+  }));
 
   const bookingItems: BookingItem[] = allBookings.map((b) => {
     const cp = bookingCompMap.get(b.companion_id);
@@ -340,6 +325,14 @@ export default async function AccountPage({
         : "Bronze";
 
   const handle = "@" + (profile.full_name ?? "member").toLowerCase().replace(/\s+/g, "");
+
+  // ── Server action: delete own post ───────────────────────────
+  async function deleteOwnPost(postId: string) {
+    "use server";
+    const supabase = await createClient();
+    await supabase.from("posts").delete().eq("id", postId).eq("user_id", user!.id);
+    revalidatePath("/account");
+  }
 
   // ── Modal URL helpers ─────────────────────────────────────────
   const tabHref = (t: ClientTab) =>
@@ -496,7 +489,7 @@ export default async function AccountPage({
 
         {/* Tab content */}
         <div className="pb-24 pt-5">
-          {activeTab === "activity" && <ActivityTab posts={activityPosts} />}
+          {activeTab === "activity" && <ActivityTab posts={activityPosts} deleteAction={deleteOwnPost} />}
           {activeTab === "unlocked" && <UnlockedTab companions={unlockedList} />}
           {activeTab === "bookings" && <BookingsTab bookings={bookingItems} />}
         </div>
@@ -517,7 +510,13 @@ export default async function AccountPage({
 
 // ── Activity tab ───────────────────────────────────────────────
 
-function ActivityTab({ posts }: { posts: ActivityPost[] }) {
+function ActivityTab({
+  posts,
+  deleteAction,
+}: {
+  posts: ActivityPost[];
+  deleteAction: (postId: string) => Promise<void>;
+}) {
   if (posts.length === 0) {
     return (
       <div className="flex flex-col items-center gap-3 py-20 text-center">
@@ -525,17 +524,17 @@ function ActivityTab({ posts }: { posts: ActivityPost[] }) {
           className="text-lg font-light text-foreground/40"
           style={{ fontFamily: "var(--font-cormorant)" }}
         >
-          No activity yet
+          No posts yet
         </p>
         <p className="text-sm text-muted/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
-          Follow companions to see their posts here
+          Your posts will appear here
         </p>
         <Link
-          href="/browse"
+          href="/feed"
           className="mt-2 rounded-xl border border-[rgba(212,175,55,0.2)] bg-[rgba(212,175,55,0.06)] px-5 py-2.5 text-sm text-gold/80 transition-colors hover:border-[rgba(212,175,55,0.35)] hover:bg-[rgba(212,175,55,0.1)]"
           style={{ fontFamily: "var(--font-dm-sans)" }}
         >
-          Browse companions
+          Go to feed
         </Link>
       </div>
     );
@@ -543,83 +542,82 @@ function ActivityTab({ posts }: { posts: ActivityPost[] }) {
   return (
     <div className="space-y-4">
       {posts.map((post) => (
-        <ActivityPostCard key={post.id} post={post} />
+        <ActivityPostCard key={post.id} post={post} deleteAction={deleteAction} />
       ))}
     </div>
   );
 }
 
-function ActivityPostCard({ post }: { post: ActivityPost }) {
+function ActivityPostCard({
+  post,
+  deleteAction,
+}: {
+  post: ActivityPost;
+  deleteAction: (postId: string) => Promise<void>;
+}) {
   const diff = Date.now() - new Date(post.created_at).getTime();
   const mins = Math.floor(diff / 60000);
   const timeAgo =
     mins < 60
-      ? `${Math.max(1, mins)}m`
+      ? `${Math.max(1, mins)}m ago`
       : mins < 1440
-        ? `${Math.floor(mins / 60)}h`
+        ? `${Math.floor(mins / 60)}h ago`
         : mins < 10080
-          ? `${Math.floor(mins / 1440)}d`
+          ? `${Math.floor(mins / 1440)}d ago`
           : new Date(post.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
 
   return (
     <div className="rounded-2xl border border-[rgba(212,175,55,0.08)] bg-[rgba(255,255,255,0.02)] p-4">
-      <div className="flex items-start gap-3">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[rgba(212,175,55,0.1)] text-xs font-medium text-gold">
-          {post.authorName.charAt(0).toUpperCase()}
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-baseline gap-2">
-            {post.authorUsername ? (
-              <Link
-                href={`/profile/${post.authorUsername}`}
-                className="text-sm font-medium text-foreground/90 transition-colors hover:text-gold"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
-              >
-                {post.authorName}
-              </Link>
-            ) : (
-              <span
-                className="text-sm font-medium text-foreground/90"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
-              >
-                {post.authorName}
-              </span>
-            )}
+      <p className="text-xs text-muted/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        {timeAgo}
+      </p>
+      <p
+        className="mt-1.5 text-sm leading-relaxed text-foreground/70 whitespace-pre-wrap break-words"
+        style={{ fontFamily: "var(--font-dm-sans)" }}
+      >
+        {post.content}
+      </p>
+      {post.image_url && (
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img
+          src={post.image_url}
+          alt=""
+          className="mt-3 w-full rounded-xl object-cover"
+          style={{ maxHeight: "300px" }}
+        />
+      )}
+      {post.tags.length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {post.tags.slice(0, 4).map((tag) => (
             <span
-              className="text-[11px] text-muted/30"
+              key={tag}
+              className="rounded-full bg-[rgba(212,175,55,0.06)] px-2 py-0.5 text-[10px] text-gold/50"
               style={{ fontFamily: "var(--font-dm-sans)" }}
             >
-              {timeAgo}
+              #{tag}
             </span>
-          </div>
-          <p
-            className="mt-1.5 text-sm leading-relaxed text-foreground/70"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
-          >
-            {post.content}
-          </p>
-          {post.image_url && (
-            <img
-              src={post.image_url}
-              alt=""
-              className="mt-3 w-full rounded-xl object-cover"
-              style={{ maxHeight: "300px" }}
-            />
-          )}
-          {post.tags.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              {post.tags.slice(0, 4).map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full bg-[rgba(212,175,55,0.06)] px-2 py-0.5 text-[10px] text-gold/50"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
-                >
-                  #{tag}
-                </span>
-              ))}
-            </div>
-          )}
+          ))}
         </div>
+      )}
+      <div className="mt-2 flex items-center justify-between">
+        <span className="text-[10px] text-muted/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          {post.audience === "public"
+            ? "Public"
+            : post.audience === "followers"
+            ? "Followers only"
+            : "Only me"}
+        </span>
+        <form action={deleteAction.bind(null, post.id)}>
+          <button
+            type="submit"
+            aria-label="Delete post"
+            className="p-1 text-muted/30 transition-colors hover:text-red-400/70"
+          >
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+            </svg>
+          </button>
+        </form>
       </div>
     </div>
   );

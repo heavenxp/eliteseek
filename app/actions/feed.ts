@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath, refresh } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
@@ -114,7 +114,7 @@ export async function deletePost(postId: string): Promise<FeedActionResult> {
 
   if (error) return { error: error.message };
 
-  refresh();
+  revalidatePath("/feed");
   return null;
 }
 

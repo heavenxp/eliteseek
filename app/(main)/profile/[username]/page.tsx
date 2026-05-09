@@ -81,20 +81,25 @@ export default async function ProfilePage({
   const [
     followerResult,
     followingResult,
-    postCountResult,
+    feedPostsResult,
     availabilityPostsResult,
     contentPostsResult,
   ] = await Promise.all([
     supabase.from("follows").select("*", { count: "exact", head: true }).eq("following_id", companion.user_id),
     supabase.from("follows").select("*", { count: "exact", head: true }).eq("follower_id", companion.user_id),
-    supabase.from("availability_posts").select("*", { count: "exact", head: true }).eq("companion_id", companion.id),
+    supabase.from("posts").select("id, content, created_at, image_url, tags, audience", { count: "exact" }).eq("user_id", companion.user_id).order("created_at", { ascending: false }).limit(50),
     supabase.from("availability_posts").select("*").eq("companion_id", companion.id).gte("date_from", new Date().toISOString()).order("date_from", { ascending: true }).limit(20),
     supabase.from("content_posts").select("id, title, media_urls, is_ppv, ppv_price, is_subscribers_only, published_at").eq("companion_id", companion.id).eq("moderation_status", "approved").order("published_at", { ascending: false }).limit(50),
   ]);
 
   const followerCount = followerResult.count ?? 0;
   const followingCount = followingResult.count ?? 0;
-  const postCount = postCountResult.count ?? 0;
+  const postCount = feedPostsResult.count ?? 0;
+  const feedPosts = (feedPostsResult.data ?? []) as Array<{
+    id: string; content: string; created_at: string;
+    image_url: string | null; tags: string[] | null;
+    audience: "public" | "followers" | "private";
+  }>;
   const availabilityPosts = (availabilityPostsResult.data ?? []) as AvailabilityPost[];
   const contentPosts = (contentPostsResult.data ?? []) as Array<{
     id: string;
@@ -181,6 +186,7 @@ export default async function ProfilePage({
         followerCount={followerCount}
         followingCount={followingCount}
         postCount={postCount}
+        feedPosts={feedPosts}
         availabilityPosts={availabilityPosts}
         contentPosts={contentPosts}
         stripeConfigured={stripeConfigured()}
@@ -261,6 +267,7 @@ export default async function ProfilePage({
       followerCount={followerCount}
       followingCount={followingCount}
       postCount={postCount}
+      feedPosts={feedPosts}
       availabilityPosts={availabilityPosts}
       contentPosts={contentPosts}
       stripeConfigured={stripeConfigured()}

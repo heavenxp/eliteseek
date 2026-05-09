@@ -15,6 +15,15 @@ import { getFollowerList, getFollowingList, type FollowListItem } from "@/app/ac
 
 // ── Types ──────────────────────────────────────────────────────
 
+type FeedPostItem = {
+  id: string;
+  content: string;
+  created_at: string;
+  image_url: string | null;
+  tags: string[] | null;
+  audience: "public" | "followers" | "private";
+};
+
 type ContentPostPreview = {
   id: string;
   title: string | null;
@@ -73,6 +82,7 @@ type ProfileBodyProps = {
   followerCount: number;
   followingCount: number;
   postCount: number;
+  feedPosts: FeedPostItem[];
   availabilityPosts: AvailabilityPost[];
   contentPosts: ContentPostPreview[];
   stripeConfigured: boolean;
@@ -89,6 +99,7 @@ export function ProfileBody({
   followerCount: initialFollowerCount,
   followingCount,
   postCount,
+  feedPosts,
   availabilityPosts,
   contentPosts,
   stripeConfigured,
@@ -510,11 +521,7 @@ export function ProfileBody({
         {/* ── Tab content ── */}
         <div className="relative overflow-hidden pb-20 pt-4">
           {activeTab === "posts" && (
-            <PostsTab
-              posts={availabilityPosts}
-              isOwner={isOwner}
-              onBook={(post) => setSelectedPost(post)}
-            />
+            <PostsTab feedPosts={feedPosts} isOwner={isOwner} />
           )}
           {activeTab === "media" && (
             <MediaTab
@@ -956,34 +963,19 @@ function FollowListModal({
 
 // ── Posts tab ──────────────────────────────────────────────────
 
-function PostsTab({
-  posts,
-  isOwner,
-  onBook,
-}: {
-  posts: AvailabilityPost[];
-  isOwner: boolean;
-  onBook: (post: AvailabilityPost) => void;
-}) {
-  if (posts.length === 0) {
+function PostsTab({ feedPosts, isOwner }: { feedPosts: FeedPostItem[]; isOwner: boolean }) {
+  if (feedPosts.length === 0) {
     return (
       <div className="flex flex-col items-center gap-3 py-16 text-center">
         <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.04)]">
-          <Icon name="calendar" className="h-5 w-5 text-gold/30" />
+          <Icon name="photo" className="h-5 w-5 text-gold/30" />
         </div>
-        <p
-          className="text-sm text-muted/40"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
-        >
-          {isOwner ? "You haven't posted any availability yet" : "No upcoming availability"}
+        <p className="text-sm text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          {isOwner ? "You haven't posted to the feed yet" : "No posts yet"}
         </p>
         {isOwner && (
-          <Link
-            href="/companion/posts/new"
-            className="btn-gold rounded-xl px-5 py-2 text-sm"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
-          >
-            Create your first post
+          <Link href="/feed" className="btn-gold rounded-xl px-5 py-2 text-sm" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            Go to feed
           </Link>
         )}
       </div>
@@ -991,14 +983,60 @@ function PostsTab({
   }
 
   return (
-    <div className="space-y-4">
-      {posts.map((post) => (
-        <PostCard
-          key={post.id}
-          post={post}
-          onBook={isOwner ? undefined : () => onBook(post)}
-        />
-      ))}
+    <div className="space-y-3 pb-6">
+      {feedPosts.map((post) => {
+        const diff = Date.now() - new Date(post.created_at).getTime();
+        const mins = Math.floor(diff / 60000);
+        const timeAgo =
+          mins < 60 ? `${Math.max(1, mins)}m ago`
+          : mins < 1440 ? `${Math.floor(mins / 60)}h ago`
+          : mins < 10080 ? `${Math.floor(mins / 1440)}d ago`
+          : new Date(post.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+
+        return (
+          <div
+            key={post.id}
+            className="rounded-2xl border border-[rgba(212,175,55,0.08)] bg-[rgba(255,255,255,0.02)] p-4"
+          >
+            <p className="text-xs text-muted/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              {timeAgo}
+            </p>
+            <p
+              className="mt-1.5 text-sm leading-relaxed text-foreground/75 whitespace-pre-wrap break-words"
+              style={{ fontFamily: "var(--font-dm-sans)" }}
+            >
+              {post.content}
+            </p>
+            {post.image_url && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={post.image_url}
+                alt=""
+                className="mt-3 w-full rounded-xl object-cover"
+                style={{ maxHeight: "320px" }}
+              />
+            )}
+            {post.tags && post.tags.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {post.tags.slice(0, 5).map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-[rgba(212,175,55,0.06)] px-2 py-0.5 text-[10px] text-gold/50"
+                    style={{ fontFamily: "var(--font-dm-sans)" }}
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
+            {isOwner && post.audience !== "public" && (
+              <p className="mt-2 text-[10px] text-muted/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                {post.audience === "followers" ? "· Followers only" : "· Only you"}
+              </p>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }

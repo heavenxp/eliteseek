@@ -1,0 +1,4 @@
+-- Placeholder: no schema changes required between 011 and 013.
+-- 011 added lock_level to companion_profiles and recreated companion_cards view.
+-- 013 added username to profiles table (independent operation).
+-- This file exists to complete the numeric sequence.

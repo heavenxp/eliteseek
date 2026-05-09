@@ -88,12 +88,12 @@ function TrendingTags({
   return (
     <div
       className="flex gap-2 overflow-x-auto border-b border-white/[0.05] px-4 py-3"
-      style={{ scrollbarWidth: "none" }}
+      style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
     >
       <button
         onClick={() => onSelect(null)}
         className={[
-          "shrink-0 rounded-full border px-3.5 py-1 text-[12px] font-medium transition-all",
+          "shrink-0 rounded-full border px-3.5 py-1.5 text-[12px] font-medium transition-all",
           activeTag === null
             ? "border-[#d4af37]/50 bg-[#d4af37]/10 text-[#d4af37]"
             : "border-white/10 text-white/35 hover:text-white/70",
@@ -107,7 +107,7 @@ function TrendingTags({
           key={tag}
           onClick={() => onSelect(activeTag === tag ? null : tag)}
           className={[
-            "shrink-0 rounded-full border px-3.5 py-1 text-[12px] font-medium transition-all",
+            "shrink-0 rounded-full border px-3.5 py-1.5 text-[12px] font-medium transition-all",
             activeTag === tag
               ? "border-[#d4af37]/50 bg-[#d4af37]/10 text-[#d4af37]"
               : "border-white/10 text-white/35 hover:text-white/70",
@@ -146,6 +146,16 @@ export function ComposeBox({ viewer }: { viewer: ViewerProfile }) {
 
   useEffect(() => {
     if (expanded) textareaRef.current?.focus();
+  }, [expanded]);
+
+  // Lock body scroll when expanded on mobile
+  useEffect(() => {
+    if (expanded) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
   }, [expanded]);
 
   function collapse() {
@@ -223,7 +233,7 @@ export function ComposeBox({ viewer }: { viewer: ViewerProfile }) {
   if (!expanded) {
     return (
       <div
-        className="flex cursor-text items-center gap-3 border-b border-white/[0.06] px-4 py-3.5"
+        className="flex w-full cursor-text items-center gap-3 border-b border-white/[0.06] px-4 py-4 sm:py-3.5"
         onClick={() => setExpanded(true)}
       >
         <Avatar name={viewer.name} url={viewer.avatar} size={38} />
@@ -231,12 +241,12 @@ export function ComposeBox({ viewer }: { viewer: ViewerProfile }) {
           className="flex-1 select-none text-[15px] text-white/25"
           style={{ fontFamily: "var(--font-dm-sans)" }}
         >
-          What's on your mind?
+          What&apos;s on your mind?
         </span>
         <button
           type="button"
           onClick={(e) => { e.stopPropagation(); setExpanded(true); }}
-          className="rounded-full border border-[#d4af37]/40 px-4 py-1.5 text-[13px] font-semibold text-[#d4af37] transition-colors hover:bg-[#d4af37]/10"
+          className="shrink-0 rounded-full border border-[#d4af37]/40 px-4 py-2 text-[13px] font-semibold text-[#d4af37] transition-colors hover:bg-[#d4af37]/10 sm:py-1.5"
           style={{ fontFamily: "var(--font-dm-sans)" }}
         >
           Post
@@ -247,236 +257,254 @@ export function ComposeBox({ viewer }: { viewer: ViewerProfile }) {
 
   // ── Expanded ──
   return (
-    <form ref={ref} onSubmit={handleSubmit} className="border-b border-white/[0.06] px-4 pb-3 pt-4">
-      {/* Header */}
-      <div className="mb-3 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <Avatar name={viewer.name} url={viewer.avatar} size={36} />
-          <span className="text-[14px] font-semibold text-white/90" style={{ fontFamily: "var(--font-dm-sans)" }}>
-            {viewer.name}
-          </span>
-        </div>
-        <button
-          type="button"
-          onClick={collapse}
-          className="text-white/30 transition-colors hover:text-white/70"
-          aria-label="Collapse"
-        >
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-
-      {/* Textarea */}
-      <textarea
-        ref={textareaRef}
-        name="content"
-        rows={4}
-        maxLength={500}
-        placeholder="What's on your mind?"
-        onChange={(e) => setChars(e.target.value.length)}
-        className="w-full resize-none bg-transparent text-[15px] leading-relaxed text-white/90 placeholder:text-white/25 focus:outline-none"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+    <>
+      {/* Mobile backdrop */}
+      <div
+        className="fixed inset-0 z-40 bg-black/60 sm:hidden"
+        onClick={collapse}
       />
 
-      {/* Image preview */}
-      {imagePreview && (
-        <div className="relative mt-2 overflow-hidden rounded-2xl">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={imagePreview} alt="Preview" className="max-h-64 w-full object-cover" />
+      {/* On mobile: fixed bottom sheet. On sm+: inline form. */}
+      <form
+        ref={ref}
+        onSubmit={handleSubmit}
+        className="fixed inset-x-0 bottom-0 z-50 flex max-h-[90vh] flex-col overflow-y-auto rounded-t-2xl border-t border-white/[0.08] bg-[#080810] px-4 pb-8 pt-3 sm:relative sm:inset-auto sm:z-auto sm:max-h-none sm:overflow-visible sm:rounded-none sm:border-b sm:border-t-0 sm:border-white/[0.06] sm:pb-3 sm:pt-4"
+      >
+        {/* Mobile drag handle */}
+        <div className="mb-4 flex justify-center sm:hidden">
+          <div className="h-1 w-10 rounded-full bg-white/20" />
+        </div>
+
+        {/* Header */}
+        <div className="mb-3 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <Avatar name={viewer.name} url={viewer.avatar} size={36} />
+            <span className="text-[14px] font-semibold text-white/90" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              {viewer.name}
+            </span>
+          </div>
           <button
             type="button"
-            onClick={clearImage}
-            className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/70 text-white/80 transition-colors hover:text-white"
-            aria-label="Remove image"
+            onClick={collapse}
+            className="p-1 text-white/30 transition-colors hover:text-white/70"
+            aria-label="Collapse"
           >
-            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
-      )}
 
-      {/* Selected tag chips */}
-      {selectedTags.length > 0 && (
-        <div className="mt-2.5 flex flex-wrap gap-1.5">
-          {selectedTags.map((tag) => (
-            <span
-              key={tag}
-              className="flex items-center gap-1 rounded-full border border-[#d4af37]/40 bg-[#d4af37]/[0.08] px-2.5 py-0.5 text-[11px] font-medium text-[#d4af37]/80"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
-            >
-              #{tag}
-              <button type="button" onClick={() => removeTag(tag)} className="leading-none opacity-60 transition-opacity hover:opacity-100">×</button>
-            </span>
-          ))}
-        </div>
-      )}
+        {/* Textarea */}
+        <textarea
+          ref={textareaRef}
+          name="content"
+          rows={4}
+          maxLength={500}
+          placeholder="What's on your mind?"
+          onChange={(e) => setChars(e.target.value.length)}
+          className="w-full resize-none bg-transparent text-[15px] leading-relaxed text-white/90 placeholder:text-white/25 focus:outline-none"
+          style={{ fontFamily: "var(--font-dm-sans)" }}
+        />
 
-      {/* Audience pills — revealed by tapping globe icon */}
-      {showAudienceMenu && (
-        <div className="mt-3 flex flex-wrap gap-1.5">
-          {(["public", "followers", "private"] as const).map((a) => (
+        {/* Image preview */}
+        {imagePreview && (
+          <div className="relative mt-2 overflow-hidden rounded-2xl">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={imagePreview} alt="Preview" className="max-h-64 w-full object-cover" />
             <button
-              key={a}
               type="button"
-              onClick={() => { setAudience(a); setShowAudienceMenu(false); }}
-              className={[
-                "rounded-full border px-3 py-0.5 text-[12px] font-medium transition-all",
-                audience === a
-                  ? "border-[#d4af37]/50 bg-[#d4af37]/10 text-[#d4af37]"
-                  : "border-white/10 text-white/30 hover:border-white/20 hover:text-white/60",
-              ].join(" ")}
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+              onClick={clearImage}
+              className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/70 text-white/80 transition-colors hover:text-white"
+              aria-label="Remove image"
             >
-              {audienceLabels[a]}
+              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
-          ))}
-        </div>
-      )}
+          </div>
+        )}
 
-      {/* Tag picker */}
-      <div className="mt-3 border-t border-white/[0.05] pt-3">
-        <div className="flex flex-wrap gap-1.5">
-          {PRESET_TAGS.map((tag) => {
-            const active = selectedTags.includes(tag);
-            const disabled = !active && selectedTags.length >= MAX_TAGS;
-            return (
-              <button
+        {/* Selected tag chips */}
+        {selectedTags.length > 0 && (
+          <div className="mt-2.5 flex flex-wrap gap-1.5">
+            {selectedTags.map((tag) => (
+              <span
                 key={tag}
+                className="flex items-center gap-1 rounded-full border border-[#d4af37]/40 bg-[#d4af37]/[0.08] px-2.5 py-0.5 text-[11px] font-medium text-[#d4af37]/80"
+                style={{ fontFamily: "var(--font-dm-sans)" }}
+              >
+                #{tag}
+                <button type="button" onClick={() => removeTag(tag)} className="leading-none opacity-60 transition-opacity hover:opacity-100">×</button>
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Audience pills — revealed by tapping globe icon */}
+        {showAudienceMenu && (
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {(["public", "followers", "private"] as const).map((a) => (
+              <button
+                key={a}
                 type="button"
-                onClick={() => togglePresetTag(tag)}
-                disabled={disabled}
+                onClick={() => { setAudience(a); setShowAudienceMenu(false); }}
                 className={[
-                  "rounded-full border px-2.5 py-0.5 text-[11px] font-medium transition-all",
-                  active
+                  "rounded-full border px-3 py-1 text-[12px] font-medium transition-all",
+                  audience === a
                     ? "border-[#d4af37]/50 bg-[#d4af37]/10 text-[#d4af37]"
-                    : disabled
-                    ? "border-white/[0.04] text-white/15"
-                    : "border-white/10 text-white/30 hover:border-white/20 hover:text-white/50",
+                    : "border-white/10 text-white/30 hover:border-white/20 hover:text-white/60",
                 ].join(" ")}
                 style={{ fontFamily: "var(--font-dm-sans)" }}
               >
-                {tag}
+                {audienceLabels[a]}
               </button>
-            );
-          })}
-        </div>
-        <div className="mt-2 flex items-center gap-2">
-          <input
-            type="text"
-            value={customTagInput}
-            onChange={(e) => setCustomTagInput(e.target.value.slice(0, 20))}
-            onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addCustomTag())}
-            placeholder={selectedTags.length >= MAX_TAGS ? `${MAX_TAGS} tags max` : "Custom tag…"}
-            disabled={selectedTags.length >= MAX_TAGS}
-            className="flex-1 rounded-full bg-white/[0.04] px-3 py-1 text-[12px] text-white/70 placeholder:text-white/20 focus:outline-none focus:ring-1 focus:ring-white/10 disabled:opacity-30"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
-          />
-          <button
-            type="button"
-            onClick={addCustomTag}
-            disabled={!customTagInput.trim() || selectedTags.length >= MAX_TAGS}
-            className="text-[12px] text-white/40 transition-opacity hover:text-white/70 disabled:opacity-30"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
-          >
-            Add
-          </button>
-        </div>
-      </div>
+            ))}
+          </div>
+        )}
 
-      {/* Lock price input — host only */}
-      {locked && isHost && (
-        <div className="mt-2.5 flex items-center gap-2">
-          <span className="text-[12px] text-white/40" style={{ fontFamily: "var(--font-dm-sans)" }}>Gift price</span>
-          <div className="flex items-center gap-1 rounded-full border border-[#d4af37]/30 bg-[#d4af37]/[0.06] px-3 py-1">
-            <span className="text-[12px] text-[#d4af37]/60" style={{ fontFamily: "var(--font-dm-sans)" }}>$</span>
+        {/* Tag picker */}
+        <div className="mt-3 border-t border-white/[0.05] pt-3">
+          <div className="flex flex-wrap gap-1.5">
+            {PRESET_TAGS.map((tag) => {
+              const active = selectedTags.includes(tag);
+              const disabled = !active && selectedTags.length >= MAX_TAGS;
+              return (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => togglePresetTag(tag)}
+                  disabled={disabled}
+                  className={[
+                    "rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all",
+                    active
+                      ? "border-[#d4af37]/50 bg-[#d4af37]/10 text-[#d4af37]"
+                      : disabled
+                      ? "border-white/[0.04] text-white/15"
+                      : "border-white/10 text-white/30 hover:border-white/20 hover:text-white/50",
+                  ].join(" ")}
+                  style={{ fontFamily: "var(--font-dm-sans)" }}
+                >
+                  {tag}
+                </button>
+              );
+            })}
+          </div>
+          <div className="mt-2 flex items-center gap-2">
             <input
-              type="number"
-              min="1"
-              step="1"
-              value={lockedPrice}
-              onChange={(e) => setLockedPrice(e.target.value)}
-              placeholder="1"
-              className="w-16 bg-transparent text-[12px] text-[#d4af37] placeholder:text-[#d4af37]/30 focus:outline-none"
+              type="text"
+              value={customTagInput}
+              onChange={(e) => setCustomTagInput(e.target.value.slice(0, 20))}
+              onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addCustomTag())}
+              placeholder={selectedTags.length >= MAX_TAGS ? `${MAX_TAGS} tags max` : "Custom tag…"}
+              disabled={selectedTags.length >= MAX_TAGS}
+              className="flex-1 rounded-full bg-white/[0.04] px-3 py-1.5 text-[12px] text-white/70 placeholder:text-white/20 focus:outline-none focus:ring-1 focus:ring-white/10 disabled:opacity-30"
               style={{ fontFamily: "var(--font-dm-sans)" }}
             />
-          </div>
-        </div>
-      )}
-
-      {/* Bottom action row */}
-      <div className="mt-3 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          {/* Image upload */}
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            className="text-white/35 transition-colors hover:text-white/70"
-            aria-label="Attach image"
-          >
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-            </svg>
-          </button>
-          <input ref={fileInputRef} type="file" accept="image/jpeg,image/jpg,image/png,image/webp,image/gif" className="hidden" onChange={handleImageChange} />
-
-          {/* Audience toggle */}
-          <button
-            type="button"
-            onClick={() => setShowAudienceMenu((v) => !v)}
-            className={[
-              "flex items-center gap-1 text-[12px] font-medium transition-colors",
-              showAudienceMenu || audience !== "public" ? "text-[#d4af37]" : "text-white/35 hover:text-white/70",
-            ].join(" ")}
-            style={{ fontFamily: "var(--font-dm-sans)" }}
-            aria-label="Audience"
-          >
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253M3 12c0 .778.099 1.533.284 2.253" />
-            </svg>
-            {audience !== "public" && <span>{audienceLabels[audience]}</span>}
-          </button>
-
-          {/* Lock toggle — hosts only */}
-          {isHost && (
             <button
               type="button"
-              onClick={() => setLocked((v) => !v)}
-              className={locked ? "text-[#d4af37]" : "text-white/35 transition-colors hover:text-white/70"}
-              aria-label="Lock post"
+              onClick={addCustomTag}
+              disabled={!customTagInput.trim() || selectedTags.length >= MAX_TAGS}
+              className="text-[12px] text-white/40 transition-opacity hover:text-white/70 disabled:opacity-30"
+              style={{ fontFamily: "var(--font-dm-sans)" }}
             >
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-              </svg>
+              Add
             </button>
-          )}
+          </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          {error && (
-            <span className="text-[12px] text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
-              {error}
+        {/* Lock price input — host only */}
+        {locked && isHost && (
+          <div className="mt-2.5 flex items-center gap-2">
+            <span className="text-[12px] text-white/40" style={{ fontFamily: "var(--font-dm-sans)" }}>Gift price</span>
+            <div className="flex items-center gap-1 rounded-full border border-[#d4af37]/30 bg-[#d4af37]/[0.06] px-3 py-1">
+              <span className="text-[12px] text-[#d4af37]/60" style={{ fontFamily: "var(--font-dm-sans)" }}>$</span>
+              <input
+                type="number"
+                min="1"
+                step="1"
+                value={lockedPrice}
+                onChange={(e) => setLockedPrice(e.target.value)}
+                placeholder="1"
+                className="w-16 bg-transparent text-[12px] text-[#d4af37] placeholder:text-[#d4af37]/30 focus:outline-none"
+                style={{ fontFamily: "var(--font-dm-sans)" }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Bottom action row */}
+        <div className="mt-4 flex items-center justify-between sm:mt-3">
+          <div className="flex items-center gap-5 sm:gap-4">
+            {/* Image upload */}
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="p-1 text-white/35 transition-colors hover:text-white/70"
+              aria-label="Attach image"
+            >
+              <svg className="h-[22px] w-[22px] sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+              </svg>
+            </button>
+            <input ref={fileInputRef} type="file" accept="image/jpeg,image/jpg,image/png,image/webp,image/gif" className="hidden" onChange={handleImageChange} />
+
+            {/* Audience toggle */}
+            <button
+              type="button"
+              onClick={() => setShowAudienceMenu((v) => !v)}
+              className={[
+                "flex items-center gap-1 p-1 text-[12px] font-medium transition-colors",
+                showAudienceMenu || audience !== "public" ? "text-[#d4af37]" : "text-white/35 hover:text-white/70",
+              ].join(" ")}
+              style={{ fontFamily: "var(--font-dm-sans)" }}
+              aria-label="Audience"
+            >
+              <svg className="h-[22px] w-[22px] sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253M3 12c0 .778.099 1.533.284 2.253" />
+              </svg>
+              {audience !== "public" && <span>{audienceLabels[audience]}</span>}
+            </button>
+
+            {/* Lock toggle — hosts only */}
+            {isHost && (
+              <button
+                type="button"
+                onClick={() => setLocked((v) => !v)}
+                className={["p-1 transition-colors", locked ? "text-[#d4af37]" : "text-white/35 hover:text-white/70"].join(" ")}
+                aria-label="Lock post"
+              >
+                <svg className="h-[22px] w-[22px] sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                </svg>
+              </button>
+            )}
+          </div>
+
+          <div className="flex items-center gap-3">
+            {error && (
+              <span className="text-[12px] text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                {error}
+              </span>
+            )}
+            <span
+              className={`text-[12px] tabular-nums ${chars > 450 ? "text-red-400" : "text-white/20"}`}
+              style={{ fontFamily: "var(--font-dm-sans)" }}
+            >
+              {chars}/500
             </span>
-          )}
-          <span
-            className={`text-[12px] tabular-nums ${chars > 450 ? "text-red-400" : "text-white/20"}`}
-            style={{ fontFamily: "var(--font-dm-sans)" }}
-          >
-            {chars}/500
-          </span>
-          <button
-            type="submit"
-            disabled={isPending || chars === 0}
-            className="rounded-full bg-[#d4af37] px-5 py-1.5 text-[13px] font-semibold text-black transition-opacity disabled:opacity-40 hover:bg-[#c9a432]"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
-          >
-            {isPending ? "Posting…" : "Post"}
-          </button>
+            <button
+              type="submit"
+              disabled={isPending || chars === 0}
+              className="rounded-full bg-[#d4af37] px-5 py-2 text-[13px] font-semibold text-black transition-opacity disabled:opacity-40 hover:bg-[#c9a432] sm:py-1.5"
+              style={{ fontFamily: "var(--font-dm-sans)" }}
+            >
+              {isPending ? "Posting…" : "Post"}
+            </button>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 }
 
@@ -493,7 +521,7 @@ function FeedTabs({ activeTab }: { activeTab: FeedTab }) {
           key={tab.value}
           href={tab.href}
           className={[
-            "flex-1 py-3 text-center text-[14px] font-medium transition-colors",
+            "flex flex-1 items-center justify-center py-3.5 text-center text-[14px] font-medium transition-colors",
             activeTab === tab.value
               ? "-mb-px border-b-2 border-white text-white"
               : "text-white/35 hover:text-white/60",
@@ -524,7 +552,7 @@ function FollowButton({ authorId, isFollowing }: { authorId: string; isFollowing
       onClick={handle}
       disabled={isPending}
       className={[
-        "text-[13px] font-medium transition-colors disabled:opacity-50",
+        "min-h-[36px] px-1 text-[13px] font-medium transition-colors disabled:opacity-50",
         optimisticFollowing
           ? "text-white/30 hover:text-red-400"
           : "text-[#d4af37] hover:text-[#c9a432]",
@@ -607,13 +635,13 @@ function CommentSection({
             onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), submit())}
             maxLength={300}
             placeholder="Add a comment…"
-            className="flex-1 rounded-full bg-white/[0.04] px-3.5 py-1.5 text-[13px] text-white/80 placeholder:text-white/20 focus:outline-none focus:ring-1 focus:ring-white/10"
+            className="flex-1 rounded-full bg-white/[0.04] px-3.5 py-2 text-[13px] text-white/80 placeholder:text-white/20 focus:outline-none focus:ring-1 focus:ring-white/10 sm:py-1.5"
             style={{ fontFamily: "var(--font-dm-sans)" }}
           />
           <button
             onClick={submit}
             disabled={isPending || !text.trim()}
-            className="text-[12px] font-medium text-[#d4af37] transition-opacity disabled:opacity-30"
+            className="min-h-[36px] px-1 text-[12px] font-medium text-[#d4af37] transition-opacity disabled:opacity-30"
             style={{ fontFamily: "var(--font-dm-sans)" }}
           >
             {isPending ? "…" : "Post"}
@@ -693,7 +721,7 @@ function PostCard({ post, currentUserId }: { post: FeedPost; currentUserId: stri
                 {formatDistanceToNowStrict(new Date(post.created_at), { addSuffix: true })}
               </span>
             </div>
-            <div className="flex shrink-0 items-center gap-3">
+            <div className="flex shrink-0 items-center gap-2">
               {!isOwnPost && currentUserId && (
                 <FollowButton authorId={post.author_id} isFollowing={post.is_following} />
               )}
@@ -701,7 +729,7 @@ function PostCard({ post, currentUserId }: { post: FeedPost; currentUserId: stri
                 <button
                   onClick={handleDelete}
                   disabled={isPending}
-                  className="p-1 text-white/20 transition-colors hover:text-red-400 disabled:opacity-30"
+                  className="p-1.5 text-white/20 transition-colors hover:text-red-400 disabled:opacity-30"
                   aria-label="Delete post"
                 >
                   <svg className="h-[15px] w-[15px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
@@ -780,10 +808,10 @@ function PostCard({ post, currentUserId }: { post: FeedPost; currentUserId: stri
             <button
               onClick={handleLike}
               disabled={isPending || !currentUserId}
-              className="group flex items-center gap-1.5 text-white/35 transition-colors hover:text-red-400 disabled:pointer-events-none"
+              className="group flex min-h-[36px] items-center gap-1.5 text-white/35 transition-colors hover:text-red-400 disabled:pointer-events-none"
             >
               <svg
-                className={`h-[19px] w-[19px] transition-colors ${optimisticPost.is_liked ? "fill-red-400 text-red-400" : "fill-none"}`}
+                className={`h-[20px] w-[20px] transition-colors sm:h-[19px] sm:w-[19px] ${optimisticPost.is_liked ? "fill-red-400 text-red-400" : "fill-none"}`}
                 viewBox="0 0 24 24"
                 stroke="currentColor"
                 strokeWidth={1.7}
@@ -803,9 +831,9 @@ function PostCard({ post, currentUserId }: { post: FeedPost; currentUserId: stri
             {/* Comment */}
             <button
               onClick={() => setShowComments((v) => !v)}
-              className="flex items-center gap-1.5 text-white/35 transition-colors hover:text-white/70"
+              className="flex min-h-[36px] items-center gap-1.5 text-white/35 transition-colors hover:text-white/70"
             >
-              <svg className="h-[19px] w-[19px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.7}>
+              <svg className="h-[20px] w-[20px] sm:h-[19px] sm:w-[19px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.7}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" />
               </svg>
               {optimisticPost.comment_count > 0 && (
@@ -816,8 +844,8 @@ function PostCard({ post, currentUserId }: { post: FeedPost; currentUserId: stri
             </button>
 
             {/* Share (stub) */}
-            <button className="text-white/35 transition-colors hover:text-white/70" aria-label="Share">
-              <svg className="h-[19px] w-[19px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.7}>
+            <button className="flex min-h-[36px] items-center text-white/35 transition-colors hover:text-white/70" aria-label="Share">
+              <svg className="h-[20px] w-[20px] sm:h-[19px] sm:w-[19px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.7}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
               </svg>
             </button>

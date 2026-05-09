@@ -58,10 +58,12 @@ function AccountMenu({ fullName, compact = false }: { fullName: string; compact?
         // Mobile: stacked icon + label
         <button
           onClick={() => setOpen((v) => !v)}
-          className="flex flex-col items-center gap-1 rounded-xl px-4 py-2 text-muted/60 transition-colors"
+          className="flex flex-col items-center gap-1 rounded-xl px-5 py-2.5 text-muted/60 transition-colors"
         >
-          {avatar}
-          <span className="text-[10px]" style={{ fontFamily: "var(--font-dm-sans)" }}>Me</span>
+          <div className="flex h-6 w-6 items-center justify-center rounded-full border border-[rgba(212,175,55,0.55)] bg-[rgba(212,175,55,0.2)] text-[10px] font-medium text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            {initial}
+          </div>
+          <span className="text-[10px]" style={{ fontFamily: "var(--font-dm-sans)" }}>Profile</span>
         </button>
       ) : (
         // Desktop: pill button
@@ -136,7 +138,7 @@ export function AppNav({ user }: { user: NavUser }) {
   const pathname = usePathname();
 
   const companionNav = [
-    { label: "My Profile", href: `/profile/${user.username ?? ""}`, icon: "user" },
+    ...(user.username ? [{ label: "My Profile", href: `/profile/${user.username}`, icon: "user" }] : []),
     { label: "Feed", href: "/feed", icon: "feed" },
     { label: "Availability", href: "/companion/posts", icon: "calendar" },
     { label: "Bookings", href: "/companion/bookings", icon: "check" },

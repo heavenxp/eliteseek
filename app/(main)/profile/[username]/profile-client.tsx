@@ -1,15 +1,17 @@
 "use client";
 
-import { useState, useTransition, useRef, useEffect } from "react";
+import { useState, useTransition, useRef, useEffect, useActionState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Icon } from "@/components/icons";
 import { toggleFollow } from "@/app/actions/feed";
+import { sendAccessRequest, type AccessState } from "@/app/actions/access";
 import { BookingModal } from "@/components/booking/booking-modal";
 import { MessageButton } from "@/components/messages/message-button";
 import { SubscribeButton } from "@/components/subscriptions/subscribe-button";
 import { PostCard } from "@/components/posts/post-card";
 import type { AvailabilityPost } from "@/lib/database.types";
+import { getFollowerList, getFollowingList, type FollowListItem } from "@/app/actions/follows";
 
 // ── Types ──────────────────────────────────────────────────────
 
@@ -100,6 +102,8 @@ export function ProfileBody({
   const [followPending, startFollowTransition] = useTransition();
   const [optionsOpen, setOptionsOpen] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [followersModalOpen, setFollowersModalOpen] = useState(false);
+  const [followingModalOpen, setFollowingModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState<AvailabilityPost | null>(null);
   const optionsRef = useRef<HTMLDivElement>(null);
 
@@ -308,8 +312,18 @@ export function ProfileBody({
           className="mt-4 flex gap-5 border-b border-[rgba(255,255,255,0.06)] pb-4"
           style={{ fontFamily: "var(--font-dm-sans)" }}
         >
-          <StatItem value={followerCount} label="Followers" />
-          <StatItem value={followingCount} label="Following" />
+          <button
+            onClick={() => setFollowersModalOpen(true)}
+            className="flex flex-col items-start transition-opacity hover:opacity-70"
+          >
+            <StatItem value={followerCount} label="Followers" />
+          </button>
+          <button
+            onClick={() => setFollowingModalOpen(true)}
+            className="flex flex-col items-start transition-opacity hover:opacity-70"
+          >
+            <StatItem value={followingCount} label="Following" />
+          </button>
           <StatItem value={postCount} label="Posts" />
           {companion.average_rating && companion.total_reviews > 0 && (
             <div className="flex flex-col items-start">
@@ -494,7 +508,7 @@ export function ProfileBody({
         </div>
 
         {/* ── Tab content ── */}
-        <div className="pb-20 pt-4">
+        <div className="relative overflow-hidden pb-20 pt-4">
           {activeTab === "posts" && (
             <PostsTab
               posts={availabilityPosts}
@@ -516,8 +530,43 @@ export function ProfileBody({
               isFullyVisible={isOwner || (vd?.isFullyVisible ?? false)}
             />
           )}
+
+          {/* Locked overlay — covers tab content when profile is not fully visible */}
+          {!isOwner && vd && !vd.isFullyVisible && vd.lockStatus !== "public" && (
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-[rgba(8,8,16,0.72)] backdrop-blur-sm">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(212,175,55,0.25)] bg-[rgba(212,175,55,0.06)]">
+                <Icon name="lock" className="h-5 w-5 text-gold/50" />
+              </div>
+              <p
+                className="text-sm text-muted/50"
+                style={{ fontFamily: "var(--font-dm-sans)" }}
+              >
+                {vd.lockStatus === "elite_only"
+                  ? "Elite access required to view content"
+                  : "Unlock this profile to view content"}
+              </p>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Follow list modals */}
+      {followersModalOpen && (
+        <FollowListModal
+          title="Followers"
+          companionUserId={companion.user_id}
+          mode="followers"
+          onClose={() => setFollowersModalOpen(false)}
+        />
+      )}
+      {followingModalOpen && (
+        <FollowListModal
+          title="Following"
+          companionUserId={companion.user_id}
+          mode="following"
+          onClose={() => setFollowingModalOpen(false)}
+        />
+      )}
 
       {/* Booking modal */}
       {(showBookingModal || selectedPost !== null) && (
@@ -634,6 +683,20 @@ function LockNotice({
   clientTier: string;
   viewerUserId: string | null;
 }) {
+  const [state, formAction, isPending] = useActionState<AccessState, FormData>(
+    sendAccessRequest,
+    null
+  );
+  // Treat as pending if: already pending in DB, just submitted successfully, or in-flight
+  const isRequestPending =
+    accessRequestStatus === "pending" || state?.success === true || isPending;
+  const canRequest =
+    viewerUserId &&
+    (lockStatus === "locked" ||
+      (lockStatus === "elite_only" && clientTier === "silver")) &&
+    !isRequestPending &&
+    accessRequestStatus !== "approved";
+
   return (
     <div className="mt-4 rounded-2xl border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.04)] px-4 py-4">
       <div className="flex items-start gap-3">
@@ -655,8 +718,16 @@ function LockNotice({
               ? clientTier === "silver"
                 ? "Request access or upgrade to Elite to view this profile"
                 : "Upgrade to Elite membership to access this profile"
-              : "Unlock to see full photos, bio, and book experiences"}
+              : "Request access or pay to unlock full photos, bio, and bookings"}
           </p>
+          {state?.error && (
+            <p
+              className="mt-1.5 text-xs text-red-400/70"
+              style={{ fontFamily: "var(--font-dm-sans)" }}
+            >
+              {state.error}
+            </p>
+          )}
           <div className="mt-3 flex flex-wrap gap-2">
             {/* Guest CTA */}
             {!viewerUserId && (
@@ -668,15 +739,12 @@ function LockNotice({
                 Sign in
               </Link>
             )}
-            {/* Authenticated unlock/request actions */}
+
+            {/* Pay-to-unlock */}
             {viewerUserId && lockStatus === "locked" && profile_unlock_fee && (
               <form action="/api/access/unlock" method="post">
                 <input type="hidden" name="companion_id" value={companionId} />
-                <input
-                  type="hidden"
-                  name="amount_paid"
-                  value={String(profile_unlock_fee)}
-                />
+                <input type="hidden" name="amount_paid" value={String(profile_unlock_fee)} />
                 <button
                   type="submit"
                   className="btn-gold rounded-lg px-4 py-1.5 text-xs"
@@ -686,30 +754,35 @@ function LockNotice({
                 </button>
               </form>
             )}
-            {viewerUserId &&
-              (lockStatus === "locked" ||
-                (lockStatus === "elite_only" && clientTier === "silver")) &&
-              accessRequestStatus === null && (
-                <form action="/api/access/request" method="post">
-                  <input type="hidden" name="companion_id" value={companionId} />
-                  <button
-                    type="submit"
-                    className="btn-ghost rounded-lg px-4 py-1.5 text-xs"
-                    style={{ fontFamily: "var(--font-dm-sans)" }}
-                  >
-                    Request Free Access
-                  </button>
-                </form>
-              )}
-            {accessRequestStatus === "pending" && (
+
+            {/* Request access — server action, no redirect */}
+            {canRequest && (
+              <form action={formAction}>
+                <input type="hidden" name="companion_id" value={companionId} />
+                <button
+                  type="submit"
+                  disabled={isPending}
+                  className="btn-ghost rounded-lg px-4 py-1.5 text-xs disabled:opacity-50"
+                  style={{ fontFamily: "var(--font-dm-sans)" }}
+                >
+                  Request Access
+                </button>
+              </form>
+            )}
+
+            {/* Pending state */}
+            {isRequestPending && accessRequestStatus !== "declined" && (
               <span
-                className="text-xs text-muted/50"
+                className="flex items-center gap-1.5 text-xs text-muted/50"
                 style={{ fontFamily: "var(--font-dm-sans)" }}
               >
-                Access request pending…
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-gold/50" />
+                Request pending
               </span>
             )}
-            {accessRequestStatus === "declined" && (
+
+            {/* Declined state */}
+            {accessRequestStatus === "declined" && !state?.success && (
               <span
                 className="text-xs text-red-400/70"
                 style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -717,6 +790,8 @@ function LockNotice({
                 Access request was not approved
               </span>
             )}
+
+            {/* Elite upgrade CTA */}
             {lockStatus === "elite_only" && clientTier !== "elite" && (
               <Link
                 href="/membership"
@@ -728,6 +803,152 @@ function LockNotice({
             )}
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Follow list modal ─────────────────────────────────────────
+
+const TIER_BADGE: Record<string, { label: string; cls: string }> = {
+  bronze: { label: "Bronze", cls: "bg-[rgba(180,120,60,0.15)] text-[#c87941]" },
+  silver: { label: "Silver", cls: "bg-[rgba(180,180,200,0.12)] text-[#a0a0b8]" },
+  elite:  { label: "Elite",  cls: "bg-[rgba(212,175,55,0.15)] text-gold" },
+};
+
+function relativeTime(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return `${Math.max(1, mins)}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  if (days < 30) return `${days}d ago`;
+  const mos = Math.floor(days / 30);
+  if (mos < 12) return `${mos}mo ago`;
+  return `${Math.floor(mos / 12)}y ago`;
+}
+
+function FollowListModal({
+  title,
+  companionUserId,
+  mode,
+  onClose,
+}: {
+  title: string;
+  companionUserId: string;
+  mode: "followers" | "following";
+  onClose: () => void;
+}) {
+  const [items, setItems] = useState<FollowListItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fn = mode === "followers" ? getFollowerList : getFollowingList;
+    fn(companionUserId).then((data) => {
+      setItems(data);
+      setLoading(false);
+    });
+  }, [companionUserId, mode]);
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-[rgba(8,8,16,0.75)] backdrop-blur-sm"
+        onClick={onClose}
+      />
+      {/* Card */}
+      <div className="relative z-10 mx-4 w-full max-w-sm rounded-2xl border border-[rgba(212,175,55,0.15)] bg-[rgba(16,12,32,0.98)] p-5 shadow-2xl">
+        <div className="mb-4 flex items-center justify-between">
+          <h2
+            className="text-lg font-light text-foreground"
+            style={{ fontFamily: "var(--font-cormorant)" }}
+          >
+            {title}
+            {!loading && (
+              <span className="ml-2 text-sm text-muted/40">{items.length}</span>
+            )}
+          </h2>
+          <button
+            onClick={onClose}
+            className="rounded-full p-1.5 text-muted/40 transition-colors hover:text-muted/70"
+          >
+            <Icon name="x" className="h-4 w-4" />
+          </button>
+        </div>
+
+        {loading ? (
+          <div className="flex justify-center py-8">
+            <span className="h-5 w-5 animate-spin rounded-full border-2 border-[rgba(212,175,55,0.3)] border-t-gold" />
+          </div>
+        ) : items.length === 0 ? (
+          <p
+            className="py-8 text-center text-sm text-muted/30"
+            style={{ fontFamily: "var(--font-dm-sans)" }}
+          >
+            None yet
+          </p>
+        ) : (
+          <ul className="max-h-80 space-y-2 overflow-y-auto">
+            {items.map((item) => {
+              const initial = item.name.charAt(0).toUpperCase();
+              const tierBadge = item.tier ? TIER_BADGE[item.tier] : null;
+              const row = (
+                <div className="flex items-center gap-3 rounded-xl border border-[rgba(212,175,55,0.06)] bg-[rgba(255,255,255,0.02)] px-3 py-2.5 transition-colors hover:border-[rgba(212,175,55,0.15)] hover:bg-[rgba(212,175,55,0.04)]">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[rgba(212,175,55,0.1)] text-xs font-medium text-gold">
+                    {initial}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span
+                        className="truncate text-sm text-foreground/90"
+                        style={{ fontFamily: "var(--font-dm-sans)" }}
+                      >
+                        {item.name}
+                      </span>
+                      {tierBadge && (
+                        <span
+                          className={`shrink-0 rounded-full px-1.5 py-0.5 text-[9px] font-medium ${tierBadge.cls}`}
+                          style={{ fontFamily: "var(--font-dm-sans)" }}
+                        >
+                          {tierBadge.label}
+                        </span>
+                      )}
+                    </div>
+                    <p
+                      className="text-[10px] text-muted/30"
+                      style={{ fontFamily: "var(--font-dm-sans)" }}
+                    >
+                      {item.username ? `@${item.username} · ` : ""}{relativeTime(item.followedAt)}
+                    </p>
+                  </div>
+                  {item.username && (
+                    <Icon name="chevron-right" className="h-3.5 w-3.5 shrink-0 text-muted/30" />
+                  )}
+                </div>
+              );
+              return (
+                <li key={item.id}>
+                  <Link
+                    href={item.username ? `/profile/${item.username}` : `/profile/client/${item.id}`}
+                    onClick={onClose}
+                  >
+                    {row}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </div>
     </div>
   );

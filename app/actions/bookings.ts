@@ -17,12 +17,21 @@ async function requireClient() {
 async function requireCompanionOwner(supabase: Awaited<ReturnType<typeof createClient>>, bookingId: string, userId: string) {
   const { data } = await supabase
     .from("bookings")
-    .select("id, companion_id, companion_profiles!inner(user_id)")
+    .select("id, companion_id")
     .eq("id", bookingId)
     .single();
 
-  const profile = (Array.isArray(data?.companion_profiles) ? data.companion_profiles[0] : data?.companion_profiles) as { user_id: string } | null | undefined;
-  if (!data || profile?.user_id !== userId) return null;
+  if (!data) return null;
+
+  // Verify ownership without a join — avoids !inner RLS collapse
+  const { data: cp } = await supabase
+    .from("companion_profiles")
+    .select("user_id")
+    .eq("id", data.companion_id)
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (!cp) return null;
   return data;
 }
 

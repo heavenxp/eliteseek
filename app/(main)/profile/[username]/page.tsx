@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { stripeConfigured } from "@/lib/stripe";
 import { ProfileBody } from "./profile-client";
 import type { AvailabilityPost } from "@/lib/database.types";
@@ -11,9 +12,8 @@ export async function generateMetadata({
   params: Promise<{ username: string }>;
 }): Promise<Metadata> {
   const { username } = await params;
-  const supabase = await createClient();
 
-  const { data } = await supabase
+  const { data } = await createAdminClient()
     .from("companion_profiles")
     .select("display_name, tagline, bio, cover_image_url")
     .eq("username", username)
@@ -59,7 +59,7 @@ export default async function ProfilePage({
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data: companion } = await supabase
+  const { data: companion } = await createAdminClient()
     .from("companion_profiles")
     .select(
       `id, user_id, display_name, bio, tagline, location, age,

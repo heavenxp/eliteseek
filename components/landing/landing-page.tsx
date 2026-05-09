@@ -644,10 +644,10 @@ export function LandingPage() {
               className="flex flex-wrap justify-center gap-6 text-xs text-muted"
               style={{ fontFamily: "var(--font-dm-sans)" }}
             >
-              <Link href="/terms" className="transition hover:text-foreground">Terms & Conditions</Link>
-              <Link href="/privacy" className="transition hover:text-foreground">Privacy Policy</Link>
-              <Link href="/safety" className="transition hover:text-foreground">Safety</Link>
-              <Link href="/contact" className="transition hover:text-foreground">Contact</Link>
+              <Link href="#" className="transition hover:text-foreground">Terms & Conditions</Link>
+              <Link href="#" className="transition hover:text-foreground">Privacy Policy</Link>
+              <Link href="#" className="transition hover:text-foreground">Safety</Link>
+              <Link href="#" className="transition hover:text-foreground">Contact</Link>
             </div>
 
             {/* Legal */}

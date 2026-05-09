@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { ComposeBox, FeedClient, type FeedPost, type FeedTab } from "./feed-client";
 
 export const metadata: Metadata = {
@@ -25,17 +26,18 @@ export default async function FeedPage({
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  // ── Follows ───────────────────────────────────────────────────
-  const { data: followsData } = await supabase
-    .from("follows")
-    .select("following_id")
-    .eq("follower_id", user.id);
+  // ── Follows + viewer role ─────────────────────────────────────
+  const [{ data: followsData }, { data: viewerProfile }] = await Promise.all([
+    supabase.from("follows").select("following_id").eq("follower_id", user.id),
+    supabase.from("profiles").select("role").eq("id", user.id).single(),
+  ]);
   const followingIds = new Set((followsData ?? []).map((f) => f.following_id));
+  const userRole = viewerProfile?.role as string | undefined;
 
   if (activeTab === "following" && followingIds.size === 0) {
     return (
       <PageShell>
-        <ComposeBox />
+        <ComposeBox showAudience={userRole === "client"} />
         <FeedClient posts={[]} currentUserId={user.id} activeTab={activeTab} />
       </PageShell>
     );
@@ -45,7 +47,7 @@ export default async function FeedPage({
   // For You: fetch 100 to allow reranking; Following: fetch 50 chronologically
   let postsQuery = supabase
     .from("posts")
-    .select("id, content, created_at, user_id, tags, image_url")
+    .select("id, content, created_at, user_id, tags, image_url, audience")
     .order("created_at", { ascending: false })
     .limit(activeTab === "for_you" ? 100 : 50);
 
@@ -67,6 +69,7 @@ export default async function FeedPage({
   // ── Parallel data fetch ───────────────────────────────────────
   const [
     profilesResult,
+    usernamesResult,
     likesResult,
     userLikesResult,
     commentsResult,
@@ -75,11 +78,17 @@ export default async function FeedPage({
     recentCommentsResult,
     preferredTagsResult,
   ] = await Promise.all([
-    // Author profiles (includes current user for country lookup)
-    supabase
+    // Author profiles — admin client bypasses RLS for cross-user reads
+    createAdminClient()
       .from("profiles")
       .select("id, full_name, avatar_url, country")
       .in("id", Array.from(authorIds)),
+
+    // Companion usernames — only companions have profiles with usernames
+    createAdminClient()
+      .from("companion_profiles")
+      .select("user_id, username")
+      .in("user_id", Array.from(authorIds)),
 
     // Total likes (for like_count display)
     postIds.length > 0
@@ -124,6 +133,12 @@ export default async function FeedPage({
   type Profile = { id: string; full_name: string; avatar_url: string | null; country: string | null };
   const profileMap = new Map<string, Profile>(
     (profilesResult.data ?? []).map((p) => [p.id, p as Profile])
+  );
+
+  const usernameMap = new Map<string, string>(
+    (usernamesResult.data ?? [])
+      .filter((r) => r.username != null)
+      .map((r) => [r.user_id, r.username as string])
   );
 
   const likeCountMap = new Map<string, number>();
@@ -179,9 +194,11 @@ export default async function FeedPage({
       author_id:  p.user_id,
       tags:       (p.tags as string[]) ?? [],
       image_url:  (p as { image_url?: string | null }).image_url ?? null,
+      audience:   ((p as { audience?: string }).audience ?? "public") as "public" | "followers" | "private",
       author: {
         full_name: profile?.full_name ?? "Unknown",
         avatar_url: profile?.avatar_url ?? null,
+        username: usernameMap.get(p.user_id) ?? null,
       },
       like_count:    likeCountMap.get(p.id) ?? 0,
       is_liked:      likedByUser.has(p.id),
@@ -232,7 +249,7 @@ export default async function FeedPage({
 
   return (
     <PageShell>
-      <ComposeBox />
+      <ComposeBox showAudience={userRole === "client"} />
       <FeedClient posts={posts} currentUserId={user.id} activeTab={activeTab} />
     </PageShell>
   );

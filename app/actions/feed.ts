@@ -34,7 +34,12 @@ export async function createPost(_: FeedActionResult, formData: FormData): Promi
     image_url = publicUrl;
   }
 
-  const { error } = await supabase.from("posts").insert({ user_id: user.id, content, tags, image_url });
+  const rawAudience = (formData.get("audience") as string) ?? "public";
+  const audience = (["public", "followers", "private"] as const).includes(rawAudience as never)
+    ? (rawAudience as "public" | "followers" | "private")
+    : "public";
+
+  const { error } = await supabase.from("posts").insert({ user_id: user.id, content, tags, image_url, audience });
   if (error) {
     console.error("[createPost] insert error:", error.message);
     return { error: error.message };

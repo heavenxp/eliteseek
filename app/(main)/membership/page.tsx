@@ -137,7 +137,7 @@ export default async function MembershipPage() {
           style={{ fontFamily: "var(--font-dm-sans)" }}
         >
           Billing is managed securely via Stripe. Cancel anytime.{" "}
-          <Link href="/privacy" className="underline hover:text-muted/60">
+          <Link href="#" className="underline hover:text-muted/60">
             Privacy Policy
           </Link>
         </p>

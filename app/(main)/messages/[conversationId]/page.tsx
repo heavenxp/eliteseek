@@ -1,5 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { ChatView } from "@/components/messages/chat-view";
 import { markConversationRead } from "@/app/actions/messages";
 import type { Message } from "@/lib/database.types";
@@ -28,9 +29,9 @@ export default async function ConversationPage({
   const isParticipant = conv.client_id === user.id || conv.companion_id === user.id;
   if (!isParticipant) notFound();
 
-  // Fetch participant profiles separately
+  // Fetch participant profiles separately (admin bypasses RLS for cross-user reads)
   const profileIds = Array.from(new Set([conv.client_id, conv.companion_id]));
-  const { data: profiles } = await supabase
+  const { data: profiles } = await createAdminClient()
     .from("profiles")
     .select("id, full_name")
     .in("id", profileIds);

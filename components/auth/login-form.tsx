@@ -92,7 +92,7 @@ export function LoginForm() {
                 Password
               </label>
               <Link
-                href="/forgot-password"
+                href="#"
                 className="text-xs text-gold/80 transition hover:text-gold"
                 style={{ fontFamily: "var(--font-dm-sans)" }}
               >
@@ -146,11 +146,11 @@ export function LoginForm() {
         style={{ fontFamily: "var(--font-dm-sans)" }}
       >
         By signing in you agree to our{" "}
-        <Link href="/terms" className="underline underline-offset-2 hover:text-muted/70">
+        <Link href="#" className="underline underline-offset-2 hover:text-muted/70">
           Terms
         </Link>{" "}
         and{" "}
-        <Link href="/privacy" className="underline underline-offset-2 hover:text-muted/70">
+        <Link href="#" className="underline underline-offset-2 hover:text-muted/70">
           Privacy Policy
         </Link>
         .

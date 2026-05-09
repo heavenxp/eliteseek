@@ -59,12 +59,21 @@ export async function respondToAccessRequest(
 
   const { data: req } = await supabase
     .from("access_requests")
-    .select("id, client_id, companion_id, companion_profiles!inner(user_id)")
+    .select("id, client_id, companion_id")
     .eq("id", requestId)
     .single();
 
-  const cp = (Array.isArray(req?.companion_profiles) ? req.companion_profiles[0] : req?.companion_profiles) as { user_id: string } | null | undefined;
-  if (!req || cp?.user_id !== userId) return { error: "Request not found." };
+  if (!req) return { error: "Request not found." };
+
+  // Verify ownership without a join — avoids !inner RLS collapse
+  const { data: cp } = await supabase
+    .from("companion_profiles")
+    .select("user_id")
+    .eq("id", req.companion_id)
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (!cp) return { error: "Request not found." };
 
   const { error } = await supabase
     .from("access_requests")

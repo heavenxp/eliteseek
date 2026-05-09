@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { MessagesShell } from "@/components/messages/messages-shell";
 import { ConversationSidebar } from "@/components/messages/conversation-sidebar";
 
@@ -54,7 +55,7 @@ export default async function MessagesLayout({
           .eq("is_read", false)
       : Promise.resolve({ data: [] }),
     participantIds.length > 0
-      ? supabase
+      ? createAdminClient()
           .from("profiles")
           .select("id, full_name")
           .in("id", participantIds)

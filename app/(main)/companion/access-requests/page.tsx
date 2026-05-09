@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { Icon } from "@/components/icons";
 import { RequestActions } from "./request-actions";
-import type { AccessRequestStatus } from "@/lib/database.types";
+import type { AccessRequestStatus, MembershipTier } from "@/lib/database.types";
 
 export const metadata = { title: "Access Requests — EliteSeek" };
 
@@ -25,7 +26,10 @@ type RequestRow = {
   message: string | null;
   created_at: string;
   responded_at: string | null;
-  client: { full_name: string } | null;
+  clientName: string;
+  clientHandle: string;
+  membershipTier: MembershipTier;
+  memberSince: string;
 };
 
 export default async function AccessRequestsPage() {
@@ -43,21 +47,45 @@ export default async function AccessRequestsPage() {
 
   const { data: raw } = await supabase
     .from("access_requests")
-    .select(`
-      id,
-      status,
-      message,
-      created_at,
-      responded_at,
-      client:profiles!client_id (full_name)
-    `)
+    .select("id, status, message, created_at, responded_at, client_id")
     .eq("companion_id", companion.id)
     .order("created_at", { ascending: false });
 
-  const requests = (raw ?? []).map((r) => ({
-    ...r,
-    client: Array.isArray(r.client) ? r.client[0] ?? null : r.client,
-  })) as RequestRow[];
+  const rawList = raw ?? [];
+  const clientIds = [...new Set(rawList.map((r) => r.client_id))];
+
+  const admin = createAdminClient();
+  const [profilesRes, tierRes] = await Promise.all([
+    clientIds.length > 0
+      ? admin.from("profiles").select("id, full_name, created_at").in("id", clientIds)
+      : Promise.resolve({ data: [] as { id: string; full_name: string; created_at: string }[] }),
+    clientIds.length > 0
+      ? admin.from("client_profiles").select("user_id, membership_tier").in("user_id", clientIds)
+      : Promise.resolve({ data: [] as { user_id: string; membership_tier: MembershipTier }[] }),
+  ]);
+
+  const profileMap = new Map((profilesRes.data ?? []).map((p) => [p.id, p]));
+  const tierMap = new Map((tierRes.data ?? []).map((p) => [p.user_id, p.membership_tier]));
+
+  const requests: RequestRow[] = rawList.map((r) => {
+    const profile = profileMap.get(r.client_id);
+    const fullName = profile?.full_name ?? "Anonymous";
+    const handle = "@" + fullName.split(" ")[0].toLowerCase();
+    const memberSince = profile?.created_at
+      ? new Date(profile.created_at).toLocaleDateString("en-US", { month: "long", year: "numeric" })
+      : "—";
+    return {
+      id: r.id,
+      status: r.status as AccessRequestStatus,
+      message: r.message,
+      created_at: r.created_at,
+      responded_at: r.responded_at,
+      clientName: fullName,
+      clientHandle: handle,
+      membershipTier: (tierMap.get(r.client_id) ?? "bronze") as MembershipTier,
+      memberSince,
+    };
+  });
 
   const pending = requests.filter((r) => r.status === "pending");
   const approved = requests.filter((r) => r.status === "approved");
@@ -153,6 +181,12 @@ function Section({
   );
 }
 
+const TIER_BADGE: Record<string, { label: string; cls: string }> = {
+  bronze: { label: "Bronze", cls: "bg-[rgba(180,120,60,0.15)] text-[#c87941]" },
+  silver: { label: "Silver", cls: "bg-[rgba(180,180,200,0.12)] text-[#a0a0b8]" },
+  elite:  { label: "Elite",  cls: "bg-[rgba(212,175,55,0.15)] text-gold" },
+};
+
 function RequestCard({
   request,
   showActions = false,
@@ -160,37 +194,61 @@ function RequestCard({
   request: RequestRow;
   showActions?: boolean;
 }) {
-  const clientName = request.client?.full_name ?? "Anonymous";
-  const initials = clientName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
+  const initials = request.clientName
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+  const tier = TIER_BADGE[request.membershipTier] ?? TIER_BADGE.bronze;
 
   return (
     <div className="rounded-2xl border border-[rgba(212,175,55,0.1)] bg-[rgba(255,255,255,0.02)] p-4">
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-start gap-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[rgba(212,175,55,0.1)] text-xs font-medium text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
-            {initials}
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <p className="text-sm text-foreground/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
-                {clientName}
-              </p>
-              <span
-                className={`rounded-full px-2 py-0.5 text-[10px] ${STATUS_COLORS[request.status]}`}
-                style={{ fontFamily: "var(--font-dm-sans)" }}
-              >
-                {STATUS_LABELS[request.status]}
-              </span>
-            </div>
-            <p className="mt-0.5 text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
-              Requested {new Date(request.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
+      <div className="flex items-start gap-3">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[rgba(212,175,55,0.1)] text-xs font-medium text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          {initials}
+        </div>
+        <div className="flex-1 min-w-0">
+          {/* Name row */}
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="text-sm font-medium text-foreground/90" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              {request.clientName}
             </p>
-            {request.message && (
-              <p className="mt-2 text-xs italic text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
-                &ldquo;{request.message}&rdquo;
-              </p>
-            )}
+            <span
+              className={`rounded-full px-2 py-0.5 text-[10px] ${STATUS_COLORS[request.status]}`}
+              style={{ fontFamily: "var(--font-dm-sans)" }}
+            >
+              {STATUS_LABELS[request.status]}
+            </span>
           </div>
+
+          {/* Handle + tier + member since */}
+          <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span className="text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              {request.clientHandle}
+            </span>
+            <span
+              className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${tier.cls}`}
+              style={{ fontFamily: "var(--font-dm-sans)" }}
+            >
+              {tier.label}
+            </span>
+            <span className="text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              Member since {request.memberSince}
+            </span>
+          </div>
+
+          {/* Request date */}
+          <p className="mt-1.5 text-xs text-muted/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            Requested {new Date(request.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
+          </p>
+
+          {/* Optional message */}
+          {request.message && (
+            <p className="mt-2 text-xs italic text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              &ldquo;{request.message}&rdquo;
+            </p>
+          )}
         </div>
       </div>
 

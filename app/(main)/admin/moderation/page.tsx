@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { AdminActionButton } from "../admin-action-button";
 import { approveContent, rejectContent } from "@/app/actions/admin";
-import type { ContentPost, CompanionProfile, Profile } from "@/lib/database.types";
+import type { ContentPost, CompanionProfile } from "@/lib/database.types";
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-GB", {
@@ -35,11 +35,7 @@ type PostRow = Pick<
   ContentPost,
   "id" | "title" | "body" | "media_urls" | "companion_id" | "created_at" | "moderation_status"
 > & {
-  companion_profiles:
-    | (Pick<CompanionProfile, "display_name" | "user_id"> & {
-        profiles: Pick<Profile, "full_name"> | null;
-      })
-    | null;
+  companion_profiles: Pick<CompanionProfile, "display_name" | "user_id"> | null;
 };
 
 export default async function AdminModerationPage() {
@@ -49,7 +45,7 @@ export default async function AdminModerationPage() {
     .from("content_posts")
     .select(
       `id, title, body, media_urls, companion_id, created_at, moderation_status,
-       companion_profiles!companion_id(display_name, user_id, profiles!user_id(full_name))`
+       companion_profiles!companion_id(display_name, user_id)`
     )
     .in("moderation_status", ["pending", "flagged"])
     .order("created_at", { ascending: false })
@@ -99,13 +95,7 @@ export default async function AdminModerationPage() {
             const cp = Array.isArray(post.companion_profiles)
               ? post.companion_profiles[0] ?? null
               : post.companion_profiles;
-            const profileData = cp
-              ? Array.isArray(cp.profiles)
-                ? cp.profiles[0] ?? null
-                : cp.profiles
-              : null;
-            const companionName =
-              cp?.display_name ?? profileData?.full_name ?? post.companion_id;
+            const companionName = cp?.display_name ?? post.companion_id;
             const mediaCount = Array.isArray(post.media_urls)
               ? post.media_urls.length
               : 0;

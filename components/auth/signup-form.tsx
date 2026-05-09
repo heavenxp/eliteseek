@@ -202,7 +202,7 @@ export function SignupForm() {
         style={{ fontFamily: "var(--font-dm-sans)" }}
       >
         By creating an account you agree to our{" "}
-        <Link href="/terms" className="underline underline-offset-2 hover:text-muted/70">
+        <Link href="#" className="underline underline-offset-2 hover:text-muted/70">
           Terms
         </Link>
         . You must be 18+ to use EliteSeek.

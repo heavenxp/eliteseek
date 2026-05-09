@@ -19,12 +19,13 @@ export type FeedPost = {
   content: string;
   created_at: string;
   author_id: string;
-  author: { full_name: string; avatar_url: string | null };
+  author: { full_name: string; avatar_url: string | null; username: string | null };
   like_count: number;
   is_liked: boolean;
   is_following: boolean;
   tags: string[];
   image_url: string | null;
+  audience: "public" | "followers" | "private";
   comments: FeedComment[];
   comment_count: number;
 };
@@ -41,7 +42,7 @@ const PRESET_TAGS = ["Travel", "Dining", "Events", "Nightlife", "Wellness", "Bus
 const MAX_TAGS = 5;
 
 // ── Compose box ────────────────────────────────────────────────
-export function ComposeBox() {
+export function ComposeBox({ showAudience }: { showAudience?: boolean }) {
   const router = useRouter();
   const ref = useRef<HTMLFormElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -52,6 +53,7 @@ export function ComposeBox() {
   const [customTagInput, setCustomTagInput] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [audience, setAudience] = useState<"public" | "followers" | "private">("public");
 
   function togglePresetTag(tag: string) {
     setSelectedTags((prev) =>
@@ -94,6 +96,7 @@ export function ComposeBox() {
     const fd = new FormData(e.currentTarget);
     if (selectedTags.length > 0) fd.set("tags", selectedTags.join(","));
     if (imageFile) fd.set("image", imageFile);
+    fd.set("audience", audience);
     const capturedPreview = imagePreview;
     startTransition(async () => {
       const result = await createPost(null, fd);
@@ -109,6 +112,7 @@ export function ComposeBox() {
         setImageFile(null);
         setImagePreview(null);
         if (fileInputRef.current) fileInputRef.current.value = "";
+        setAudience("public");
         router.refresh();
       }
     });
@@ -143,6 +147,32 @@ export function ComposeBox() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
+        </div>
+      )}
+
+      {/* Audience selector — clients only */}
+      {showAudience && (
+        <div className="mt-3 flex items-center gap-1.5">
+          {(["public", "followers", "private"] as const).map((a) => {
+            const labels = { public: "Public", followers: "Followers only", private: "Only me" };
+            const active = audience === a;
+            return (
+              <button
+                key={a}
+                type="button"
+                onClick={() => setAudience(a)}
+                className={[
+                  "rounded-full border px-2.5 py-0.5 text-[11px] font-medium transition-all",
+                  active
+                    ? "border-[#d4af37]/50 bg-[#d4af37]/10 text-[#d4af37]"
+                    : "border-white/10 text-white/30 hover:border-white/20 hover:text-white/50",
+                ].join(" ")}
+                style={{ fontFamily: "var(--font-dm-sans)" }}
+              >
+                {labels[a]}
+              </button>
+            );
+          })}
         </div>
       )}
 
@@ -486,7 +516,9 @@ function PostCard({ post, currentUserId }: { post: FeedPost; currentUserId: stri
     <article className="border-b border-white/[0.06] px-4 py-4">
       <div className="flex gap-3">
         <div className="flex flex-col items-center">
-          <Avatar name={post.author.full_name} url={post.author.avatar_url} size={38} />
+          <Link href={post.author.username ? `/profile/${post.author.username}` : `/profile/client/${post.author_id}`}>
+            <Avatar name={post.author.full_name} url={post.author.avatar_url} size={38} />
+          </Link>
           {showComments && (post.comments.length > 0 || post.comment_count > 0) && (
             <div className="mt-2 w-px flex-1 bg-white/[0.08]" />
           )}
@@ -496,12 +528,13 @@ function PostCard({ post, currentUserId }: { post: FeedPost; currentUserId: stri
           {/* Header */}
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-baseline gap-2 min-w-0">
-              <span
-                className="truncate text-[14px] font-semibold text-white/90"
+              <Link
+                href={post.author.username ? `/profile/${post.author.username}` : `/profile/client/${post.author_id}`}
+                className="truncate text-[14px] font-semibold text-white/90 hover:text-white transition-colors"
                 style={{ fontFamily: "var(--font-dm-sans)" }}
               >
                 {post.author.full_name}
-              </span>
+              </Link>
               <span className="shrink-0 text-xs text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
                 {formatDistanceToNowStrict(new Date(post.created_at), { addSuffix: true })}
               </span>
@@ -522,40 +555,59 @@ function PostCard({ post, currentUserId }: { post: FeedPost; currentUserId: stri
             )}
           </div>
 
-          {/* Content */}
-          <p
-            className="mt-1 text-[15px] leading-relaxed text-white/85 whitespace-pre-wrap break-words"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
-          >
-            {post.content}
-          </p>
-
-          {/* Post image */}
-          {post.image_url && (
-            <div className="mt-2 overflow-hidden rounded-xl">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={post.image_url}
-                alt=""
-                className="w-full max-h-80 object-cover"
-              />
-            </div>
-          )}
-
-          {/* Tags */}
-          {post.tags.length > 0 && (
-            <div className="mt-1.5 flex flex-wrap gap-1">
-              {post.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-[#d4af37]/20 bg-[#d4af37]/[0.06] px-2 py-0.5 text-[11px] text-[#d4af37]/60"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
+          {/* Content + image + tags (gated for followers-only posts) */}
+          {(() => {
+            const gated = post.audience === "followers" && !optimisticPost.is_following && currentUserId !== post.author_id;
+            return (
+              <div className="relative mt-1">
+                <div className={gated ? "blur-[3px] select-none pointer-events-none" : ""}>
+                  <p
+                    className="text-[15px] leading-relaxed text-white/85 whitespace-pre-wrap break-words"
+                    style={{ fontFamily: "var(--font-dm-sans)" }}
+                  >
+                    {post.content}
+                  </p>
+                  {post.image_url && (
+                    <div className="mt-2 overflow-hidden rounded-xl">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={post.image_url} alt="" className="w-full max-h-80 object-cover" />
+                    </div>
+                  )}
+                  {post.tags.length > 0 && (
+                    <div className="mt-1.5 flex flex-wrap gap-1">
+                      {post.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="rounded-full border border-[#d4af37]/20 bg-[#d4af37]/[0.06] px-2 py-0.5 text-[11px] text-[#d4af37]/60"
+                          style={{ fontFamily: "var(--font-dm-sans)" }}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                {gated && (
+                  <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-1">
+                    <svg className="h-4 w-4 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                    </svg>
+                    <p className="text-[11px] text-white/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                      Followers only
+                    </p>
+                  </div>
+                )}
+                {post.audience !== "public" && currentUserId === post.author_id && (
+                  <span
+                    className="mt-1 inline-block text-[10px] text-white/25"
+                    style={{ fontFamily: "var(--font-dm-sans)" }}
+                  >
+                    {post.audience === "followers" ? "Followers only" : "Only you"}
+                  </span>
+                )}
+              </div>
+            );
+          })()}
 
           {/* Actions */}
           <div className="mt-3 flex items-center gap-5">

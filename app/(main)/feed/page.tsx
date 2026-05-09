@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { ComposeBox, FeedClient, type FeedPost, type FeedTab } from "./feed-client";
+import { ComposeBox, FeedClient, type FeedPost, type FeedTab, type ViewerProfile } from "./feed-client";
 
 export const metadata: Metadata = {
   title: "Feed — EliteSeek",
@@ -27,18 +27,22 @@ export default async function FeedPage({
   if (!user) redirect("/login");
 
   // ── Follows + viewer role ─────────────────────────────────────
-  const [{ data: followsData }, { data: viewerProfile }] = await Promise.all([
+  const [{ data: followsData }, { data: rawViewerProfile }] = await Promise.all([
     supabase.from("follows").select("following_id").eq("follower_id", user.id),
-    createAdminClient().from("profiles").select("role").eq("id", user.id).single(),
+    createAdminClient().from("profiles").select("role, full_name, avatar_url").eq("id", user.id).single(),
   ]);
   const followingIds = new Set((followsData ?? []).map((f) => f.following_id));
-  const userRole = viewerProfile?.role as string | undefined;
+  const viewer: ViewerProfile = {
+    name: (rawViewerProfile?.full_name as string | null) ?? "You",
+    avatar: (rawViewerProfile?.avatar_url as string | null) ?? null,
+    role: (rawViewerProfile?.role as string | null) ?? "client",
+  };
 
   if (activeTab === "following" && followingIds.size === 0) {
     return (
       <PageShell>
-        <ComposeBox />
-        <FeedClient posts={[]} currentUserId={user.id} activeTab={activeTab} />
+        <ComposeBox viewer={viewer} />
+        <FeedClient posts={[]} currentUserId={user.id} activeTab={activeTab} trendingTags={[]} />
       </PageShell>
     );
   }
@@ -47,7 +51,7 @@ export default async function FeedPage({
   // For You: fetch 100 to allow reranking; Following: fetch 50 chronologically
   let postsQuery = supabase
     .from("posts")
-    .select("id, content, created_at, user_id, tags, image_url, audience")
+    .select("id, content, created_at, user_id, tags, image_url, audience, locked_price")
     .order("created_at", { ascending: false })
     .limit(activeTab === "for_you" ? 100 : 50);
 
@@ -60,6 +64,18 @@ export default async function FeedPage({
 
   const postList = rawPosts ?? [];
   const postIds  = postList.map((p) => p.id);
+
+  // Trending tags — top 12 by frequency across fetched posts
+  const tagCount = new Map<string, number>();
+  for (const p of postList) {
+    for (const tag of (p.tags as string[] | null) ?? []) {
+      tagCount.set(tag, (tagCount.get(tag) ?? 0) + 1);
+    }
+  }
+  const trendingTags = [...tagCount.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 12)
+    .map(([tag]) => tag);
 
   // Include current user's ID so we can look up their country from the same profiles query
   const authorIds = new Set([...postList.map((p) => p.user_id), user.id]);
@@ -193,8 +209,9 @@ export default async function FeedPage({
       created_at: p.created_at,
       author_id:  p.user_id,
       tags:       (p.tags as string[]) ?? [],
-      image_url:  (p as { image_url?: string | null }).image_url ?? null,
-      audience:   ((p as { audience?: string }).audience ?? "public") as "public" | "followers" | "private",
+      image_url:    (p as { image_url?: string | null }).image_url ?? null,
+      audience:     ((p as { audience?: string }).audience ?? "public") as "public" | "followers" | "private",
+      locked_price: (p as { locked_price?: number | null }).locked_price ?? null,
       author: {
         full_name: profile?.full_name ?? "Unknown",
         avatar_url: profile?.avatar_url ?? null,
@@ -249,8 +266,8 @@ export default async function FeedPage({
 
   return (
     <PageShell>
-      <ComposeBox />
-      <FeedClient posts={posts} currentUserId={user.id} activeTab={activeTab} />
+      <ComposeBox viewer={viewer} />
+      <FeedClient posts={posts} currentUserId={user.id} activeTab={activeTab} trendingTags={trendingTags} />
     </PageShell>
   );
 }

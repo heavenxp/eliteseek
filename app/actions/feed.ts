@@ -39,7 +39,13 @@ export async function createPost(_: FeedActionResult, formData: FormData): Promi
     ? (rawAudience as "public" | "followers" | "private")
     : "public";
 
-  const { error } = await supabase.from("posts").insert({ user_id: user.id, content, tags, image_url, audience });
+  const rawLockedPrice = formData.get("locked_price");
+  const locked_price =
+    rawLockedPrice !== null && rawLockedPrice !== ""
+      ? Math.max(1, parseFloat(rawLockedPrice as string))
+      : null;
+
+  const { error } = await supabase.from("posts").insert({ user_id: user.id, content, tags, image_url, audience, locked_price });
   if (error) {
     console.error("[createPost] insert error:", error.message);
     return { error: error.message };

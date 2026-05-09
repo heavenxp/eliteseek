@@ -29,7 +29,7 @@ export default async function FeedPage({
   // ── Follows + viewer role ─────────────────────────────────────
   const [{ data: followsData }, { data: viewerProfile }] = await Promise.all([
     supabase.from("follows").select("following_id").eq("follower_id", user.id),
-    supabase.from("profiles").select("role").eq("id", user.id).single(),
+    createAdminClient().from("profiles").select("role").eq("id", user.id).single(),
   ]);
   const followingIds = new Set((followsData ?? []).map((f) => f.following_id));
   const userRole = viewerProfile?.role as string | undefined;

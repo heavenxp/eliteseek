@@ -43,6 +43,7 @@ const MAX_TAGS = 5;
 
 // ── Compose box ────────────────────────────────────────────────
 export function ComposeBox({ showAudience }: { showAudience?: boolean }) {
+  console.log("[ComposeBox] showAudience:", showAudience);
   const router = useRouter();
   const ref = useRef<HTMLFormElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);

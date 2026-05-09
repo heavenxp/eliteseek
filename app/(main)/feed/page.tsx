@@ -37,7 +37,7 @@ export default async function FeedPage({
   if (activeTab === "following" && followingIds.size === 0) {
     return (
       <PageShell>
-        <ComposeBox showAudience={userRole === "client"} />
+        <ComposeBox />
         <FeedClient posts={[]} currentUserId={user.id} activeTab={activeTab} />
       </PageShell>
     );
@@ -249,7 +249,7 @@ export default async function FeedPage({
 
   return (
     <PageShell>
-      <ComposeBox showAudience={userRole === "client"} />
+      <ComposeBox />
       <FeedClient posts={posts} currentUserId={user.id} activeTab={activeTab} />
     </PageShell>
   );

@@ -42,8 +42,7 @@ const PRESET_TAGS = ["Travel", "Dining", "Events", "Nightlife", "Wellness", "Bus
 const MAX_TAGS = 5;
 
 // ── Compose box ────────────────────────────────────────────────
-export function ComposeBox({ showAudience }: { showAudience?: boolean }) {
-  console.log("[ComposeBox] showAudience:", showAudience);
+export function ComposeBox() {
   const router = useRouter();
   const ref = useRef<HTMLFormElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -151,31 +150,29 @@ export function ComposeBox({ showAudience }: { showAudience?: boolean }) {
         </div>
       )}
 
-      {/* Audience selector — clients only */}
-      {showAudience && (
-        <div className="mt-3 flex items-center gap-1.5">
-          {(["public", "followers", "private"] as const).map((a) => {
-            const labels = { public: "Public", followers: "Followers only", private: "Only me" };
-            const active = audience === a;
-            return (
-              <button
-                key={a}
-                type="button"
-                onClick={() => setAudience(a)}
-                className={[
-                  "rounded-full border px-2.5 py-0.5 text-[11px] font-medium transition-all",
-                  active
-                    ? "border-[#d4af37]/50 bg-[#d4af37]/10 text-[#d4af37]"
-                    : "border-white/10 text-white/30 hover:border-white/20 hover:text-white/50",
-                ].join(" ")}
-                style={{ fontFamily: "var(--font-dm-sans)" }}
-              >
-                {labels[a]}
-              </button>
-            );
-          })}
-        </div>
-      )}
+      {/* Audience selector */}
+      <div className="mt-3 flex items-center gap-1.5">
+        {(["public", "followers", "private"] as const).map((a) => {
+          const labels = { public: "Public", followers: "Followers only", private: "Only me" };
+          const active = audience === a;
+          return (
+            <button
+              key={a}
+              type="button"
+              onClick={() => setAudience(a)}
+              className={[
+                "rounded-full border px-2.5 py-0.5 text-[11px] font-medium transition-all",
+                active
+                  ? "border-[#d4af37]/50 bg-[#d4af37]/10 text-[#d4af37]"
+                  : "border-white/10 text-white/30 hover:border-white/20 hover:text-white/50",
+              ].join(" ")}
+              style={{ fontFamily: "var(--font-dm-sans)" }}
+            >
+              {labels[a]}
+            </button>
+          );
+        })}
+      </div>
 
       {/* Preset tag chips */}
       <div className="mt-2.5 flex flex-wrap gap-1.5">

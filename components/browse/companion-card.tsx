@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Icon } from "@/components/icons";
 import { TierBadge } from "@/components/badges/tier-badge";
+import { VerifiedBadge } from "@/components/badges/verified-badge";
 import type { CompanionCard as CompanionCardType, LockLevel, MembershipTier } from "@/lib/database.types";
 
 // ── Lock level helpers ─────────────────────────────────────────
@@ -33,7 +34,6 @@ export function CompanionCard({
   companion: CompanionCardType;
   clientTier?: MembershipTier;
 }) {
-  const isSelect   = companion.verification_tier === "select";
   const lockLevel  = (companion.lock_level ?? "public") as LockLevel;
   const isLocked   = lockLevel !== "public";
   const qualifies  = canRequest(lockLevel, clientTier);
@@ -75,18 +75,9 @@ export function CompanionCard({
           )}
         </div>
 
-        {/* Verification tier badge */}
+        {/* Verification seal — the primary trust mark */}
         <div className="absolute right-3 top-3">
-          {isSelect ? (
-            <span className="badge-select rounded-full px-2.5 py-1 text-[10px]">
-              <span className="flex items-center gap-1">
-                <Icon name="star" className="h-2.5 w-2.5" />
-                Select
-              </span>
-            </span>
-          ) : companion.verification_tier === "verified" ? (
-            <span className="badge-verified rounded-full px-2.5 py-1 text-[10px]">Verified</span>
-          ) : null}
+          <VerifiedBadge tier={companion.verification_tier} showLabel className="text-[10px]" />
         </div>
 
         {/* Location */}

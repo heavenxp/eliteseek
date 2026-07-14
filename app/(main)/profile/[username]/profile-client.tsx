@@ -4,6 +4,7 @@ import { useState, useTransition, useRef, useEffect, useActionState } from "reac
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Icon } from "@/components/icons";
+import { VerifiedBadge } from "@/components/badges/verified-badge";
 import { toggleFollow, deletePost } from "@/app/actions/feed";
 import { sendAccessRequest, type AccessState } from "@/app/actions/access";
 import { BookingModal } from "@/components/booking/booking-modal";
@@ -124,8 +125,6 @@ export function ProfileBody({
   const optionsRef = useRef<HTMLDivElement>(null);
   const newPostRef = useRef<HTMLDivElement>(null);
 
-  const isSelect = companion.verification_tier === "select";
-  const isVerified = companion.verification_tier === "verified";
 
   const mediaItems: FeedImageItem[] = feedPosts
     .filter((p): p is FeedPostItem & { image_url: string } => p.image_url != null)
@@ -320,17 +319,7 @@ export function ProfileBody({
                 </span>
               )}
             </h1>
-            {isSelect && (
-              <span className="badge-select flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs">
-                <Icon name="star" className="h-2.5 w-2.5" />
-                Select
-              </span>
-            )}
-            {isVerified && !isSelect && (
-              <span className="badge-verified rounded-full px-2.5 py-0.5 text-xs">
-                Verified
-              </span>
-            )}
+            <VerifiedBadge tier={companion.verification_tier} size="lg" />
             {companion.host_tier && companion.host_tier !== "pearl" && (
               <TierBadge type="host" tier={companion.host_tier} />
             )}

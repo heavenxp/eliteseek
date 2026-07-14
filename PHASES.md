@@ -56,22 +56,9 @@ The schema already supports a full social layer (`posts`/likes/comments/follows/
 
 **Exit criteria:** no unverified host visible, no unverified client can book, moderation pipeline live.
 
-## Phase 3 — Safe Bookings
+> **Reordered 14 Jul 2026:** the Content Engine now comes before Safe Bookings — finish all product surface first; payment/escrow work sits just before the design pass.
 
-**Goal: the booking flow that makes hosts choose this platform.**
-
-- [ ] Escrow payments via Stripe Connect: client pays at booking → funds held → auto-release to host after booking completion (minus 15%)
-- [ ] Dispute window (48h post-booking) before payout release
-- [ ] Booking check-in / check-out: host confirms arrival and safe completion in-app
-- [ ] Trusted-contact / SOS feature: host nominates a contact; check-in misses trigger notification
-- [ ] Hosts can decline any booking, no penalty, no reason required
-- [ ] Client ratings visible to hosts **before** accepting a booking
-- [ ] Host availability as structured data on profiles: home city + upcoming travel windows (e.g. "Based in Melbourne · Sydney Jun 7–9") — powers city-based discovery and booking
-- [ ] Cancellation policy engine (host-set: flexible/moderate/strict, Airbnb-style)
-
-**Exit criteria:** end-to-end booking with escrow works in production; safety flow tested on real devices.
-
-## Phase 4 — Content Engine
+## Phase 3 — Content Engine
 
 **Goal: complete the creator side.**
 
@@ -85,6 +72,21 @@ The schema already supports a full social layer (`posts`/likes/comments/follows/
 - [ ] Payment note: keep content non-explicit while on Stripe. If explicit content is ever allowed, that requires migrating content payments to a specialist processor (Segpay/CCBill class) FIRST — do not flip the content policy before the processor.
 
 **Exit criteria:** a host can earn from both bookings and content; a client can pay for both.
+
+## Phase 4 — Safe Bookings
+
+**Goal: the booking flow that makes hosts choose this platform.**
+
+- [ ] Escrow payments via Stripe Connect: client pays at booking → funds held → auto-release to host after booking completion (minus 15%)
+- [ ] Dispute window (48h post-booking) before payout release
+- [ ] Booking check-in / check-out: host confirms arrival and safe completion in-app
+- [ ] Trusted-contact / SOS feature: host nominates a contact; check-in misses trigger notification
+- [ ] Hosts can decline any booking, no penalty, no reason required
+- [ ] Client ratings visible to hosts **before** accepting a booking
+- [ ] Host availability as structured data on profiles: home city + upcoming travel windows (e.g. "Based in Melbourne · Sydney Jun 7–9") — powers city-based discovery and booking
+- [ ] Cancellation policy engine (host-set: flexible/moderate/strict, Airbnb-style)
+
+**Exit criteria:** end-to-end booking with escrow works in production; safety flow tested on real devices.
 
 ## Phase 5 — Design Pass
 

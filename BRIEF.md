@@ -131,7 +131,7 @@ Bronze → Silver → Gold → Platinum. Membership tier info stays inside the a
 2. **Discovery & Social** — browse feed, search, experiences, host profiles (public/unlocked), social feed (posts/likes/comments/follows), stories, events + group chat, availability posts
 3. **Access & Locks** — lock system, access requests, paid unlock, Elite-only access
 4. **Content & Creator** — content studio (`/companion/content`), browse feed (`/content`), PPV, subscriptions, moderation
-5. **Booking** — request, confirmation, my bookings, safety flow (check-in/out, trusted contact — Phase 3)
+5. **Booking** — request, confirmation, my bookings, safety flow (check-in/out, trusted contact — Phase 4)
 6. **Membership** — tiers, billing
 7. **Messaging** — inbox, chat, notifications
 8. **Account** — profile, earnings, unlocks, settings, verification
@@ -153,7 +153,7 @@ Bronze → Silver → Gold → Platinum. Membership tier info stays inside the a
 
 ## Build Status
 
-Tracked in PHASES.md (Phase 1 — Stabilize & Strip is current). Shipped so far: Next.js app, Supabase (auth/DB/storage/realtime), landing, onboarding, browse, profiles + locks, content/PPV, bookings, messaging, membership, Stripe payments, PWA, Vercel deploy. Gifting: built, then feature-flagged off (cut from scope).
+Tracked in PHASES.md (Phase 2 — Trust Layer is current; Phase 1 complete; note the 14 Jul 2026 reorder — Content Engine is Phase 3, Safe Bookings is Phase 4). Shipped so far: Next.js app, Supabase (auth/DB/storage/realtime), landing, onboarding, browse, profiles + locks, content/PPV, bookings, messaging, membership, Stripe payments, PWA, Vercel deploy. Gifting: built, then feature-flagged off (cut from scope).
 
 ---
 

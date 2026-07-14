@@ -2,7 +2,8 @@ import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { ComposeBox, FeedClient, type FeedPost, type FeedTab, type ViewerProfile } from "./feed-client";
+import { FeedClient, type FeedPost, type FeedTab, type ViewerProfile } from "./feed-client";
+import { getOnlineUsers } from "@/app/actions/presence";
 
 export const metadata: Metadata = {
   title: "Feed — EliteSeek",
@@ -26,11 +27,14 @@ export default async function FeedPage({
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  // ── Follows + viewer role ─────────────────────────────────────
-  const [{ data: followsData }, { data: rawViewerProfile }] = await Promise.all([
+  // ── Follows + viewer role + client tier ──────────────────────
+  const [{ data: followsData }, { data: rawViewerProfile }, { data: clientProfileData }, onlineUsers] = await Promise.all([
     supabase.from("follows").select("following_id").eq("follower_id", user.id),
     createAdminClient().from("profiles").select("role, full_name, avatar_url").eq("id", user.id).single(),
+    supabase.from("client_profiles").select("client_tier").eq("user_id", user.id).maybeSingle(),
+    getOnlineUsers(),
   ]);
+  const viewerClientTier: string = clientProfileData?.client_tier ?? "bronze";
   const followingIds = new Set((followsData ?? []).map((f) => f.following_id));
   const viewer: ViewerProfile = {
     name: (rawViewerProfile?.full_name as string | null) ?? "You",
@@ -41,8 +45,7 @@ export default async function FeedPage({
   if (activeTab === "following" && followingIds.size === 0) {
     return (
       <PageShell>
-        <ComposeBox viewer={viewer} />
-        <FeedClient posts={[]} currentUserId={user.id} activeTab={activeTab} trendingTags={[]} />
+        <FeedClient posts={[]} currentUserId={user.id} activeTab={activeTab} trendingTags={[]} viewerClientTier={viewerClientTier} viewer={viewer} onlineUsers={onlineUsers} />
       </PageShell>
     );
   }
@@ -51,7 +54,7 @@ export default async function FeedPage({
   // For You: fetch 100 to allow reranking; Following: fetch 50 chronologically
   let postsQuery = supabase
     .from("posts")
-    .select("id, content, created_at, user_id, tags, image_url, audience, locked_price")
+    .select("id, content, created_at, user_id, tags, image_url, audience, locked_price, content_min_tier")
     .order("created_at", { ascending: false })
     .limit(activeTab === "for_you" ? 100 : 50);
 
@@ -209,9 +212,10 @@ export default async function FeedPage({
       created_at: p.created_at,
       author_id:  p.user_id,
       tags:       (p.tags as string[]) ?? [],
-      image_url:    (p as { image_url?: string | null }).image_url ?? null,
-      audience:     ((p as { audience?: string }).audience ?? "public") as "public" | "followers" | "private",
-      locked_price: (p as { locked_price?: number | null }).locked_price ?? null,
+      image_url:        (p as { image_url?: string | null }).image_url ?? null,
+      audience:         ((p as { audience?: string }).audience ?? "public") as "public" | "followers" | "private",
+      locked_price:     (p as { locked_price?: number | null }).locked_price ?? null,
+      content_min_tier: (p as { content_min_tier?: string | null }).content_min_tier ?? null,
       author: {
         full_name: profile?.full_name ?? "Unknown",
         avatar_url: profile?.avatar_url ?? null,
@@ -266,8 +270,7 @@ export default async function FeedPage({
 
   return (
     <PageShell>
-      <ComposeBox viewer={viewer} />
-      <FeedClient posts={posts} currentUserId={user.id} activeTab={activeTab} trendingTags={trendingTags} />
+      <FeedClient posts={posts} currentUserId={user.id} activeTab={activeTab} trendingTags={trendingTags} viewerClientTier={viewerClientTier} viewer={viewer} onlineUsers={onlineUsers} />
     </PageShell>
   );
 }
@@ -279,7 +282,7 @@ function PageShell({ children }: { children: React.ReactNode }) {
         className="sticky top-0 z-20 border-b border-white/[0.06] md:top-[65px]"
         style={{ backgroundColor: "rgba(10,10,10,0.92)", backdropFilter: "blur(16px)" }}
       >
-        <div className="mx-auto max-w-[600px] px-4 py-3.5">
+        <div className="mx-auto max-w-5xl px-4 py-3.5">
           <h1
             className="text-[17px] font-semibold text-white/90"
             style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -288,7 +291,7 @@ function PageShell({ children }: { children: React.ReactNode }) {
           </h1>
         </div>
       </header>
-      <main className="mx-auto max-w-[600px]">{children}</main>
+      <main className="mx-auto max-w-5xl">{children}</main>
     </>
   );
 }

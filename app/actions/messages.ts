@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { notify } from "@/app/actions/notifications";
 
 export type MessageState = { error?: string; success?: boolean } | null;
 
@@ -62,15 +63,17 @@ export async function sendMessage(
   if (!user) redirect("/login");
 
   const conversationId = formData.get("conversation_id") as string;
-  const content = (formData.get("content") as string)?.trim();
+  const content = (formData.get("content") as string)?.trim() || null;
+  const mediaUrl = (formData.get("media_url") as string | null) || null;
 
-  if (!conversationId || !content) return { error: "Message cannot be empty." };
-  if (content.length > 2000) return { error: "Message too long (max 2000 characters)." };
+  if (!conversationId) return { error: "Missing conversation." };
+  if (!content && !mediaUrl) return { error: "Message cannot be empty." };
+  if (content && content.length > 2000) return { error: "Message too long (max 2000 characters)." };
 
-  // Verify participant
+  // Verify participant and get both IDs for notification
   const { data: conv } = await supabase
     .from("conversations")
-    .select("id")
+    .select("id, client_id, companion_id")
     .eq("id", conversationId)
     .or(`client_id.eq.${user.id},companion_id.eq.${user.id}`)
     .single();
@@ -79,9 +82,21 @@ export async function sendMessage(
 
   const { error } = await supabase
     .from("messages")
-    .insert({ conversation_id: conversationId, sender_id: user.id, content });
+    .insert({ conversation_id: conversationId, sender_id: user.id, content: content ?? "", media_url: mediaUrl });
 
   if (error) return { error: error.message };
+
+  const recipientId = conv.client_id === user.id ? conv.companion_id : conv.client_id;
+  const { data: profile } = await supabase.from("profiles").select("full_name").eq("id", user.id).single();
+  const preview = content ? (content.length > 80 ? content.slice(0, 80) + "…" : content) : "📎 Media";
+  await notify({
+    userId: recipientId,
+    type: "new_message",
+    title: `New message from ${profile?.full_name ?? "Someone"}`,
+    body: preview,
+    link: `/messages/${conversationId}`,
+  });
+
   return { success: true };
 }
 

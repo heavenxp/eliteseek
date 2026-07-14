@@ -63,7 +63,7 @@ export default async function ProfilePage({
     .from("companion_profiles")
     .select(
       `id, user_id, display_name, bio, tagline, location, age,
-       tags, languages, verification_tier, is_available,
+       tags, languages, verification_tier, host_tier, is_available,
        average_rating, total_reviews, booking_rate_hourly,
        subscription_price, profile_unlock_fee, cover_image_url,
        username, available_from, available_until, visibility`
@@ -171,6 +171,7 @@ export default async function ProfilePage({
           tags: companion.tags ?? [],
           languages: companion.languages ?? [],
           verification_tier: companion.verification_tier,
+          host_tier: companion.host_tier ?? "pearl",
           is_available: companion.is_available,
           average_rating: companion.average_rating,
           total_reviews: companion.total_reviews,
@@ -252,6 +253,7 @@ export default async function ProfilePage({
         tags: companion.tags ?? [],
         languages: companion.languages ?? [],
         verification_tier: companion.verification_tier,
+        host_tier: companion.host_tier ?? "pearl",
         is_available: companion.is_available,
         average_rating: companion.average_rating,
         total_reviews: companion.total_reviews,

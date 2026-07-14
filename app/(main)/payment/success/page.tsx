@@ -61,12 +61,23 @@ export default async function PaymentSuccessPage({
   const paymentType = (type as PaymentType) ?? "unlock";
   const copy = COPY[paymentType] ?? COPY.unlock;
 
-  const ctaHref =
-    paymentType === "unlock" && companion_id
-      ? `/companion/${companion_id}`
-      : paymentType === "booking"
-        ? "/bookings"
-        : "/content";
+  let ctaHref =
+    paymentType === "booking"
+      ? "/bookings"
+      : paymentType !== "unlock"
+        ? "/content"
+        : companion_id
+          ? `/companion/${companion_id}`
+          : "/browse";
+
+  if (paymentType === "unlock" && companion_id) {
+    const { data: cp } = await supabase
+      .from("companion_profiles")
+      .select("username")
+      .eq("id", companion_id)
+      .maybeSingle();
+    if (cp?.username) ctaHref = `/profile/${cp.username}`;
+  }
 
   return (
     <div className="page-bg flex min-h-screen items-center justify-center px-4">

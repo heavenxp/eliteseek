@@ -11,7 +11,7 @@ export default async function SettingsPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, role, phone, avatar_url")
+    .select("full_name, role, phone, avatar_url, searchable")
     .eq("id", user.id)
     .single();
 
@@ -48,6 +48,7 @@ export default async function SettingsPage() {
         clientFullName={profile.full_name}
         clientPhone={profile.phone}
         avatarUrl={profile.avatar_url}
+        searchable={profile.searchable ?? true}
       />
     </div>
   );

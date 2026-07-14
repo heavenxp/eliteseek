@@ -2,10 +2,12 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { getStripe } from "@/lib/stripe";
 import {
   sendBookingRequestEmail,
   sendBookingResponseEmail,
 } from "@/lib/email";
+import { notify } from "@/app/actions/notifications";
 
 async function requireClient() {
   const supabase = await createClient();
@@ -14,10 +16,14 @@ async function requireClient() {
   return { supabase, userId: user.id };
 }
 
-async function requireCompanionOwner(supabase: Awaited<ReturnType<typeof createClient>>, bookingId: string, userId: string) {
+async function requireCompanionOwner(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  bookingId: string,
+  userId: string
+) {
   const { data } = await supabase
     .from("bookings")
-    .select("id, companion_id")
+    .select("id, companion_id, status")
     .eq("id", bookingId)
     .single();
 
@@ -42,6 +48,16 @@ export async function createBookingRequest(
   formData: FormData
 ): Promise<BookingState> {
   const { supabase, userId } = await requireClient();
+
+  // Companions cannot send booking requests
+  const { data: viewerProfile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", userId)
+    .single();
+  if (viewerProfile?.role === "companion") {
+    return { error: "Elite Hosts cannot send booking requests." };
+  }
 
   const companionId = formData.get("companion_id") as string;
   const scheduledAt = formData.get("scheduled_at") as string;
@@ -85,32 +101,35 @@ export async function createBookingRequest(
 
   if (error) return { error: error.message };
 
-  // Mark the availability post as booked so it no longer shows as available
+  // Store the availability post link (separate update — column not yet in generated types)
   if (availabilityPostId) {
-    await supabase
-      .from("availability_posts")
-      .update({ is_booked: true })
-      .eq("id", availabilityPostId)
-      .eq("companion_id", companionId);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabase.from("bookings") as any)
+      .update({ availability_post_id: availabilityPostId })
+      .eq("id", booking!.id);
   }
 
-  // Notify the companion
+  // When Stripe is configured, notification fires after the deposit is paid
+  // (see app/api/stripe/webhooks/route.ts case "booking").
+  // When Stripe is not configured, notify immediately.
+  const stripeConfigured = !!getStripe();
+
   const { data: companionProfile } = await supabase
     .from("companion_profiles")
     .select("user_id")
     .eq("id", companionId)
     .single();
 
-  if (companionProfile) {
-    await supabase.from("notifications").insert({
-      user_id: companionProfile.user_id,
+  if (companionProfile && !stripeConfigured) {
+    const dateStr = new Date(scheduledAt).toLocaleDateString("en-GB", { day: "numeric", month: "long" });
+    await notify({
+      userId: companionProfile.user_id,
       type: "booking_request",
       title: "New booking request",
-      body: `You have a new booking request for ${new Date(scheduledAt).toLocaleDateString("en-GB", { day: "numeric", month: "long" })}.`,
-      data: { booking_id: booking!.id },
+      body: `You have a new booking request for ${dateStr}.`,
+      link: "/companion/bookings",
     });
 
-    // Fire-and-forget: email companion about the new request
     void (async () => {
       try {
         const { createAdminClient } = await import("@/lib/supabase/admin");
@@ -155,16 +174,37 @@ export async function respondToBooking(
   const booking = await requireCompanionOwner(supabase, bookingId, userId);
   if (!booking) return { error: "Booking not found." };
 
+  // Prevent double-responding
+  if (booking.status !== "pending") {
+    return { error: "This booking has already been responded to." };
+  }
+
   const { error } = await supabase
     .from("bookings")
     .update({
       status: action,
       ...(action === "cancelled" ? { cancelled_at: new Date().toISOString() } : {}),
-      ...(action === "confirmed" ? { completed_at: null } : {}),
     })
-    .eq("id", bookingId);
+    .eq("id", bookingId)
+    .eq("status", "pending");
 
   if (error) return { error: error.message };
+
+  // On confirm: mark the linked availability post as booked
+  if (action === "confirmed") {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: apRow } = await (supabase.from("bookings") as any)
+      .select("availability_post_id")
+      .eq("id", bookingId)
+      .single();
+    const apId = apRow?.availability_post_id as string | null;
+    if (apId) {
+      await supabase
+        .from("availability_posts")
+        .update({ is_booked: true })
+        .eq("id", apId);
+    }
+  }
 
   // Notify the client
   const { data: bookingData } = await supabase
@@ -175,17 +215,16 @@ export async function respondToBooking(
 
   if (bookingData) {
     const dateStr = new Date(bookingData.scheduled_at).toLocaleDateString("en-GB", { day: "numeric", month: "long" });
-    await supabase.from("notifications").insert({
-      user_id: bookingData.client_id,
+    await notify({
+      userId: bookingData.client_id,
       type: action === "confirmed" ? "booking_confirmed" : "booking_declined",
       title: action === "confirmed" ? "Booking confirmed!" : "Booking declined",
       body: action === "confirmed"
         ? `Your booking for ${dateStr} has been confirmed.`
         : `Your booking request for ${dateStr} was not accepted.`,
-      data: { booking_id: bookingId },
+      link: "/bookings",
     });
 
-    // Fire-and-forget: email client about the booking response
     void (async () => {
       try {
         const { createAdminClient } = await import("@/lib/supabase/admin");
@@ -215,6 +254,75 @@ export async function respondToBooking(
         console.error("[email] sendBookingResponseEmail failed:", emailErr);
       }
     })();
+  }
+
+  return { success: true };
+}
+
+// ── cancelBooking ─────────────────────────────────────────────
+// Called after confirmation by either host or client.
+
+export async function cancelBooking(bookingId: string): Promise<BookingState> {
+  const { supabase, userId } = await requireClient();
+
+  const { data: booking } = await supabase
+    .from("bookings")
+    .select("id, client_id, companion_id, scheduled_at, status")
+    .eq("id", bookingId)
+    .single();
+
+  if (!booking) return { error: "Booking not found." };
+  if (booking.status !== "confirmed") return { error: "Only confirmed bookings can be cancelled." };
+
+  const isClient = booking.client_id === userId;
+
+  // For host: verify companion ownership
+  if (!isClient) {
+    const { data: cp } = await supabase
+      .from("companion_profiles")
+      .select("user_id")
+      .eq("id", booking.companion_id)
+      .eq("user_id", userId)
+      .maybeSingle();
+    if (!cp) return { error: "Booking not found." };
+  }
+
+  const { error } = await supabase
+    .from("bookings")
+    .update({ status: "cancelled", cancelled_at: new Date().toISOString() })
+    .eq("id", bookingId);
+
+  if (error) return { error: error.message };
+
+  const dateStr = new Date(booking.scheduled_at).toLocaleDateString("en-GB", { day: "numeric", month: "long" });
+  const { data: profile } = await supabase.from("profiles").select("full_name").eq("id", userId).single();
+  const actorName = profile?.full_name ?? "Someone";
+
+  if (isClient) {
+    // Notify host
+    const { data: cp } = await supabase
+      .from("companion_profiles")
+      .select("user_id")
+      .eq("id", booking.companion_id)
+      .single();
+    if (cp) {
+      await notify({
+        userId: cp.user_id,
+        type: "booking_cancelled_by_client",
+        title: "Booking cancelled by client",
+        body: `${actorName} cancelled their booking for ${dateStr}.`,
+        link: "/companion/bookings",
+      });
+    }
+  } else {
+    // Notify client
+    await notify({
+      userId: booking.client_id,
+      type: "booking_cancelled",
+      title: "Booking cancelled",
+      body: `Your booking for ${dateStr} has been cancelled by the host.`,
+      link: "/bookings",
+    });
   }
 
   return { success: true };

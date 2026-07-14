@@ -16,9 +16,11 @@ type NavUser = {
 
 const CLIENT_NAV = [
   { label: "Browse", href: "/browse", icon: "eye" },
+  { label: "Search", href: "/search", icon: "search" },
   { label: "Feed", href: "/feed", icon: "feed" },
   { label: "Bookings", href: "/bookings", icon: "check" },
   { label: "Messages", href: "/messages", icon: "message" },
+  { label: "Profile", href: "/account", icon: "user" },
 ];
 
 // ── Account dropdown ──────────────────────────────────────────
@@ -31,11 +33,15 @@ function AccountMenu({ fullName, compact = false }: { fullName: string; compact?
   const firstName = fullName.split(" ")[0];
 
   useEffect(() => {
-    function handleMouseDown(e: MouseEvent) {
+    function handleOutside(e: MouseEvent | TouchEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
     }
-    document.addEventListener("mousedown", handleMouseDown);
-    return () => document.removeEventListener("mousedown", handleMouseDown);
+    document.addEventListener("mousedown", handleOutside);
+    document.addEventListener("touchstart", handleOutside as EventListener, { passive: true });
+    return () => {
+      document.removeEventListener("mousedown", handleOutside);
+      document.removeEventListener("touchstart", handleOutside as EventListener);
+    };
   }, []);
 
   async function handleSignOut() {
@@ -58,12 +64,12 @@ function AccountMenu({ fullName, compact = false }: { fullName: string; compact?
         // Mobile: stacked icon + label
         <button
           onClick={() => setOpen((v) => !v)}
-          className="flex flex-col items-center gap-1 rounded-xl px-5 py-2.5 text-muted/60 transition-colors"
+          className="flex flex-col items-center gap-0.5 rounded-xl px-2 py-2 text-muted/60 transition-colors"
         >
           <div className="flex h-6 w-6 items-center justify-center rounded-full border border-[rgba(212,175,55,0.55)] bg-[rgba(212,175,55,0.2)] text-[10px] font-medium text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
             {initial}
           </div>
-          <span className="text-[10px]" style={{ fontFamily: "var(--font-dm-sans)" }}>Profile</span>
+          <span className="whitespace-nowrap text-[9px]" style={{ fontFamily: "var(--font-dm-sans)" }}>Profile</span>
         </button>
       ) : (
         // Desktop: pill button
@@ -138,9 +144,10 @@ export function AppNav({ user }: { user: NavUser }) {
   const pathname = usePathname();
 
   const companionNav = [
-    ...(user.username ? [{ label: "My Profile", href: `/profile/${user.username}`, icon: "user" }] : []),
+    ...(user.username ? [{ label: "Profile", href: `/profile/${user.username}`, icon: "user" }] : []),
     { label: "Feed", href: "/feed", icon: "feed" },
-    { label: "Availability", href: "/companion/posts", icon: "calendar" },
+    { label: "Search", href: "/search", icon: "search" },
+    { label: "Schedule", href: "/companion/posts", icon: "calendar" },
     { label: "Bookings", href: "/companion/bookings", icon: "check" },
     { label: "Messages", href: "/messages", icon: "message" },
   ];
@@ -202,12 +209,12 @@ export function AppNav({ user }: { user: NavUser }) {
               key={link.href}
               href={link.href}
               className={[
-                "flex flex-col items-center gap-1 rounded-xl px-4 py-2 transition-colors",
+                "flex flex-col items-center gap-0.5 rounded-xl px-2 py-2 transition-colors",
                 isActive(link.href) ? "text-gold" : "text-muted/60",
               ].join(" ")}
             >
               <Icon name={link.icon} className="h-5 w-5" />
-              <span className="text-[10px]" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <span className="whitespace-nowrap text-[9px]" style={{ fontFamily: "var(--font-dm-sans)" }}>
                 {link.label}
               </span>
             </Link>

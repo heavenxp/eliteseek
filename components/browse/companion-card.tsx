@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Icon } from "@/components/icons";
+import { TierBadge } from "@/components/badges/tier-badge";
 import type { CompanionCard as CompanionCardType, LockLevel, MembershipTier } from "@/lib/database.types";
 
 // ── Lock level helpers ─────────────────────────────────────────
@@ -46,7 +47,17 @@ export function CompanionCard({
   const card = (
     <div className="group block overflow-hidden rounded-2xl border border-[rgba(212,175,55,0.12)] bg-[rgba(255,255,255,0.03)] transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(212,175,55,0.28)] hover:shadow-[0_8px_32px_rgba(212,175,55,0.08)]">
       {/* Image area */}
-      <div className={`companion-placeholder relative h-64 w-full overflow-hidden ${isLocked ? "blur-[3px]" : ""}`}>
+      <div className={`companion-placeholder relative h-64 w-full overflow-hidden bg-[rgba(212,175,55,0.04)] ${isLocked ? "blur-[3px]" : ""}`}>
+        {companion.cover_image_url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={companion.cover_image_url}
+            alt={companion.display_name}
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <div className="h-full w-full bg-gradient-to-b from-[rgba(212,175,55,0.06)] to-[rgba(8,8,16,0.3)]" />
+        )}
         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[rgba(8,8,16,0.7)] to-transparent" />
 
         {/* Top badges */}
@@ -96,6 +107,9 @@ export function CompanionCard({
                 <span className="ml-1.5 text-base text-muted/50">{companion.age}</span>
               )}
             </p>
+            {companion.host_tier && companion.host_tier !== "pearl" && (
+              <TierBadge type="host" tier={companion.host_tier} />
+            )}
           </div>
 
           {/* Rating */}

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AppNav } from "@/components/layout/app-nav";
+import { PresenceTracker } from "@/components/layout/presence-tracker";
 
 export default async function MainLayout({
   children,
@@ -34,6 +35,7 @@ export default async function MainLayout({
 
   return (
     <div className="page-bg min-h-screen">
+      <PresenceTracker />
       <AppNav
         user={{
           fullName: profile.full_name,

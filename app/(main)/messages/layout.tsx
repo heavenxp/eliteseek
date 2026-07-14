@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { MessagesShell } from "@/components/messages/messages-shell";
 import { ConversationSidebar } from "@/components/messages/conversation-sidebar";
+import { getUserEvents } from "@/app/actions/events";
 
 type ConversationItem = {
   id: string;
@@ -22,6 +23,8 @@ export default async function MessagesLayout({
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
+
+  const userEvents = await getUserEvents();
 
   // Fetch conversations — RLS filters to only conversations the user participates in
   const { data: rawConvs } = await supabase
@@ -100,6 +103,7 @@ export default async function MessagesLayout({
         <ConversationSidebar
           userId={user.id}
           initialConversations={conversations}
+          events={userEvents}
         />
       }
     >

@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { Icon } from "@/components/icons";
 import { RequestActions } from "./request-actions";
+import { TierBadge } from "@/components/badges/tier-badge";
 import type { AccessRequestStatus, MembershipTier } from "@/lib/database.types";
 
 export const metadata = { title: "Access Requests — EliteSeek" };
@@ -29,6 +30,7 @@ type RequestRow = {
   clientName: string;
   clientHandle: string;
   membershipTier: MembershipTier;
+  clientTier: string;
   memberSince: string;
 };
 
@@ -60,12 +62,12 @@ export default async function AccessRequestsPage() {
       ? admin.from("profiles").select("id, full_name, created_at").in("id", clientIds)
       : Promise.resolve({ data: [] as { id: string; full_name: string; created_at: string }[] }),
     clientIds.length > 0
-      ? admin.from("client_profiles").select("user_id, membership_tier").in("user_id", clientIds)
-      : Promise.resolve({ data: [] as { user_id: string; membership_tier: MembershipTier }[] }),
+      ? admin.from("client_profiles").select("user_id, membership_tier, client_tier").in("user_id", clientIds)
+      : Promise.resolve({ data: [] as { user_id: string; membership_tier: MembershipTier; client_tier: string }[] }),
   ]);
 
   const profileMap = new Map((profilesRes.data ?? []).map((p) => [p.id, p]));
-  const tierMap = new Map((tierRes.data ?? []).map((p) => [p.user_id, p.membership_tier]));
+  const tierMap = new Map((tierRes.data ?? []).map((p) => [p.user_id, p]));
 
   const requests: RequestRow[] = rawList.map((r) => {
     const profile = profileMap.get(r.client_id);
@@ -82,7 +84,8 @@ export default async function AccessRequestsPage() {
       responded_at: r.responded_at,
       clientName: fullName,
       clientHandle: handle,
-      membershipTier: (tierMap.get(r.client_id) ?? "bronze") as MembershipTier,
+      membershipTier: (tierMap.get(r.client_id)?.membership_tier ?? "bronze") as MembershipTier,
+      clientTier: tierMap.get(r.client_id)?.client_tier ?? "bronze",
       memberSince,
     };
   });
@@ -181,12 +184,6 @@ function Section({
   );
 }
 
-const TIER_BADGE: Record<string, { label: string; cls: string }> = {
-  bronze: { label: "Bronze", cls: "bg-[rgba(180,120,60,0.15)] text-[#c87941]" },
-  silver: { label: "Silver", cls: "bg-[rgba(180,180,200,0.12)] text-[#a0a0b8]" },
-  elite:  { label: "Elite",  cls: "bg-[rgba(212,175,55,0.15)] text-gold" },
-};
-
 function RequestCard({
   request,
   showActions = false,
@@ -200,7 +197,6 @@ function RequestCard({
     .join("")
     .slice(0, 2)
     .toUpperCase();
-  const tier = TIER_BADGE[request.membershipTier] ?? TIER_BADGE.bronze;
 
   return (
     <div className="rounded-2xl border border-[rgba(212,175,55,0.1)] bg-[rgba(255,255,255,0.02)] p-4">
@@ -227,12 +223,7 @@ function RequestCard({
             <span className="text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
               {request.clientHandle}
             </span>
-            <span
-              className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${tier.cls}`}
-              style={{ fontFamily: "var(--font-dm-sans)" }}
-            >
-              {tier.label}
-            </span>
+            <TierBadge type="client" tier={request.clientTier} />
             <span className="text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
               Member since {request.memberSince}
             </span>

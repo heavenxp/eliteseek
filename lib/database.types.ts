@@ -6,6 +6,8 @@ export type VisibilityLevel      = "public" | "locked" | "elite_only";
 export type LockLevel            = "public" | "request" | "silver" | "elite";
 export type VerificationTier     = "unverified" | "verified" | "select";
 export type MembershipTier       = "bronze" | "silver" | "elite";
+export type HostTier             = "pearl" | "rose" | "ruby" | "sapphire" | "diamond";
+export type ClientTier           = "bronze" | "silver" | "gold" | "platinum";
 export type BookingStatus        = "pending" | "confirmed" | "cancelled" | "completed" | "disputed";
 export type BookingType          = "dinner" | "event" | "travel" | "social" | "virtual";
 export type SubscriptionStatus   = "active" | "cancelled" | "expired" | "past_due";
@@ -38,6 +40,8 @@ export interface Profile {
   is_suspended: boolean;
   suspension_reason: string | null;
   is_admin: boolean;
+  last_seen: string | null;
+  searchable: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -116,6 +120,7 @@ export interface ClientProfile {
   id: string;
   user_id: string;
   membership_tier: MembershipTier;
+  client_tier: ClientTier;
   membership_expires_at: string | null;
   stripe_customer_id: string | null;
   stripe_subscription_id: string | null;
@@ -270,6 +275,7 @@ export interface Message {
   sender_id: string;
   content: string;
   is_read: boolean;
+  media_url: string | null;
   created_at: string;
 }
 
@@ -316,6 +322,7 @@ export interface CompanionCard {
   visibility: VisibilityLevel;
   lock_level: LockLevel;
   verification_tier: VerificationTier;
+  host_tier: HostTier;
   is_featured: boolean;
   is_available: boolean;
   average_rating: number | null;

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Icon } from "@/components/icons";
@@ -96,13 +97,22 @@ export default async function CompanionBookingsPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 md:px-6 md:py-12">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
-          Booking Requests
-        </h1>
-        <p className="mt-1 text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
-          {pending.length} pending · {upcoming.length} confirmed upcoming
-        </p>
+      <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+            Booking Requests
+          </h1>
+          <p className="mt-1 text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            {pending.length} pending · {upcoming.length} confirmed upcoming
+          </p>
+        </div>
+        <Link
+          href="/events"
+          className="rounded-xl border border-[rgba(212,175,55,0.2)] bg-[rgba(212,175,55,0.06)] px-4 py-2 text-sm text-[#d4af37]/80 hover:bg-[rgba(212,175,55,0.1)] hover:text-[#d4af37] transition-colors"
+          style={{ fontFamily: "var(--font-dm-sans)" }}
+        >
+          Events
+        </Link>
       </div>
 
       {/* Stats */}
@@ -110,7 +120,7 @@ export default async function CompanionBookingsPage() {
         {[
           { label: "Pending", value: pending.length, color: "text-amber-400" },
           { label: "Confirmed", value: upcoming.length, color: "text-emerald-400" },
-          { label: "Completed", value: past.length, color: "text-gold" },
+          { label: "Completed", value: bookings.filter((b) => b.status === "completed").length, color: "text-gold" },
           { label: "Earnings", value: `$${totalEarnings.toLocaleString()}`, color: "text-foreground/80" },
         ].map((stat) => (
           <div key={stat.label} className="rounded-xl border border-[rgba(212,175,55,0.1)] bg-[rgba(255,255,255,0.02)] p-4">

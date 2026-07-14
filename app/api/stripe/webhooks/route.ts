@@ -167,6 +167,35 @@ async function handleCheckoutCompleted(
         reference_type: "booking",
         metadata: { is_deposit: true },
       });
+
+      // Notify the companion now that the deposit is confirmed
+      const { data: bookingRow } = await supabase
+        .from("bookings")
+        .select("companion_id, scheduled_at")
+        .eq("id", booking_id)
+        .single();
+
+      if (bookingRow) {
+        const { data: cp } = await supabase
+          .from("companion_profiles")
+          .select("user_id")
+          .eq("id", bookingRow.companion_id)
+          .single();
+
+        if (cp) {
+          const dateStr = new Date(bookingRow.scheduled_at).toLocaleDateString("en-GB", {
+            day: "numeric",
+            month: "long",
+          });
+          await supabase.from("notifications").insert({
+            user_id: cp.user_id,
+            type: "booking_request",
+            title: "New booking request",
+            body: `You have a new booking request for ${dateStr}.`,
+            data: { booking_id },
+          });
+        }
+      }
       break;
     }
 

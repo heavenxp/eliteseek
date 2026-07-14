@@ -28,6 +28,7 @@ type Props = {
   clientFullName?: string;
   clientPhone?: string | null;
   avatarUrl?: string | null;
+  searchable?: boolean;
 };
 
 const VISIBILITY_OPTIONS: { value: VisibilityLevel; label: string; desc: string; icon: string }[] = [
@@ -174,7 +175,7 @@ function PhotoUpload({ label, currentUrl, uploadPath, onUploaded, aspect = "squa
 
 // ── Client settings form ──────────────────────────────────────
 
-function ClientSettingsForm({ clientFullName, clientPhone }: { clientFullName?: string; clientPhone?: string | null }) {
+function ClientSettingsForm({ clientFullName, clientPhone, searchable }: { clientFullName?: string; clientPhone?: string | null; searchable?: boolean }) {
   const [state, formAction, isPending] = useActionState(updateClientSettings, null);
 
   return (
@@ -285,6 +286,39 @@ function ClientSettingsForm({ clientFullName, clientPhone }: { clientFullName?: 
         >
           Manage Membership
         </Link>
+      </section>
+
+      <div className="gold-divider" />
+
+      {/* ── Search visibility ── */}
+      <section>
+        <h2 className="mb-1 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+          Discoverability
+        </h2>
+        <p className="mb-4 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          Control whether others can find you via search.
+        </p>
+        <label className="flex cursor-pointer items-center justify-between rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.02)] px-4 py-3.5">
+          <div>
+            <p className="text-sm text-foreground/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              Allow others to find me in search
+            </p>
+            <p className="text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              When off, your profile will not appear in any search results
+            </p>
+          </div>
+          <div className="relative ml-4">
+            <input
+              type="checkbox"
+              name="searchable"
+              value="1"
+              defaultChecked={searchable ?? true}
+              className="peer sr-only"
+            />
+            <div className="h-6 w-11 rounded-full border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.04)] transition-colors peer-checked:border-[rgba(212,175,55,0.4)] peer-checked:bg-[rgba(212,175,55,0.2)]" />
+            <div className="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-muted/30 transition-all peer-checked:translate-x-5 peer-checked:bg-gold" />
+          </div>
+        </label>
       </section>
 
       <button

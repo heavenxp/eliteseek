@@ -31,6 +31,7 @@ export async function updateCompanionSettings(
   const tagline = (formData.get("tagline") as string)?.trim() || null;
   const location = (formData.get("location") as string)?.trim() || null;
   const isAvailable = formData.get("is_available") === "1";
+  const searchable = formData.get("searchable") === "1";
 
   const profileUnlockFee = unlockFeeRaw ? parseFloat(unlockFeeRaw) : null;
   const subscriptionPrice = subPriceRaw ? parseFloat(subPriceRaw) : null;
@@ -52,6 +53,8 @@ export async function updateCompanionSettings(
 
   if (error) return { error: error.message };
 
+  await supabase.from("profiles").update({ searchable }).eq("id", user.id);
+
   revalidatePath("/account/settings");
   return { success: true };
 }
@@ -66,12 +69,13 @@ export async function updateClientSettings(
 
   const full_name = (formData.get("full_name") as string)?.trim();
   const phone = (formData.get("phone") as string)?.trim() || null;
+  const searchable = formData.get("searchable") === "1";
 
   if (!full_name) return { error: "Display name is required." };
 
   const { error } = await supabase
     .from("profiles")
-    .update({ full_name, phone })
+    .update({ full_name, phone, searchable })
     .eq("id", user.id);
 
   if (error) return { error: error.message };

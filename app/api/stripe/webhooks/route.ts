@@ -293,6 +293,20 @@ async function handleIdentityVerified(
 ) {
   const companionId = session.metadata?.companion_id;
 
+  // Client sessions carry user_id but no companion_id — for those, only
+  // profiles.kyc_status (the client-side truth for booking) is updated.
+  if (!companionId) {
+    const userId = session.metadata?.user_id;
+    const clientMatch = userId
+      ? { column: "id", value: userId }
+      : { column: "kyc_session_id", value: session.id };
+    await supabase
+      .from("profiles")
+      .update({ kyc_status: "verified" })
+      .eq(clientMatch.column, clientMatch.value);
+    return;
+  }
+
   // Prefer metadata; fall back to session-id lookup for sessions created
   // outside the app (e.g. dashboard-initiated re-verification).
   const match = companionId
@@ -333,9 +347,22 @@ async function handleIdentityRequiresInput(
   session: Stripe.Identity.VerificationSession
 ) {
   const companionId = session.metadata?.companion_id;
-  const match = companionId
-    ? { column: "id", value: companionId }
-    : { column: "stripe_identity_session_id", value: session.id };
+
+  // Client sessions: mark profiles.kyc_status failed (retryable) only
+  if (!companionId) {
+    const userId = session.metadata?.user_id;
+    const clientMatch = userId
+      ? { column: "id", value: userId }
+      : { column: "kyc_session_id", value: session.id };
+    await supabase
+      .from("profiles")
+      .update({ kyc_status: "failed" })
+      .eq(clientMatch.column, clientMatch.value)
+      .neq("kyc_status", "verified");
+    return;
+  }
+
+  const match = { column: "id", value: companionId };
 
   // requires_input = the last check failed (blurry document, mismatch, …).
   // The host can retry from the verification page, which resumes the session.

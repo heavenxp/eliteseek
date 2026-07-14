@@ -52,11 +52,20 @@ export async function createBookingRequest(
   // Companions cannot send booking requests
   const { data: viewerProfile } = await supabase
     .from("profiles")
-    .select("role")
+    .select("role, kyc_status")
     .eq("id", userId)
     .single();
   if (viewerProfile?.role === "companion") {
     return { error: "Elite Hosts cannot send booking requests." };
+  }
+
+  // Phase 2: clients must be ID-verified to book (browsing and content
+  // subscriptions stay open to everyone).
+  if (viewerProfile?.kyc_status !== "verified") {
+    return {
+      error:
+        "ID verification is required to book. Verify once at Account → Verification — it takes about a minute.",
+    };
   }
 
   const companionId = formData.get("companion_id") as string;

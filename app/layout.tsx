@@ -3,6 +3,7 @@ import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import { ServiceWorkerRegister } from "@/components/pwa/sw-register";
 import { InstallPrompt } from "@/components/pwa/install-prompt";
 import "./globals.css";
+import { cn } from "@/lib/utils";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -68,7 +69,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorant.variable} ${dmSans.variable} h-full`}
+      className={cn("h-full font-sans", cormorant.variable, dmSans.variable)}
     >
       <head>
         {/* iOS home screen meta tags */}

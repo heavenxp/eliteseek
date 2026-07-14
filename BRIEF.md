@@ -1,14 +1,21 @@
 # EliteSeek — Master Project Brief
 
+> **Read PHASES.md first.** It defines the current scope, roadmap, and product discipline; this brief is background reference. Where the two disagree, PHASES.md wins.
+
 ## What is EliteSeek?
 
-EliteSeek is a premium Elite Host and social experience marketplace built as a Progressive Web App (PWA). It combines three proven platform models into one:
+EliteSeek is a **verified companion booking + paid content platform**, built as a PWA. Two legal product categories, one brand:
 
-- **Booking platform** — clients book Elite Hosts for dinners, events, travel, social outings
-- **Creator platform** — Elite Hosts post exclusive content, clients subscribe and unlock PPV
-- **Gifting platform** — clients send physical and virtual gifts from Elite Host wishlists
+- **Bookings** — strictly non-sexual social companionship: dates, plus-ones, events, dinners, travel companions. Airbnb-style language throughout ("book", "host", "experience").
+- **Content** — creator subscriptions, PPV, profile unlocks. Standard creator-platform model.
 
-The platform is legally positioned as an Elite Host/social experience marketplace. It is not an escort platform. All sexual services are strictly prohibited in T&Cs and enforced via AI content moderation.
+**Core positioning: "the one where everyone's real and everyone's safe."** Verification and safety are the product, not features.
+
+The "no sexual services" rule is enforced in the product, not just the ToS: moderated photography and copy, hourly/event-based pricing only (no menu structures), active moderation of reviews/messages/profiles, and bookings and content never cross-sold as one thing.
+
+### Cut from scope
+- ❌ **Gifting/wishlist system** — removed from launch entirely (this feature pattern got WishTender terminated by Stripe). Feature-flagged off via `GIFTING_ENABLED` in `lib/flags.ts`; DB tables remain. Revisit post-traction only, with processor sign-off first.
+- ❌ Any escort-advertising or adult-booking framing — permanently out.
 
 ---
 
@@ -22,6 +29,7 @@ The platform is legally positioned as an Elite Host/social experience marketplac
 - **Primary colour** — Gold `#d4af37`
 - **Background** — Deep dark `#080810` with warm radial gradients
 - **Style reference** — Glassmorphism throughout, frosted glass cards, gold accents, blurred backgrounds
+- **Copy tone** — Airbnb Experiences / high-end matchmaking. Never dating-app or adult-industry language (no "discreet", no desirability framing).
 
 ---
 
@@ -29,12 +37,12 @@ The platform is legally positioned as an Elite Host/social experience marketplac
 
 | Layer | Tool |
 |---|---|
-| Framework | Next.js 14 (App Router) |
-| Styling | Tailwind CSS + Framer Motion |
+| Framework | Next.js 16 (App Router) |
+| Styling | Tailwind CSS v4 + shadcn/ui (restyled in EliteSeek tokens) |
 | Backend & Database | Supabase |
 | Authentication | Supabase Auth |
 | File Storage | Supabase Storage |
-| Payments | Stripe |
+| Payments | Stripe (Connect escrow for bookings) |
 | KYC Verification | Stripe Identity |
 | AI Content Moderation | Hive Moderation |
 | Email | Resend |
@@ -42,26 +50,24 @@ The platform is legally positioned as an Elite Host/social experience marketplac
 | Deployment | Vercel |
 | PWA | Next.js PWA config |
 
+shadcn MCP server is configured in `.mcp.json`; community registries (`@aceternity`, `@magicui`) in `components.json`. See "Quality bar" in PHASES.md.
+
 ---
 
 ## User Roles
 
 ### Elite Host
-- Creates profile with photos, bio, services, availability
-- Sets their own prices for everything
-- Posts content (photos, videos) — clean content only
-- Manages wishlist for gifting
-- Receives bookings, subscriptions, PPV purchases, tips, gifts
-- Gets paid out via Stripe Connect
+- Creates profile with photos, bio, availability (home city + travel windows)
+- Sets hourly/event rates for bookings and prices for content (above platform minimums)
+- Posts content (photos, videos) — clean content only, Hive-scanned
+- Receives bookings, subscriptions, PPV purchases, profile unlocks
+- Gets paid out via Stripe Connect (escrow, auto-release post-booking)
 
 ### Client
 - Browses and discovers Elite Hosts
-- Requests or pays to unlock profiles
-- Books Elite Hosts for experiences
-- Subscribes to Elite Hosts
-- Purchases PPV content
-- Sends gifts from wishlists
-- Tips Elite Hosts
+- Requests or pays to unlock locked profiles
+- Books Elite Hosts for experiences (ID verification required to book, not to browse)
+- Subscribes to Elite Hosts and purchases PPV content
 
 ---
 
@@ -69,20 +75,20 @@ The platform is legally positioned as an Elite Host/social experience marketplac
 
 | Revenue Type | Who Sets Price | Platform Cut | Creator Keeps |
 |---|---|---|---|
+| Bookings | Creator sets hourly/event rate | 15% | 85% |
 | Subscriptions | Creator (min $9.99/month) | 20% | 80% |
 | PPV Content Unlock | Creator (min $3) | 20% | 80% |
 | Profile Unlock Fee | Creator (min $10) | 20% | 80% |
-| Tips & Virtual Gifts | Creator sets menu | 20% | 80% |
-| Bookings | Creator sets rate | 15% | 85% |
-| Physical Gifts (wishlist) | Retail price | 20% | 80% |
+
+(Gifting and tip revenue removed with the gifting cut.)
 
 ---
 
 ## Content Rules
 
 - All content must be clean — lifestyle, fashion, behind the scenes
-- Bikini, swimwear, lingerie allowed
-- Explicit sexual content strictly prohibited
+- Bikini, swimwear, lingerie allowed; explicit sexual content strictly prohibited
+- Content stays non-explicit while on Stripe — an explicit-content policy change would require migrating to a specialist processor (Segpay/CCBill class) FIRST
 - Every upload scanned by Hive Moderation AI before going live
 - Strike system: 3 strikes = account suspended
 - Manual review queue for borderline content (70–90% confidence score)
@@ -96,141 +102,57 @@ Elite Hosts choose their visibility level:
 
 - **Public** — basic profile visible to all users
 - **Locked** — full profile hidden, client must request access or pay unlock fee
-- **Elite Only** — profile hidden from non-Elite membership tier members
+- **Elite Only** — profile hidden from lower client membership tiers
 
 ---
 
-## Verification Tiers (Elite Host)
+## Verification & Tiers
 
-- **Unverified** — basic listing, lower search ranking
-- **Verified** — ID checked via Stripe Identity, badge awarded, priority placement
-- **EliteSeek Select** — handpicked by platform, top placement, featured slots, application required
+### Host verification
+- **Unverified** — not visible (KYC required before profile goes live, per Phase 2)
+- **Verified** — ID checked via Stripe Identity, badge awarded
+- **EliteSeek Select** — handpicked by platform, top placement, application required
+
+### Host quality tiers (rating-based, `lib/tiers.ts`)
+Pearl (New) → Rose (Rising) → Ruby (Established) → Sapphire (Acclaimed) → Diamond (Elite)
+
+### Client membership tiers (spend-based, `lib/tiers.ts`)
+Bronze → Silver → Gold → Platinum. Membership tier info stays inside the app; pricing never on profiles.
 
 ---
 
-## Membership Tiers (Client)
+## Sitemap (current)
 
-- **Bronze** — basic browse, limited access to locked profiles
-- **Silver** — priority booking, can request access to locked profiles
-- **Elite** — full access including Elite Only profiles, concierge service, early access
-
----
-
-## Full Sitemap
-
-### 1. Onboarding
-- Landing Page
-- Sign Up / Login
-- KYC Verification
-- Elite Host Setup
-- Client Setup
-
-### 2. Discovery
-- Browse Feed
-- Search
-- Experiences Marketplace
-- Elite Host Profile (Public)
-- Elite Host Profile (Unlocked)
-
-### 3. Access & Locks
-- Profile Lock System
-- Access Request Flow
-- Profile Unlock (Pay to View)
-- Elite Only Access
-- Verification Tiers
-
-### 4. Content & Creator
-- Content Studio
-- PPV Unlock
-- Subscription Feed
-- Content Moderation
-- Elite Host Dashboard
-- Live / Virtual Sessions
-
-### 5. Booking
-- Booking Request
-- Booking Confirmation
-- My Bookings
-- Concierge Layer
-- Post-Experience
-
-### 6. Gifting
-- Wishlist Builder
-- Gift Browser
-- Gift Checkout
-- Virtual Gifting
-- Gift History
-
-### 7. Membership
-- Membership Tiers
-- Elite Lounge
-- Status & Rewards
-- Billing
-
-### 8. Messaging
-- Inbox
-- Chat
-- Notifications
-
-### 9. Account
-- My Profile
-- Earnings (Elite Host)
-- My Unlocks (Client)
-- Settings
-- Verification Centre
-
-### 10. Admin
-- User Management
-- Content Moderation
-- Payments Dashboard
-- Analytics
-- Platform Settings
+1. **Onboarding** — landing, signup/login, KYC, host setup, client setup
+2. **Discovery** — browse feed, search, experiences, host profiles (public/unlocked)
+3. **Access & Locks** — lock system, access requests, paid unlock, Elite-only access
+4. **Content & Creator** — content studio (`/companion/content`), browse feed (`/content`), PPV, subscriptions, moderation
+5. **Booking** — request, confirmation, my bookings, safety flow (check-in/out, trusted contact — Phase 3)
+6. **Membership** — tiers, billing
+7. **Messaging** — inbox, chat, notifications
+8. **Account** — profile, earnings, unlocks, settings, verification
+9. **Admin** — moderation queue, user management, analytics
 
 ---
 
 ## Key Legal Considerations
 
-- Platform is Australian entity
-- T&Cs explicitly prohibit sexual services
+- Platform is an Australian entity
+- T&Cs explicitly prohibit sexual services — and the product enforces it (moderation, pricing structure, copy)
 - Age verification mandatory (Australian Online Safety Act)
+- No misleading claims (fake stats are an Australian Consumer Law risk)
 - AI content moderation documented and enforced from day one
-- No explicit content permitted at any tier
-- Payment processors: Stripe primary, adult-friendly processor as backup
+- Payment processor: Stripe — content stays non-explicit while on Stripe
 - Consult Australian internet lawyer before launch
 
 ---
 
 ## Build Status
 
-- [x] Brand identity decided
-- [x] Tech stack decided
-- [x] Full sitemap completed
-- [x] Revenue model decided
-- [ ] Project created (Next.js)
-- [ ] Supabase connected
-- [ ] Authentication built
-- [ ] Database schema designed
-- [ ] Landing page built
-- [ ] Onboarding flow built
-- [ ] Browse feed built
-- [ ] Profile system built
-- [ ] Content / PPV system built
-- [ ] Gifting system built
-- [ ] Booking system built
-- [ ] Messaging built
-- [ ] Payments (Stripe) integrated
-- [ ] KYC (Stripe Identity) integrated
-- [ ] Content moderation (Hive) integrated
-- [ ] Admin dashboard built
-- [ ] PWA configured
-- [ ] Deployed to Vercel
+Tracked in PHASES.md (Phase 1 — Stabilize & Strip is current). Shipped so far: Next.js app, Supabase (auth/DB/storage/realtime), landing, onboarding, browse, profiles + locks, content/PPV, bookings, messaging, membership, Stripe payments, PWA, Vercel deploy. Gifting: built, then feature-flagged off (cut from scope).
 
 ---
 
 ## How to Use This Brief
 
-At the start of every Cursor or Claude Code session, reference this file:
-
-> "Read BRIEF.md and continue building EliteSeek. Current status is [paste current build status]."
-
-This brings any Claude session fully up to speed instantly.
+At the start of every session: read PHASES.md, then this file. State which phase/checkbox is being worked, complete it, tick the box, commit with a phase-prefixed message (e.g. `p1: hide gifting UI`).

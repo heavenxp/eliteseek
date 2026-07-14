@@ -34,7 +34,7 @@ The "no sexual services" rule must be true in the product, not just the ToS:
 - [x] Replace fake trust stats on landing ("500+ Verified Elite Hosts", "4.9★ Average Rating") with honest premium copy, e.g. "Invite-only · ID-verified hosts · Melbourne first" — misleading stats are an Australian Consumer Law risk and undercut the trust positioning
 - [x] Replace "100% Discreet & Private" with "Private & Secure" — "discreet" is adult-industry signal vocabulary (no "discreet/discretion" vocabulary remains anywhere; also deleted the unused full-marketing LandingPage which contained fake featured-host profiles and a gifting card)
 - [x] Audit all copy sitewide against the repositioning above — replace anything that reads adult-industry, including page metadata (current meta description still mentions "luxury gifts") — meta descriptions rewritten (layout + manifest), "Intimate dinner" placeholder fixed, host tier subtitles reframed (Desired/Sought After → Established/Acclaimed), onboarding bio placeholder neutralized; grep sweep for signal vocabulary (escort/intimate/discreet/GFE/incall/etc.) is clean outside the flag-gated gifts code
-- [ ] Update BRIEF.md to reflect this document
+- [x] Update BRIEF.md to reflect this document
 
 **Exit criteria:** site loads clean in production, both user types route correctly, no gifting surface visible.
 

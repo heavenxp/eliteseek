@@ -28,7 +28,7 @@ The "no sexual services" rule must be true in the product, not just the ToS:
 
 **Goal: working deployment of the reduced scope.**
 
-- [ ] Verify the old Internal Server Error is gone (checked 14 Jul 2026: homepage returns 200, all deployments READY, no runtime errors in 7 days — still confirm /login, /signup, content feed, and dashboard routes)
+- [x] Verify the old Internal Server Error is gone (checked 14 Jul 2026: homepage returns 200, all deployments READY, no runtime errors in 7 days — confirmed /login, /signup, /content, /feed, /bookings, /companion/bookings, /account/settings, /membership, /messages all 200 in production, no error text in rendered pages)
 - [ ] Fix content page routing: creators → studio view; clients → browse feed
 - [ ] Remove/feature-flag the gifting & wishlist system (tables can stay; hide all UI + API routes)
 - [ ] Replace fake trust stats on landing ("500+ Verified Elite Hosts", "4.9★ Average Rating") with honest premium copy, e.g. "Invite-only · ID-verified hosts · Melbourne first" — misleading stats are an Australian Consumer Law risk and undercut the trust positioning

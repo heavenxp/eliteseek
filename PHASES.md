@@ -31,8 +31,8 @@ The "no sexual services" rule must be true in the product, not just the ToS:
 - [x] Verify the old Internal Server Error is gone (checked 14 Jul 2026: homepage returns 200, all deployments READY, no runtime errors in 7 days — confirmed /login, /signup, /content, /feed, /bookings, /companion/bookings, /account/settings, /membership, /messages all 200 in production, no error text in rendered pages)
 - [x] Fix content page routing: creators → studio view; clients → browse feed
 - [x] Remove/feature-flag the gifting & wishlist system (tables can stay; hide all UI + API routes) — `GIFTING_ENABLED=false` in `lib/flags.ts` gates /gifts (404) and the sendGift action; gift links, gift-locked feed posts, tier/onboarding gift perks, and gift metadata copy all removed
-- [ ] Replace fake trust stats on landing ("500+ Verified Elite Hosts", "4.9★ Average Rating") with honest premium copy, e.g. "Invite-only · ID-verified hosts · Melbourne first" — misleading stats are an Australian Consumer Law risk and undercut the trust positioning
-- [ ] Replace "100% Discreet & Private" with "Private & Secure" — "discreet" is adult-industry signal vocabulary
+- [x] Replace fake trust stats on landing ("500+ Verified Elite Hosts", "4.9★ Average Rating") with honest premium copy, e.g. "Invite-only · ID-verified hosts · Melbourne first" — misleading stats are an Australian Consumer Law risk and undercut the trust positioning
+- [x] Replace "100% Discreet & Private" with "Private & Secure" — "discreet" is adult-industry signal vocabulary (no "discreet/discretion" vocabulary remains anywhere; also deleted the unused full-marketing LandingPage which contained fake featured-host profiles and a gifting card)
 - [ ] Audit all copy sitewide against the repositioning above — replace anything that reads adult-industry, including page metadata (current meta description still mentions "luxury gifts")
 - [ ] Update BRIEF.md to reflect this document
 

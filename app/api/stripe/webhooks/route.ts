@@ -57,6 +57,16 @@ export async function POST(req: NextRequest) {
         await handleSubscriptionCancelled(supabase, sub);
         break;
       }
+      case "identity.verification_session.verified": {
+        const session = event.data.object as Stripe.Identity.VerificationSession;
+        await handleIdentityVerified(supabase, session);
+        break;
+      }
+      case "identity.verification_session.requires_input": {
+        const session = event.data.object as Stripe.Identity.VerificationSession;
+        await handleIdentityRequiresInput(supabase, session);
+        break;
+      }
     }
   } catch (err) {
     console.error("Webhook handler error:", err);
@@ -273,4 +283,56 @@ async function handleSubscriptionCancelled(
     .from("subscriptions")
     .update({ status: "cancelled", cancelled_at: new Date().toISOString() })
     .eq("stripe_subscription_id", sub.id);
+}
+
+// ── Identity (host KYC) ───────────────────────────────────────
+
+async function handleIdentityVerified(
+  supabase: ReturnType<typeof createAdminClient>,
+  session: Stripe.Identity.VerificationSession
+) {
+  const companionId = session.metadata?.companion_id;
+
+  // Prefer metadata; fall back to session-id lookup for sessions created
+  // outside the app (e.g. dashboard-initiated re-verification).
+  const match = companionId
+    ? { column: "id", value: companionId }
+    : { column: "stripe_identity_session_id", value: session.id };
+
+  const { data: companion } = await supabase
+    .from("companion_profiles")
+    .select("id, verification_tier")
+    .eq(match.column, match.value)
+    .single();
+  if (!companion) return;
+
+  await supabase
+    .from("companion_profiles")
+    .update({
+      identity_status: "verified",
+      identity_verified_at: new Date().toISOString(),
+      // Promote the public badge unless the host is already Select
+      ...(companion.verification_tier === "unverified"
+        ? { verification_tier: "verified" }
+        : {}),
+    })
+    .eq("id", companion.id);
+}
+
+async function handleIdentityRequiresInput(
+  supabase: ReturnType<typeof createAdminClient>,
+  session: Stripe.Identity.VerificationSession
+) {
+  const companionId = session.metadata?.companion_id;
+  const match = companionId
+    ? { column: "id", value: companionId }
+    : { column: "stripe_identity_session_id", value: session.id };
+
+  // requires_input = the last check failed (blurry document, mismatch, …).
+  // The host can retry from the verification page, which resumes the session.
+  await supabase
+    .from("companion_profiles")
+    .update({ identity_status: "failed" })
+    .eq(match.column, match.value)
+    .neq("identity_status", "verified");
 }

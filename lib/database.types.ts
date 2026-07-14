@@ -5,6 +5,7 @@ export type UserRole             = "client" | "companion";
 export type VisibilityLevel      = "public" | "locked" | "elite_only";
 export type LockLevel            = "public" | "request" | "silver" | "elite";
 export type VerificationTier     = "unverified" | "verified" | "select";
+export type IdentityStatus       = "unverified" | "pending" | "verified" | "failed";
 export type MembershipTier       = "bronze" | "silver" | "elite";
 export type HostTier             = "pearl" | "rose" | "ruby" | "sapphire" | "diamond";
 export type ClientTier           = "bronze" | "silver" | "gold" | "platinum";
@@ -99,6 +100,9 @@ export interface CompanionProfile {
   cover_image_url: string | null;
   stripe_account_id: string | null;
   stripe_account_status: StripeAccountStatus;
+  identity_status: IdentityStatus;
+  stripe_identity_session_id: string | null;
+  identity_verified_at: string | null;
   moderation_strikes: number;
   is_featured: boolean;
   total_reviews: number;

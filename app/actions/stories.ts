@@ -47,7 +47,23 @@ export async function getStories(): Promise<StoriesResult | null> {
     .order("created_at", { ascending: true });
 
   const admin = createAdminClient();
-  const storiesRaw = raw ?? [];
+  let storiesRaw = raw ?? [];
+
+  // Phase 2: unverified hosts are never visible to clients — drop their
+  // stories (they still see their own).
+  const authorIds = [...new Set(storiesRaw.map((s) => s.user_id))];
+  if (authorIds.length > 0) {
+    const { data: hostTiers } = await admin
+      .from("companion_profiles")
+      .select("user_id, verification_tier")
+      .in("user_id", authorIds);
+    const unverifiedHostIds = new Set(
+      (hostTiers ?? [])
+        .filter((h) => h.verification_tier === "unverified" && h.user_id !== user.id)
+        .map((h) => h.user_id)
+    );
+    storiesRaw = storiesRaw.filter((s) => !unverifiedHostIds.has(s.user_id));
+  }
 
   // Fetch viewer profile + all author profiles in one query
   const userIds = [...new Set([user.id, ...storiesRaw.map((s) => s.user_id)])];

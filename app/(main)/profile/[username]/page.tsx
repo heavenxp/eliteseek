@@ -15,11 +15,14 @@ export async function generateMetadata({
 
   const { data } = await createAdminClient()
     .from("companion_profiles")
-    .select("display_name, tagline, bio, cover_image_url")
+    .select("display_name, tagline, bio, cover_image_url, verification_tier")
     .eq("username", username)
     .single();
 
-  if (!data) return { title: "Elite Host — EliteSeek" };
+  // Unverified profiles are not live — don't leak their details in metadata
+  if (!data || data.verification_tier === "unverified") {
+    return { title: "Elite Host — EliteSeek" };
+  }
 
   const name = data.display_name ?? username;
   const description =
@@ -66,7 +69,8 @@ export default async function ProfilePage({
        tags, languages, verification_tier, host_tier, is_available,
        average_rating, total_reviews, booking_rate_hourly,
        subscription_price, profile_unlock_fee, cover_image_url,
-       username, available_from, available_until, visibility`
+       username, available_from, available_until, visibility,
+       identity_status`
     )
     .eq("username", username)
     .single();
@@ -75,6 +79,10 @@ export default async function ProfilePage({
 
   const displayName = companion.display_name ?? username;
   const isOwner = user?.id === companion.user_id;
+
+  // Phase 2: unverified host profiles are not live — only the owner can
+  // see their own (so they can complete verification).
+  if (companion.verification_tier === "unverified" && !isOwner) notFound();
   const lockStatus = companion.visibility as "public" | "locked" | "elite_only";
 
   // Always fetch: counts + feed posts + content posts

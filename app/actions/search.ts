@@ -49,6 +49,8 @@ export async function searchUsers({
     const { data: companions } = await admin
       .from("companion_profiles")
       .select("user_id, username, display_name, location")
+      // Phase 2: unverified hosts are never visible to clients
+      .in("verification_tier", ["verified", "select"])
       .in("user_id", hostIds);
 
     for (const c of companions ?? []) {
@@ -62,6 +64,8 @@ export async function searchUsers({
 
   return profiles
     .filter((p) => {
+      // Hosts absent from companionMap are unverified — drop them
+      if (p.role === "companion" && !companionMap.has(p.id)) return false;
       if (city && p.role === "companion") {
         const loc = companionMap.get(p.id)?.location ?? "";
         return loc.toLowerCase().includes(city.toLowerCase());

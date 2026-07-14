@@ -45,7 +45,9 @@ export default async function BrowsePage({
   // Build companion cards query
   let query = supabase
     .from("companion_cards")
-    .select("*", { count: "exact" });
+    .select("*", { count: "exact" })
+    // Phase 2: unverified hosts are never visible to clients
+    .in("verification_tier", ["verified", "select"]);
 
   if (q) query = query.or(`display_name.ilike.%${q}%,location.ilike.%${q}%`);
   if (tags.length > 0) query = query.overlaps("tags", tags);

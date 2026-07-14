@@ -106,7 +106,7 @@ export default async function FeedPage({
     // Companion usernames — only companions have profiles with usernames
     createAdminClient()
       .from("companion_profiles")
-      .select("user_id, username")
+      .select("user_id, username, verification_tier")
       .in("user_id", Array.from(authorIds)),
 
     // Total likes (for like_count display)
@@ -202,8 +202,17 @@ export default async function FeedPage({
     recentCommentCount.set(c.post_id, (recentCommentCount.get(c.post_id) ?? 0) + 1);
   }
 
+  // Phase 2: unverified hosts are never visible to clients — drop their
+  // posts from the feed (they still see their own).
+  const unverifiedHostIds = new Set(
+    (usernamesResult.data ?? [])
+      .filter((r) => r.verification_tier === "unverified" && r.user_id !== user.id)
+      .map((r) => r.user_id)
+  );
+  const visiblePosts = postList.filter((p) => !unverifiedHostIds.has(p.user_id));
+
   // ── Map to FeedPost ───────────────────────────────────────────
-  let posts: FeedPost[] = postList.map((p) => {
+  let posts: FeedPost[] = visiblePosts.map((p) => {
     const profile    = profileMap.get(p.user_id);
     const allComments = commentsByPost.get(p.id) ?? [];
     return {

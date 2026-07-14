@@ -13,7 +13,7 @@ export default async function ExperiencesPage() {
     .from("availability_posts")
     .select(`
       *,
-      companion:companion_profiles!companion_id (
+      companion:companion_profiles!companion_id!inner (
         id,
         display_name,
         verification_tier,
@@ -21,6 +21,8 @@ export default async function ExperiencesPage() {
         username
       )
     `)
+    // Phase 2: unverified hosts are never visible to clients
+    .in("companion.verification_tier", ["verified", "select"])
     .eq("visibility", "public")
     .eq("is_booked", false)
     .gt("date_from", new Date(Date.now() - 3600 * 1000).toISOString())

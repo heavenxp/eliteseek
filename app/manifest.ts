@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "EliteSeek",
     short_name: "EliteSeek",
     description:
-      "A premium Elite Host and social experience marketplace. Book exclusive experiences, subscribe to exclusive content, and send luxury gifts.",
+      "A verified companion booking and content platform. Book ID-verified Elite Hosts for dinners, events, and travel, or subscribe to exclusive content.",
     start_url: "/browse",
     display: "standalone",
     orientation: "portrait",

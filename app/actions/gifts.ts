@@ -1,6 +1,8 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { notify } from "@/app/actions/notifications";
+import { GIFTING_ENABLED } from "@/lib/flags";
 
 type SendGiftInput = {
   recipientId: string;
@@ -13,6 +15,8 @@ type SendGiftInput = {
 export async function sendGift(
   input: SendGiftInput
 ): Promise<{ error: string | null }> {
+  if (!GIFTING_ENABLED) return { error: "Gifting is not available" };
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -42,6 +46,15 @@ export async function sendGift(
       .update({ is_purchased: true, purchased_by: user.id, purchased_at: new Date().toISOString() })
       .eq("id", input.wishlistItemId);
   }
+
+  const { data: profile } = await supabase.from("profiles").select("full_name").eq("id", user.id).single();
+  await notify({
+    userId: input.recipientId,
+    type: "gift_received",
+    title: `${profile?.full_name ?? "Someone"} sent you a gift!`,
+    body: input.virtualGiftName ?? "A special gift",
+    link: "/account",
+  });
 
   return { error: null };
 }

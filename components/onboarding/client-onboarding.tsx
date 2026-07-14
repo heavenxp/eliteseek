@@ -9,7 +9,7 @@ import type { MembershipTier } from "@/lib/database.types";
 const INTEREST_OPTIONS = [
   { value: "Dining", label: "Dining", icon: "calendar" },
   { value: "Events", label: "Events", icon: "star" },
-  { value: "Travel", label: "Travel", icon: "gift" },
+  { value: "Travel", label: "Travel", icon: "map-pin" },
   { value: "Social", label: "Social", icon: "eye" },
   { value: "Virtual", label: "Virtual", icon: "lock" },
 ];
@@ -30,7 +30,6 @@ const MEMBERSHIP_OPTIONS: {
     features: [
       "Browse public Elite Host profiles",
       "View public content feeds",
-      "Send gift requests",
       "Basic search & filters",
     ],
     highlighted: false,

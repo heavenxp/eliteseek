@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { notify } from "@/app/actions/notifications";
 
 export type FeedActionResult = { error?: string } | null;
 
@@ -39,13 +40,15 @@ export async function createPost(_: FeedActionResult, formData: FormData): Promi
     ? (rawAudience as "public" | "followers" | "private")
     : "public";
 
-  const rawLockedPrice = formData.get("locked_price");
-  const locked_price =
-    rawLockedPrice !== null && rawLockedPrice !== ""
-      ? Math.max(1, parseFloat(rawLockedPrice as string))
-      : null;
+  // Gift-locked posts are part of the gifting system, which is cut from scope
+  // (lib/flags.ts) — new posts can no longer set a locked_price.
+  const locked_price = null;
 
-  const { error } = await supabase.from("posts").insert({ user_id: user.id, content, tags, image_url, audience, locked_price });
+  const rawMinTier = formData.get("content_min_tier") as string | null;
+  const content_min_tier =
+    rawMinTier && ["silver", "gold", "platinum"].includes(rawMinTier) ? rawMinTier : null;
+
+  const { error } = await supabase.from("posts").insert({ user_id: user.id, content, tags, image_url, audience, locked_price, content_min_tier });
   if (error) {
     console.error("[createPost] insert error:", error.message);
     return { error: error.message };
@@ -70,6 +73,18 @@ export async function toggleLike(postId: string): Promise<FeedActionResult> {
     await supabase.from("post_likes").delete().eq("post_id", postId).eq("user_id", user.id);
   } else {
     await supabase.from("post_likes").insert({ post_id: postId, user_id: user.id });
+    const [postRes, profileRes] = await Promise.all([
+      supabase.from("posts").select("user_id").eq("id", postId).single(),
+      supabase.from("profiles").select("full_name").eq("id", user.id).single(),
+    ]);
+    if (postRes.data && postRes.data.user_id !== user.id) {
+      await notify({
+        userId: postRes.data.user_id,
+        type: "post_liked",
+        title: `${profileRes.data?.full_name ?? "Someone"} liked your post`,
+        link: "/feed",
+      });
+    }
   }
 
   revalidatePath("/feed");
@@ -95,6 +110,13 @@ export async function toggleFollow(followingId: string): Promise<FeedActionResul
       .eq("following_id", followingId);
   } else {
     await supabase.from("follows").insert({ follower_id: user.id, following_id: followingId });
+    const { data: profile } = await supabase.from("profiles").select("full_name").eq("id", user.id).single();
+    await notify({
+      userId: followingId,
+      type: "new_follower",
+      title: `${profile?.full_name ?? "Someone"} started following you`,
+      link: "/feed",
+    });
   }
 
   revalidatePath("/feed");
@@ -131,6 +153,20 @@ export async function createComment(postId: string, content: string): Promise<Fe
     .insert({ post_id: postId, user_id: user.id, content: trimmed });
 
   if (error) return { error: error.message };
+
+  const [postRes, profileRes] = await Promise.all([
+    supabase.from("posts").select("user_id").eq("id", postId).single(),
+    supabase.from("profiles").select("full_name").eq("id", user.id).single(),
+  ]);
+  if (postRes.data && postRes.data.user_id !== user.id) {
+    await notify({
+      userId: postRes.data.user_id,
+      type: "post_commented",
+      title: `${profileRes.data?.full_name ?? "Someone"} commented on your post`,
+      body: trimmed.length > 80 ? trimmed.slice(0, 80) + "…" : trimmed,
+      link: "/feed",
+    });
+  }
 
   revalidatePath("/feed");
   return null;

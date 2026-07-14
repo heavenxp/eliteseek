@@ -12,6 +12,7 @@ import { SubscribeButton } from "@/components/subscriptions/subscribe-button";
 import { PostCard } from "@/components/posts/post-card";
 import type { AvailabilityPost } from "@/lib/database.types";
 import { getFollowerList, getFollowingList, type FollowListItem } from "@/app/actions/follows";
+import { TierBadge } from "@/components/badges/tier-badge";
 
 // ── Types ──────────────────────────────────────────────────────
 
@@ -48,6 +49,7 @@ type CompanionData = {
   tags: string[];
   languages: string[];
   verification_tier: string;
+  host_tier: string;
   is_available: boolean;
   average_rating: number | null;
   total_reviews: number;
@@ -297,15 +299,7 @@ export function ProfileBody({
                         <Icon name="camera" className="h-4 w-4" /> Settings
                       </OptionsItem>
                     </>
-                  ) : (
-                    <>
-                      {vd?.isFullyVisible && (
-                        <OptionsItem href={`/gifts?companion=${companion.id}`}>
-                          <Icon name="gift" className="h-4 w-4" /> Send Gift
-                        </OptionsItem>
-                      )}
-                    </>
-                  )}
+                  ) : null}
                 </div>
               )}
             </div>}
@@ -336,6 +330,9 @@ export function ProfileBody({
               <span className="badge-verified rounded-full px-2.5 py-0.5 text-xs">
                 Verified
               </span>
+            )}
+            {companion.host_tier && companion.host_tier !== "pearl" && (
+              <TierBadge type="host" tier={companion.host_tier} />
             )}
           </div>
           <p

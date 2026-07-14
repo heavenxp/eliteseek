@@ -22,7 +22,7 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: "EliteSeek — Curated Elite Hosts",
   description:
-    "A premium Elite Host and social experience marketplace. Book exclusive experiences, subscribe to exclusive content, and send luxury gifts.",
+    "A verified companion booking and content platform. Book ID-verified Elite Hosts for dinners, events, and travel, or subscribe to exclusive content. Private and secure.",
   keywords: ["Elite Host", "experiences", "luxury", "premium", "social"],
   manifest: "/manifest.webmanifest",
   appleWebApp: {

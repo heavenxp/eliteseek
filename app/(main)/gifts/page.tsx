@@ -1,7 +1,8 @@
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { GiftsClient } from "./gifts-client";
+import { GIFTING_ENABLED } from "@/lib/flags";
 import type { WishlistItem, CompanionProfile } from "@/lib/database.types";
 
 export type WishlistItemWithCompanion = WishlistItem & {
@@ -13,6 +14,8 @@ export default async function GiftsPage({
 }: {
   searchParams: Promise<{ companion?: string }>;
 }) {
+  if (!GIFTING_ENABLED) notFound();
+
   const { companion: companionFilter } = await searchParams;
 
   const supabase = await createClient();

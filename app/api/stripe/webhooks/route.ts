@@ -301,11 +301,13 @@ async function handleIdentityVerified(
 
   const { data: companion } = await supabase
     .from("companion_profiles")
-    .select("id, verification_tier")
+    .select("id, user_id, verification_tier")
     .eq(match.column, match.value)
     .single();
   if (!companion) return;
 
+  // Single statement — identity_status and the visibility-gating
+  // verification_tier can never diverge from this write.
   await supabase
     .from("companion_profiles")
     .update({
@@ -317,6 +319,13 @@ async function handleIdentityVerified(
         : {}),
     })
     .eq("id", companion.id);
+
+  // Mirror into the admin-facing profiles.kyc_status (display only, never
+  // gates visibility — verification_tier is the source of truth for that).
+  await supabase
+    .from("profiles")
+    .update({ kyc_status: "verified" })
+    .eq("id", companion.user_id);
 }
 
 async function handleIdentityRequiresInput(
@@ -330,9 +339,20 @@ async function handleIdentityRequiresInput(
 
   // requires_input = the last check failed (blurry document, mismatch, …).
   // The host can retry from the verification page, which resumes the session.
+  const { data: companion } = await supabase
+    .from("companion_profiles")
+    .select("id, user_id, identity_status")
+    .eq(match.column, match.value)
+    .single();
+  if (!companion || companion.identity_status === "verified") return;
+
   await supabase
     .from("companion_profiles")
     .update({ identity_status: "failed" })
-    .eq(match.column, match.value)
-    .neq("identity_status", "verified");
+    .eq("id", companion.id);
+
+  await supabase
+    .from("profiles")
+    .update({ kyc_status: "failed" })
+    .eq("id", companion.user_id);
 }

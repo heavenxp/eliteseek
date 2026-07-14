@@ -65,7 +65,8 @@ export default async function VerificationCentrePage({
       if (session.status === "verified") {
         status = "verified";
         verifiedAt = new Date().toISOString();
-        await createAdminClient()
+        const admin = createAdminClient();
+        await admin
           .from("companion_profiles")
           .update({
             identity_status: "verified",
@@ -75,12 +76,15 @@ export default async function VerificationCentrePage({
               : {}),
           })
           .eq("id", companion.id);
+        await admin.from("profiles").update({ kyc_status: "verified" }).eq("id", user.id);
       } else if (session.status === "requires_input" && session.last_error) {
         status = "failed";
-        await createAdminClient()
+        const admin = createAdminClient();
+        await admin
           .from("companion_profiles")
           .update({ identity_status: "failed" })
           .eq("id", companion.id);
+        await admin.from("profiles").update({ kyc_status: "failed" }).eq("id", user.id);
       }
     } catch {
       // Leave local status untouched if Stripe is unreachable

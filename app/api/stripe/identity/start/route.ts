@@ -83,6 +83,12 @@ export async function GET() {
     })
     .eq("id", companion.id);
 
+  // Mirror into the admin-facing profiles.kyc_status (display only)
+  await supabase
+    .from("profiles")
+    .update({ kyc_status: "pending" })
+    .eq("id", user.id);
+
   if (!session.url) {
     return NextResponse.json({ error: "Could not start verification" }, { status: 502 });
   }

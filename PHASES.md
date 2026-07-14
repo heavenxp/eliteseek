@@ -46,7 +46,7 @@ The schema already supports a full social layer (`posts`/likes/comments/follows/
 
 **Goal: verification as the moat.**
 
-- [ ] Stripe Identity KYC for **hosts** (required before profile goes live)
+- [x] Stripe Identity KYC for **hosts** (required before profile goes live) — migration 025 live; hosted flow at /api/stripe/identity/start; webhook promotes verification_tier (single source of truth for visibility); unverified hosts hidden from browse/search/experiences/feed/stories/profile+metadata; Verification Centre at /companion/verification. ⚠️ Ops: enable Stripe Identity on the account + add identity.verification_session.verified / .requires_input to the webhook endpoint's events, then run one real verification end-to-end
 - [ ] Stripe Identity for **clients** — required to book, NOT required to browse or subscribe to content
 - [ ] "Verified" badge system (this replaces the planned membership badges as the primary badge; SVGs from Creative Market/Flaticon per original plan)
 - [ ] Hive moderation integration:

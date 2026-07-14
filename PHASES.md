@@ -19,8 +19,12 @@ The "no sexual services" rule must be true in the product, not just the ToS:
 - Booking and content are two things a host offers — never cross-sold as one thing
 
 ### Cut from scope
-- ❌ Gifting/wishlist system — removed from launch entirely (this exact feature pattern got WishTender terminated by Stripe). Revisit post-traction only, with processor sign-off first.
+- ❌ Gifting/wishlist system (`wishlist_items`, `gifts` tables) — removed from launch entirely (this exact feature pattern got WishTender terminated by Stripe). Revisit post-traction only, with processor sign-off first.
 - ❌ Any escort-advertising or adult-booking framing — permanently out.
+- ✅ **Tips stay** — the `tips` table/feature (tip menus on content) is standard creator-platform monetization and is NOT part of the gifting cut.
+
+### Core product surface (not extras)
+The schema already supports a full social layer (`posts`/likes/comments/follows/`stories`), event-based group messaging (`events`, `event_members`, `event_messages`, `event_invite_codes`), and structured availability (`availability_posts`). All of these are **core product**: the Quality bar below applies to every screen backed by these tables.
 
 ---
 
@@ -75,6 +79,9 @@ The "no sexual services" rule must be true in the product, not just the ToS:
 - [ ] Studio view: content upload, pricing, subscriber management, earnings dashboard
 - [ ] Browse feed with discovery (city, category, verified-only filter)
 - [ ] Content stays behind paywall + Hive scan before publish
+- [ ] Stories viewer: rebuilt UI (per Quality bar), story media routed through the same Hive moderation pipeline before going live
+- [ ] Event group chat: rebuilt UI (per Quality bar) for events / invite codes / group messages, event messages routed through the same Hive moderation pipeline
+- [ ] Availability display: rebuilt UI (per Quality bar) for availability_posts on profiles and discovery, availability post content routed through the same Hive moderation pipeline
 - [ ] Payment note: keep content non-explicit while on Stripe. If explicit content is ever allowed, that requires migrating content payments to a specialist processor (Segpay/CCBill class) FIRST — do not flip the content policy before the processor.
 
 **Exit criteria:** a host can earn from both bookings and content; a client can pay for both.

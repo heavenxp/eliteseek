@@ -7,7 +7,9 @@
 EliteSeek is a **verified companion booking + paid content platform**, built as a PWA. Two legal product categories, one brand:
 
 - **Bookings** — strictly non-sexual social companionship: dates, plus-ones, events, dinners, travel companions. Airbnb-style language throughout ("book", "host", "experience").
-- **Content** — creator subscriptions, PPV, profile unlocks. Standard creator-platform model.
+- **Content** — creator subscriptions, PPV, profile unlocks, tips. Standard creator-platform model.
+
+Core product surface beyond the two revenue categories (all schema-backed, all held to the PHASES.md Quality bar): the social layer (posts, likes, comments, follows, stories), event-based group messaging (events, members, invite codes, group chat), and structured availability (`availability_posts`).
 
 **Core positioning: "the one where everyone's real and everyone's safe."** Verification and safety are the product, not features.
 
@@ -60,14 +62,15 @@ shadcn MCP server is configured in `.mcp.json`; community registries (`@aceterni
 - Creates profile with photos, bio, availability (home city + travel windows)
 - Sets hourly/event rates for bookings and prices for content (above platform minimums)
 - Posts content (photos, videos) — clean content only, Hive-scanned
-- Receives bookings, subscriptions, PPV purchases, profile unlocks
+- Receives bookings, subscriptions, PPV purchases, profile unlocks, tips (creator-set tip menu)
 - Gets paid out via Stripe Connect (escrow, auto-release post-booking)
 
 ### Client
 - Browses and discovers Elite Hosts
 - Requests or pays to unlock locked profiles
 - Books Elite Hosts for experiences (ID verification required to book, not to browse)
-- Subscribes to Elite Hosts and purchases PPV content
+- Subscribes to Elite Hosts, purchases PPV content, sends tips
+- Participates in the social layer: feed posts, comments, follows, stories, events + group chat
 
 ---
 
@@ -79,8 +82,9 @@ shadcn MCP server is configured in `.mcp.json`; community registries (`@aceterni
 | Subscriptions | Creator (min $9.99/month) | 20% | 80% |
 | PPV Content Unlock | Creator (min $3) | 20% | 80% |
 | Profile Unlock Fee | Creator (min $10) | 20% | 80% |
+| Tips | Creator sets tip menu | 20% | 80% |
 
-(Gifting and tip revenue removed with the gifting cut.)
+(Gifting/wishlist revenue removed with the gifting cut — `wishlist_items`/`gifts` only. Tips are standard creator-platform monetization and stay active.)
 
 ---
 
@@ -124,7 +128,7 @@ Bronze → Silver → Gold → Platinum. Membership tier info stays inside the a
 ## Sitemap (current)
 
 1. **Onboarding** — landing, signup/login, KYC, host setup, client setup
-2. **Discovery** — browse feed, search, experiences, host profiles (public/unlocked)
+2. **Discovery & Social** — browse feed, search, experiences, host profiles (public/unlocked), social feed (posts/likes/comments/follows), stories, events + group chat, availability posts
 3. **Access & Locks** — lock system, access requests, paid unlock, Elite-only access
 4. **Content & Creator** — content studio (`/companion/content`), browse feed (`/content`), PPV, subscriptions, moderation
 5. **Booking** — request, confirmation, my bookings, safety flow (check-in/out, trusted contact — Phase 3)

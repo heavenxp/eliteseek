@@ -33,6 +33,14 @@ export default async function ContentFeedPage() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
+  // Creators land in their studio; the browse feed is the client view
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+  if (profile?.role === "companion") redirect("/companion/content");
+
   const { data: rawPosts } = await supabase
     .from("content_posts")
     .select(

@@ -100,7 +100,7 @@ export function CreatePostForm() {
                 name="title"
                 type="text"
                 required
-                placeholder="e.g. Intimate dinner at Nobu, Mayfair"
+                placeholder="e.g. Dinner at Nobu, Melbourne"
                 className="auth-input w-full"
                 style={{ fontFamily: "var(--font-dm-sans)" }}
               />

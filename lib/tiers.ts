@@ -9,9 +9,9 @@ export const HOST_TIERS: {
   minRating: number;
 }[] = [
   { key: "pearl",    label: "Pearl",    subtitle: "New",         color: "#d0c8bc", minRating: 0   },
-  { key: "rose",     label: "Rose",     subtitle: "Charming",    color: "#e090a0", minRating: 3.0 },
-  { key: "ruby",     label: "Ruby",     subtitle: "Desired",     color: "#e01848", minRating: 3.7 },
-  { key: "sapphire", label: "Sapphire", subtitle: "Sought After",color: "#1a8fff", minRating: 4.3 },
+  { key: "rose",     label: "Rose",     subtitle: "Rising",      color: "#e090a0", minRating: 3.0 },
+  { key: "ruby",     label: "Ruby",     subtitle: "Established", color: "#e01848", minRating: 3.7 },
+  { key: "sapphire", label: "Sapphire", subtitle: "Acclaimed",   color: "#1a8fff", minRating: 4.3 },
   { key: "diamond",  label: "Diamond",  subtitle: "Elite",       color: "#a8e8ff", minRating: 4.8 },
 ];
 

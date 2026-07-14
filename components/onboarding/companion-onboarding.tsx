@@ -412,7 +412,7 @@ export function CompanionOnboarding({
         <FieldTextarea
           value={bio}
           onChange={(e) => setBio(e.target.value.slice(0, 500))}
-          placeholder="Tell clients about yourself — your personality, passions, and what makes an experience with you unforgettable."
+          placeholder="Tell clients about yourself — your personality, interests, and the kinds of experiences you host best."
         />
       </div>
     </div>

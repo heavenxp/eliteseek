@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { stripeConfigured } from "@/lib/stripe";
 import { ProfileBody } from "./profile-client";
+import { VerifyIdentityBanner } from "@/components/profile/verify-identity-banner";
 import type { AvailabilityPost } from "@/lib/database.types";
 
 export async function generateMetadata({
@@ -166,6 +167,10 @@ export default async function ProfilePage({
     }
 
     return (
+      <>
+        {companion.verification_tier === "unverified" && (
+          <VerifyIdentityBanner status={companion.identity_status ?? "unverified"} />
+        )}
       <ProfileBody
         companion={{
           id: companion.id,
@@ -207,6 +212,7 @@ export default async function ProfilePage({
           totalNetEarnings,
         }}
       />
+      </>
     );
   }
 

@@ -444,6 +444,9 @@ export default async function AccountPage({
             {[
               { href: "/messages",        icon: "message",          label: "Messages"   },
               { href: "/bookings",         icon: "calendar",         label: "Bookings"   },
+              ...(isCompanion
+                ? [{ href: "/companion/verification", icon: "shield", label: "Verification" }]
+                : []),
               { href: "/membership",       icon: "star",             label: "Membership" },
               { href: "/account/settings", icon: "settings",         label: "Settings"   },
             ].map(({ href, icon, label }) => (

@@ -129,7 +129,7 @@ function PhotoUpload({ label, currentUrl, uploadPath, onUploaded, aspect = "squa
         onClick={() => inputRef.current?.click()}
         disabled={uploading}
         className={[
-          "relative flex items-center justify-center overflow-hidden rounded-xl border border-dashed border-[rgba(212,175,55,0.25)] bg-[rgba(255,255,255,0.02)] transition-colors hover:border-[rgba(212,175,55,0.45)] hover:bg-[rgba(212,175,55,0.03)] disabled:cursor-not-allowed",
+          "relative flex items-center justify-center overflow-hidden rounded-xl border border-dashed border-white/20 bg-[rgba(255,255,255,0.02)] transition-colors hover:border-white/20 hover:bg-white/[0.04] disabled:cursor-not-allowed",
           isWide ? "h-32 w-full" : "h-28 w-28",
         ].join(" ")}
       >
@@ -257,7 +257,7 @@ function ClientSettingsForm({ clientFullName, clientPhone, searchable }: { clien
           ].map(({ name, label }) => (
             <label
               key={name}
-              className="flex cursor-pointer items-center gap-3 rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.02)] px-4 py-3 transition-colors hover:border-[rgba(212,175,55,0.18)]"
+              className="flex cursor-pointer items-center gap-3 rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.02)] px-4 py-3 transition-colors hover:border-white/10"
             >
               <input
                 type="checkbox"
@@ -320,7 +320,7 @@ function ClientSettingsForm({ clientFullName, clientPhone, searchable }: { clien
               defaultChecked={searchable ?? true}
               className="peer sr-only"
             />
-            <div className="h-6 w-11 rounded-full border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.04)] transition-colors peer-checked:border-[rgba(212,175,55,0.4)] peer-checked:bg-[rgba(212,175,55,0.2)]" />
+            <div className="h-6 w-11 rounded-full border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.04)] transition-colors peer-checked:border-white/20 peer-checked:bg-white/[0.07]" />
             <div className="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-muted/30 transition-all peer-checked:translate-x-5 peer-checked:bg-gold" />
           </div>
         </label>
@@ -453,8 +453,8 @@ function CompanionSettingsForm({
               className={[
                 "flex cursor-pointer items-start gap-4 rounded-xl border p-4 transition-all",
                 visibility === opt.value
-                  ? "border-[rgba(212,175,55,0.35)] bg-[rgba(212,175,55,0.06)]"
-                  : "border-[rgba(255,255,255,0.07)] hover:border-[rgba(212,175,55,0.18)]",
+                  ? "border-white/20 bg-white/[0.04]"
+                  : "border-[rgba(255,255,255,0.07)] hover:border-white/10",
               ].join(" ")}
             >
               <input
@@ -465,7 +465,7 @@ function CompanionSettingsForm({
                 onChange={() => setVisibility(opt.value)}
                 className="sr-only"
               />
-              <div className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border ${visibility === opt.value ? "border-[rgba(212,175,55,0.4)] bg-[rgba(212,175,55,0.1)]" : "border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.02)]"}`}>
+              <div className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border ${visibility === opt.value ? "border-white/20 bg-white/[0.07]" : "border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.02)]"}`}>
                 <Icon name={opt.icon} className={`h-4 w-4 ${visibility === opt.value ? "text-gold" : "text-muted/40"}`} />
               </div>
               <div className="flex-1">
@@ -634,7 +634,7 @@ function CompanionSettingsForm({
               defaultChecked={companion.is_available}
               className="peer sr-only"
             />
-            <div className="h-6 w-11 rounded-full border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.04)] transition-colors peer-checked:border-[rgba(212,175,55,0.4)] peer-checked:bg-[rgba(212,175,55,0.2)]" />
+            <div className="h-6 w-11 rounded-full border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.04)] transition-colors peer-checked:border-white/20 peer-checked:bg-white/[0.07]" />
             <div className="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-muted/30 transition-all peer-checked:translate-x-5 peer-checked:bg-gold" />
           </div>
         </label>
@@ -658,7 +658,7 @@ function CompanionSettingsForm({
           ] as const).map((opt) => (
             <label
               key={opt.value}
-              className="flex cursor-pointer items-center gap-3 rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.02)] px-4 py-3 transition-colors has-[:checked]:border-[rgba(212,175,55,0.4)] has-[:checked]:bg-[rgba(212,175,55,0.05)]"
+              className="flex cursor-pointer items-center gap-3 rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.02)] px-4 py-3 transition-colors has-[:checked]:border-white/20 has-[:checked]:bg-white/[0.04]"
             >
               <input
                 type="radio"
@@ -774,7 +774,7 @@ export function SettingsForm({ role, companion, clientFullName, clientPhone, ava
 
   if (!companion) {
     return (
-      <div className="rounded-2xl border border-[rgba(212,175,55,0.1)] bg-[rgba(255,255,255,0.02)] p-6 text-center">
+      <div className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.02)] p-6 text-center">
         <p className="text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
           Complete your profile setup first.
         </p>

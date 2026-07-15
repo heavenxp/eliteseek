@@ -80,8 +80,8 @@ export function CreatePostForm() {
                   className={[
                     "flex flex-col items-center gap-2 rounded-xl border px-3 py-4 text-center transition-all",
                     category === cat.value
-                      ? "border-[rgba(212,175,55,0.45)] bg-[rgba(212,175,55,0.08)] text-foreground"
-                      : "border-[rgba(255,255,255,0.07)] text-muted/70 hover:border-[rgba(212,175,55,0.2)] hover:text-muted",
+                      ? "border-white/20 bg-white/[0.04] text-foreground"
+                      : "border-[rgba(255,255,255,0.07)] text-muted/70 hover:border-white/10 hover:text-muted",
                   ].join(" ")}
                 >
                   <span className="text-2xl">{cat.icon}</span>
@@ -94,7 +94,7 @@ export function CreatePostForm() {
 
             <div>
               <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
-                Title <span className="text-gold/60">*</span>
+                Title <span className="text-muted/40">*</span>
               </label>
               <input
                 name="title"
@@ -154,7 +154,7 @@ export function CreatePostForm() {
                 className={[
                   "relative h-5 w-9 rounded-full border transition-colors",
                   isMultiDay
-                    ? "border-[rgba(212,175,55,0.4)] bg-[rgba(212,175,55,0.2)]"
+                    ? "border-white/20 bg-white/[0.07]"
                     : "border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.03)]",
                 ].join(" ")}
               >
@@ -165,7 +165,7 @@ export function CreatePostForm() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
-                  {isMultiDay ? "Start date & time" : "Date & time"} <span className="text-gold/60">*</span>
+                  {isMultiDay ? "Start date & time" : "Date & time"} <span className="text-muted/40">*</span>
                 </label>
                 <input
                   name="date_from"
@@ -195,7 +195,7 @@ export function CreatePostForm() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
-                  City <span className="text-gold/60">*</span>
+                  City <span className="text-muted/40">*</span>
                 </label>
                 <input
                   name="location_city"
@@ -226,7 +226,7 @@ export function CreatePostForm() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
-                  Price (per person, USD) <span className="text-gold/60">*</span>
+                  Price (per person, USD) <span className="text-muted/40">*</span>
                 </label>
                 <div className="relative">
                   <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>$</span>
@@ -297,7 +297,7 @@ export function CreatePostForm() {
               <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
                 Photos
               </label>
-              <div className="flex h-32 items-center justify-center rounded-xl border border-dashed border-[rgba(212,175,55,0.2)] bg-[rgba(255,255,255,0.02)] text-muted/40 transition-colors hover:border-[rgba(212,175,55,0.35)] hover:text-muted/60 cursor-pointer">
+              <div className="flex h-32 items-center justify-center rounded-xl border border-dashed border-white/10 bg-[rgba(255,255,255,0.02)] text-muted/40 transition-colors hover:border-white/20 hover:text-muted/60 cursor-pointer">
                 <div className="flex flex-col items-center gap-2 text-center">
                   <Icon name="camera" className="h-7 w-7" />
                   <span className="text-xs" style={{ fontFamily: "var(--font-dm-sans)" }}>
@@ -324,8 +324,8 @@ export function CreatePostForm() {
                     className={[
                       "flex w-full items-start gap-3 rounded-xl border p-4 text-left transition-all",
                       visibility === opt.value
-                        ? "border-[rgba(212,175,55,0.35)] bg-[rgba(212,175,55,0.06)]"
-                        : "border-[rgba(255,255,255,0.07)] hover:border-[rgba(212,175,55,0.15)]",
+                        ? "border-white/20 bg-white/[0.04]"
+                        : "border-[rgba(255,255,255,0.07)] hover:border-white/10",
                     ].join(" ")}
                   >
                     <div className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border ${visibility === opt.value ? "border-gold bg-gold" : "border-[rgba(255,255,255,0.2)]"}`}>

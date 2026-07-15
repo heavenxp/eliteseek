@@ -98,7 +98,7 @@ export default async function VerificationCentrePage({
       <div className="mx-auto max-w-2xl px-4 py-10 md:px-6 md:py-16">
         {/* Header */}
         <div className="mb-10 text-center">
-          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.08)]">
+          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/20 bg-white/[0.04]">
             <Icon name="shield" className="h-7 w-7 text-gold" />
           </div>
           <h1
@@ -119,7 +119,7 @@ export default async function VerificationCentrePage({
         {/* Status card */}
         {isVerified ? (
           <div className="glass-gold gold-glow rounded-3xl p-8 text-center">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(212,175,55,0.15)]">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-white/[0.07]">
               <Icon name="check" className="h-6 w-6 text-gold" />
             </div>
             <h2 className="text-2xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
@@ -145,7 +145,7 @@ export default async function VerificationCentrePage({
           <div className="glass-card rounded-3xl p-8">
             {/* State line */}
             {status === "pending" && (
-              <div className="mb-6 flex items-center gap-3 rounded-2xl border border-[rgba(212,175,55,0.2)] bg-[rgba(212,175,55,0.05)] px-4 py-3">
+              <div className="mb-6 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold opacity-60" />
                   <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-gold" />
@@ -170,12 +170,12 @@ export default async function VerificationCentrePage({
             <ol className="space-y-5">
               {STEPS.map((step, i) => (
                 <li key={step.title} className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[rgba(212,175,55,0.2)] bg-[rgba(212,175,55,0.06)]">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04]">
                     <Icon name={step.icon} className="h-5 w-5 text-gold" />
                   </div>
                   <div>
                     <p className="text-sm font-medium text-foreground" style={{ fontFamily: "var(--font-dm-sans)" }}>
-                      <span className="mr-2 text-gold/60">{i + 1}</span>
+                      <span className="mr-2 text-muted/40">{i + 1}</span>
                       {step.title}
                     </p>
                     <p className="mt-1 text-sm leading-relaxed text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>

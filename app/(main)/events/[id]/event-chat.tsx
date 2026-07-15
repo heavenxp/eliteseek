@@ -354,7 +354,7 @@ export function EventChat({ eventId, currentUserId, currentUserName, currentUser
             onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
             placeholder={recording ? "Recording…" : uploading ? "Uploading…" : "Send a message…"}
             disabled={recording || uploading}
-            className="flex-1 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-foreground placeholder:text-white/20 focus:border-[rgba(212,175,55,0.3)] focus:outline-none disabled:opacity-40 transition-colors"
+            className="flex-1 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-foreground placeholder:text-white/20 focus:border-white/20 focus:outline-none disabled:opacity-40 transition-colors"
             style={{ fontFamily: "var(--font-dm-sans)" }}
           />
 
@@ -393,7 +393,7 @@ function MessageBubble({
 
   return (
     <div className={`flex gap-2 ${isOwn ? "flex-row-reverse" : ""}`}>
-      <div className="h-7 w-7 shrink-0 rounded-full overflow-hidden bg-[rgba(212,175,55,0.08)] border border-[rgba(212,175,55,0.15)] flex items-center justify-center">
+      <div className="h-7 w-7 shrink-0 rounded-full overflow-hidden bg-white/[0.04] border border-white/10 flex items-center justify-center">
         {avatar ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={avatar} alt="" className="h-full w-full object-cover" />
@@ -414,7 +414,7 @@ function MessageBubble({
           className={[
             "rounded-2xl px-3 py-2 text-sm leading-relaxed",
             isOwn
-              ? "bg-[rgba(212,175,55,0.12)] text-white/90 rounded-tr-sm"
+              ? "bg-white/[0.07] text-white/90 rounded-tr-sm"
               : "bg-white/[0.05] text-white/80 rounded-tl-sm",
           ].join(" ")}
           style={{ fontFamily: "var(--font-dm-sans)" }}

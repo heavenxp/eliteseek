@@ -15,7 +15,7 @@ function OnlineBubble({ user }: { user: OnlineUser }) {
   return (
     <Link href={href} className="flex flex-col items-center gap-1 shrink-0">
       <div className="relative">
-        <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border-2 border-[rgba(212,175,55,0.4)] bg-[rgba(212,175,55,0.08)] text-sm font-medium text-gold">
+        <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border-2 border-white/20 bg-white/[0.04] text-sm font-medium text-gold">
           {user.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={user.avatar_url} alt="" className="h-full w-full object-cover" />

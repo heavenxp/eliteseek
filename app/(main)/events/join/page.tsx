@@ -32,8 +32,8 @@ export default function JoinEventPage() {
     <div className="mx-auto max-w-md px-4 py-16 md:py-24">
       <div className="mb-8 text-center">
         <div className="mb-4 flex justify-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[rgba(212,175,55,0.2)] bg-[rgba(212,175,55,0.06)]">
-            <svg className="h-6 w-6 text-gold/50" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+          <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
+            <svg className="h-6 w-6 text-muted/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />
             </svg>
           </div>
@@ -55,7 +55,7 @@ export default function JoinEventPage() {
           onChange={(e) => setCode(e.target.value.toUpperCase())}
           placeholder="XXXXXXXX"
           maxLength={8}
-          className="w-full rounded-xl border border-white/[0.1] bg-white/[0.03] px-4 py-3.5 text-center font-mono text-xl tracking-[0.35em] text-foreground placeholder:text-white/15 focus:border-[rgba(212,175,55,0.4)] focus:outline-none transition-colors"
+          className="w-full rounded-xl border border-white/[0.1] bg-white/[0.03] px-4 py-3.5 text-center font-mono text-xl tracking-[0.35em] text-foreground placeholder:text-white/15 focus:border-white/20 focus:outline-none transition-colors"
           autoComplete="off"
           autoCapitalize="characters"
           spellCheck={false}

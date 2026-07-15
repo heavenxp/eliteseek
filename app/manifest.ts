@@ -6,11 +6,11 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: "EliteSeek",
     description:
       "A verified companion booking and content platform. Book ID-verified Elite Hosts for dinners, events, and travel, or subscribe to exclusive content.",
-    start_url: "/browse",
+    start_url: "/feed",
     display: "standalone",
     orientation: "portrait",
-    theme_color: "#f2f8ff",
-    background_color: "#f2f8ff",
+    theme_color: "#080810",
+    background_color: "#080810",
     categories: ["lifestyle", "social", "entertainment"],
     icons: [
       {

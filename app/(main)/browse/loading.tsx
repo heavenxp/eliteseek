@@ -39,7 +39,7 @@ export default function BrowseLoading() {
 
 function CardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-2xl border border-[rgba(212,175,55,0.08)] bg-[rgba(255,255,255,0.02)]">
+    <div className="overflow-hidden rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.02)]">
       <div className="h-64 animate-pulse bg-[rgba(255,255,255,0.04)]" />
       <div className="space-y-2.5 p-4">
         <div className="h-5 w-3/4 animate-pulse rounded bg-[rgba(255,255,255,0.05)]" />

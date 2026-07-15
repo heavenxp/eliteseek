@@ -88,14 +88,14 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
         </div>
 
         {/* Tabs */}
-        <div className="mb-6 flex gap-1 rounded-xl border border-[rgba(212,175,55,0.1)] bg-[rgba(255,255,255,0.02)] p-1">
+        <div className="mb-6 flex gap-1 rounded-xl border border-white/10 bg-[rgba(255,255,255,0.02)] p-1">
           {(["wishlist", "custom", "history"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
               className={`flex-1 rounded-lg py-2 text-sm transition-colors ${
                 tab === t
-                  ? "bg-[rgba(212,175,55,0.12)] text-gold"
+                  ? "bg-white/[0.07] text-gold"
                   : "text-muted/50 hover:text-muted/80"
               }`}
               style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -110,7 +110,7 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
           <div>
             {wishlistItems.length === 0 ? (
               <div className="glass-card rounded-2xl p-10 text-center">
-                <Icon name="star" className="mx-auto mb-3 h-8 w-8 text-gold/30" />
+                <Icon name="star" className="mx-auto mb-3 h-8 w-8 text-muted/40" />
                 <p
                   className="text-sm text-muted/40"
                   style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -143,8 +143,8 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
         {tab === "custom" && (
           <div className="glass-card rounded-2xl p-6">
             {selectedItem && (
-              <div className="mb-5 flex items-start gap-3 rounded-xl border border-[rgba(212,175,55,0.2)] bg-[rgba(212,175,55,0.05)] p-4">
-                <Icon name="star" className="mt-0.5 h-4 w-4 shrink-0 text-gold/60" />
+              <div className="mb-5 flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.04] p-4">
+                <Icon name="star" className="mt-0.5 h-4 w-4 shrink-0 text-muted/40" />
                 <div>
                   <p
                     className="text-sm text-foreground"
@@ -256,7 +256,7 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
         {tab === "history" && (
           <div>
             {successMsg && (
-              <div className="mb-4 rounded-xl border border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.08)] px-4 py-3">
+              <div className="mb-4 rounded-xl border border-white/20 bg-white/[0.04] px-4 py-3">
                 <p
                   className="text-sm text-gold"
                   style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -267,7 +267,7 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
             )}
             {sentGifts.length === 0 ? (
               <div className="glass-card rounded-2xl p-10 text-center">
-                <Icon name="star" className="mx-auto mb-3 h-8 w-8 text-gold/30" />
+                <Icon name="star" className="mx-auto mb-3 h-8 w-8 text-muted/40" />
                 <p
                   className="text-sm text-muted/40"
                   style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -280,8 +280,8 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
                 <ul className="divide-y divide-[rgba(212,175,55,0.08)]">
                   {sentGifts.map((gift) => (
                     <li key={gift.id} className="flex items-center gap-4 px-5 py-4">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.06)]">
-                        <Icon name="star" className="h-4 w-4 text-gold/60" />
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04]">
+                        <Icon name="star" className="h-4 w-4 text-muted/40" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p
@@ -305,7 +305,7 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
                             ? "bg-emerald-500/10 text-emerald-400"
                             : gift.status === "sent"
                               ? "bg-blue-500/10 text-blue-400"
-                              : "bg-[rgba(212,175,55,0.1)] text-gold/60"
+                              : "bg-white/[0.07] text-muted/40"
                         }`}
                         style={{ fontFamily: "var(--font-dm-sans)" }}
                       >
@@ -374,7 +374,7 @@ function WishlistCard({
           >
             Wished by{" "}
             {companionHref ? (
-              <Link href={companionHref} className="text-gold/60 hover:text-gold">
+              <Link href={companionHref} className="text-muted/40 hover:text-gold">
                 {item.companion.display_name}
               </Link>
             ) : (

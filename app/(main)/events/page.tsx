@@ -36,7 +36,7 @@ export default async function EventsPage() {
         <div className="flex gap-2">
           <Link
             href="/events/join"
-            className="rounded-xl border border-white/[0.1] px-4 py-2 text-sm text-white/60 hover:border-[rgba(212,175,55,0.3)] hover:text-white/80 transition-colors"
+            className="rounded-xl border border-white/[0.1] px-4 py-2 text-sm text-white/60 hover:border-white/20 hover:text-white/80 transition-colors"
             style={{ fontFamily: "var(--font-dm-sans)" }}
           >
             Enter Code

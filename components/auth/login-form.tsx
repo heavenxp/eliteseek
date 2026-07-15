@@ -9,7 +9,7 @@ import { Icon } from "@/components/icons";
 
 export function LoginForm() {
   const searchParams = useSearchParams();
-  const next = searchParams.get("next") ?? "/browse";
+  const next = searchParams.get("next") ?? "/feed";
   const urlError = searchParams.get("error");
 
   const [state, formAction, isPending] = useActionState<AuthState, FormData>(signIn, null);
@@ -33,7 +33,7 @@ export function LoginForm() {
             Welcome back
           </h1>
           <p className="mt-2 text-sm text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>
-            Sign in to your EliteSeek account
+            Verified companion bookings &amp; content — invite-only, Melbourne first
           </p>
         </div>
 

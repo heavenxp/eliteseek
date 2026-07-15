@@ -130,7 +130,7 @@ export default async function EarningsPage() {
         <div className="mb-8 flex items-center gap-3">
           <Link
             href="/account"
-            className="rounded-xl p-2 text-muted/50 transition-colors hover:bg-[rgba(212,175,55,0.06)] hover:text-gold"
+            className="rounded-xl p-2 text-muted/50 transition-colors hover:bg-white/[0.04] hover:text-gold"
             aria-label="Back"
           >
             ‹
@@ -192,7 +192,7 @@ export default async function EarningsPage() {
                 .map(([type, net]) => (
                   <li
                     key={type}
-                    className="flex items-center justify-between rounded-xl px-3 py-2.5 transition-colors hover:bg-[rgba(212,175,55,0.04)]"
+                    className="flex items-center justify-between rounded-xl px-3 py-2.5 transition-colors hover:bg-white/[0.04]"
                   >
                     <span
                       className="text-sm text-foreground/80"
@@ -232,7 +232,7 @@ export default async function EarningsPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm" style={{ fontFamily: "var(--font-dm-sans)" }}>
                 <thead>
-                  <tr className="border-b border-[rgba(212,175,55,0.1)]">
+                  <tr className="border-b border-white/10">
                     {["Date", "Type", "Gross", "Fee", "Net"].map((h) => (
                       <th
                         key={h}
@@ -247,7 +247,7 @@ export default async function EarningsPage() {
                   {recentTx.map((tx) => (
                     <tr
                       key={tx.id}
-                      className="transition-colors hover:bg-[rgba(212,175,55,0.03)]"
+                      className="transition-colors hover:bg-white/[0.04]"
                     >
                       <td className="py-3 text-muted/50 text-xs">
                         {fmtDate(tx.created_at)}

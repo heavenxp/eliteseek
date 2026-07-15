@@ -244,11 +244,11 @@ export function ChatView({
 
       <div className="flex h-full flex-col">
         {/* Header */}
-        <div className="flex items-center gap-3 border-b border-[rgba(212,175,55,0.1)] px-4 py-3.5">
+        <div className="flex items-center gap-3 border-b border-white/10 px-4 py-3.5">
           <Link href="/messages" className="flex items-center text-muted/50 hover:text-muted md:hidden">
             <Icon name="chevron-left" className="h-5 w-5" />
           </Link>
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[rgba(212,175,55,0.12)] text-sm font-medium text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/[0.07] text-sm font-medium text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
             {otherName.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
@@ -365,7 +365,7 @@ export function ChatView({
 
         {/* Media preview strip */}
         {mediaPreview && (
-          <div className="border-t border-[rgba(212,175,55,0.08)] px-3 pt-2 pb-1">
+          <div className="border-t border-white/10 px-3 pt-2 pb-1">
             <div className="relative inline-block">
               {mediaFile?.type.startsWith("video/") ? (
                 <video src={mediaPreview} className="h-20 w-20 rounded-xl object-cover" />
@@ -388,7 +388,7 @@ export function ChatView({
 
         {/* Recording indicator */}
         {recording && (
-          <div className="border-t border-[rgba(212,175,55,0.08)] px-4 py-2 flex items-center gap-2">
+          <div className="border-t border-white/10 px-4 py-2 flex items-center gap-2">
             <span className="h-2 w-2 animate-pulse rounded-full bg-red-400" />
             <span className="text-xs text-red-400/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
               Recording… release to send
@@ -397,7 +397,7 @@ export function ChatView({
         )}
 
         {/* Input */}
-        <div className="border-t border-[rgba(212,175,55,0.1)] p-3">
+        <div className="border-t border-white/10 p-3">
           <div className="flex items-end gap-2">
             <input
               ref={fileInputRef}
@@ -412,7 +412,7 @@ export function ChatView({
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={busy}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[rgba(255,255,255,0.04)] text-muted/40 transition-colors hover:bg-[rgba(212,175,55,0.1)] hover:text-gold/70 disabled:opacity-40"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[rgba(255,255,255,0.04)] text-muted/40 transition-colors hover:bg-white/[0.07] hover:text-gold/70 disabled:opacity-40"
               aria-label="Attach media"
             >
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
@@ -432,7 +432,7 @@ export function ChatView({
                 "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-colors disabled:opacity-40 select-none",
                 recording
                   ? "bg-red-500/20 text-red-400 animate-pulse"
-                  : "bg-[rgba(255,255,255,0.04)] text-muted/40 hover:bg-[rgba(212,175,55,0.1)] hover:text-gold/70",
+                  : "bg-[rgba(255,255,255,0.04)] text-muted/40 hover:bg-white/[0.07] hover:text-gold/70",
               ].join(" ")}
               aria-label="Hold to record voice message"
             >
@@ -461,7 +461,7 @@ export function ChatView({
               type="button"
               onClick={handleSubmit}
               disabled={busy || (!text.trim() && !mediaFile)}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[rgba(212,175,55,0.15)] text-gold transition-all hover:bg-[rgba(212,175,55,0.25)] disabled:opacity-40"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/[0.07] text-gold transition-all hover:bg-white/10 disabled:opacity-40"
             >
               {uploading ? (
                 <span className="h-4 w-4 animate-spin rounded-full border border-gold/30 border-t-gold" />

@@ -131,9 +131,9 @@ export default async function AdminTransactionsPage() {
         </p>
       ) : transactions.length === 0 ? (
         <div className="glass-card p-16 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.05)]">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
             <svg
-              className="h-6 w-6 text-gold/30"
+              className="h-6 w-6 text-muted/40"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -164,7 +164,7 @@ export default async function AdminTransactionsPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm" style={{ fontFamily: "var(--font-dm-sans)" }}>
               <thead>
-                <tr className="border-b border-[rgba(212,175,55,0.08)]">
+                <tr className="border-b border-white/10">
                   {["Date", "Type", "Gross", "Platform Fee", "Net", "Status"].map((h) => (
                     <th
                       key={h}
@@ -179,7 +179,7 @@ export default async function AdminTransactionsPage() {
                 {transactions.map((t) => (
                   <tr
                     key={t.id}
-                    className="hover:bg-[rgba(212,175,55,0.02)] transition-colors"
+                    className="hover:bg-white/[0.04] transition-colors"
                   >
                     <td className="px-4 py-3 text-xs text-muted/50">
                       {formatDate(t.created_at)}

@@ -20,7 +20,7 @@ export function AdminNavLinkClient({
       className={[
         "rounded-lg px-3 py-2 text-sm transition-colors",
         isActive
-          ? "bg-[rgba(212,175,55,0.08)] text-gold"
+          ? "bg-white/[0.04] text-gold"
           : "text-muted/70 hover:text-foreground",
       ].join(" ")}
       style={{ fontFamily: "var(--font-dm-sans)" }}

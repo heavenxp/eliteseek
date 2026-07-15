@@ -16,7 +16,7 @@ export function MessagesShell({ sidebar, children }: Props) {
       {/* Sidebar — hidden on mobile when a conversation is open */}
       <div
         className={[
-          "w-full shrink-0 border-r border-[rgba(212,175,55,0.1)] md:w-80",
+          "w-full shrink-0 border-r border-white/10 md:w-80",
           hasConversation ? "hidden md:flex md:flex-col" : "flex flex-col",
         ].join(" ")}
       >

@@ -84,7 +84,7 @@ export function StoryCreateSheet({ userId, onClose, onCreated }: Props) {
       />
 
       {/* Sheet */}
-      <div className="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl border-t border-[rgba(212,175,55,0.15)] bg-[#080810] px-5 pb-10 pt-4 sm:bottom-auto sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-full sm:max-w-sm sm:rounded-2xl sm:border sm:pb-6">
+      <div className="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl border-t border-white/10 bg-[#080810] px-5 pb-10 pt-4 sm:bottom-auto sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-full sm:max-w-sm sm:rounded-2xl sm:border sm:pb-6">
         {/* Drag handle */}
         <div className="mb-4 flex justify-center sm:hidden">
           <div className="h-1 w-10 rounded-full bg-white/20" />
@@ -110,7 +110,7 @@ export function StoryCreateSheet({ userId, onClose, onCreated }: Props) {
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="flex h-52 w-full flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-[rgba(212,175,55,0.2)] bg-[rgba(212,175,55,0.03)] transition-colors hover:border-[rgba(212,175,55,0.4)] hover:bg-[rgba(212,175,55,0.06)]"
+            className="flex h-52 w-full flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-white/10 bg-white/[0.04] transition-colors hover:border-white/20 hover:bg-white/[0.04]"
           >
             <svg className="h-10 w-10 text-[#d4af37]/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.4}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
@@ -167,7 +167,7 @@ export function StoryCreateSheet({ userId, onClose, onCreated }: Props) {
                 className={[
                   "flex-1 rounded-xl border py-2 text-sm capitalize transition-colors",
                   audience === a
-                    ? "border-[rgba(212,175,55,0.4)] bg-[rgba(212,175,55,0.1)] text-[#d4af37]"
+                    ? "border-white/20 bg-white/[0.07] text-[#d4af37]"
                     : "border-white/10 text-white/40 hover:border-white/20 hover:text-white/60",
                 ].join(" ")}
                 style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -185,7 +185,7 @@ export function StoryCreateSheet({ userId, onClose, onCreated }: Props) {
         )}
 
         {shared ? (
-          <div className="mt-5 flex items-center justify-center gap-2 rounded-xl bg-[rgba(212,175,55,0.12)] border border-[rgba(212,175,55,0.25)] py-3">
+          <div className="mt-5 flex items-center justify-center gap-2 rounded-xl bg-white/[0.07] border border-white/20 py-3">
             <svg className="h-4 w-4 text-[#d4af37]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
             </svg>

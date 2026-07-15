@@ -78,7 +78,7 @@ export function CreateEventForm({ userId }: Props) {
   }
 
   const inputClass =
-    "w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-sm text-foreground placeholder:text-white/20 focus:border-[rgba(212,175,55,0.35)] focus:outline-none transition-colors";
+    "w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-sm text-foreground placeholder:text-white/20 focus:border-white/20 focus:outline-none transition-colors";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
@@ -105,7 +105,7 @@ export function CreateEventForm({ userId }: Props) {
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="flex h-44 w-full flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.02)] hover:border-[rgba(212,175,55,0.3)] hover:bg-[rgba(212,175,55,0.04)] transition-colors"
+            className="flex h-44 w-full flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-white/10 bg-white/[0.04] hover:border-white/20 hover:bg-white/[0.04] transition-colors"
           >
             <svg className="h-8 w-8 text-[#d4af37]/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.4}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
@@ -176,7 +176,7 @@ export function CreateEventForm({ userId }: Props) {
             <select
               value={hour}
               onChange={(e) => setHour(e.target.value)}
-              className="flex-1 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2.5 text-sm text-foreground focus:border-[rgba(212,175,55,0.35)] focus:outline-none transition-colors appearance-none"
+              className="flex-1 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2.5 text-sm text-foreground focus:border-white/20 focus:outline-none transition-colors appearance-none"
               style={{ fontFamily: "var(--font-dm-sans)" }}
             >
               <option value="" disabled>HH</option>
@@ -188,7 +188,7 @@ export function CreateEventForm({ userId }: Props) {
             <select
               value={minute}
               onChange={(e) => setMinute(e.target.value)}
-              className="flex-1 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2.5 text-sm text-foreground focus:border-[rgba(212,175,55,0.35)] focus:outline-none transition-colors appearance-none"
+              className="flex-1 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2.5 text-sm text-foreground focus:border-white/20 focus:outline-none transition-colors appearance-none"
               style={{ fontFamily: "var(--font-dm-sans)" }}
             >
               <option value="" disabled>MM</option>
@@ -228,7 +228,7 @@ export function CreateEventForm({ userId }: Props) {
               className={[
                 "flex-1 rounded-xl border py-2.5 text-sm capitalize transition-colors",
                 visibility === v
-                  ? "border-[rgba(212,175,55,0.4)] bg-[rgba(212,175,55,0.1)] text-[#d4af37]"
+                  ? "border-white/20 bg-white/[0.07] text-[#d4af37]"
                   : "border-white/[0.08] text-white/40 hover:border-white/20 hover:text-white/60",
               ].join(" ")}
               style={{ fontFamily: "var(--font-dm-sans)" }}

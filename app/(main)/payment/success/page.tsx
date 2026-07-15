@@ -82,7 +82,7 @@ export default async function PaymentSuccessPage({
   return (
     <div className="page-bg flex min-h-screen items-center justify-center px-4">
       <div className="glass-card w-full max-w-sm rounded-2xl p-8 text-center">
-        <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full border border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.08)]">
+        <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-white/[0.04]">
           <Icon name="check" className="h-7 w-7 text-gold" />
         </div>
 

@@ -99,11 +99,13 @@ The schema already supports a full social layer (`posts`/likes/comments/follows/
 
 **Goal: premium feel that makes an unusual transaction feel normal, safe, classy.**
 
-- [ ] UI8 design pass (per original plan) — keep baby blue glassmorphism + champagne gold, Cormorant Garamond + DM Sans
+> **Direction settled 15 Jul 2026:** evolve the existing dark theme — the "baby blue glassmorphism" reference came from a superseded pre-rebuild design doc and is removed. Target: simple, clean, modern dark UI (mainstream social-app clarity — flat surfaces, strong typography, generous spacing), not ornate luxury. **Simplicity is the premium signal.**
+
+- [ ] Theme evolution: keep near-black base; demote gold from decoration to **signal only** (verified seal, logo, primary CTAs) — strip it from borders, glows, and background gradients. Cormorant stays for brand/display type, DM Sans for everything else
+- [ ] Kill the marketing landing entirely: root behaves like a social app — signed-in → feed, signed-out → login as the front door (logo, one-line positioning "Verified companion bookings & content — invite-only, Melbourne first", login form, signup link, legally required age-verification footer line). Old landing routes redirect to /login
 - [ ] shadcn/ui components integrated where wanted (see UI notes below)
 - [ ] Host profile layout modeled on Bluesky's profile structure (open source, safe to draw from): banner + overlapping avatar, tight name/bio block, stat row, availability line, tabs (Posts / Media / About), card feed — restyled entirely in EliteSeek tokens. Borrow the layout only: no photos, bio wording, or advertising conventions from any real profile; host copy stays in Airbnb-experience territory
 - [ ] Copy pass: study Airbnb Experiences and high-end matchmaking tone — not OnlyFans, not dating apps
-- [ ] Landing page: keep floating glass balloons, minimal copy, no profile cards (per original decisions)
 - [ ] Membership tier info stays inside the app, pricing never on profiles (per original decisions)
 
 ## Phase 6 — Melbourne Launch

@@ -119,8 +119,8 @@ function ChipSelect({
             className={[
               "rounded-full border px-3.5 py-1.5 text-xs transition-all duration-150",
               active
-                ? "border-[rgba(212,175,55,0.5)] bg-[rgba(212,175,55,0.12)] text-gold"
-                : "border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.02)] text-muted hover:border-[rgba(212,175,55,0.25)]",
+                ? "border-white/20 bg-white/[0.07] text-gold"
+                : "border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.02)] text-muted hover:border-white/20",
             ].join(" ")}
             style={{ fontFamily: "var(--font-dm-sans)" }}
           >
@@ -159,7 +159,7 @@ function TagInput({
         {tags.map((t) => (
           <span
             key={t}
-            className="flex items-center gap-1.5 rounded-full border border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.08)] px-3 py-1 text-xs text-gold"
+            className="flex items-center gap-1.5 rounded-full border border-white/20 bg-white/[0.04] px-3 py-1 text-xs text-gold"
             style={{ fontFamily: "var(--font-dm-sans)" }}
           >
             {t}
@@ -217,9 +217,9 @@ function ProgressDots({ step }: { step: number }) {
                 className={[
                   "flex h-7 w-7 items-center justify-center rounded-full border text-xs font-medium transition-all",
                   active
-                    ? "border-[rgba(212,175,55,0.6)] bg-[rgba(212,175,55,0.15)] text-gold"
+                    ? "border-white/20 bg-white/[0.07] text-gold"
                     : done
-                    ? "border-[rgba(212,175,55,0.4)] bg-[#d4af37] text-[#080810]"
+                    ? "border-white/20 bg-[#d4af37] text-[#080810]"
                     : "border-[rgba(255,255,255,0.1)] text-muted/40",
                 ].join(" ")}
                 style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -237,7 +237,7 @@ function ProgressDots({ step }: { step: number }) {
               <div
                 className={[
                   "mb-4 h-px w-8 transition-colors",
-                  done ? "bg-[rgba(212,175,55,0.4)]" : "bg-[rgba(255,255,255,0.08)]",
+                  done ? "bg-white/10" : "bg-[rgba(255,255,255,0.08)]",
                 ].join(" ")}
               />
             )}
@@ -619,15 +619,15 @@ export function CompanionOnboarding({
             className={[
               "flex w-full items-start gap-4 rounded-xl border p-4 text-left transition-all",
               visibility === opt.value
-                ? "border-[rgba(212,175,55,0.45)] bg-[rgba(212,175,55,0.07)]"
-                : "border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] hover:border-[rgba(212,175,55,0.2)]",
+                ? "border-white/20 bg-white/[0.04]"
+                : "border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] hover:border-white/10",
             ].join(" ")}
           >
             <div
               className={[
                 "mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border",
                 visibility === opt.value
-                  ? "border-[rgba(212,175,55,0.4)] bg-[rgba(212,175,55,0.1)]"
+                  ? "border-white/20 bg-white/[0.07]"
                   : "border-[rgba(255,255,255,0.08)]",
               ].join(" ")}
             >

@@ -40,8 +40,8 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
     return (
       <div className="mx-auto max-w-md px-4 py-24 text-center">
         <div className="mb-6 flex justify-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.05)]">
-            <svg className="h-7 w-7 text-gold/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
+            <svg className="h-7 w-7 text-muted/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
             </svg>
           </div>
@@ -92,7 +92,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
       </Link>
 
       {/* Cover */}
-      <div className="relative h-56 w-full overflow-hidden rounded-2xl mb-6 bg-[rgba(212,175,55,0.04)]">
+      <div className="relative h-56 w-full overflow-hidden rounded-2xl mb-6 bg-white/[0.04]">
         {event.cover_image_url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={event.cover_image_url} alt="" className="h-full w-full object-cover" />
@@ -121,7 +121,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
       {/* Details */}
       <div className="mb-6 grid gap-2">
         <div className="flex items-center gap-2.5 text-sm text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
-          <svg className="h-4 w-4 text-gold/40 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg className="h-4 w-4 text-muted/40 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
           </svg>
           {eventDate.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
@@ -130,7 +130,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
         </div>
         {event.location && (
           <div className="flex items-center gap-2.5 text-sm text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
-            <svg className="h-4 w-4 text-gold/40 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg className="h-4 w-4 text-muted/40 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
             </svg>
@@ -145,14 +145,14 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
       </div>
 
       {/* Attendees */}
-      <div className="mb-6 rounded-2xl border border-[rgba(212,175,55,0.08)] bg-[rgba(255,255,255,0.02)] p-4">
+      <div className="mb-6 rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.02)] p-4">
         <p className="mb-3 text-[11px] uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
           Attendees · {members.length}
         </p>
         <div className="flex flex-wrap gap-2">
           {displayedMembers.map((m) => (
             <div key={m.id} className="flex items-center gap-1.5">
-              <div className="h-8 w-8 rounded-full overflow-hidden bg-[rgba(212,175,55,0.08)] border border-[rgba(212,175,55,0.15)] flex items-center justify-center">
+              <div className="h-8 w-8 rounded-full overflow-hidden bg-white/[0.04] border border-white/10 flex items-center justify-center">
                 {m.profile?.avatar_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={m.profile.avatar_url} alt="" className="h-full w-full object-cover" />
@@ -190,7 +190,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
 
       {/* Invite codes (creator of private event) */}
       {isCreator && event.visibility === "private" && inviteCodes.length > 0 && (
-        <div className="mb-6 rounded-2xl border border-[rgba(212,175,55,0.12)] bg-[rgba(212,175,55,0.03)] p-4">
+        <div className="mb-6 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
           <p className="mb-3 text-[11px] uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
             Invite Codes
           </p>
@@ -202,7 +202,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
                   "rounded-lg border px-3 py-1.5 font-mono text-xs tracking-widest",
                   ic.uses_count >= ic.max_uses
                     ? "border-white/[0.05] text-white/20 line-through"
-                    : "border-[rgba(212,175,55,0.2)] text-[#d4af37]/70",
+                    : "border-white/10 text-[#d4af37]/70",
                 ].join(" ")}
               >
                 {ic.code}
@@ -222,7 +222,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
 
       {/* Chat (members only) */}
       {isMember && (
-        <div className="rounded-2xl border border-[rgba(212,175,55,0.08)] bg-[rgba(255,255,255,0.02)] overflow-hidden">
+        <div className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.02)] overflow-hidden">
           <EventChat
             eventId={id}
             currentUserId={user.id}

@@ -15,7 +15,7 @@ function StatusBadge({ status }: { status: string }) {
     pending: "bg-amber-500/10 text-amber-400 border-amber-500/20",
     failed: "bg-red-500/10 text-red-400 border-red-500/20",
     not_started: "bg-white/5 text-muted/60 border-white/10",
-    companion: "bg-[rgba(212,175,55,0.1)] text-gold border-[rgba(212,175,55,0.2)]",
+    companion: "bg-white/[0.07] text-gold border-white/10",
     client: "bg-white/5 text-muted/70 border-white/10",
     flagged: "bg-orange-500/10 text-orange-400 border-orange-500/20",
   };

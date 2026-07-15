@@ -32,7 +32,7 @@ export function Pagination({ currentPage, totalPages }: Props) {
       <button
         onClick={() => goTo(currentPage - 1)}
         disabled={currentPage === 1}
-        className="flex h-9 w-9 items-center justify-center rounded-lg border border-[rgba(255,255,255,0.07)] text-muted transition-colors hover:border-[rgba(212,175,55,0.25)] hover:text-foreground disabled:opacity-30 disabled:pointer-events-none"
+        className="flex h-9 w-9 items-center justify-center rounded-lg border border-[rgba(255,255,255,0.07)] text-muted transition-colors hover:border-white/20 hover:text-foreground disabled:opacity-30 disabled:pointer-events-none"
         aria-label="Previous page"
       >
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -52,8 +52,8 @@ export function Pagination({ currentPage, totalPages }: Props) {
             className={[
               "flex h-9 w-9 items-center justify-center rounded-lg text-sm transition-colors",
               p === currentPage
-                ? "bg-[rgba(212,175,55,0.12)] text-gold border border-[rgba(212,175,55,0.3)]"
-                : "border border-[rgba(255,255,255,0.07)] text-muted hover:border-[rgba(212,175,55,0.2)] hover:text-foreground",
+                ? "bg-white/[0.07] text-gold border border-white/20"
+                : "border border-[rgba(255,255,255,0.07)] text-muted hover:border-white/10 hover:text-foreground",
             ].join(" ")}
             style={{ fontFamily: "var(--font-dm-sans)" }}
           >
@@ -65,7 +65,7 @@ export function Pagination({ currentPage, totalPages }: Props) {
       <button
         onClick={() => goTo(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="flex h-9 w-9 items-center justify-center rounded-lg border border-[rgba(255,255,255,0.07)] text-muted transition-colors hover:border-[rgba(212,175,55,0.25)] hover:text-foreground disabled:opacity-30 disabled:pointer-events-none"
+        className="flex h-9 w-9 items-center justify-center rounded-lg border border-[rgba(255,255,255,0.07)] text-muted transition-colors hover:border-white/20 hover:text-foreground disabled:opacity-30 disabled:pointer-events-none"
         aria-label="Next page"
       >
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

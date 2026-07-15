@@ -45,9 +45,9 @@ export function CompanionCard({
     : `/companion/${companion.id}`;
 
   const card = (
-    <div className="group block overflow-hidden rounded-2xl border border-[rgba(212,175,55,0.12)] bg-[rgba(255,255,255,0.03)] transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(212,175,55,0.28)] hover:shadow-[0_8px_32px_rgba(212,175,55,0.08)]">
+    <div className="group block overflow-hidden rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.03)] transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:shadow-[0_8px_32px_rgba(212,175,55,0.08)]">
       {/* Image area */}
-      <div className={`companion-placeholder relative h-64 w-full overflow-hidden bg-[rgba(212,175,55,0.04)] ${isLocked ? "blur-[3px]" : ""}`}>
+      <div className={`companion-placeholder relative h-64 w-full overflow-hidden bg-white/[0.04] ${isLocked ? "blur-[3px]" : ""}`}>
         {companion.cover_image_url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -128,7 +128,7 @@ export function CompanionCard({
         {companion.tags && companion.tags.length > 0 && (
           <div className="mt-2.5 flex flex-wrap gap-1.5">
             {companion.tags.slice(0, 3).map((tag) => (
-              <span key={tag} className="rounded-full bg-[rgba(212,175,55,0.07)] px-2 py-0.5 text-[10px] text-muted/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <span key={tag} className="rounded-full bg-white/[0.04] px-2 py-0.5 text-[10px] text-muted/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
                 {tag}
               </span>
             ))}
@@ -150,7 +150,7 @@ export function CompanionCard({
       {/* Lock overlay */}
       {isLocked && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-2xl bg-[rgba(8,8,16,0.62)] backdrop-blur-[1px]">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(212,175,55,0.3)] bg-[rgba(8,8,16,0.85)]">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-[rgba(8,8,16,0.85)]">
             <Icon name="lock" className="h-5 w-5 text-gold/80" />
           </div>
 
@@ -163,7 +163,7 @@ export function CompanionCard({
 
           {qualifies ? (
             <span
-              className="rounded-full border border-[rgba(212,175,55,0.45)] bg-[rgba(212,175,55,0.1)] px-4 py-1.5 text-xs text-gold transition-colors hover:bg-[rgba(212,175,55,0.2)]"
+              className="rounded-full border border-white/20 bg-white/[0.07] px-4 py-1.5 text-xs text-gold transition-colors hover:bg-white/[0.07]"
               style={{ fontFamily: "var(--font-dm-sans)" }}
             >
               Request Access

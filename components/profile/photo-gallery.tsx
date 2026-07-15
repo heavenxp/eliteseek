@@ -19,7 +19,7 @@ export function PhotoGallery({
         {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={i}
-            className="companion-placeholder relative aspect-[3/4] overflow-hidden rounded-xl border border-[rgba(212,175,55,0.08)]"
+            className="companion-placeholder relative aspect-[3/4] overflow-hidden rounded-xl border border-white/10"
             style={{ opacity: 1 - i * 0.12 }}
           >
             <div className="absolute inset-0 flex items-center justify-center">
@@ -33,7 +33,7 @@ export function PhotoGallery({
             {isOwner && i === 0 && (
               <div className="absolute inset-0 flex items-center justify-center bg-[rgba(8,8,16,0.4)]">
                 <span
-                  className="text-xs text-gold/50"
+                  className="text-xs text-muted/40"
                   style={{ fontFamily: "var(--font-dm-sans)" }}
                 >
                   + Add photos
@@ -52,7 +52,7 @@ export function PhotoGallery({
         isUrl(photo.storage_path) ? (
           <div
             key={photo.id}
-            className="relative aspect-[3/4] overflow-hidden rounded-xl border border-[rgba(212,175,55,0.12)]"
+            className="relative aspect-[3/4] overflow-hidden rounded-xl border border-white/10"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -64,7 +64,7 @@ export function PhotoGallery({
         ) : (
           <div
             key={photo.id}
-            className="companion-placeholder relative aspect-[3/4] overflow-hidden rounded-xl border border-[rgba(212,175,55,0.12)]"
+            className="companion-placeholder relative aspect-[3/4] overflow-hidden rounded-xl border border-white/10"
           >
             <div className="absolute inset-0 flex items-center justify-center">
               <span

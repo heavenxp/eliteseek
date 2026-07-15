@@ -72,7 +72,7 @@ export function ClientBookingActions({
           </span>
         )}
         {escrowStatus === "release_scheduled" && releaseAt && (
-          <span className="rounded-full border border-[rgba(212,175,55,0.25)] bg-[rgba(212,175,55,0.07)] px-2.5 py-1 text-[11px] text-gold/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <span className="rounded-full border border-white/20 bg-white/[0.04] px-2.5 py-1 text-[11px] text-gold/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
             Releases to host {new Date(releaseAt).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
           </span>
         )}

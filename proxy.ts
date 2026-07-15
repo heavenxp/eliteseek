@@ -41,7 +41,7 @@ export async function proxy(request: NextRequest) {
 
   // Redirect authenticated users away from auth pages
   if (user && (pathname === "/login" || pathname === "/signup")) {
-    return NextResponse.redirect(new URL("/browse", request.url));
+    return NextResponse.redirect(new URL("/feed", request.url));
   }
 
   // Protected routes — redirect unauthenticated users to login

@@ -99,7 +99,7 @@ export default async function CompanionPostsPage() {
 function PostRow({ post, isPast = false }: { post: AvailabilityPost; isPast?: boolean }) {
   const date = new Date(post.date_from);
   return (
-    <div className="flex items-center justify-between gap-4 rounded-xl border border-[rgba(212,175,55,0.1)] bg-[rgba(255,255,255,0.02)] px-4 py-3.5">
+    <div className="flex items-center justify-between gap-4 rounded-xl border border-white/10 bg-[rgba(255,255,255,0.02)] px-4 py-3.5">
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <p className="truncate text-sm text-foreground/90" style={{ fontFamily: "var(--font-dm-sans)" }}>
@@ -109,7 +109,7 @@ function PostRow({ post, isPast = false }: { post: AvailabilityPost; isPast?: bo
             <span className="shrink-0 rounded-full bg-[rgba(52,211,153,0.1)] px-2 py-0.5 text-[10px] text-emerald-400">Booked</span>
           )}
           {post.visibility === "locked" && (
-            <span className="shrink-0 rounded-full bg-[rgba(212,175,55,0.08)] px-2 py-0.5 text-[10px] text-gold/70">Subs only</span>
+            <span className="shrink-0 rounded-full bg-white/[0.04] px-2 py-0.5 text-[10px] text-gold/70">Subs only</span>
           )}
         </div>
         <div className="mt-1 flex items-center gap-3 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
@@ -132,8 +132,8 @@ function PostRow({ post, isPast = false }: { post: AvailabilityPost; isPast?: bo
 function EmptyState() {
   return (
     <div className="flex flex-col items-center gap-4 py-20 text-center">
-      <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.05)]">
-        <Icon name="calendar" className="h-6 w-6 text-gold/40" />
+      <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
+        <Icon name="calendar" className="h-6 w-6 text-muted/40" />
       </div>
       <p className="text-xl font-light text-foreground/60" style={{ fontFamily: "var(--font-cormorant)" }}>
         No availability posts yet

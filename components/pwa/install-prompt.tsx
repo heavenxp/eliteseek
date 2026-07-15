@@ -87,7 +87,7 @@ export function InstallPrompt() {
     <div
       role="dialog"
       aria-label="Install EliteSeek"
-      className="fixed bottom-24 left-4 right-4 z-50 mx-auto max-w-sm overflow-hidden rounded-2xl border border-[rgba(212,175,55,0.25)] bg-[rgba(8,8,22,0.97)] shadow-[0_8px_48px_rgba(0,0,0,0.7)] backdrop-blur-xl sm:left-auto sm:right-6 sm:w-80"
+      className="fixed bottom-24 left-4 right-4 z-50 mx-auto max-w-sm overflow-hidden rounded-2xl border border-white/20 bg-[rgba(8,8,22,0.97)] shadow-[0_8px_48px_rgba(0,0,0,0.7)] backdrop-blur-xl sm:left-auto sm:right-6 sm:w-80"
     >
       {/* Gold top accent */}
       <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />

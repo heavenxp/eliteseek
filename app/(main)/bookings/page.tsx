@@ -19,7 +19,7 @@ const STATUS_COLORS: Record<BookingStatus, string> = {
   pending: "bg-[rgba(251,191,36,0.12)] text-amber-400",
   confirmed: "bg-[rgba(52,211,153,0.1)] text-emerald-400",
   cancelled: "bg-[rgba(248,113,113,0.1)] text-red-400/80",
-  completed: "bg-[rgba(212,175,55,0.1)] text-gold",
+  completed: "bg-white/[0.07] text-gold",
   disputed: "bg-[rgba(248,113,113,0.1)] text-red-400",
 };
 
@@ -108,7 +108,7 @@ export default async function ClientBookingsPage() {
         </div>
         <Link
           href="/events"
-          className="rounded-xl border border-[rgba(212,175,55,0.2)] bg-[rgba(212,175,55,0.06)] px-4 py-2 text-sm text-[#d4af37]/80 hover:bg-[rgba(212,175,55,0.1)] hover:text-[#d4af37] transition-colors"
+          className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-[#d4af37]/80 hover:bg-white/[0.07] hover:text-[#d4af37] transition-colors"
           style={{ fontFamily: "var(--font-dm-sans)" }}
         >
           Events
@@ -170,7 +170,7 @@ function BookingCard({ booking }: { booking: BookingRow }) {
     : "#";
 
   return (
-    <div className="rounded-2xl border border-[rgba(212,175,55,0.1)] bg-[rgba(255,255,255,0.02)] p-4 transition-all hover:border-[rgba(212,175,55,0.2)]">
+    <div className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.02)] p-4 transition-all hover:border-white/10">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
@@ -189,18 +189,18 @@ function BookingCard({ booking }: { booking: BookingRow }) {
           </div>
           <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
             <span className="flex items-center gap-1">
-              <Icon name="calendar" className="h-3 w-3 text-gold/40" />
+              <Icon name="calendar" className="h-3 w-3 text-muted/40" />
               {date.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" })}
               {" · "}
               {date.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}
             </span>
             <span className="flex items-center gap-1">
-              <Icon name="clock" className="h-3 w-3 text-gold/40" />
+              <Icon name="clock" className="h-3 w-3 text-muted/40" />
               {booking.duration_hours}h
             </span>
             {booking.location && (
               <span className="flex items-center gap-1">
-                <Icon name="map-pin" className="h-3 w-3 text-gold/40" />
+                <Icon name="map-pin" className="h-3 w-3 text-muted/40" />
                 {booking.location}
               </span>
             )}
@@ -246,8 +246,8 @@ function BookingCard({ booking }: { booking: BookingRow }) {
 function EmptyState() {
   return (
     <div className="flex flex-col items-center gap-4 py-24 text-center">
-      <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.05)]">
-        <Icon name="calendar" className="h-6 w-6 text-gold/40" />
+      <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
+        <Icon name="calendar" className="h-6 w-6 text-muted/40" />
       </div>
       <p className="text-xl font-light text-foreground/60" style={{ fontFamily: "var(--font-cormorant)" }}>
         No bookings yet

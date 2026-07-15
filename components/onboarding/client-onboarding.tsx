@@ -90,9 +90,9 @@ function ProgressDots({ step }: { step: number }) {
                 className={[
                   "flex h-7 w-7 items-center justify-center rounded-full border text-xs transition-all",
                   active
-                    ? "border-[rgba(212,175,55,0.6)] bg-[rgba(212,175,55,0.15)] text-gold"
+                    ? "border-white/20 bg-white/[0.07] text-gold"
                     : done
-                    ? "border-[rgba(212,175,55,0.4)] bg-[#d4af37] text-[#080810]"
+                    ? "border-white/20 bg-[#d4af37] text-[#080810]"
                     : "border-[rgba(255,255,255,0.1)] text-muted/40",
                 ].join(" ")}
                 style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -110,7 +110,7 @@ function ProgressDots({ step }: { step: number }) {
               <div
                 className={[
                   "mb-4 h-px w-8 transition-colors",
-                  done ? "bg-[rgba(212,175,55,0.4)]" : "bg-[rgba(255,255,255,0.08)]",
+                  done ? "bg-white/10" : "bg-[rgba(255,255,255,0.08)]",
                 ].join(" ")}
               />
             )}
@@ -171,7 +171,7 @@ export function ClientOnboarding({
   // ── Step 1: Welcome + Interests ──────────────────────────
   const renderStep1 = () => (
     <div className="space-y-6">
-      <div className="rounded-xl border border-[rgba(212,175,55,0.12)] bg-[rgba(212,175,55,0.04)] p-4">
+      <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
         <p
           className="text-sm text-muted/80"
           style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -195,15 +195,15 @@ export function ClientOnboarding({
                 className={[
                   "flex flex-col items-center gap-2 rounded-xl border px-3 py-4 transition-all",
                   active
-                    ? "border-[rgba(212,175,55,0.45)] bg-[rgba(212,175,55,0.08)]"
-                    : "border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] hover:border-[rgba(212,175,55,0.2)]",
+                    ? "border-white/20 bg-white/[0.04]"
+                    : "border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] hover:border-white/10",
                 ].join(" ")}
               >
                 <div
                   className={[
                     "flex h-9 w-9 items-center justify-center rounded-full border",
                     active
-                      ? "border-[rgba(212,175,55,0.4)] bg-[rgba(212,175,55,0.1)]"
+                      ? "border-white/20 bg-white/[0.07]"
                       : "border-[rgba(255,255,255,0.08)]",
                   ].join(" ")}
                 >
@@ -252,8 +252,8 @@ export function ClientOnboarding({
             className={[
               "relative w-full rounded-xl border p-4 text-left transition-all duration-200",
               active
-                ? "border-[rgba(212,175,55,0.45)] bg-[rgba(212,175,55,0.07)] shadow-[0_0_20px_rgba(212,175,55,0.08)]"
-                : "border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] hover:border-[rgba(212,175,55,0.2)]",
+                ? "border-white/20 bg-white/[0.04] shadow-[0_0_20px_rgba(212,175,55,0.08)]"
+                : "border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] hover:border-white/10",
             ].join(" ")}
           >
             {opt.highlighted && (

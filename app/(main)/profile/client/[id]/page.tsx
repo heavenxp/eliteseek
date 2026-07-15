@@ -98,7 +98,7 @@ export default async function ClientProfilePage({
   const TIER_CLS = {
     bronze: "border-[rgba(180,120,60,0.3)] bg-[rgba(180,120,60,0.08)] text-[#c87941]",
     silver: "border-[rgba(180,180,200,0.25)] bg-[rgba(180,180,200,0.06)] text-[#a0a0b8]",
-    elite:  "border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.08)] text-gold",
+    elite:  "border-white/20 bg-white/[0.04] text-gold",
   };
 
   return (
@@ -112,9 +112,9 @@ export default async function ClientProfilePage({
       <div className="mx-auto max-w-2xl px-4">
         {/* Avatar + Follow button row */}
         <div className="-mt-10 flex items-end justify-between md:-mt-12">
-          <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-[rgba(8,8,16,1)] bg-[rgba(212,175,55,0.08)] md:h-24 md:w-24">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-[rgba(8,8,16,1)] bg-white/[0.04] md:h-24 md:w-24">
             <span
-              className="text-3xl font-light text-gold/40 md:text-4xl"
+              className="text-3xl font-light text-muted/40 md:text-4xl"
               style={{ fontFamily: "var(--font-cormorant)" }}
             >
               {initials}
@@ -128,7 +128,7 @@ export default async function ClientProfilePage({
                   type="submit"
                   className={`rounded-xl px-5 py-2 text-sm transition-colors ${
                     isFollowing
-                      ? "border border-[rgba(212,175,55,0.3)] bg-transparent text-gold hover:bg-[rgba(212,175,55,0.06)]"
+                      ? "border border-white/20 bg-transparent text-gold hover:bg-white/[0.04]"
                       : "btn-gold"
                   }`}
                   style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -260,7 +260,7 @@ function ClientPost({
           : new Date(post.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
 
   return (
-    <div className="rounded-2xl border border-[rgba(212,175,55,0.08)] bg-[rgba(255,255,255,0.02)] p-4">
+    <div className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.02)] p-4">
       <p
         className="text-xs text-muted/30"
         style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -287,7 +287,7 @@ function ClientPost({
           {(post.tags as string[]).slice(0, 4).map((tag) => (
             <span
               key={tag}
-              className="rounded-full bg-[rgba(212,175,55,0.06)] px-2 py-0.5 text-[10px] text-gold/50"
+              className="rounded-full bg-white/[0.04] px-2 py-0.5 text-[10px] text-muted/40"
               style={{ fontFamily: "var(--font-dm-sans)" }}
             >
               #{tag}

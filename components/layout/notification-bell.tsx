@@ -106,8 +106,8 @@ export function NotificationBell() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-10 z-50 w-80 overflow-hidden rounded-2xl border border-[rgba(212,175,55,0.18)] bg-[rgba(8,8,16,0.98)] shadow-[0_8px_48px_rgba(0,0,0,0.6)] backdrop-blur-xl">
-          <div className="flex items-center justify-between border-b border-[rgba(212,175,55,0.08)] px-4 py-3">
+        <div className="absolute right-0 top-10 z-50 w-80 overflow-hidden rounded-2xl border border-white/10 bg-[rgba(8,8,16,0.98)] shadow-[0_8px_48px_rgba(0,0,0,0.6)] backdrop-blur-xl">
+          <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
             <p className="text-sm font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
               Notifications
             </p>
@@ -115,7 +115,7 @@ export function NotificationBell() {
               <button
                 onClick={markAllRead}
                 disabled={marking}
-                className="text-[10px] text-gold/60 hover:text-gold disabled:opacity-40"
+                className="text-[10px] text-muted/40 hover:text-gold disabled:opacity-40"
                 style={{ fontFamily: "var(--font-dm-sans)" }}
               >
                 Mark all read
@@ -138,7 +138,7 @@ export function NotificationBell() {
                       className={[
                         "w-full border-b border-[rgba(255,255,255,0.04)] px-4 py-3 last:border-0 text-left transition-colors",
                         !n.is_read
-                          ? "bg-[rgba(212,175,55,0.04)] hover:bg-[rgba(212,175,55,0.07)]"
+                          ? "bg-white/[0.04] hover:bg-white/[0.04]"
                           : "hover:bg-[rgba(255,255,255,0.02)]",
                         link ? "cursor-pointer" : "cursor-default",
                       ].join(" ")}

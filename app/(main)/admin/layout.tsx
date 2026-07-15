@@ -33,7 +33,7 @@ export default async function AdminLayout({
   return (
     <div className="flex min-h-screen" style={{ fontFamily: "var(--font-dm-sans)" }}>
       {/* Sidebar — hidden on mobile, fixed on desktop */}
-      <aside className="hidden md:flex md:flex-col md:fixed md:inset-y-0 md:top-[65px] md:left-0 md:w-56 shrink-0 border-r border-[rgba(212,175,55,0.1)] bg-[rgba(8,8,16,0.6)] backdrop-blur-sm z-30">
+      <aside className="hidden md:flex md:flex-col md:fixed md:inset-y-0 md:top-[65px] md:left-0 md:w-56 shrink-0 border-r border-white/10 bg-[rgba(8,8,16,0.6)] backdrop-blur-sm z-30">
         <div className="px-4 pt-8 pb-4">
           <p className="text-[10px] uppercase tracking-widest text-muted/40 mb-4">
             Admin
@@ -47,7 +47,7 @@ export default async function AdminLayout({
       </aside>
 
       {/* Mobile top nav strip */}
-      <div className="md:hidden fixed top-[57px] inset-x-0 z-30 bg-[rgba(8,8,16,0.92)] border-b border-[rgba(212,175,55,0.08)] px-4 py-2 overflow-x-auto">
+      <div className="md:hidden fixed top-[57px] inset-x-0 z-30 bg-[rgba(8,8,16,0.92)] border-b border-white/10 px-4 py-2 overflow-x-auto">
         <nav className="flex gap-2 whitespace-nowrap">
           {NAV_LINKS.map((link) => (
             <Link

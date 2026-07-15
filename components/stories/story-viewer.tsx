@@ -286,7 +286,7 @@ export function StoryViewer({ groups, initialGroupIndex, currentUserId, onClose 
         {/* Loading / error states */}
         {mediaState === "loading" && (
           <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#d4af37]/70 border-t-transparent" />
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-transparent" />
           </div>
         )}
         {mediaState === "error" && (
@@ -328,7 +328,7 @@ export function StoryViewer({ groups, initialGroupIndex, currentUserId, onClose 
         {/* Header: avatar + name + time + close */}
         <div className="absolute top-6 inset-x-0 flex items-center justify-between px-3 pt-2 pointer-events-none z-20">
           <div className="flex items-center gap-2.5">
-            <div className="h-9 w-9 shrink-0 rounded-full overflow-hidden border-2 border-[#d4af37]/60 bg-[rgba(212,175,55,0.1)] flex items-center justify-center">
+            <div className="h-9 w-9 shrink-0 rounded-full overflow-hidden border-2 border-white/20 bg-white/[0.07] flex items-center justify-center">
               {group.avatarUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={group.avatarUrl} alt="" className="h-full w-full object-cover" />

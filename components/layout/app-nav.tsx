@@ -52,7 +52,7 @@ function AccountMenu({ fullName, compact = false }: { fullName: string; compact?
   }
 
   const avatar = (
-    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[rgba(212,175,55,0.2)] text-[10px] font-medium text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
+    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white/[0.07] text-[10px] font-medium text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
       {initial}
     </div>
   );
@@ -66,7 +66,7 @@ function AccountMenu({ fullName, compact = false }: { fullName: string; compact?
           onClick={() => setOpen((v) => !v)}
           className="flex flex-col items-center gap-0.5 rounded-xl px-2 py-2 text-muted/60 transition-colors"
         >
-          <div className="flex h-6 w-6 items-center justify-center rounded-full border border-[rgba(212,175,55,0.55)] bg-[rgba(212,175,55,0.2)] text-[10px] font-medium text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <div className="flex h-6 w-6 items-center justify-center rounded-full border border-white/20 bg-white/[0.07] text-[10px] font-medium text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
             {initial}
           </div>
           <span className="whitespace-nowrap text-[9px]" style={{ fontFamily: "var(--font-dm-sans)" }}>Profile</span>
@@ -75,7 +75,7 @@ function AccountMenu({ fullName, compact = false }: { fullName: string; compact?
         // Desktop: pill button
         <button
           onClick={() => setOpen((v) => !v)}
-          className="flex items-center gap-2.5 rounded-full border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] px-3 py-1.5 transition-all hover:border-[rgba(212,175,55,0.25)]"
+          className="flex items-center gap-2.5 rounded-full border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] px-3 py-1.5 transition-all hover:border-white/20"
         >
           {avatar}
           <span className="text-xs text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>
@@ -87,9 +87,9 @@ function AccountMenu({ fullName, compact = false }: { fullName: string; compact?
 
       {/* Dropdown */}
       {open && (
-        <div className={`absolute z-50 w-52 overflow-hidden rounded-2xl border border-[rgba(212,175,55,0.18)] bg-[rgba(8,8,16,0.98)] shadow-[0_8px_48px_rgba(0,0,0,0.6)] backdrop-blur-xl ${compact ? "bottom-full right-0 mb-2" : "right-0 top-11"}`}>
+        <div className={`absolute z-50 w-52 overflow-hidden rounded-2xl border border-white/10 bg-[rgba(8,8,16,0.98)] shadow-[0_8px_48px_rgba(0,0,0,0.6)] backdrop-blur-xl ${compact ? "bottom-full right-0 mb-2" : "right-0 top-11"}`}>
           {/* Name */}
-          <div className="border-b border-[rgba(212,175,55,0.08)] px-4 py-3">
+          <div className="border-b border-white/10 px-4 py-3">
             <p className="truncate text-sm font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
               {fullName}
             </p>
@@ -100,7 +100,7 @@ function AccountMenu({ fullName, compact = false }: { fullName: string; compact?
             <Link
               href="/account"
               onClick={() => setOpen(false)}
-              className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground/70 transition-colors hover:bg-[rgba(212,175,55,0.06)] hover:text-foreground"
+              className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground/70 transition-colors hover:bg-white/[0.04] hover:text-foreground"
               style={{ fontFamily: "var(--font-dm-sans)" }}
             >
               <Icon name="user" className="h-4 w-4 shrink-0 text-muted/50" />
@@ -109,7 +109,7 @@ function AccountMenu({ fullName, compact = false }: { fullName: string; compact?
             <Link
               href="/account/settings"
               onClick={() => setOpen(false)}
-              className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground/70 transition-colors hover:bg-[rgba(212,175,55,0.06)] hover:text-foreground"
+              className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground/70 transition-colors hover:bg-white/[0.04] hover:text-foreground"
               style={{ fontFamily: "var(--font-dm-sans)" }}
             >
               <Icon name="settings" className="h-4 w-4 shrink-0 text-muted/50" />
@@ -160,11 +160,11 @@ export function AppNav({ user }: { user: NavUser }) {
   return (
     <>
       {/* ── Desktop top nav ─────────────────────────────── */}
-      <header className="fixed inset-x-0 top-0 z-40 hidden border-b border-[rgba(212,175,55,0.1)] bg-[rgba(8,8,16,0.85)] backdrop-blur-xl md:block">
+      <header className="fixed inset-x-0 top-0 z-40 hidden border-b border-white/10 bg-[rgba(8,8,16,0.85)] backdrop-blur-xl md:block">
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="flex h-7 w-7 items-center justify-center rounded-full border border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.08)]">
+            <div className="flex h-7 w-7 items-center justify-center rounded-full border border-white/20 bg-white/[0.04]">
               <Icon name="diamond" className="h-3.5 w-3.5 text-gold" />
             </div>
             <span
@@ -184,7 +184,7 @@ export function AppNav({ user }: { user: NavUser }) {
                 className={[
                   "rounded-lg px-4 py-2 text-sm transition-colors",
                   isActive(link.href)
-                    ? "bg-[rgba(212,175,55,0.08)] text-gold"
+                    ? "bg-white/[0.04] text-gold"
                     : "text-muted hover:text-foreground",
                 ].join(" ")}
                 style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -202,7 +202,7 @@ export function AppNav({ user }: { user: NavUser }) {
       </header>
 
       {/* ── Mobile bottom nav ───────────────────────────── */}
-      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-[rgba(212,175,55,0.1)] bg-[rgba(8,8,16,0.92)] backdrop-blur-xl md:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[rgba(8,8,16,0.92)] backdrop-blur-xl md:hidden">
         <div className="flex items-center justify-around px-2 py-2">
           {links.map((link) => (
             <Link

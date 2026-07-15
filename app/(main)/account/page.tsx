@@ -107,7 +107,7 @@ export default async function AccountPage({
         <div className="mx-auto max-w-3xl px-4 py-10">
           <div className="glass-card mb-6 rounded-2xl p-6">
             <div className="flex items-center gap-5">
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.1)] text-xl font-semibold text-gold">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/[0.07] text-xl font-semibold text-gold">
                 {initials}
               </div>
               <div className="flex-1 min-w-0">
@@ -121,7 +121,7 @@ export default async function AccountPage({
                   Elite Host · Since {memberSince}
                 </p>
                 <span
-                  className="mt-1.5 inline-block rounded-full border border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.08)] px-3 py-0.5 text-xs text-gold"
+                  className="mt-1.5 inline-block rounded-full border border-white/20 bg-white/[0.04] px-3 py-0.5 text-xs text-gold"
                   style={{ fontFamily: "var(--font-dm-sans)" }}
                 >
                   {verificationLabel}
@@ -346,7 +346,7 @@ export default async function AccountPage({
       {/* Page label */}
       <div className="flex justify-center pt-4">
         <span
-          className="rounded-full border border-[rgba(212,175,55,0.25)] bg-[rgba(212,175,55,0.06)] px-4 py-1 text-[11px] tracking-widest text-gold/60 uppercase"
+          className="rounded-full border border-white/20 bg-white/[0.04] px-4 py-1 text-[11px] tracking-widest text-muted/40 uppercase"
           style={{ fontFamily: "var(--font-dm-sans)" }}
         >
           Your Profile
@@ -362,9 +362,9 @@ export default async function AccountPage({
       <div className="mx-auto max-w-2xl px-4">
         {/* Avatar + Edit button */}
         <div className="-mt-10 flex items-end justify-between md:-mt-12">
-          <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full border-4 border-[rgba(8,8,16,1)] bg-[rgba(212,175,55,0.1)] md:h-24 md:w-24">
+          <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full border-4 border-[rgba(8,8,16,1)] bg-white/[0.07] md:h-24 md:w-24">
             <span
-              className="text-3xl font-light text-gold/50 md:text-4xl"
+              className="text-3xl font-light text-muted/40 md:text-4xl"
               style={{ fontFamily: "var(--font-cormorant)" }}
             >
               {initials}
@@ -372,7 +372,7 @@ export default async function AccountPage({
           </div>
           <Link
             href="/account/settings"
-            className="mb-2 flex items-center gap-1.5 rounded-xl border border-[rgba(212,175,55,0.2)] bg-[rgba(255,255,255,0.03)] px-4 py-2 text-sm text-muted/70 transition-colors hover:border-[rgba(212,175,55,0.35)] hover:text-muted"
+            className="mb-2 flex items-center gap-1.5 rounded-xl border border-white/10 bg-[rgba(255,255,255,0.03)] px-4 py-2 text-sm text-muted/70 transition-colors hover:border-white/20 hover:text-muted"
             style={{ fontFamily: "var(--font-dm-sans)" }}
           >
             <Icon name="camera" className="h-4 w-4" />
@@ -393,7 +393,7 @@ export default async function AccountPage({
           </p>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <span
-              className="rounded-full border border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.08)] px-3 py-0.5 text-xs text-gold"
+              className="rounded-full border border-white/20 bg-white/[0.04] px-3 py-0.5 text-xs text-gold"
               style={{ fontFamily: "var(--font-dm-sans)" }}
             >
               {tierLabel} Tier
@@ -453,9 +453,9 @@ export default async function AccountPage({
               <Link
                 key={href}
                 href={href}
-                className="flex flex-col items-center gap-1.5 rounded-2xl border border-[rgba(212,175,55,0.12)] bg-[rgba(212,175,55,0.04)] px-5 py-3 transition-colors hover:border-[rgba(212,175,55,0.28)] hover:bg-[rgba(212,175,55,0.08)]"
+                className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-3 transition-colors hover:border-white/20 hover:bg-white/[0.04]"
               >
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[rgba(212,175,55,0.18)] bg-[rgba(212,175,55,0.08)]">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04]">
                   <Icon name={icon} className="h-4 w-4 text-gold/70" />
                 </div>
                 <span
@@ -533,7 +533,7 @@ function ActivityTab({
         </p>
         <Link
           href="/feed"
-          className="mt-2 rounded-xl border border-[rgba(212,175,55,0.2)] bg-[rgba(212,175,55,0.06)] px-5 py-2.5 text-sm text-gold/80 transition-colors hover:border-[rgba(212,175,55,0.35)] hover:bg-[rgba(212,175,55,0.1)]"
+          className="mt-2 rounded-xl border border-white/10 bg-white/[0.04] px-5 py-2.5 text-sm text-gold/80 transition-colors hover:border-white/20 hover:bg-white/[0.07]"
           style={{ fontFamily: "var(--font-dm-sans)" }}
         >
           Go to feed
@@ -569,7 +569,7 @@ function ActivityPostCard({
           : new Date(post.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
 
   return (
-    <div className="rounded-2xl border border-[rgba(212,175,55,0.08)] bg-[rgba(255,255,255,0.02)] p-4">
+    <div className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.02)] p-4">
       <p className="text-xs text-muted/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
         {timeAgo}
       </p>
@@ -593,7 +593,7 @@ function ActivityPostCard({
           {post.tags.slice(0, 4).map((tag) => (
             <span
               key={tag}
-              className="rounded-full bg-[rgba(212,175,55,0.06)] px-2 py-0.5 text-[10px] text-gold/50"
+              className="rounded-full bg-white/[0.04] px-2 py-0.5 text-[10px] text-muted/40"
               style={{ fontFamily: "var(--font-dm-sans)" }}
             >
               #{tag}
@@ -642,7 +642,7 @@ function UnlockedTab({ companions }: { companions: CompanionItem[] }) {
         </p>
         <Link
           href="/browse"
-          className="mt-2 rounded-xl border border-[rgba(212,175,55,0.2)] bg-[rgba(212,175,55,0.06)] px-5 py-2.5 text-sm text-gold/80 transition-colors hover:border-[rgba(212,175,55,0.35)] hover:bg-[rgba(212,175,55,0.1)]"
+          className="mt-2 rounded-xl border border-white/10 bg-white/[0.04] px-5 py-2.5 text-sm text-gold/80 transition-colors hover:border-white/20 hover:bg-white/[0.07]"
           style={{ fontFamily: "var(--font-dm-sans)" }}
         >
           Browse companions
@@ -662,8 +662,8 @@ function UnlockedTab({ companions }: { companions: CompanionItem[] }) {
 function UnlockedCard({ companion }: { companion: CompanionItem }) {
   const initial = companion.displayName.charAt(0).toUpperCase();
   const inner = (
-    <div className="flex items-center gap-3 rounded-2xl border border-[rgba(212,175,55,0.1)] bg-[rgba(255,255,255,0.02)] p-4 transition-colors hover:border-[rgba(212,175,55,0.22)] hover:bg-[rgba(212,175,55,0.03)]">
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[rgba(212,175,55,0.2)] bg-[rgba(212,175,55,0.08)] text-sm font-medium text-gold">
+    <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.02)] p-4 transition-colors hover:border-white/20 hover:bg-white/[0.04]">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-sm font-medium text-gold">
         {initial}
       </div>
       <div className="flex-1 min-w-0">
@@ -713,7 +713,7 @@ function BookingsTab({ bookings }: { bookings: BookingItem[] }) {
         </p>
         <Link
           href="/browse"
-          className="mt-2 rounded-xl border border-[rgba(212,175,55,0.2)] bg-[rgba(212,175,55,0.06)] px-5 py-2.5 text-sm text-gold/80 transition-colors hover:border-[rgba(212,175,55,0.35)] hover:bg-[rgba(212,175,55,0.1)]"
+          className="mt-2 rounded-xl border border-white/10 bg-white/[0.04] px-5 py-2.5 text-sm text-gold/80 transition-colors hover:border-white/20 hover:bg-white/[0.07]"
           style={{ fontFamily: "var(--font-dm-sans)" }}
         >
           Browse companions
@@ -744,7 +744,7 @@ function BookingCard({ booking }: { booking: BookingItem }) {
     booking.total_amount != null ? `$${Number(booking.total_amount).toFixed(0)}` : null;
 
   return (
-    <div className="rounded-2xl border border-[rgba(212,175,55,0.1)] bg-[rgba(255,255,255,0.02)] p-4">
+    <div className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.02)] p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           {booking.username ? (
@@ -804,7 +804,7 @@ function FollowModal({
         className="absolute inset-0 bg-[rgba(8,8,16,0.75)] backdrop-blur-sm"
         aria-label="Close"
       />
-      <div className="relative z-10 mx-4 w-full max-w-sm rounded-2xl border border-[rgba(212,175,55,0.15)] bg-[rgba(16,12,32,0.98)] p-5 shadow-2xl">
+      <div className="relative z-10 mx-4 w-full max-w-sm rounded-2xl border border-white/10 bg-[rgba(16,12,32,0.98)] p-5 shadow-2xl">
         <div className="mb-4 flex items-center justify-between">
           <h2
             className="text-lg font-light text-foreground"
@@ -832,8 +832,8 @@ function FollowModal({
             {items.map((item) => {
               const initial = item.fullName.charAt(0).toUpperCase();
               const row = (
-                <div className="flex items-center gap-3 rounded-xl border border-[rgba(212,175,55,0.06)] bg-[rgba(255,255,255,0.02)] px-3 py-2.5 transition-colors hover:border-[rgba(212,175,55,0.15)] hover:bg-[rgba(212,175,55,0.04)]">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[rgba(212,175,55,0.1)] text-xs font-medium text-gold">
+                <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-[rgba(255,255,255,0.02)] px-3 py-2.5 transition-colors hover:border-white/10 hover:bg-white/[0.04]">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/[0.07] text-xs font-medium text-gold">
                     {initial}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -904,9 +904,9 @@ function CompanionLinks() {
         <li key={link.href}>
           <Link
             href={link.href}
-            className="flex items-center gap-4 px-5 py-4 transition-colors hover:bg-[rgba(212,175,55,0.04)]"
+            className="flex items-center gap-4 px-5 py-4 transition-colors hover:bg-white/[0.04]"
           >
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.06)]">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04]">
               <Icon name={link.icon} className="h-4 w-4 text-gold/70" />
             </div>
             <div className="flex-1 min-w-0">

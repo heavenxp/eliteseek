@@ -111,7 +111,7 @@ function TrendingTags({
         className={[
           "shrink-0 rounded-full border px-3.5 py-1.5 text-[12px] font-medium transition-all",
           activeTag === null
-            ? "border-[#d4af37]/50 bg-[#d4af37]/10 text-[#d4af37]"
+            ? "border-white/20 bg-white/10 text-[#d4af37]"
             : "border-white/10 text-white/35 hover:text-white/70",
         ].join(" ")}
         style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -125,7 +125,7 @@ function TrendingTags({
           className={[
             "shrink-0 rounded-full border px-3.5 py-1.5 text-[12px] font-medium transition-all",
             activeTag === tag
-              ? "border-[#d4af37]/50 bg-[#d4af37]/10 text-[#d4af37]"
+              ? "border-white/20 bg-white/10 text-[#d4af37]"
               : "border-white/10 text-white/35 hover:text-white/70",
           ].join(" ")}
           style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -258,7 +258,7 @@ export function ComposeBox({ viewer }: { viewer: ViewerProfile }) {
         <button
           type="button"
           onClick={(e) => { e.stopPropagation(); setExpanded(true); }}
-          className="shrink-0 rounded-full border border-[#d4af37]/40 px-4 py-2 text-[13px] font-semibold text-[#d4af37] transition-colors hover:bg-[#d4af37]/10 sm:py-1.5"
+          className="shrink-0 rounded-full border border-white/20 px-4 py-2 text-[13px] font-semibold text-[#d4af37] transition-colors hover:bg-white/10 sm:py-1.5"
           style={{ fontFamily: "var(--font-dm-sans)" }}
         >
           Post
@@ -318,7 +318,7 @@ export function ComposeBox({ viewer }: { viewer: ViewerProfile }) {
         {selectedTags.length > 0 && (
           <div className="mt-2.5 flex flex-wrap gap-1.5">
             {selectedTags.map((tag) => (
-              <span key={tag} className="flex items-center gap-1 rounded-full border border-[#d4af37]/40 bg-[#d4af37]/[0.08] px-2.5 py-0.5 text-[11px] font-medium text-[#d4af37]/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <span key={tag} className="flex items-center gap-1 rounded-full border border-white/20 bg-white/[0.06] px-2.5 py-0.5 text-[11px] font-medium text-[#d4af37]/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
                 #{tag}
                 <button type="button" onClick={() => removeTag(tag)} className="leading-none opacity-60 transition-opacity hover:opacity-100">×</button>
               </span>
@@ -330,7 +330,7 @@ export function ComposeBox({ viewer }: { viewer: ViewerProfile }) {
           <div className="mt-3 flex flex-wrap gap-1.5">
             {(["public", "followers", "private"] as const).map((a) => (
               <button key={a} type="button" onClick={() => { setAudience(a); setShowAudienceMenu(false); }}
-                className={["rounded-full border px-3 py-1 text-[12px] font-medium transition-all", audience === a ? "border-[#d4af37]/50 bg-[#d4af37]/10 text-[#d4af37]" : "border-white/10 text-white/30 hover:border-white/20 hover:text-white/60"].join(" ")}
+                className={["rounded-full border px-3 py-1 text-[12px] font-medium transition-all", audience === a ? "border-white/20 bg-white/10 text-[#d4af37]" : "border-white/10 text-white/30 hover:border-white/20 hover:text-white/60"].join(" ")}
                 style={{ fontFamily: "var(--font-dm-sans)" }}
               >
                 {audienceLabels[a]}
@@ -346,7 +346,7 @@ export function ComposeBox({ viewer }: { viewer: ViewerProfile }) {
               const disabled = !active && selectedTags.length >= MAX_TAGS;
               return (
                 <button key={tag} type="button" onClick={() => togglePresetTag(tag)} disabled={disabled}
-                  className={["rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all", active ? "border-[#d4af37]/50 bg-[#d4af37]/10 text-[#d4af37]" : disabled ? "border-white/[0.04] text-white/15" : "border-white/10 text-white/30 hover:border-white/20 hover:text-white/50"].join(" ")}
+                  className={["rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all", active ? "border-white/20 bg-white/10 text-[#d4af37]" : disabled ? "border-white/[0.04] text-white/15" : "border-white/10 text-white/30 hover:border-white/20 hover:text-white/50"].join(" ")}
                   style={{ fontFamily: "var(--font-dm-sans)" }}
                 >
                   {tag}
@@ -379,7 +379,7 @@ export function ComposeBox({ viewer }: { viewer: ViewerProfile }) {
               const active = contentMinTier === t;
               return (
                 <button key={t ?? "all"} type="button" onClick={() => setContentMinTier(t)}
-                  className={["rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all", active ? "border-[#d4af37]/50 bg-[#d4af37]/10 text-[#d4af37]" : "border-white/10 text-white/30 hover:border-white/20 hover:text-white/50"].join(" ")}
+                  className={["rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all", active ? "border-white/20 bg-white/10 text-[#d4af37]" : "border-white/10 text-white/30 hover:border-white/20 hover:text-white/50"].join(" ")}
                   style={{ fontFamily: "var(--font-dm-sans)" }}
                 >
                   {label}
@@ -634,7 +634,7 @@ function PostCard({ post, currentUserId, viewerClientTier }: { post: FeedPost; c
               {post.tags.length > 0 && (
                 <div className="mt-2 flex flex-wrap gap-1">
                   {post.tags.map((tag) => (
-                    <span key={tag} className="rounded-full bg-[#d4af37]/[0.06] px-2 py-0.5 text-[11px] text-[#d4af37]/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                    <span key={tag} className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[11px] text-[#d4af37]/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
                       #{tag}
                     </span>
                   ))}
@@ -653,7 +653,7 @@ function PostCard({ post, currentUserId, viewerClientTier }: { post: FeedPost; c
 
             {lockedGated && (
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="flex flex-col items-center gap-1.5 rounded-2xl border border-[#d4af37]/20 bg-[rgba(8,8,16,0.75)] px-6 py-4 backdrop-blur-sm">
+                <div className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/20 bg-[rgba(8,8,16,0.75)] px-6 py-4 backdrop-blur-sm">
                   <svg className="h-5 w-5 text-[#d4af37]/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                   </svg>
@@ -666,7 +666,7 @@ function PostCard({ post, currentUserId, viewerClientTier }: { post: FeedPost; c
 
             {tierGated && (
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="flex flex-col items-center gap-1.5 rounded-2xl border border-[#d4af37]/20 bg-[rgba(8,8,16,0.75)] px-6 py-4 backdrop-blur-sm">
+                <div className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/20 bg-[rgba(8,8,16,0.75)] px-6 py-4 backdrop-blur-sm">
                   <svg className="h-5 w-5 text-[#d4af37]/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                   </svg>
@@ -767,7 +767,7 @@ function SidebarOnlineNow({ onlineUsers }: { onlineUsers: { hosts: OnlineUser[];
           return (
             <Link key={u.id} href={href} className="flex items-center gap-2.5 transition-opacity hover:opacity-75">
               <div className="relative shrink-0">
-                <div className="flex h-7 w-7 items-center justify-center overflow-hidden rounded-full border border-[rgba(212,175,55,0.2)] bg-[rgba(212,175,55,0.08)] text-[11px] font-medium text-[#d4af37]">
+                <div className="flex h-7 w-7 items-center justify-center overflow-hidden rounded-full border border-white/10 bg-white/[0.04] text-[11px] font-medium text-[#d4af37]">
                   {u.avatar_url ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={u.avatar_url} alt="" className="h-full w-full object-cover" />

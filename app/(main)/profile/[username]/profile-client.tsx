@@ -213,7 +213,7 @@ export function ProfileBody({
           <div className="companion-placeholder h-24 w-24 shrink-0 overflow-hidden rounded-full border-4 border-[rgba(8,8,16,1)] md:h-28 md:w-28">
             <div className="flex h-full w-full items-center justify-center">
               <span
-                className="text-3xl font-light text-gold/40 md:text-4xl"
+                className="text-3xl font-light text-muted/40 md:text-4xl"
                 style={{ fontFamily: "var(--font-cormorant)" }}
               >
                 {companion.displayName.charAt(0)}
@@ -236,11 +236,11 @@ export function ProfileBody({
                     <Icon name="chevron-down" className="h-3 w-3 ml-0.5 opacity-70" />
                   </button>
                   {newPostOpen && (
-                    <div className="absolute right-0 top-11 z-30 min-w-[180px] overflow-hidden rounded-xl border border-[rgba(212,175,55,0.15)] bg-[rgba(12,12,24,0.97)] shadow-xl backdrop-blur-sm">
+                    <div className="absolute right-0 top-11 z-30 min-w-[180px] overflow-hidden rounded-xl border border-white/10 bg-[rgba(12,12,24,0.97)] shadow-xl backdrop-blur-sm">
                       <Link
                         href="/feed"
                         onClick={() => setNewPostOpen(false)}
-                        className="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm text-muted/70 transition-colors hover:bg-[rgba(212,175,55,0.06)] hover:text-foreground"
+                        className="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm text-muted/70 transition-colors hover:bg-white/[0.04] hover:text-foreground"
                         style={{ fontFamily: "var(--font-dm-sans)" }}
                       >
                         <Icon name="feed" className="h-4 w-4" /> Social Post
@@ -248,7 +248,7 @@ export function ProfileBody({
                       <Link
                         href="/companion/posts/new"
                         onClick={() => setNewPostOpen(false)}
-                        className="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm text-muted/70 transition-colors hover:bg-[rgba(212,175,55,0.06)] hover:text-foreground"
+                        className="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm text-muted/70 transition-colors hover:bg-white/[0.04] hover:text-foreground"
                         style={{ fontFamily: "var(--font-dm-sans)" }}
                       >
                         <Icon name="calendar" className="h-4 w-4" /> Availability Post
@@ -270,7 +270,7 @@ export function ProfileBody({
                 disabled={followPending}
                 className={`rounded-xl px-5 py-2 text-sm transition-colors disabled:opacity-50 ${
                   isFollowing
-                    ? "border border-[rgba(212,175,55,0.3)] bg-transparent text-gold hover:bg-[rgba(212,175,55,0.06)]"
+                    ? "border border-white/20 bg-transparent text-gold hover:bg-white/[0.04]"
                     : "btn-gold"
                 }`}
                 style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -283,14 +283,14 @@ export function ProfileBody({
             {(isOwner || (viewerUserId && vd?.isFullyVisible)) && <div className="relative" ref={optionsRef}>
               <button
                 onClick={() => setOptionsOpen((o) => !o)}
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-[rgba(212,175,55,0.2)] bg-[rgba(255,255,255,0.03)] text-muted/70 transition-colors hover:border-[rgba(212,175,55,0.35)] hover:text-muted"
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-[rgba(255,255,255,0.03)] text-muted/70 transition-colors hover:border-white/20 hover:text-muted"
                 aria-label="More options"
               >
                 <span className="text-sm leading-none tracking-wider">•••</span>
               </button>
 
               {optionsOpen && (
-                <div className="absolute right-0 top-11 z-30 min-w-[180px] overflow-hidden rounded-xl border border-[rgba(212,175,55,0.15)] bg-[rgba(12,12,24,0.97)] shadow-xl backdrop-blur-sm">
+                <div className="absolute right-0 top-11 z-30 min-w-[180px] overflow-hidden rounded-xl border border-white/10 bg-[rgba(12,12,24,0.97)] shadow-xl backdrop-blur-sm">
                   {isOwner ? (
                     <>
                       <OptionsItem href="/companion/bookings">
@@ -417,20 +417,20 @@ export function ProfileBody({
           >
             {companion.location && (
               <span className="flex items-center gap-1.5">
-                <Icon name="map-pin" className="h-3.5 w-3.5 shrink-0 text-gold/50" />
+                <Icon name="map-pin" className="h-3.5 w-3.5 shrink-0 text-muted/40" />
                 Based in {companion.location}
               </span>
             )}
             {nextAwayPost && (
               <span className="flex items-center gap-1.5">
-                <Icon name="send" className="h-3.5 w-3.5 shrink-0 text-gold/50" />
+                <Icon name="send" className="h-3.5 w-3.5 shrink-0 text-muted/40" />
                 {nextAwayPost.location_city}{" "}
                 {formatTravelDates(nextAwayPost.date_from, nextAwayPost.date_to)}
               </span>
             )}
             {!nextAwayPost && companion.available_from && (
               <span className="flex items-center gap-1.5">
-                <Icon name="calendar" className="h-3.5 w-3.5 shrink-0 text-gold/50" />
+                <Icon name="calendar" className="h-3.5 w-3.5 shrink-0 text-muted/40" />
                 {formatTravelDates(companion.available_from, companion.available_until)}
               </span>
             )}
@@ -464,7 +464,7 @@ export function ProfileBody({
             {companion.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full border border-[rgba(212,175,55,0.2)] bg-[rgba(212,175,55,0.06)] px-2.5 py-0.5 text-[11px] text-gold/70"
+                className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-0.5 text-[11px] text-gold/70"
                 style={{ fontFamily: "var(--font-dm-sans)" }}
               >
                 {tag}
@@ -583,8 +583,8 @@ export function ProfileBody({
           {/* Locked overlay — covers tab content when profile is not fully visible */}
           {!isOwner && vd && !vd.isFullyVisible && vd.lockStatus !== "public" && (
             <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-[rgba(8,8,16,0.72)] backdrop-blur-sm">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(212,175,55,0.25)] bg-[rgba(212,175,55,0.06)]">
-                <Icon name="lock" className="h-5 w-5 text-gold/50" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/[0.04]">
+                <Icon name="lock" className="h-5 w-5 text-muted/40" />
               </div>
               <p
                 className="text-sm text-muted/50"
@@ -653,14 +653,14 @@ function DashCard({
   return (
     <Link
       href={href}
-      className="group relative flex flex-col gap-1.5 overflow-hidden rounded-2xl border border-[rgba(212,175,55,0.12)] bg-[rgba(255,255,255,0.02)] p-4 transition-all hover:border-[rgba(212,175,55,0.25)] hover:bg-[rgba(255,255,255,0.04)]"
+      className="group relative flex flex-col gap-1.5 overflow-hidden rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.02)] p-4 transition-all hover:border-white/20 hover:bg-[rgba(255,255,255,0.04)]"
     >
       {badge !== undefined && badge > 0 && (
         <span className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-gold text-[10px] font-bold text-[rgba(8,8,16,1)]">
           {badge > 99 ? "99+" : badge}
         </span>
       )}
-      <Icon name={icon} className="h-4 w-4 text-gold/50 transition-colors group-hover:text-gold/70" />
+      <Icon name={icon} className="h-4 w-4 text-muted/40 transition-colors group-hover:text-gold/70" />
       <p
         className="text-xl font-semibold text-foreground"
         style={{ fontFamily: "var(--font-cormorant)" }}
@@ -702,7 +702,7 @@ function OptionsItem({
   children: React.ReactNode;
 }) {
   const cls =
-    "flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm text-muted/70 transition-colors hover:bg-[rgba(212,175,55,0.06)] hover:text-foreground";
+    "flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm text-muted/70 transition-colors hover:bg-white/[0.04] hover:text-foreground";
   if (href) {
     return (
       <Link href={href} className={cls} style={{ fontFamily: "var(--font-dm-sans)" }}>
@@ -747,9 +747,9 @@ function LockNotice({
     accessRequestStatus !== "approved";
 
   return (
-    <div className="mt-4 rounded-2xl border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.04)] px-4 py-4">
+    <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4">
       <div className="flex items-start gap-3">
-        <Icon name="lock" className="mt-0.5 h-4 w-4 shrink-0 text-gold/50" />
+        <Icon name="lock" className="mt-0.5 h-4 w-4 shrink-0 text-muted/40" />
         <div className="flex-1">
           <p
             className="text-sm font-medium text-foreground/80"
@@ -862,7 +862,7 @@ function LockNotice({
 const TIER_BADGE: Record<string, { label: string; cls: string }> = {
   bronze: { label: "Bronze", cls: "bg-[rgba(180,120,60,0.15)] text-[#c87941]" },
   silver: { label: "Silver", cls: "bg-[rgba(180,180,200,0.12)] text-[#a0a0b8]" },
-  elite:  { label: "Elite",  cls: "bg-[rgba(212,175,55,0.15)] text-gold" },
+  elite:  { label: "Elite",  cls: "bg-white/[0.07] text-gold" },
 };
 
 function relativeTime(iso: string): string {
@@ -916,7 +916,7 @@ function FollowListModal({
         onClick={onClose}
       />
       {/* Card */}
-      <div className="relative z-10 mx-4 w-full max-w-sm rounded-2xl border border-[rgba(212,175,55,0.15)] bg-[rgba(16,12,32,0.98)] p-5 shadow-2xl">
+      <div className="relative z-10 mx-4 w-full max-w-sm rounded-2xl border border-white/10 bg-[rgba(16,12,32,0.98)] p-5 shadow-2xl">
         <div className="mb-4 flex items-center justify-between">
           <h2
             className="text-lg font-light text-foreground"
@@ -937,7 +937,7 @@ function FollowListModal({
 
         {loading ? (
           <div className="flex justify-center py-8">
-            <span className="h-5 w-5 animate-spin rounded-full border-2 border-[rgba(212,175,55,0.3)] border-t-gold" />
+            <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/20 border-t-gold" />
           </div>
         ) : items.length === 0 ? (
           <p
@@ -952,8 +952,8 @@ function FollowListModal({
               const initial = item.name.charAt(0).toUpperCase();
               const tierBadge = item.tier ? TIER_BADGE[item.tier] : null;
               const row = (
-                <div className="flex items-center gap-3 rounded-xl border border-[rgba(212,175,55,0.06)] bg-[rgba(255,255,255,0.02)] px-3 py-2.5 transition-colors hover:border-[rgba(212,175,55,0.15)] hover:bg-[rgba(212,175,55,0.04)]">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[rgba(212,175,55,0.1)] text-xs font-medium text-gold">
+                <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-[rgba(255,255,255,0.02)] px-3 py-2.5 transition-colors hover:border-white/10 hover:bg-white/[0.04]">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/[0.07] text-xs font-medium text-gold">
                     {initial}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -1030,8 +1030,8 @@ function AvailabilityTab({
   if (posts.length === 0) {
     return (
       <div className="flex flex-col items-center gap-3 py-16 text-center">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.04)]">
-          <Icon name="calendar" className="h-5 w-5 text-gold/30" />
+        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
+          <Icon name="calendar" className="h-5 w-5 text-muted/40" />
         </div>
         <p className="text-sm text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
           {isOwner ? "No upcoming availability posts" : "No upcoming availability"}
@@ -1054,7 +1054,7 @@ function AvailabilityTab({
       {posts.map((post) => (
         <div
           key={post.id}
-          className="rounded-2xl border border-[rgba(212,175,55,0.12)] bg-[rgba(255,255,255,0.02)] p-4"
+          className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.02)] p-4"
         >
           <div className="flex items-start justify-between gap-3">
             <div className="flex-1 min-w-0">
@@ -1064,7 +1064,7 @@ function AvailabilityTab({
               >
                 {post.title}
               </p>
-              <p className="mt-0.5 text-xs text-gold/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="mt-0.5 text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
                 {CATEGORY_LABELS[post.category] ?? post.category}
               </p>
               <div
@@ -1122,8 +1122,8 @@ function PostsTab({
   if (feedPosts.length === 0) {
     return (
       <div className="flex flex-col items-center gap-3 py-16 text-center">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.04)]">
-          <Icon name="photo" className="h-5 w-5 text-gold/30" />
+        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
+          <Icon name="photo" className="h-5 w-5 text-muted/40" />
         </div>
         <p className="text-sm text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
           {isOwner ? "You haven't posted to the feed yet" : "No posts yet"}
@@ -1151,7 +1151,7 @@ function PostsTab({
         return (
           <div
             key={post.id}
-            className="rounded-2xl border border-[rgba(212,175,55,0.08)] bg-[rgba(255,255,255,0.02)] p-4"
+            className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.02)] p-4"
           >
             <p className="text-xs text-muted/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
               {timeAgo}
@@ -1176,7 +1176,7 @@ function PostsTab({
                 {post.tags.slice(0, 5).map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-full bg-[rgba(212,175,55,0.06)] px-2 py-0.5 text-[10px] text-gold/50"
+                    className="rounded-full bg-white/[0.04] px-2 py-0.5 text-[10px] text-muted/40"
                     style={{ fontFamily: "var(--font-dm-sans)" }}
                   >
                     #{tag}
@@ -1228,8 +1228,8 @@ function MediaTab({
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-center gap-3 py-16 text-center">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.04)]">
-          <Icon name="photo" className="h-5 w-5 text-gold/30" />
+        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
+          <Icon name="photo" className="h-5 w-5 text-muted/40" />
         </div>
         <p className="text-sm text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
           No photos yet
@@ -1270,8 +1270,8 @@ function VideosTab({
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-center gap-3 py-16 text-center">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.04)]">
-          <Icon name="video" className="h-5 w-5 text-gold/30" />
+        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
+          <Icon name="video" className="h-5 w-5 text-muted/40" />
         </div>
         <p
           className="text-sm text-muted/40"
@@ -1302,12 +1302,12 @@ function VideosTab({
             />
             {locked && (
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[rgba(212,175,55,0.4)] bg-[rgba(8,8,16,0.7)]">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-[rgba(8,8,16,0.7)]">
                   <Icon name="lock" className="h-4 w-4 text-gold" />
                 </div>
                 {item.post.is_ppv && item.post.ppv_price && (
                   <span
-                    className="rounded-full border border-[rgba(212,175,55,0.3)] bg-[rgba(8,8,16,0.7)] px-3 py-1 text-xs text-gold"
+                    className="rounded-full border border-white/20 bg-[rgba(8,8,16,0.7)] px-3 py-1 text-xs text-gold"
                     style={{ fontFamily: "var(--font-dm-sans)" }}
                   >
                     Unlock for ${item.post.ppv_price}

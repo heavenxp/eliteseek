@@ -3,7 +3,7 @@
 export default function OfflinePage() {
   return (
     <div className="page-bg flex min-h-screen flex-col items-center justify-center gap-6 px-6 text-center">
-      <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.08)]">
+      <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-white/[0.04]">
         <svg
           className="h-8 w-8 text-gold"
           fill="none"

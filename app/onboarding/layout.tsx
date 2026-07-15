@@ -25,7 +25,7 @@ export default async function OnboardingLayout({
 
       <header className="relative z-10 px-6 pt-6">
         <Link href="/" className="inline-flex items-center gap-2.5">
-          <div className="flex h-7 w-7 items-center justify-center rounded-full border border-[rgba(212,175,55,0.35)] bg-[rgba(212,175,55,0.08)]">
+          <div className="flex h-7 w-7 items-center justify-center rounded-full border border-white/20 bg-white/[0.04]">
             <Icon name="diamond" className="h-3.5 w-3.5 text-gold" />
           </div>
           <span

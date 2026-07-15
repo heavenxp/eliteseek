@@ -137,11 +137,11 @@ export function ContentStudioForm() {
         onClick={() => inputRef.current?.click()}
         className={`cursor-pointer rounded-2xl border-2 border-dashed p-8 text-center transition-colors ${
           isDragging
-            ? "border-gold/60 bg-[rgba(212,175,55,0.08)]"
-            : "border-[rgba(212,175,55,0.2)] hover:border-[rgba(212,175,55,0.4)] hover:bg-[rgba(212,175,55,0.03)]"
+            ? "border-gold/60 bg-white/[0.04]"
+            : "border-white/10 hover:border-white/20 hover:bg-white/[0.04]"
         }`}
       >
-        <Icon name="upload" className="mx-auto mb-3 h-8 w-8 text-gold/40" />
+        <Icon name="upload" className="mx-auto mb-3 h-8 w-8 text-muted/40" />
         <p className="text-sm text-foreground/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
           Drop photos or videos here
         </p>
@@ -305,7 +305,7 @@ function ToggleRow({
   return (
     <label
       htmlFor={id}
-      className="flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-[rgba(212,175,55,0.1)] bg-[rgba(255,255,255,0.02)] px-4 py-3"
+      className="flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-white/10 bg-[rgba(255,255,255,0.02)] px-4 py-3"
     >
       <div>
         <p className="text-sm text-foreground" style={{ fontFamily: "var(--font-dm-sans)" }}>
@@ -326,7 +326,7 @@ function ToggleRow({
         <div
           className={`h-6 w-11 rounded-full border transition-colors ${
             checked
-              ? "border-gold/50 bg-[rgba(212,175,55,0.25)]"
+              ? "border-gold/50 bg-white/10"
               : "border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.04)]"
           }`}
         />

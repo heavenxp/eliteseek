@@ -41,14 +41,14 @@ export function ContentFeedClient({ posts, currentUserId, stripeConfigured = fal
         </div>
 
         {/* Filter tabs */}
-        <div className="mb-6 flex gap-1 rounded-xl border border-[rgba(212,175,55,0.1)] bg-[rgba(255,255,255,0.02)] p-1">
+        <div className="mb-6 flex gap-1 rounded-xl border border-white/10 bg-[rgba(255,255,255,0.02)] p-1">
           {(["all", "free", "subscribed"] as Filter[]).map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
               className={`flex-1 rounded-lg py-2 text-sm capitalize transition-colors ${
                 filter === f
-                  ? "bg-[rgba(212,175,55,0.12)] text-gold"
+                  ? "bg-white/[0.07] text-gold"
                   : "text-muted/50 hover:text-muted/80"
               }`}
               style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -123,7 +123,7 @@ function ContentCard({ post, stripeConfigured }: { post: FeedPost; stripeConfigu
     <article className="glass-card overflow-hidden rounded-2xl">
       {/* Companion header */}
       <div className="flex items-center gap-3 px-4 py-3">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[rgba(212,175,55,0.2)] bg-[rgba(212,175,55,0.08)] text-sm font-medium text-gold">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-sm font-medium text-gold">
           {post.companion?.display_name?.charAt(0)?.toUpperCase() ?? "?"}
         </div>
         <div className="flex-1 min-w-0">
@@ -148,7 +148,7 @@ function ContentCard({ post, stripeConfigured }: { post: FeedPost; stripeConfigu
         </div>
         {post.is_ppv && !isUnlocked && (
           <span
-            className="shrink-0 rounded-full border border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.08)] px-2.5 py-0.5 text-xs text-gold"
+            className="shrink-0 rounded-full border border-white/20 bg-white/[0.04] px-2.5 py-0.5 text-xs text-gold"
             style={{ fontFamily: "var(--font-dm-sans)" }}
           >
             PPV · ${post.ppv_price}
@@ -156,7 +156,7 @@ function ContentCard({ post, stripeConfigured }: { post: FeedPost; stripeConfigu
         )}
         {post.is_subscribers_only && !isUnlocked && (
           <span
-            className="shrink-0 rounded-full border border-[rgba(212,175,55,0.15)] px-2.5 py-0.5 text-xs text-muted/50"
+            className="shrink-0 rounded-full border border-white/10 px-2.5 py-0.5 text-xs text-muted/50"
             style={{ fontFamily: "var(--font-dm-sans)" }}
           >
             Subs only
@@ -274,7 +274,7 @@ function LockOverlay({
 }) {
   return (
     <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/20">
-      <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(212,175,55,0.4)] bg-[rgba(8,8,16,0.7)]">
+      <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-[rgba(8,8,16,0.7)]">
         <Icon name="lock" className="h-5 w-5 text-gold" />
       </div>
       <div className="flex flex-col items-center gap-2">
@@ -306,8 +306,8 @@ function LockOverlay({
 function EmptyFeed({ filter }: { filter: Filter }) {
   return (
     <div className="flex flex-col items-center gap-4 py-20 text-center">
-      <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.05)]">
-        <Icon name="photo" className="h-6 w-6 text-gold/40" />
+      <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
+        <Icon name="photo" className="h-6 w-6 text-muted/40" />
       </div>
       <p
         className="text-xl font-light text-foreground/60"

@@ -100,7 +100,7 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
               className={[
                 "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors",
                 currentSort === opt.value || (opt.value === "featured" && !currentSort)
-                  ? "bg-[rgba(212,175,55,0.08)] text-gold"
+                  ? "bg-white/[0.04] text-gold"
                   : "text-muted hover:bg-[rgba(255,255,255,0.03)] hover:text-foreground",
               ].join(" ")}
               style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -122,7 +122,7 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
           City
         </p>
         <div className="relative">
-          <Icon name="map-pin" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gold/40" />
+          <Icon name="map-pin" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted/40" />
           <input
             type="text"
             defaultValue={currentCity}
@@ -155,8 +155,8 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
           className={[
             "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 transition-all",
             currentAvailable
-              ? "border border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.07)]"
-              : "border border-[rgba(255,255,255,0.05)] hover:border-[rgba(212,175,55,0.15)]",
+              ? "border border-white/20 bg-white/[0.04]"
+              : "border border-[rgba(255,255,255,0.05)] hover:border-white/10",
           ].join(" ")}
         >
           <div className={`h-2 w-2 rounded-full ${currentAvailable ? "bg-emerald-400" : "bg-muted/30"}`} />
@@ -186,7 +186,7 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
               className={[
                 "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors",
                 currentTier === opt.value
-                  ? "bg-[rgba(212,175,55,0.08)] text-gold"
+                  ? "bg-white/[0.04] text-gold"
                   : "text-muted hover:bg-[rgba(255,255,255,0.03)] hover:text-foreground",
               ].join(" ")}
               style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -215,8 +215,8 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
                 className={[
                   "rounded-full border px-3 py-1.5 text-xs transition-all",
                   active
-                    ? "border-[rgba(212,175,55,0.45)] bg-[rgba(212,175,55,0.1)] text-gold"
-                    : "border-[rgba(255,255,255,0.07)] text-muted/70 hover:border-[rgba(212,175,55,0.2)] hover:text-muted",
+                    ? "border-white/20 bg-white/[0.07] text-gold"
+                    : "border-[rgba(255,255,255,0.07)] text-muted/70 hover:border-white/10 hover:text-muted",
                 ].join(" ")}
                 style={{ fontFamily: "var(--font-dm-sans)" }}
               >

@@ -199,9 +199,9 @@ function RequestCard({
     .toUpperCase();
 
   return (
-    <div className="rounded-2xl border border-[rgba(212,175,55,0.1)] bg-[rgba(255,255,255,0.02)] p-4">
+    <div className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.02)] p-4">
       <div className="flex items-start gap-3">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[rgba(212,175,55,0.1)] text-xs font-medium text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/[0.07] text-xs font-medium text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
           {initials}
         </div>
         <div className="flex-1 min-w-0">
@@ -255,8 +255,8 @@ function RequestCard({
 function EmptyState({ isLocked }: { isLocked: boolean }) {
   return (
     <div className="flex flex-col items-center gap-4 py-24 text-center">
-      <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.05)]">
-        <Icon name="lock" className="h-6 w-6 text-gold/40" />
+      <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
+        <Icon name="lock" className="h-6 w-6 text-muted/40" />
       </div>
       <p className="text-xl font-light text-foreground/60" style={{ fontFamily: "var(--font-cormorant)" }}>
         No access requests yet

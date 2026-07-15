@@ -18,7 +18,7 @@ function RoleBadge({ role }: { role: string }) {
       className={[
         "rounded-full border px-2.5 py-0.5 text-xs",
         isCompanion
-          ? "bg-[rgba(212,175,55,0.1)] text-gold border-[rgba(212,175,55,0.2)]"
+          ? "bg-white/[0.07] text-gold border-white/10"
           : "bg-white/5 text-muted/70 border-white/10",
       ].join(" ")}
       style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -82,7 +82,7 @@ export default async function AdminKycPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm" style={{ fontFamily: "var(--font-dm-sans)" }}>
               <thead>
-                <tr className="border-b border-[rgba(212,175,55,0.08)]">
+                <tr className="border-b border-white/10">
                   {["Name", "Role", "User ID", "Submitted", "Actions"].map((h) => (
                     <th
                       key={h}
@@ -97,7 +97,7 @@ export default async function AdminKycPage() {
                 {profiles.map((p) => (
                   <tr
                     key={p.id}
-                    className="hover:bg-[rgba(212,175,55,0.02)] transition-colors"
+                    className="hover:bg-white/[0.04] transition-colors"
                   >
                     <td className="px-4 py-3 text-foreground/80">{p.full_name}</td>
                     <td className="px-4 py-3">

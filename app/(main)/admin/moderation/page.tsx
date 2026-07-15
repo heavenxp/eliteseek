@@ -218,7 +218,7 @@ export default async function AdminModerationPage() {
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <span
-                    className="rounded-full border border-[rgba(212,175,55,0.25)] bg-[rgba(212,175,55,0.07)] px-2.5 py-0.5 text-xs text-gold"
+                    className="rounded-full border border-white/20 bg-white/[0.04] px-2.5 py-0.5 text-xs text-gold"
                     style={{ fontFamily: "var(--font-dm-sans)" }}
                   >
                     {FLAG_TYPE_LABELS[flag.content_type ?? ""] ?? flag.content_type}

@@ -72,9 +72,9 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
 
-      <div className="relative w-full max-w-lg overflow-hidden rounded-t-2xl border border-[rgba(212,175,55,0.2)] bg-[rgba(8,8,16,0.98)] shadow-[0_-8px_64px_rgba(0,0,0,0.7)] sm:rounded-2xl">
+      <div className="relative w-full max-w-lg overflow-hidden rounded-t-2xl border border-white/10 bg-[rgba(8,8,16,0.98)] shadow-[0_-8px_64px_rgba(0,0,0,0.7)] sm:rounded-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[rgba(212,175,55,0.1)] px-6 py-4">
+        <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
           <div>
             <h2 className="text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
               {step === 3 ? "Request Sent" : "Book an Experience"}
@@ -90,7 +90,7 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
 
         {/* Step indicators */}
         {step !== 3 && (
-          <div className="flex border-b border-[rgba(212,175,55,0.06)] px-6 py-3">
+          <div className="flex border-b border-white/10 px-6 py-3">
             {[1, 2].map((s) => (
               <div key={s} className="flex items-center">
                 <div className={`flex h-6 w-6 items-center justify-center rounded-full text-[10px] transition-colors ${step >= s ? "bg-gold text-black" : "border border-[rgba(255,255,255,0.1)] text-muted/40"}`} style={{ fontFamily: "var(--font-dm-sans)" }}>
@@ -109,7 +109,7 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
         {step === 1 && (
           <div className="space-y-5 p-6">
             {post ? (
-              <div className="rounded-xl border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.04)] p-4">
+              <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
                 <p className="text-sm font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
                   {post.title}
                 </p>
@@ -147,8 +147,8 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
                         className={[
                           "rounded-xl border px-4 py-2 text-sm transition-colors",
                           duration === h
-                            ? "border-[rgba(212,175,55,0.4)] bg-[rgba(212,175,55,0.1)] text-gold"
-                            : "border-[rgba(255,255,255,0.07)] text-muted hover:border-[rgba(212,175,55,0.2)]",
+                            ? "border-white/20 bg-white/[0.07] text-gold"
+                            : "border-[rgba(255,255,255,0.07)] text-muted hover:border-white/10",
                         ].join(" ")}
                         style={{ fontFamily: "var(--font-dm-sans)" }}
                       >
@@ -197,7 +197,7 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
             <input type="hidden" name="availability_post_id" value={post?.id ?? ""} />
 
             {/* Summary */}
-            <div className="rounded-xl border border-[rgba(212,175,55,0.12)] bg-[rgba(255,255,255,0.02)] p-4 space-y-2">
+            <div className="rounded-xl border border-white/10 bg-[rgba(255,255,255,0.02)] p-4 space-y-2">
               <div className="flex justify-between text-sm" style={{ fontFamily: "var(--font-dm-sans)" }}>
                 <span className="text-muted/60">Experience</span>
                 <span className="text-foreground/80">{post ? post.title : `${duration}h booking`}</span>
@@ -277,7 +277,7 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
         {/* Step 3 — success */}
         {step === 3 && (
           <div className="flex flex-col items-center gap-4 px-6 py-10 text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.08)]">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-white/[0.04]">
               <Icon name="send" className="h-6 w-6 text-gold" />
             </div>
             <p className="text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>

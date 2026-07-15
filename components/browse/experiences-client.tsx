@@ -71,8 +71,8 @@ export function ExperiencesClient({ posts, isAuthenticated }: Props) {
               className={[
                 "shrink-0 rounded-full border px-4 py-1.5 text-xs transition-all",
                 activeCategory === tab.value
-                  ? "border-[rgba(212,175,55,0.4)] bg-[rgba(212,175,55,0.1)] text-gold"
-                  : "border-[rgba(255,255,255,0.07)] text-muted/60 hover:border-[rgba(212,175,55,0.2)] hover:text-muted",
+                  ? "border-white/20 bg-white/[0.07] text-gold"
+                  : "border-[rgba(255,255,255,0.07)] text-muted/60 hover:border-white/10 hover:text-muted",
               ].join(" ")}
               style={{ fontFamily: "var(--font-dm-sans)" }}
             >
@@ -85,8 +85,8 @@ export function ExperiencesClient({ posts, isAuthenticated }: Props) {
       {/* Results */}
       {filtered.length === 0 ? (
         <div className="flex flex-col items-center gap-4 py-24 text-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.05)]">
-            <Icon name="calendar" className="h-6 w-6 text-gold/40" />
+          <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
+            <Icon name="calendar" className="h-6 w-6 text-muted/40" />
           </div>
           <p className="text-lg font-light text-foreground/60" style={{ fontFamily: "var(--font-cormorant)" }}>
             No experiences available
@@ -100,7 +100,7 @@ export function ExperiencesClient({ posts, isAuthenticated }: Props) {
           {filtered.map((post) => (
             <div key={post.id}>
               <div className="mb-3 flex items-center gap-2.5">
-                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[rgba(212,175,55,0.1)] text-xs font-medium text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/[0.07] text-xs font-medium text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
                   {post.companion.display_name.charAt(0)}
                 </div>
                 <div>
@@ -108,7 +108,7 @@ export function ExperiencesClient({ posts, isAuthenticated }: Props) {
                     {post.companion.display_name}
                   </p>
                   {post.companion.verification_tier === "select" && (
-                    <span className="text-[10px] text-gold/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                    <span className="text-[10px] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
                       Select Elite Host
                     </span>
                   )}
@@ -137,7 +137,7 @@ export function ExperiencesClient({ posts, isAuthenticated }: Props) {
 
       {/* Unauthenticated CTA */}
       {!isAuthenticated && posts.length > 0 && (
-        <div className="mt-8 rounded-2xl border border-[rgba(212,175,55,0.18)] bg-[rgba(212,175,55,0.04)] p-6 text-center">
+        <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.04] p-6 text-center">
           <p className="text-base font-light text-foreground/80" style={{ fontFamily: "var(--font-cormorant)" }}>
             Sign in to book experiences
           </p>

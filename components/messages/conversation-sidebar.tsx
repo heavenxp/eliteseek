@@ -86,7 +86,7 @@ export function ConversationSidebar({ userId, initialConversations, events = [] 
   return (
     <>
       {/* Header */}
-      <div className="border-b border-[rgba(212,175,55,0.1)] px-4 py-4">
+      <div className="border-b border-white/10 px-4 py-4">
         <h2
           className="text-xl font-light text-foreground"
           style={{ fontFamily: "var(--font-cormorant)" }}
@@ -110,7 +110,7 @@ export function ConversationSidebar({ userId, initialConversations, events = [] 
             </p>
             <Link
               href="/browse"
-              className="text-xs text-gold/60 underline underline-offset-2 hover:text-gold"
+              className="text-xs text-muted/40 underline underline-offset-2 hover:text-gold"
               style={{ fontFamily: "var(--font-dm-sans)" }}
             >
               Browse Elite Hosts →
@@ -133,11 +133,11 @@ export function ConversationSidebar({ userId, initialConversations, events = [] 
                         className={[
                           "flex items-start gap-3 border-b border-[rgba(255,255,255,0.04)] px-4 py-3.5 transition-colors",
                           isActive
-                            ? "bg-[rgba(212,175,55,0.07)]"
+                            ? "bg-white/[0.04]"
                             : "hover:bg-[rgba(255,255,255,0.02)]",
                         ].join(" ")}
                       >
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[rgba(212,175,55,0.12)] text-sm font-medium text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.07] text-sm font-medium text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
                           {conv.other_name.charAt(0).toUpperCase()}
                         </div>
 
@@ -189,11 +189,11 @@ export function ConversationSidebar({ userId, initialConversations, events = [] 
                           className={[
                             "flex items-center gap-3 border-b border-[rgba(255,255,255,0.04)] px-4 py-3 transition-colors",
                             isActive
-                              ? "bg-[rgba(212,175,55,0.07)]"
+                              ? "bg-white/[0.04]"
                               : "hover:bg-[rgba(255,255,255,0.02)]",
                           ].join(" ")}
                         >
-                          <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.06)]">
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-white/[0.04]">
                             {ev.cover_image_url ? (
                               // eslint-disable-next-line @next/next/no-img-element
                               <img src={ev.cover_image_url} alt="" className="h-full w-full object-cover" />

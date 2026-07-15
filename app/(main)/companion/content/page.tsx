@@ -176,12 +176,12 @@ export default async function ContentStudioPage() {
             <div className="glass-card divide-y divide-[rgba(255,255,255,0.05)] rounded-2xl">
               {subscribers.map((s) => (
                 <div key={s.client_id} className="flex items-center gap-3 px-4 py-3">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[rgba(212,175,55,0.08)]">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white/[0.04]">
                     {s.avatar_url ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={s.avatar_url} alt="" className="h-full w-full object-cover" />
                     ) : (
-                      <span className="text-sm text-gold/50" style={{ fontFamily: "var(--font-cormorant)" }}>
+                      <span className="text-sm text-muted/40" style={{ fontFamily: "var(--font-cormorant)" }}>
                         {s.name.charAt(0)}
                       </span>
                     )}
@@ -254,7 +254,7 @@ function ContentRow({ post }: { post: ContentPost }) {
   const inReview = post.moderation_status === "flagged" || post.moderation_status === "pending";
 
   return (
-    <div className="flex items-center gap-4 rounded-xl border border-[rgba(212,175,55,0.1)] bg-[rgba(255,255,255,0.02)] px-4 py-3.5">
+    <div className="flex items-center gap-4 rounded-xl border border-white/10 bg-[rgba(255,255,255,0.02)] px-4 py-3.5">
       {/* Thumbnail */}
       <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-[rgba(255,255,255,0.04)]">
         {media ? (
@@ -293,12 +293,12 @@ function ContentRow({ post }: { post: ContentPost }) {
             </span>
           )}
           {post.is_ppv && (
-            <span className="rounded-full bg-[rgba(212,175,55,0.1)] px-2 py-0.5 text-[10px] text-gold/70">
+            <span className="rounded-full bg-white/[0.07] px-2 py-0.5 text-[10px] text-gold/70">
               PPV ${post.ppv_price}
             </span>
           )}
           {post.is_subscribers_only && (
-            <span className="rounded-full bg-[rgba(212,175,55,0.08)] px-2 py-0.5 text-[10px] text-gold/60">
+            <span className="rounded-full bg-white/[0.04] px-2 py-0.5 text-[10px] text-muted/40">
               Subs only
             </span>
           )}
@@ -319,8 +319,8 @@ function ContentRow({ post }: { post: ContentPost }) {
 function EmptyState() {
   return (
     <div className="flex flex-col items-center gap-4 py-16 text-center">
-      <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.05)]">
-        <Icon name="photo" className="h-6 w-6 text-gold/40" />
+      <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
+        <Icon name="photo" className="h-6 w-6 text-muted/40" />
       </div>
       <p
         className="text-xl font-light text-foreground/60"

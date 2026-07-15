@@ -31,7 +31,7 @@ export function SignupForm() {
         {/* Confirmed state */}
         {state?.message ? (
           <div className="space-y-4 text-center">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.08)]">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-white/[0.04]">
               <Icon name="check" className="h-8 w-8 text-gold" />
             </div>
             <p
@@ -233,8 +233,8 @@ function RoleCard({
       className={[
         "relative flex flex-col items-center gap-2 rounded-xl border px-4 py-4 text-center transition-all duration-200",
         selected
-          ? "border-[rgba(212,175,55,0.5)] bg-[rgba(212,175,55,0.08)] shadow-[0_0_20px_rgba(212,175,55,0.1)]"
-          : "border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.02)] hover:border-[rgba(212,175,55,0.25)] hover:bg-[rgba(212,175,55,0.04)]",
+          ? "border-white/20 bg-white/[0.04] shadow-[0_0_20px_rgba(212,175,55,0.1)]"
+          : "border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.02)] hover:border-white/20 hover:bg-white/[0.04]",
       ].join(" ")}
     >
       {selected && (
@@ -246,7 +246,7 @@ function RoleCard({
         className={[
           "flex h-9 w-9 items-center justify-center rounded-full border transition-colors",
           selected
-            ? "border-[rgba(212,175,55,0.4)] bg-[rgba(212,175,55,0.12)]"
+            ? "border-white/20 bg-white/[0.07]"
             : "border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.04)]",
         ].join(" ")}
       >

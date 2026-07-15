@@ -31,9 +31,9 @@ function ResultCard({ result }: { result: SearchResult }) {
   return (
     <Link
       href={href}
-      className="flex items-center gap-3 rounded-xl border border-[rgba(255,255,255,0.05)] bg-[rgba(255,255,255,0.02)] px-4 py-3 transition-colors hover:border-[rgba(212,175,55,0.2)] hover:bg-[rgba(212,175,55,0.04)]"
+      className="flex items-center gap-3 rounded-xl border border-[rgba(255,255,255,0.05)] bg-[rgba(255,255,255,0.02)] px-4 py-3 transition-colors hover:border-white/10 hover:bg-white/[0.04]"
     >
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full border border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.08)] text-sm font-medium text-gold">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/20 bg-white/[0.04] text-sm font-medium text-gold">
         {result.avatar_url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={result.avatar_url} alt="" className="h-full w-full object-cover" />
@@ -53,7 +53,7 @@ function ResultCard({ result }: { result: SearchResult }) {
           <span
             className={`shrink-0 rounded-full px-2 py-0.5 text-[9px] uppercase tracking-wide ${
               result.role === "companion"
-                ? "bg-[rgba(212,175,55,0.12)] text-gold/80"
+                ? "bg-white/[0.07] text-gold/80"
                 : "bg-[rgba(255,255,255,0.06)] text-muted/60"
             }`}
             style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -142,7 +142,7 @@ export function SearchClient() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") runSearch({ q: (e.target as HTMLInputElement).value });
               }}
-              className="w-full rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.04)] py-2.5 pl-10 pr-4 text-sm text-foreground placeholder-muted/40 outline-none transition-colors focus:border-[rgba(212,175,55,0.3)]"
+              className="w-full rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.04)] py-2.5 pl-10 pr-4 text-sm text-foreground placeholder-muted/40 outline-none transition-colors focus:border-white/20"
               style={{ fontFamily: "var(--font-dm-sans)" }}
             />
           </div>
@@ -158,7 +158,7 @@ export function SearchClient() {
                 }}
                 className={`rounded-lg px-3.5 py-1.5 text-xs transition-colors ${
                   role === tab.value
-                    ? "bg-[rgba(212,175,55,0.12)] text-gold"
+                    ? "bg-white/[0.07] text-gold"
                     : "text-muted/60 hover:text-foreground"
                 }`}
                 style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -179,7 +179,7 @@ export function SearchClient() {
               setCountry(e.target.value);
               runSearch({ country: e.target.value });
             }}
-            className="flex-1 rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.04)] px-3 py-2 text-sm text-foreground/80 outline-none transition-colors focus:border-[rgba(212,175,55,0.3)]"
+            className="flex-1 rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.04)] px-3 py-2 text-sm text-foreground/80 outline-none transition-colors focus:border-white/20"
             style={{ fontFamily: "var(--font-dm-sans)" }}
           >
             <option value="">Any Country</option>
@@ -196,7 +196,7 @@ export function SearchClient() {
               setCity(e.target.value);
               runSearch({ city: e.target.value });
             }}
-            className="flex-1 rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.04)] px-3 py-2 text-sm text-foreground/80 placeholder-muted/40 outline-none transition-colors focus:border-[rgba(212,175,55,0.3)]"
+            className="flex-1 rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.04)] px-3 py-2 text-sm text-foreground/80 placeholder-muted/40 outline-none transition-colors focus:border-white/20"
             style={{ fontFamily: "var(--font-dm-sans)" }}
           />
         </div>

@@ -12,7 +12,7 @@ function StatusBadge({ status }: { status: string }) {
     pending: "bg-amber-500/10 text-amber-400 border-amber-500/20",
     failed: "bg-red-500/10 text-red-400 border-red-500/20",
     not_started: "bg-white/5 text-muted/50 border-white/10",
-    companion: "bg-[rgba(212,175,55,0.1)] text-gold border-[rgba(212,175,55,0.2)]",
+    companion: "bg-white/[0.07] text-gold border-white/10",
     client: "bg-white/5 text-muted/70 border-white/10",
     true: "bg-red-500/10 text-red-400 border-red-500/20",
     false: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
@@ -146,7 +146,7 @@ export default async function AdminUsersPage({
           <div className="overflow-x-auto">
             <table className="w-full text-sm" style={{ fontFamily: "var(--font-dm-sans)" }}>
               <thead>
-                <tr className="border-b border-[rgba(212,175,55,0.08)]">
+                <tr className="border-b border-white/10">
                   {["Name", "Role", "KYC Status", "Suspended", "Joined", "Actions"].map((h) => (
                     <th
                       key={h}
@@ -159,7 +159,7 @@ export default async function AdminUsersPage({
               </thead>
               <tbody className="divide-y divide-[rgba(212,175,55,0.06)]">
                 {users.map((u) => (
-                  <tr key={u.id} className="hover:bg-[rgba(212,175,55,0.02)] transition-colors">
+                  <tr key={u.id} className="hover:bg-white/[0.04] transition-colors">
                     <td className="px-4 py-3 text-foreground/80">{u.full_name}</td>
                     <td className="px-4 py-3">
                       <StatusBadge status={u.role} />

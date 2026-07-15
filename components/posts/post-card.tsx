@@ -57,20 +57,20 @@ export function PostCard({ post, companion, onBook }: PostCardProps) {
   return (
     <div
       className={[
-        "group overflow-hidden rounded-2xl border border-[rgba(212,175,55,0.12)] bg-[rgba(255,255,255,0.02)] transition-all duration-300",
+        "group overflow-hidden rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.02)] transition-all duration-300",
         post.is_booked
           ? "opacity-60"
-          : "hover:border-[rgba(212,175,55,0.25)] hover:shadow-[0_8px_32px_rgba(212,175,55,0.06)]",
+          : "hover:border-white/20 hover:shadow-[0_8px_32px_rgba(212,175,55,0.06)]",
       ].join(" ")}
     >
       {/* Category ribbon */}
-      <div className="flex items-center justify-between border-b border-[rgba(212,175,55,0.08)] px-4 py-2.5">
+      <div className="flex items-center justify-between border-b border-white/10 px-4 py-2.5">
         <span className={`text-[10px] font-medium uppercase tracking-[0.12em] ${CATEGORY_COLORS[post.category]}`} style={{ fontFamily: "var(--font-dm-sans)" }}>
           {CATEGORY_LABELS[post.category]}
         </span>
         <span className="flex items-center gap-2">
           {urgency && (
-            <span className="rounded-full border border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.08)] px-2 py-0.5 text-[10px] text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <span className="rounded-full border border-white/20 bg-white/[0.04] px-2 py-0.5 text-[10px] text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
               {urgency}
             </span>
           )}
@@ -95,21 +95,21 @@ export function PostCard({ post, companion, onBook }: PostCardProps) {
         {/* Meta row */}
         <div className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1.5">
           <span className="flex items-center gap-1.5 text-xs text-muted/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
-            <Icon name="calendar" className="h-3.5 w-3.5 text-gold/50" />
+            <Icon name="calendar" className="h-3.5 w-3.5 text-muted/40" />
             {dateLabel}
           </span>
           {!dateTo && (
             <span className="flex items-center gap-1.5 text-xs text-muted/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
-              <Icon name="clock" className="h-3.5 w-3.5 text-gold/50" />
+              <Icon name="clock" className="h-3.5 w-3.5 text-muted/40" />
               {timeLabel}
             </span>
           )}
           <span className="flex items-center gap-1.5 text-xs text-muted/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
-            <Icon name="map-pin" className="h-3.5 w-3.5 text-gold/50" />
+            <Icon name="map-pin" className="h-3.5 w-3.5 text-muted/40" />
             {post.location_city}{post.venue_type ? ` · ${post.venue_type}` : ""}
           </span>
           <span className="flex items-center gap-1.5 text-xs text-muted/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
-            <Icon name="users" className="h-3.5 w-3.5 text-gold/50" />
+            <Icon name="users" className="h-3.5 w-3.5 text-muted/40" />
             Up to {post.max_guests} {post.max_guests === 1 ? "guest" : "guests"}
           </span>
         </div>

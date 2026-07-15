@@ -82,6 +82,7 @@ export default async function AdminModerationPage() {
     story: "Story",
     profile_photo: "Profile photo",
     content_post: "Content post",
+    availability_post: "Availability post",
   };
 
   return (

@@ -2,6 +2,8 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { after } from "next/server";
+import { scanContent, recordModeration } from "@/lib/moderation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { notify } from "@/app/actions/notifications";
 
@@ -385,16 +387,30 @@ export async function sendMessage(
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { error } = await supabase.from("event_messages").insert({
+  const { data: sent, error } = await supabase.from("event_messages").insert({
     event_id: eventId,
     user_id: user.id,
     content: content || null,
     message_type: messageType,
     audio_url: audioUrl ?? null,
     media_url: mediaUrl ?? null,
-  });
+  }).select("id").single();
 
   if (error) return { error: error.message };
+
+  // Phase 3: event group chat runs through the same Hive pipeline as booking
+  // chat — flags go to the manual review queue, sends are never delayed.
+  after(async () => {
+    const verdict = await scanContent(mediaUrl ? [mediaUrl] : [], content);
+    if (verdict.status === "flagged" || verdict.status === "rejected") {
+      await recordModeration({
+        subjectUserId: user.id,
+        contentId: sent?.id,
+        contentType: "message",
+        verdict,
+      });
+    }
+  });
 
   // Notify all other event members (admin bypasses RLS for private events)
   const adminClient = createAdminClient();

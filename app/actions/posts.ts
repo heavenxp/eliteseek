@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { scanContent, recordModeration } from "@/lib/moderation";
 import type { AvailabilityCategory, VisibilityLevel } from "@/lib/database.types";
 
 async function requireCompanion() {
@@ -51,6 +52,15 @@ export async function createAvailabilityPost(
     return { error: "Date must be in the future." };
   }
 
+  // Phase 3: availability post copy runs through the Hive pipeline before
+  // going live (rejected -> refused; flagged -> published but queued for review)
+  const verdict = await scanContent([], [title, description, venueType].filter(Boolean).join("\n"));
+  if (verdict.status === "rejected") {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) await recordModeration({ subjectUserId: user.id, contentType: "availability_post", verdict });
+    return { error: "This post can't be published — it doesn't meet EliteSeek's content guidelines." };
+  }
+
   const { error } = await supabase.from("availability_posts").insert({
     companion_id: companionId,
     category,
@@ -67,6 +77,11 @@ export async function createAvailabilityPost(
   });
 
   if (error) return { error: error.message };
+
+  if (verdict.status === "flagged") {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) await recordModeration({ subjectUserId: user.id, contentType: "availability_post", verdict });
+  }
 
   redirect("/companion/posts");
 }

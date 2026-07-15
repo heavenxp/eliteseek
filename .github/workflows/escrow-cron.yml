@@ -1,0 +1,25 @@
+# Escrow release + SOS safety scan every 30 minutes.
+# Vercel Hobby crons are daily-only, so GitHub Actions provides the real
+# cadence; the daily Vercel cron (vercel.json) is a redundant backstop.
+# The endpoint is idempotent — double execution is safe.
+#
+# Setup: add CRON_SECRET to this repo's Actions secrets (same value as the
+# Vercel env var).
+name: escrow-cron
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hit escrow cron endpoint
+        run: |
+          code=$(curl -s -o /tmp/out -w "%{http_code}" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            "https://eliteseek.vercel.app/api/cron/escrow")
+          cat /tmp/out
+          [ "$code" = "200" ] || { echo "cron endpoint returned $code"; exit 1; }
+

@@ -30,7 +30,7 @@ export async function saveCompanionAbout(
   if (isNaN(ageRaw) || ageRaw < 18) return { error: "You must be 18 or older." };
 
   const { error } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .update({
       display_name: (formData.get("display_name") as string).trim(),
       age: ageRaw,
@@ -61,7 +61,7 @@ export async function saveCompanionOfferings(
     .filter(Boolean);
 
   const { error } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .update({ tags, languages })
     .eq("user_id", user.id);
 
@@ -105,7 +105,7 @@ export async function saveCompanionPricing(
   }
 
   const { error } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .update({
       subscription_price: subscriptionPrice,
       booking_rate_hourly: bookingRate,
@@ -131,7 +131,7 @@ export async function saveCompanionVisibility(
   const isAvailable = formData.get("is_available") === "true";
 
   const { error } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .update({ visibility, is_available: isAvailable })
     .eq("user_id", user.id);
 
@@ -180,9 +180,9 @@ export async function saveClientMembership(
   // Bronze is free — just save the tier and redirect
   // Silver/Elite will go through Stripe billing (future)
   const { error } = await supabase
-    .from("client_profiles")
+    .from("profiles")
     .update({ membership_tier: tier })
-    .eq("user_id", user.id);
+    .eq("id", user.id);
 
   if (error) return { error: error.message };
 

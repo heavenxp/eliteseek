@@ -32,7 +32,7 @@ export async function GET() {
   const origin = getOrigin();
 
   const { data: companion } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("id, identity_status, stripe_identity_session_id")
     .eq("user_id", user.id)
     .maybeSingle();
@@ -94,7 +94,7 @@ export async function GET() {
 
   if (isHost) {
     await supabase
-      .from("companion_profiles")
+      .from("host_profiles")
       .update({
         stripe_identity_session_id: session.id,
         identity_status: "pending",

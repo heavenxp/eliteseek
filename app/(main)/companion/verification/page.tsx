@@ -42,7 +42,7 @@ export default async function VerificationCentrePage({
   if (!user) redirect("/login");
 
   const { data: companion } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select(
       "id, display_name, username, verification_tier, identity_status, stripe_identity_session_id, identity_verified_at"
     )
@@ -67,7 +67,7 @@ export default async function VerificationCentrePage({
         verifiedAt = new Date().toISOString();
         const admin = createAdminClient();
         await admin
-          .from("companion_profiles")
+          .from("host_profiles")
           .update({
             identity_status: "verified",
             identity_verified_at: verifiedAt,
@@ -81,7 +81,7 @@ export default async function VerificationCentrePage({
         status = "failed";
         const admin = createAdminClient();
         await admin
-          .from("companion_profiles")
+          .from("host_profiles")
           .update({ identity_status: "failed" })
           .eq("id", companion.id);
         await admin.from("profiles").update({ kyc_status: "failed" }).eq("id", user.id);

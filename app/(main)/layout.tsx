@@ -26,7 +26,7 @@ export default async function MainLayout({
   let companionUsername: string | null = null;
   if (profile.role === "companion") {
     const { data: cp } = await supabase
-      .from("companion_profiles")
+      .from("host_profiles")
       .select("username")
       .eq("user_id", user.id)
       .maybeSingle();

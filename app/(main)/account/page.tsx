@@ -82,7 +82,7 @@ export default async function AccountPage({
     const [bookingResult, companionResult] = await Promise.all([
       supabase.from("bookings").select("id, status").eq("companion_id", user.id),
       supabase
-        .from("companion_profiles")
+        .from("host_profiles")
         .select("username, verification_tier")
         .eq("user_id", user.id)
         .single(),
@@ -170,7 +170,7 @@ export default async function AccountPage({
     unlocksResult,
     subsResult,
   ] = await Promise.all([
-    supabase.from("client_profiles").select("membership_tier").eq("user_id", user.id).single(),
+    supabase.from("profiles").select("membership_tier").eq("id", user.id).single(),
     supabase.from("follows").select("following_id").eq("follower_id", user.id),
     supabase.from("follows").select("follower_id").eq("following_id", user.id),
     supabase
@@ -209,7 +209,7 @@ export default async function AccountPage({
   ] = await Promise.all([
     followingUserIds.length > 0
       ? admin
-          .from("companion_profiles")
+          .from("host_profiles")
           .select("user_id, display_name, username")
           .in("user_id", followingUserIds)
       : Promise.resolve({
@@ -220,13 +220,13 @@ export default async function AccountPage({
       : Promise.resolve({ data: [] as { id: string; full_name: string }[] }),
     followerUserIds.length > 0
       ? admin
-          .from("companion_profiles")
+          .from("host_profiles")
           .select("user_id, username")
           .in("user_id", followerUserIds)
       : Promise.resolve({ data: [] as { user_id: string; username: string | null }[] }),
     unlockedCompanionIds.length > 0
       ? admin
-          .from("companion_profiles")
+          .from("host_profiles")
           .select("id, display_name, username")
           .in("id", unlockedCompanionIds)
       : Promise.resolve({
@@ -240,7 +240,7 @@ export default async function AccountPage({
       .limit(30),
     bookingCompanionIds.length > 0
       ? admin
-          .from("companion_profiles")
+          .from("host_profiles")
           .select("id, display_name, username")
           .in("id", bookingCompanionIds)
       : Promise.resolve({

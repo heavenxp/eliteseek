@@ -22,7 +22,7 @@ export async function createUnlockCheckout(
   if (!user) return { error: "Not authenticated." };
 
   const { data: companion } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("display_name, profile_unlock_fee, username")
     .eq("id", companionId)
     .single();
@@ -76,7 +76,7 @@ export async function createPpvCheckout(postId: string): Promise<StripeResult> {
   const { data: post } = await supabase
     .from("content_posts")
     .select(
-      "id, ppv_price, title, companion:companion_profiles!companion_id (display_name)"
+      "id, ppv_price, title, companion:host_profiles!companion_id (display_name)"
     )
     .eq("id", postId)
     .single();
@@ -130,7 +130,7 @@ export async function createSubscriptionCheckout(
   if (!user) return { error: "Not authenticated." };
 
   const { data: companion } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("display_name, subscription_price, username")
     .eq("id", companionId)
     .single();
@@ -192,7 +192,7 @@ export async function createBookingDepositCheckout(
   const { data: booking } = await supabase
     .from("bookings")
     .select(
-      "id, total_amount, booking_type, companion:companion_profiles!companion_id (display_name)"
+      "id, total_amount, booking_type, companion:host_profiles!companion_id (display_name)"
     )
     .eq("id", bookingId)
     .eq("client_id", user.id)

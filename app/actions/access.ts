@@ -33,7 +33,7 @@ export async function sendAccessRequest(
 
   // Notify companion
   const { data: cp } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("user_id")
     .eq("id", companionId)
     .single();
@@ -67,7 +67,7 @@ export async function respondToAccessRequest(
 
   // Verify ownership without a join — avoids !inner RLS collapse
   const { data: cp } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("user_id")
     .eq("id", req.companion_id)
     .eq("user_id", userId)
@@ -101,7 +101,7 @@ export async function respondToAccessRequest(
         const [clientAuthRes, companionProfileRes] = await Promise.all([
           admin.auth.admin.getUserById(req.client_id),
           supabase
-            .from("companion_profiles")
+            .from("host_profiles")
             .select("username, user_id")
             .eq("id", req.companion_id)
             .single(),

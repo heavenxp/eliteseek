@@ -20,7 +20,7 @@ export default async function SettingsPage() {
   let companion = null;
   if (profile.role === "companion") {
     const { data } = await supabase
-      .from("companion_profiles")
+      .from("host_profiles")
       .select(`
         id, visibility, profile_unlock_fee, subscription_price,
         booking_rate_hourly, bio, tagline, location, is_available,

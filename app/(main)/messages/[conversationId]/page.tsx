@@ -44,7 +44,7 @@ export default async function ConversationPage({
 
   // Fetch companion username for the back-link
   const { data: companionMeta } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("username")
     .eq("user_id", conv.companion_id)
     .maybeSingle();

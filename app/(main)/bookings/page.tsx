@@ -71,7 +71,7 @@ export default async function ClientBookingsPage() {
       notes,
       total_amount,
       created_at,
-      host:companion_profiles!companion_id (
+      host:host_profiles!companion_id (
         id,
         display_name,
         username

@@ -31,7 +31,7 @@ export default async function FeedPage({
   const [{ data: followsData }, { data: rawViewerProfile }, { data: clientProfileData }, onlineUsers] = await Promise.all([
     supabase.from("follows").select("following_id").eq("follower_id", user.id),
     createAdminClient().from("profiles").select("role, full_name, avatar_url").eq("id", user.id).single(),
-    supabase.from("client_profiles").select("client_tier").eq("user_id", user.id).maybeSingle(),
+    supabase.from("profiles").select("client_tier").eq("id", user.id).maybeSingle(),
     getOnlineUsers(),
   ]);
   const viewerClientTier: string = clientProfileData?.client_tier ?? "bronze";
@@ -105,7 +105,7 @@ export default async function FeedPage({
 
     // Companion usernames — only companions have profiles with usernames
     createAdminClient()
-      .from("companion_profiles")
+      .from("host_profiles")
       .select("user_id, username, verification_tier")
       .in("user_id", Array.from(authorIds)),
 

@@ -46,7 +46,7 @@ export default async function AdminOverviewPage() {
   ] = await Promise.all([
     supabase.from("profiles").select("*", { count: "exact", head: true }),
     supabase
-      .from("companion_profiles")
+      .from("host_profiles")
       .select("*", { count: "exact", head: true })
       .eq("is_available", true),
     supabase

@@ -34,7 +34,7 @@ async function requireCompanion() {
   if (!user) redirect("/login");
 
   const { data: companion } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("id")
     .eq("user_id", user.id)
     .single();
@@ -171,7 +171,7 @@ export async function subscribeToCompanion(
   if (!user) return { error: "Not authenticated" };
 
   const { data: companion } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("subscription_price")
     .eq("id", companionId)
     .single();

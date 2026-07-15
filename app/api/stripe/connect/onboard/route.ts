@@ -27,7 +27,7 @@ export async function GET() {
 
   // Verify this is a companion
   const { data: companion } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("id, stripe_account_id")
     .eq("user_id", user.id)
     .single();
@@ -48,7 +48,7 @@ export async function GET() {
 
     // Persist the Stripe account ID
     await supabase
-      .from("companion_profiles")
+      .from("host_profiles")
       .update({ stripe_account_id: accountId })
       .eq("id", companion.id);
   }

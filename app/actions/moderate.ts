@@ -31,7 +31,7 @@ export async function moderateProfilePhoto(
     // Clear wherever this exact URL landed (cover and/or avatar)
     await Promise.all([
       admin
-        .from("companion_profiles")
+        .from("host_profiles")
         .update({ cover_image_url: null })
         .eq("user_id", user.id)
         .eq("cover_image_url", url),

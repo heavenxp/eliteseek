@@ -31,7 +31,7 @@ async function requireCompanionOwner(
 
   // Verify ownership without a join — avoids !inner RLS collapse
   const { data: cp } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("user_id")
     .eq("id", data.companion_id)
     .eq("user_id", userId)
@@ -91,7 +91,7 @@ export async function createBookingRequest(
   const companionEarnings = +(totalAmount - platformFee).toFixed(2);
 
   const { data: hostRow } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("cancellation_policy")
     .eq("id", companionId)
     .single();
@@ -134,7 +134,7 @@ export async function createBookingRequest(
   const stripeConfigured = !!getStripe();
 
   const { data: companionProfile } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("user_id")
     .eq("id", companionId)
     .single();
@@ -298,7 +298,7 @@ export async function cancelBooking(bookingId: string): Promise<BookingState> {
   // For host: verify companion ownership
   if (!isClient) {
     const { data: cp } = await supabase
-      .from("companion_profiles")
+      .from("host_profiles")
       .select("user_id")
       .eq("id", booking.companion_id)
       .eq("user_id", userId)
@@ -320,7 +320,7 @@ export async function cancelBooking(bookingId: string): Promise<BookingState> {
   if (isClient) {
     // Notify host
     const { data: cp } = await supabase
-      .from("companion_profiles")
+      .from("host_profiles")
       .select("user_id")
       .eq("id", booking.companion_id)
       .single();

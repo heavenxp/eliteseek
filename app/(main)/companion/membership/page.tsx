@@ -21,7 +21,7 @@ export default function HostMembershipPage() {
 
       const [cpRes, bookingsRes] = await Promise.all([
         supabase
-          .from("companion_profiles")
+          .from("host_profiles")
           .select("host_tier, average_rating, total_reviews")
           .eq("user_id", user.id)
           .single(),
@@ -29,8 +29,8 @@ export default function HostMembershipPage() {
           .from("bookings")
           .select("companion_earnings, status")
           .eq("companion_id",
-            // need companion_profiles.id — fetch separately
-            (await supabase.from("companion_profiles").select("id").eq("user_id", user.id).single()).data?.id ?? ""
+            // need host_profiles.id — fetch separately
+            (await supabase.from("host_profiles").select("id").eq("user_id", user.id).single()).data?.id ?? ""
           ),
       ]);
 

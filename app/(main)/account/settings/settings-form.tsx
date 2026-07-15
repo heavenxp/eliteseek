@@ -380,7 +380,7 @@ function CompanionSettingsForm({
   function handleCoverUploaded(url: string) {
     setCurrentCoverUrl(url);
     startTransition(async () => {
-      await supabase.from("companion_profiles").update({ cover_image_url: url }).eq("id", companion.id);
+      await supabase.from("host_profiles").update({ cover_image_url: url }).eq("id", companion.id);
       // Hive scan (Phase 2) — rejected photos are removed server-side
       const { removed } = await moderateProfilePhoto(url);
       if (removed) setCurrentCoverUrl(null);

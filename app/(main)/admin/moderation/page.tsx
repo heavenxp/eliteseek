@@ -36,7 +36,7 @@ type PostRow = Pick<
   ContentPost,
   "id" | "title" | "body" | "media_urls" | "companion_id" | "created_at" | "moderation_status"
 > & {
-  companion_profiles: Pick<CompanionProfile, "display_name" | "user_id"> | null;
+  host_profiles: Pick<CompanionProfile, "display_name" | "user_id"> | null;
 };
 
 export default async function AdminModerationPage() {
@@ -46,7 +46,7 @@ export default async function AdminModerationPage() {
     .from("content_posts")
     .select(
       `id, title, body, media_urls, companion_id, created_at, moderation_status,
-       companion_profiles!companion_id(display_name, user_id)`
+       host_profiles!companion_id(display_name, user_id)`
     )
     .in("moderation_status", ["pending", "flagged"])
     .order("created_at", { ascending: false })
@@ -124,9 +124,9 @@ export default async function AdminModerationPage() {
       ) : (
         <ul className="space-y-4">
           {posts.map((post) => {
-            const cp = Array.isArray(post.companion_profiles)
-              ? post.companion_profiles[0] ?? null
-              : post.companion_profiles;
+            const cp = Array.isArray(post.host_profiles)
+              ? post.host_profiles[0] ?? null
+              : post.host_profiles;
             const companionName = cp?.display_name ?? post.companion_id;
             const mediaCount = Array.isArray(post.media_urls)
               ? post.media_urls.length

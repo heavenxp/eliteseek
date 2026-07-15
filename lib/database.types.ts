@@ -44,6 +44,11 @@ export interface Profile {
   is_admin: boolean;
   last_seen: string | null;
   searchable: boolean;
+  membership_tier: MembershipTier;
+  client_tier: ClientTier;
+  membership_expires_at: string | null;
+  stripe_customer_id: string | null;
+  stripe_subscription_id: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -78,7 +83,7 @@ export interface Follow {
   created_at: string;
 }
 
-export interface CompanionProfile {
+export interface HostProfile {
   id: string;
   user_id: string;
   display_name: string | null;
@@ -118,6 +123,9 @@ export interface CompanionProfile {
   updated_at: string;
 }
 
+// Back-compat alias (migration 028 renamed the table to host_profiles)
+export type CompanionProfile = HostProfile;
+
 export interface Service {
   name: string;
   description?: string;
@@ -125,6 +133,7 @@ export interface Service {
   duration?: string;
 }
 
+/** @deprecated dropped in migration 028 — fields merged into Profile */
 export interface ClientProfile {
   id: string;
   user_id: string;

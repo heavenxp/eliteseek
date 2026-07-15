@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
   );
 
   const { data: cp } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("user_id")
     .eq("id", companionId)
     .single();

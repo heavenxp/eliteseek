@@ -17,7 +17,7 @@ export async function updateCompanionSettings(
   if (!user) redirect("/login");
 
   const { data: companion } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("id")
     .eq("user_id", user.id)
     .single();
@@ -55,7 +55,7 @@ export async function updateCompanionSettings(
   }
 
   const { error } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .update({
       visibility: visibility || "public",
       profile_unlock_fee: profileUnlockFee && profileUnlockFee > 0 ? profileUnlockFee : null,

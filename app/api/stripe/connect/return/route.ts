@@ -19,7 +19,7 @@ export async function GET() {
   }
 
   const { data: companion } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("id, stripe_account_id")
     .eq("user_id", user.id)
     .single();
@@ -34,7 +34,7 @@ export async function GET() {
     if (account.details_submitted) {
       // Update account status to reflect onboarding is complete
       await supabase
-        .from("companion_profiles")
+        .from("host_profiles")
         .update({ stripe_account_status: "active" })
         .eq("id", companion.id);
     }

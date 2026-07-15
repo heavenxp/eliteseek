@@ -20,9 +20,9 @@ export default async function ClientOnboardingPage() {
   if (profile?.role !== "client") redirect("/onboarding/companion");
 
   const { data: clientProfile } = await supabase
-    .from("client_profiles")
+    .from("profiles")
     .select("membership_tier")
-    .eq("user_id", user.id)
+    .eq("id", user.id)
     .single();
 
   const existingInterests =

@@ -72,7 +72,7 @@ export default async function PaymentSuccessPage({
 
   if (paymentType === "unlock" && companion_id) {
     const { data: cp } = await supabase
-      .from("companion_profiles")
+      .from("host_profiles")
       .select("username")
       .eq("id", companion_id)
       .maybeSingle();

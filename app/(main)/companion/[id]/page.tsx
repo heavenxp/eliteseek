@@ -9,7 +9,7 @@ export default async function CompanionProfileRedirect({
   const { id } = await params;
 
   const { data } = await createAdminClient()
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("username")
     .eq("id", id)
     .maybeSingle();

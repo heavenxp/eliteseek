@@ -20,7 +20,7 @@ export default async function CompanionOnboardingPage() {
   if (profile?.role !== "companion") redirect("/onboarding/client");
 
   const { data: companion } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select(
       "display_name, age, location, tagline, bio, tags, languages, subscription_price, booking_rate_hourly, profile_unlock_fee, tip_menu, visibility, is_available"
     )

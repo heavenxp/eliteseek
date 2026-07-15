@@ -43,7 +43,7 @@ export default async function EarningsPage() {
 
   // Confirm companion profile exists
   const { data: companion } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("id, stripe_account_id, stripe_account_status")
     .eq("user_id", user.id)
     .single();

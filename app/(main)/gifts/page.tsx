@@ -30,7 +30,7 @@ export default async function GiftsPage({
     .select(
       `id, companion_id, name, description, price, image_url, external_url, category,
        is_purchased, purchased_by, purchased_at, created_at,
-       companion:companion_profiles!companion_id (display_name, username)`
+       companion:host_profiles!companion_id (display_name, username)`
     )
     .eq("is_purchased", false)
     .order("created_at", { ascending: false });
@@ -62,7 +62,7 @@ export default async function GiftsPage({
     .from("gifts")
     .select(
       `id, amount, message, status, created_at, virtual_gift_name,
-       recipient:companion_profiles!recipient_id (display_name, username)`
+       recipient:host_profiles!recipient_id (display_name, username)`
     )
     .eq("sender_id", user.id)
     .order("created_at", { ascending: false })

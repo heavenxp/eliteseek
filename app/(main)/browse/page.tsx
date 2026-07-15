@@ -80,7 +80,7 @@ export default async function BrowsePage({
   const [{ data, count, error }, membershipResult] = await Promise.all([
     query,
     user
-      ? supabase.from("client_profiles").select("membership_tier").eq("user_id", user.id).maybeSingle()
+      ? supabase.from("profiles").select("membership_tier").eq("id", user.id).maybeSingle()
       : Promise.resolve({ data: null }),
   ]);
 

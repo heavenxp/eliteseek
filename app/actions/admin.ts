@@ -108,13 +108,13 @@ export async function approveKyc(
     if (error) return { error: error.message };
 
     const { data: companion } = await supabase
-      .from("companion_profiles")
+      .from("host_profiles")
       .select("id, verification_tier")
       .eq("user_id", userId)
       .maybeSingle();
     if (companion) {
       await supabase
-        .from("companion_profiles")
+        .from("host_profiles")
         .update({
           identity_status: "verified",
           identity_verified_at: new Date().toISOString(),
@@ -147,7 +147,7 @@ export async function rejectKyc(
     // Keep host lifecycle state consistent; never demote an already
     // verified/select tier from here (that's a suspension, not a KYC call)
     await supabase
-      .from("companion_profiles")
+      .from("host_profiles")
       .update({ identity_status: "failed" })
       .eq("user_id", userId)
       .neq("identity_status", "verified");

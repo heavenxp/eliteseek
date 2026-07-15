@@ -47,7 +47,7 @@ export async function searchUsers({
   const companionMap = new Map<string, { username: string | null; display_name: string | null; location: string | null }>();
   if (hostIds.length > 0) {
     const { data: companions } = await admin
-      .from("companion_profiles")
+      .from("host_profiles")
       .select("user_id, username, display_name, location")
       // Phase 2: unverified hosts are never visible to clients
       .in("verification_tier", ["verified", "select"])

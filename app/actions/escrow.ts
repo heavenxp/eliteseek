@@ -30,7 +30,7 @@ export async function createBookingEscrowCheckout(
   const { data: booking } = await supabase
     .from("bookings")
     .select(
-      "id, status, escrow_status, total_amount, booking_type, scheduled_at, companion:companion_profiles!companion_id (display_name)"
+      "id, status, escrow_status, total_amount, booking_type, scheduled_at, companion:host_profiles!companion_id (display_name)"
     )
     .eq("id", bookingId)
     .eq("client_id", user.id)
@@ -89,7 +89,7 @@ async function requireBookingHost(bookingId: string) {
   const { data: booking } = await supabase
     .from("bookings")
     .select(
-      "id, client_id, status, escrow_status, scheduled_at, duration_hours, checkin_at, checkout_at, total_amount, refunded_amount, companion:companion_profiles!companion_id (id, user_id)"
+      "id, client_id, status, escrow_status, scheduled_at, duration_hours, checkin_at, checkout_at, total_amount, refunded_amount, companion:host_profiles!companion_id (id, user_id)"
     )
     .eq("id", bookingId)
     .single();
@@ -234,7 +234,7 @@ export async function cancelBookingAsClient(bookingId: string): Promise<EscrowRe
   const { data: booking } = await supabase
     .from("bookings")
     .select(
-      "id, status, escrow_status, scheduled_at, total_amount, cancellation_policy, stripe_payment_intent_id, companion:companion_profiles!companion_id (user_id)"
+      "id, status, escrow_status, scheduled_at, total_amount, cancellation_policy, stripe_payment_intent_id, companion:host_profiles!companion_id (user_id)"
     )
     .eq("id", bookingId)
     .eq("client_id", user.id)

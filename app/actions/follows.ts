@@ -30,13 +30,13 @@ export async function getFollowerList(companionUserId: string): Promise<FollowLi
 
   const [profilesRes, tiersRes, companionRes] = await Promise.all([
     admin.from("profiles").select("id, full_name").in("id", ids),
-    admin.from("client_profiles").select("user_id, membership_tier").in("user_id", ids),
-    admin.from("companion_profiles").select("user_id, username").in("user_id", ids),
+    admin.from("profiles").select("id, membership_tier").in("id", ids),
+    admin.from("host_profiles").select("user_id, username").in("user_id", ids),
   ]);
 
   const nameMap = new Map((profilesRes.data ?? []).map((p) => [p.id, p.full_name as string]));
   const tierMap = new Map(
-    (tiersRes.data ?? []).map((p) => [p.user_id, p.membership_tier as "bronze" | "silver" | "elite"])
+    (tiersRes.data ?? []).map((p) => [p.id, p.membership_tier as "bronze" | "silver" | "elite"])
   );
   const usernameMap = new Map(
     (companionRes.data ?? []).map((p) => [p.user_id, p.username as string | null])
@@ -70,7 +70,7 @@ export async function getFollowingList(companionUserId: string): Promise<FollowL
 
   const [profilesRes, companionRes] = await Promise.all([
     admin.from("profiles").select("id, full_name").in("id", ids),
-    admin.from("companion_profiles").select("user_id, username").in("user_id", ids),
+    admin.from("host_profiles").select("user_id, username").in("user_id", ids),
   ]);
 
   const nameMap = new Map((profilesRes.data ?? []).map((p) => [p.id, p.full_name as string]));

@@ -47,7 +47,7 @@ export default async function ContentFeedPage() {
     .select(
       `id, companion_id, title, body, media_urls,
        is_ppv, ppv_price, is_subscribers_only, published_at,
-       companion:companion_profiles!companion_id (
+       companion:host_profiles!companion_id (
          id, display_name, username, verification_tier,
          cover_image_url, subscription_price
        )`

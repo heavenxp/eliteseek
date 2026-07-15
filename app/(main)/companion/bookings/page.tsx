@@ -58,7 +58,7 @@ export default async function CompanionBookingsPage() {
   if (!user) redirect("/login");
 
   const { data: companion } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("id")
     .eq("user_id", user.id)
     .single();

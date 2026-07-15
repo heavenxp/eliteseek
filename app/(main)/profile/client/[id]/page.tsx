@@ -37,7 +37,7 @@ export default async function ClientProfilePage({
 
   const [profileRes, clientRes, postsRes, viewerRoleRes, followRes] = await Promise.all([
     admin.from("profiles").select("id, full_name, created_at").eq("id", id).single(),
-    admin.from("client_profiles").select("membership_tier").eq("user_id", id).maybeSingle(),
+    admin.from("profiles").select("membership_tier").eq("id", id).maybeSingle(),
     supabase
       .from("posts")
       .select("id, content, created_at, image_url, tags, audience")

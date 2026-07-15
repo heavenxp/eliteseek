@@ -55,7 +55,7 @@ export async function getStories(): Promise<StoriesResult | null> {
   const authorIds = [...new Set(storiesRaw.map((s) => s.user_id))];
   if (authorIds.length > 0) {
     const { data: hostTiers } = await admin
-      .from("companion_profiles")
+      .from("host_profiles")
       .select("user_id, verification_tier")
       .in("user_id", authorIds);
     const unverifiedHostIds = new Set(

@@ -177,7 +177,7 @@ async function handleCheckoutCompleted(
         .single();
       if (bookingRow) {
         const { data: cp } = await supabase
-          .from("companion_profiles")
+          .from("host_profiles")
           .select("user_id")
           .eq("id", bookingRow.companion_id)
           .single();
@@ -231,7 +231,7 @@ async function handleCheckoutCompleted(
 
       if (bookingRow) {
         const { data: cp } = await supabase
-          .from("companion_profiles")
+          .from("host_profiles")
           .select("user_id")
           .eq("id", bookingRow.companion_id)
           .single();
@@ -358,7 +358,7 @@ async function handleIdentityVerified(
     : { column: "stripe_identity_session_id", value: session.id };
 
   const { data: companion } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("id, user_id, verification_tier")
     .eq(match.column, match.value)
     .single();
@@ -367,7 +367,7 @@ async function handleIdentityVerified(
   // Single statement — identity_status and the visibility-gating
   // verification_tier can never diverge from this write.
   await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .update({
       identity_status: "verified",
       identity_verified_at: new Date().toISOString(),
@@ -411,14 +411,14 @@ async function handleIdentityRequiresInput(
   // requires_input = the last check failed (blurry document, mismatch, …).
   // The host can retry from the verification page, which resumes the session.
   const { data: companion } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("id, user_id, identity_status")
     .eq(match.column, match.value)
     .single();
   if (!companion || companion.identity_status === "verified") return;
 
   await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .update({ identity_status: "failed" })
     .eq("id", companion.id);
 

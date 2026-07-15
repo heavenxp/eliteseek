@@ -11,9 +11,9 @@ export default async function MembershipPage() {
   if (!user) redirect("/login");
 
   const { data: clientProfile } = await supabase
-    .from("client_profiles")
+    .from("profiles")
     .select("client_tier")
-    .eq("user_id", user.id)
+    .eq("id", user.id)
     .single();
 
   // Total spent on completed bookings

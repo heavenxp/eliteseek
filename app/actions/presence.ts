@@ -40,7 +40,7 @@ export async function getOnlineUsers(): Promise<{ hosts: OnlineUser[]; clients: 
   let usernameMap = new Map<string, string>();
   if (hostIds.length > 0) {
     const { data: companions } = await admin
-      .from("companion_profiles")
+      .from("host_profiles")
       .select("user_id, username")
       .in("user_id", hostIds);
 

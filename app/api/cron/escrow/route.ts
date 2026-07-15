@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
 
   for (const b of due ?? []) {
     const { data: cp } = await admin
-      .from("companion_profiles")
+      .from("host_profiles")
       .select("user_id, stripe_account_id, stripe_account_status")
       .eq("id", b.companion_id)
       .single();
@@ -115,7 +115,7 @@ export async function GET(req: NextRequest) {
     if (now.getTime() < end + 2 * 3600_000) continue;
 
     const { data: cp } = await admin
-      .from("companion_profiles")
+      .from("host_profiles")
       .select("user_id, display_name, trusted_contact_name, trusted_contact_email, trusted_contact_phone")
       .eq("id", b.companion_id)
       .single();

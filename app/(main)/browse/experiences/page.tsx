@@ -13,7 +13,7 @@ export default async function ExperiencesPage() {
     .from("availability_posts")
     .select(`
       *,
-      companion:companion_profiles!companion_id!inner (
+      companion:host_profiles!companion_id!inner (
         id,
         display_name,
         verification_tier,

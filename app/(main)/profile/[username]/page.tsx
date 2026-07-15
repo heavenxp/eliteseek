@@ -17,7 +17,7 @@ export async function generateMetadata({
   const { username } = await params;
 
   const { data } = await createAdminClient()
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("display_name, tagline, bio, cover_image_url, verification_tier")
     .eq("username", username)
     .single();
@@ -66,7 +66,7 @@ export default async function ProfilePage({
   } = await supabase.auth.getUser();
 
   const { data: companion } = await createAdminClient()
-    .from("companion_profiles")
+    .from("host_profiles")
     .select(
       `id, user_id, display_name, bio, tagline, location, age,
        tags, languages, verification_tier, host_tier, is_available,
@@ -241,7 +241,7 @@ export default async function ProfilePage({
       ? supabase.from("follows").select("follower_id").eq("follower_id", user.id).eq("following_id", companion.user_id).maybeSingle()
       : Promise.resolve({ data: null }),
     user
-      ? supabase.from("client_profiles").select("membership_tier").eq("user_id", user.id).maybeSingle()
+      ? supabase.from("profiles").select("membership_tier").eq("id", user.id).maybeSingle()
       : Promise.resolve({ data: null }),
     user
       ? supabase.from("access_requests").select("status").eq("client_id", user.id).eq("companion_id", companion.id).maybeSingle()

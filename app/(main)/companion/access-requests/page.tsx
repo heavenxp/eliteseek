@@ -40,7 +40,7 @@ export default async function AccessRequestsPage() {
   if (!user) redirect("/login");
 
   const { data: companion } = await supabase
-    .from("companion_profiles")
+    .from("host_profiles")
     .select("id, visibility")
     .eq("user_id", user.id)
     .single();
@@ -62,12 +62,12 @@ export default async function AccessRequestsPage() {
       ? admin.from("profiles").select("id, full_name, created_at").in("id", clientIds)
       : Promise.resolve({ data: [] as { id: string; full_name: string; created_at: string }[] }),
     clientIds.length > 0
-      ? admin.from("client_profiles").select("user_id, membership_tier, client_tier").in("user_id", clientIds)
-      : Promise.resolve({ data: [] as { user_id: string; membership_tier: MembershipTier; client_tier: string }[] }),
+      ? admin.from("profiles").select("id, membership_tier, client_tier").in("id", clientIds)
+      : Promise.resolve({ data: [] as { id: string; membership_tier: MembershipTier; client_tier: string }[] }),
   ]);
 
   const profileMap = new Map((profilesRes.data ?? []).map((p) => [p.id, p]));
-  const tierMap = new Map((tierRes.data ?? []).map((p) => [p.user_id, p]));
+  const tierMap = new Map((tierRes.data ?? []).map((p) => [p.id, p]));
 
   const requests: RequestRow[] = rawList.map((r) => {
     const profile = profileMap.get(r.client_id);

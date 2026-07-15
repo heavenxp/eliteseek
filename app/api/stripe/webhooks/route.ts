@@ -154,6 +154,50 @@ async function handleCheckoutCompleted(
       break;
     }
 
+    case "booking_escrow": {
+      const { client_id, booking_id } = meta;
+      if (!client_id || !booking_id) return;
+
+      // Full amount now held by Stripe in the platform balance; the transfer
+      // to the host happens after check-out + 48h (see /api/cron/escrow).
+      await supabase
+        .from("bookings")
+        .update({
+          escrow_status: "held",
+          paid_at: new Date().toISOString(),
+          stripe_payment_intent_id: session.payment_intent as string,
+        })
+        .eq("id", booking_id)
+        .eq("escrow_status", "unpaid");
+
+      const { data: bookingRow } = await supabase
+        .from("bookings")
+        .select("companion_id, scheduled_at")
+        .eq("id", booking_id)
+        .single();
+      if (bookingRow) {
+        const { data: cp } = await supabase
+          .from("companion_profiles")
+          .select("user_id")
+          .eq("id", bookingRow.companion_id)
+          .single();
+        if (cp) {
+          const dateStr = new Date(bookingRow.scheduled_at).toLocaleDateString("en-GB", {
+            day: "numeric",
+            month: "long",
+          });
+          await supabase.from("notifications").insert({
+            user_id: cp.user_id,
+            type: "booking_update",
+            title: "Booking paid — funds secured",
+            body: `The ${dateStr} booking is fully paid. Funds are held by Stripe and release 48h after completion.`,
+            data: { booking_id },
+          });
+        }
+      }
+      break;
+    }
+
     case "booking": {
       const { client_id, booking_id } = meta;
       if (!client_id || !booking_id) return;

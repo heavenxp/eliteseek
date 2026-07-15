@@ -6,6 +6,7 @@ export type VisibilityLevel      = "public" | "locked" | "elite_only";
 export type LockLevel            = "public" | "request" | "silver" | "elite";
 export type VerificationTier     = "unverified" | "verified" | "select";
 export type IdentityStatus       = "unverified" | "pending" | "verified" | "failed";
+export type EscrowStatus         = "unpaid" | "held" | "release_scheduled" | "released" | "refunded" | "disputed";
 export type MembershipTier       = "bronze" | "silver" | "elite";
 export type HostTier             = "pearl" | "rose" | "ruby" | "sapphire" | "diamond";
 export type ClientTier           = "bronze" | "silver" | "gold" | "platinum";
@@ -103,6 +104,10 @@ export interface CompanionProfile {
   identity_status: IdentityStatus;
   stripe_identity_session_id: string | null;
   identity_verified_at: string | null;
+  cancellation_policy: "flexible" | "moderate" | "strict";
+  trusted_contact_name: string | null;
+  trusted_contact_email: string | null;
+  trusted_contact_phone: string | null;
   moderation_strikes: number;
   is_featured: boolean;
   total_reviews: number;
@@ -182,6 +187,16 @@ export interface Booking {
   completed_at: string | null;
   review_score: number | null;
   review_text: string | null;
+  escrow_status: EscrowStatus;
+  paid_at: string | null;
+  release_at: string | null;
+  stripe_transfer_id: string | null;
+  checkin_at: string | null;
+  checkout_at: string | null;
+  disputed_at: string | null;
+  dispute_reason: string | null;
+  sos_notified_at: string | null;
+  cancellation_policy: "flexible" | "moderate" | "strict" | null;
   created_at: string;
   updated_at: string;
 }

@@ -82,14 +82,16 @@ The schema already supports a full social layer (`posts`/likes/comments/follows/
 
 **Goal: the booking flow that makes hosts choose this platform.**
 
-- [ ] Escrow payments via Stripe Connect: client pays at booking → funds held → auto-release to host after booking completion (minus 15%)
-- [ ] Dispute window (48h post-booking) before payout release
-- [ ] Booking check-in / check-out: host confirms arrival and safe completion in-app
-- [ ] Trusted-contact / SOS feature: host nominates a contact; check-in misses trigger notification
-- [ ] Hosts can decline any booking, no penalty, no reason required
-- [ ] Client ratings visible to hosts **before** accepting a booking
-- [ ] Host availability as structured data on profiles: home city + upcoming travel windows (e.g. "Based in Melbourne · Sydney Jun 7–9") — powers city-based discovery and booking
-- [ ] Cancellation policy engine (host-set: flexible/moderate/strict, Airbnb-style)
+- [x] Escrow payments via Stripe Connect: client pays at booking → funds held → auto-release to host after booking completion (minus 15%) — **Stripe-native, no custom ledger**: separate charges & transfers (full amount captured to the platform Stripe balance with transfer_group; release = stripe.transfers.create of the 85% net; refunds via stripe.refunds.create). escrow_status on bookings mirrors Stripe state. Release runs in /api/cron/escrow every 30min (vercel.json)
+- [x] Dispute window (48h post-booking) before payout release — release_at = checkout + 48h; client dispute inside the window freezes escrow and pings admins
+- [x] Booking check-in / check-out: host confirms arrival and safe completion in-app — check-out is what starts the release clock
+- [x] Trusted-contact / SOS feature: host nominates a contact; check-in misses trigger notification — trusted contact in settings; cron alerts host in-app + emails the contact (Resend) when checked-in but not checked-out 2h past scheduled end
+- [x] Hosts can decline any booking, no penalty, no reason required — pre-payment decline existed; post-payment host cancel now fully refunds the client with nothing recorded against the host
+- [x] Client ratings visible to hosts **before** accepting a booking — hosts rate clients (1–5 + note) after completion; requests show "★ 4.8 · 12 host reviews" or "New client"
+- [x] Host availability as structured data on profiles: home city + upcoming travel windows (e.g. "Based in Melbourne · Sydney Jun 7–9") — powers city-based discovery and booking (shipped with the P3 availability rebuild + browse city filter)
+- [x] Cancellation policy engine (host-set: flexible/moderate/strict, Airbnb-style) — lib/cancellation.ts; policy snapshotted per booking; client cancel refunds per policy with the remainder still released to the host
+
+⚠️ Deploy gates: apply migration 027 BEFORE pushing (bookings/companion/client_reviews columns), set `CRON_SECRET` in Vercel env, and note payouts require hosts to complete Stripe Connect onboarding (cron skips + nudges otherwise). Admin dispute-resolution UI (release vs refund) is a follow-up — disputes currently freeze funds and notify admins.
 
 **Exit criteria:** end-to-end booking with escrow works in production; safety flow tested on real devices.
 

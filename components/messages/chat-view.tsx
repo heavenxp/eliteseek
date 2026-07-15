@@ -132,11 +132,11 @@ export function ChatView({
       const ext = mediaFile.name.split(".").pop() ?? "bin";
       const path = `${currentUserId}/messages/${Date.now()}.${ext}`;
       const { data: upload, error: uploadError } = await supabase.storage
-        .from("content-media")
+        .from("shared-media")
         .upload(path, mediaFile, { upsert: false, contentType: mediaFile.type });
       setUploading(false);
       if (uploadError || !upload) { setError("Failed to upload. Please try again."); return; }
-      const { data: { publicUrl } } = supabase.storage.from("content-media").getPublicUrl(upload.path);
+      const { data: { publicUrl } } = supabase.storage.from("shared-media").getPublicUrl(upload.path);
       mediaUrl = publicUrl;
     }
 
@@ -201,11 +201,11 @@ export function ChatView({
     const supabase = createClient();
     const path = `${currentUserId}/messages/voice/${Date.now()}.${ext}`;
     const { data: upload, error } = await supabase.storage
-      .from("content-media")
+      .from("shared-media")
       .upload(path, blob, { upsert: false, contentType: mimeType });
 
     if (error || !upload) { setUploading(false); setError("Failed to send voice message."); return; }
-    const { data: { publicUrl } } = supabase.storage.from("content-media").getPublicUrl(upload.path);
+    const { data: { publicUrl } } = supabase.storage.from("shared-media").getPublicUrl(upload.path);
 
     // Optimistically add with the real public URL so the audio player is immediately usable
     const tempMsg: Message = {

@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ContentFeedClient } from "@/components/content/content-feed-client";
 import { stripeConfigured } from "@/lib/stripe";
+import { signPaths, applySignedUrls, stripMediaItems } from "@/lib/content-media";
 import type { MediaItem } from "@/app/actions/content";
 
 export type FeedPost = {
@@ -85,23 +86,43 @@ export default async function ContentFeedPage() {
     (subsResult.data ?? []).map((s) => s.companion_id)
   );
 
-  const posts: FeedPost[] = (rawPosts ?? []).map((p) => {
+  // Paywall enforcement (Phase 3): media lives in a private bucket. Unlocked
+  // posts get short-lived signed URLs (one batched call); locked posts ship
+  // no URLs at all — the client renders placeholders, not blurred originals.
+  const entitled = (rawPosts ?? []).map((p) => {
+    const isPurchased = purchasedPostIds.has(p.id);
+    const isSubscribed = subscribedCompanionIds.has(p.companion_id);
+    const unlocked =
+      isPurchased || isSubscribed || (!p.is_ppv && !p.is_subscribers_only);
+    return { p, isPurchased, isSubscribed, unlocked };
+  });
+
+  const urlByPath = await signPaths(
+    entitled.flatMap(({ p, unlocked }) =>
+      unlocked
+        ? ((p.media_urls ?? []) as unknown as MediaItem[]).map((m) => m.storage_path)
+        : []
+    )
+  );
+
+  const posts: FeedPost[] = entitled.map(({ p, isPurchased, isSubscribed, unlocked }) => {
     const companion = Array.isArray(p.companion)
       ? (p.companion[0] ?? null)
       : p.companion;
+    const rawMedia = (p.media_urls ?? []) as unknown as MediaItem[];
     return {
       id: p.id,
       companion_id: p.companion_id,
       title: p.title,
-      body: p.body,
-      media: (p.media_urls ?? []) as unknown as MediaItem[],
+      body: unlocked ? p.body : null,
+      media: unlocked ? applySignedUrls(rawMedia, urlByPath) : stripMediaItems(rawMedia),
       is_ppv: p.is_ppv,
       ppv_price: p.ppv_price,
       is_subscribers_only: p.is_subscribers_only,
       published_at: p.published_at!,
       companion: companion as FeedPost["companion"],
-      isPurchased: purchasedPostIds.has(p.id),
-      isSubscribed: subscribedCompanionIds.has(p.companion_id),
+      isPurchased,
+      isSubscribed,
     };
   });
 

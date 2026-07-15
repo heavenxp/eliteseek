@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Icon } from "@/components/icons";
 import { DeleteContentButton } from "./delete-content-button";
+import { signPaths, applySignedUrls } from "@/lib/content-media";
 import type { ContentPost } from "@/lib/database.types";
 import type { MediaItem } from "@/app/actions/content";
 
@@ -28,6 +29,19 @@ export default async function ContentStudioPage() {
     .order("created_at", { ascending: false });
 
   const allPosts = (posts ?? []) as ContentPost[];
+
+  // content-media is private (migration 026) — sign the owner's thumbnails
+  const urlByPath = await signPaths(
+    allPosts.flatMap((p) =>
+      ((p.media_urls as unknown as MediaItem[]) ?? []).map((m) => m.storage_path)
+    )
+  );
+  for (const p of allPosts) {
+    p.media_urls = applySignedUrls(
+      ((p.media_urls as unknown as MediaItem[]) ?? []),
+      urlByPath
+    ) as unknown as ContentPost["media_urls"];
+  }
 
   const stats = {
     total: allPosts.length,

@@ -52,7 +52,7 @@ export function CreateEventForm({ userId }: Props) {
       const ext = coverFile.name.split(".").pop() ?? "jpg";
       const path = `${userId}/events/${Date.now()}.${ext}`;
       const { data: upload, error: uploadErr } = await supabase.storage
-        .from("content-media")
+        .from("shared-media")
         .upload(path, coverFile, { upsert: false });
 
       if (uploadErr || !upload) {
@@ -61,7 +61,7 @@ export function CreateEventForm({ userId }: Props) {
         return;
       }
       const { data: { publicUrl } } = supabase.storage
-        .from("content-media")
+        .from("shared-media")
         .getPublicUrl(upload.path);
       cover_image_url = publicUrl;
     }

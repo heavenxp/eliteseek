@@ -48,7 +48,7 @@ export function StoryCreateSheet({ userId, onClose, onCreated }: Props) {
       const path = `${userId}/stories/${Date.now()}.${ext}`;
 
       const { data: uploadData, error: uploadError } = await supabase.storage
-        .from("content-media")
+        .from("shared-media")
         .upload(path, file, { upsert: false });
 
       if (uploadError || !uploadData) {
@@ -58,7 +58,7 @@ export function StoryCreateSheet({ userId, onClose, onCreated }: Props) {
       }
 
       const { data: { publicUrl } } = supabase.storage
-        .from("content-media")
+        .from("shared-media")
         .getPublicUrl(uploadData.path);
 
       const result = await createStory(publicUrl, mediaType, audience);

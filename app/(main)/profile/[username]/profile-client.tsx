@@ -131,7 +131,8 @@ export function ProfileBody({
     .map((p) => ({ url: p.image_url, post: p }));
   const videoItems = contentPosts.flatMap((p) =>
     (Array.isArray(p.media_urls) ? p.media_urls : [])
-      .filter((m) => m.type.includes("video"))
+      // Locked posts arrive with stripped URLs (server-enforced paywall)
+      .filter((m) => m.type.includes("video") && m.url)
       .map((m) => ({ ...m, post: p }))
   );
 

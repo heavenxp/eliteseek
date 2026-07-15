@@ -147,12 +147,12 @@ export function EventChat({ eventId, currentUserId, currentUserName, currentUser
       const ext = mediaFile.name.split(".").pop() ?? "bin";
       const path = `${currentUserId}/event-messages/${Date.now()}.${ext}`;
       const { data: upload, error } = await supabase.storage
-        .from("content-media")
+        .from("shared-media")
         .upload(path, mediaFile, { upsert: false, contentType: mediaFile.type });
       setUploading(false);
 
       if (error || !upload) return;
-      const { data: { publicUrl } } = supabase.storage.from("content-media").getPublicUrl(upload.path);
+      const { data: { publicUrl } } = supabase.storage.from("shared-media").getPublicUrl(upload.path);
       mediaUrl = publicUrl;
     }
 
@@ -208,10 +208,10 @@ export function EventChat({ eventId, currentUserId, currentUserName, currentUser
     const ext = mimeType.includes("webm") ? "webm" : "m4a";
     const path = `events/${eventId}/voice/${Date.now()}.${ext}`;
     const { data: upload, error } = await supabase.storage
-      .from("content-media")
+      .from("shared-media")
       .upload(path, blob, { upsert: false, contentType: mimeType });
     if (!error && upload) {
-      const { data: { publicUrl } } = supabase.storage.from("content-media").getPublicUrl(upload.path);
+      const { data: { publicUrl } } = supabase.storage.from("shared-media").getPublicUrl(upload.path);
       await sendMessage(eventId, null, "voice", publicUrl);
     }
     setUploading(false);

@@ -5,6 +5,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { stripeConfigured } from "@/lib/stripe";
 import { ProfileBody } from "./profile-client";
 import { VerifyIdentityBanner } from "@/components/profile/verify-identity-banner";
+import { signPaths, applySignedUrls, stripMediaItems } from "@/lib/content-media";
+import type { MediaItem } from "@/app/actions/content";
 import type { AvailabilityPost } from "@/lib/database.types";
 
 export async function generateMetadata({
@@ -113,12 +115,23 @@ export default async function ProfilePage({
   const contentPosts = (contentPostsResult.data ?? []) as Array<{
     id: string;
     title: string | null;
-    media_urls: Array<{ url: string; type: string }>;
+    media_urls: Array<{ url: string; type: string; storage_path?: string }>;
     is_ppv: boolean;
     ppv_price: number | null;
     is_subscribers_only: boolean;
     published_at: string | null;
   }>;
+
+  // Paywall enforcement (Phase 3): content-media is a private bucket.
+  // Owners get everything signed; visitors are gated per post below.
+  if (isOwner) {
+    const ownerUrls = await signPaths(
+      contentPosts.flatMap((p) => p.media_urls.map((m) => m.storage_path ?? ""))
+    );
+    for (const p of contentPosts) {
+      p.media_urls = applySignedUrls(p.media_urls as MediaItem[], ownerUrls);
+    }
+  }
 
   if (isOwner) {
     // ── Owner: fetch dashboard stats ──────────────────────────────
@@ -246,6 +259,37 @@ export default async function ProfilePage({
   const accessRequestStatus = accessResult.data?.status ?? null;
   const isSubscribed = !!subResult.data;
   const hasUnlocked = !!unlockResult.data;
+
+  // Per-post paywall gating for the visitor's content previews
+  const ppvIds = contentPosts.filter((p) => p.is_ppv).map((p) => p.id);
+  const { data: purchases } =
+    user && ppvIds.length > 0
+      ? await supabase
+          .from("content_purchases")
+          .select("post_id")
+          .eq("client_id", user.id)
+          .in("post_id", ppvIds)
+      : { data: [] };
+  const purchasedIds = new Set((purchases ?? []).map((r) => r.post_id));
+
+  const visitorUrls = await signPaths(
+    contentPosts.flatMap((p) => {
+      const unlocked =
+        (!p.is_ppv && !p.is_subscribers_only) ||
+        (p.is_ppv && purchasedIds.has(p.id)) ||
+        (p.is_subscribers_only && isSubscribed);
+      return unlocked ? p.media_urls.map((m) => m.storage_path ?? "") : [];
+    })
+  );
+  for (const p of contentPosts) {
+    const unlocked =
+      (!p.is_ppv && !p.is_subscribers_only) ||
+      (p.is_ppv && purchasedIds.has(p.id)) ||
+      (p.is_subscribers_only && isSubscribed);
+    p.media_urls = unlocked
+      ? applySignedUrls(p.media_urls as MediaItem[], visitorUrls)
+      : stripMediaItems(p.media_urls as MediaItem[]);
+  }
 
   const isFullyVisible =
     lockStatus === "public" ||

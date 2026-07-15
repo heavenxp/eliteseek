@@ -230,6 +230,16 @@ function MediaDisplay({
 }) {
   const cls = `w-full ${blurred ? "blur-xl scale-105 brightness-50" : ""}`;
 
+  // Locked posts ship no URL at all (paywall is server-enforced) — render a
+  // placeholder for the lock overlay to sit on.
+  if (!item.url) {
+    return (
+      <div
+        className={`companion-placeholder w-full ${item.type === "video" ? "aspect-video" : "aspect-[4/3]"}`}
+      />
+    );
+  }
+
   if (item.type === "video") {
     return (
       <video

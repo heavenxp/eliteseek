@@ -57,8 +57,8 @@ The schema already supports a full social layer (`posts`/likes/comments/follows/
 **Exit criteria:** no unverified host visible, no unverified client can book, moderation pipeline live.
 
 ### Deferred ops (external config, not code)
+- [ ] **Hive — do this first** (thehive.ai → create account → API key → `HIVE_API_KEY` in Vercel env). The entire moderation pipeline (content, feed, stories, messages, photos) is live but INACTIVE without it — everything auto-approves as "unscanned". Verification-and-safety is the positioning; this is the gap that matters most. Requires a human signup (Claude can't create third-party accounts).
 - [ ] Stripe dashboard: enable Stripe Identity; add `identity.verification_session.verified` + `identity.verification_session.requires_input` to the webhook endpoint events; then run one real host + one real client verification end-to-end
-- [ ] Hive: create account, set `HIVE_API_KEY` in Vercel env — until then scans are "unscanned" and content auto-approves (decisions still logged to moderation_log)
 
 > **Reordered 14 Jul 2026:** the Content Engine now comes before Safe Bookings — finish all product surface first; payment/escrow work sits just before the design pass.
 
@@ -69,7 +69,8 @@ The schema already supports a full social layer (`posts`/likes/comments/follows/
 - [ ] Subscriptions (min $9.99/mo), PPV ($3 min), profile unlocks ($10) — per existing pricing model, creator-set above minimums
 - [ ] Studio view: content upload, pricing, subscriber management, earnings dashboard
 - [ ] Browse feed with discovery (city, category, verified-only filter)
-- [ ] Content stays behind paywall + Hive scan before publish
+- [ ] Content stays behind paywall + Hive scan before publish — code complete, pending migration 026 + deploy: `content-media` bucket flips private (Supabase advisor: public bucket let anyone enumerate paywalled files); media served via server-signed 2h URLs only after a per-post entitlement check; locked posts ship NO urls/body to the client (old UI blurred the real files — a paywall bypass); new public `shared-media` bucket for stories/chat/events media (6 legacy prod files already copied + rows repointed via storage API)
+- [x] Fix SECURITY DEFINER views (Supabase ERROR-level): `companion_cards` + `client_membership` flip to security_invoker in migration 026 — definer semantics bypassed base-table RLS; client_membership exposed stripe_customer_id and has no code consumers; companion_cards' only consumer (authed browse) is covered by base policies
 - [ ] Stories viewer: rebuilt UI (per Quality bar), story media routed through the same Hive moderation pipeline before going live
 - [ ] Event group chat: rebuilt UI (per Quality bar) for events / invite codes / group messages, event messages routed through the same Hive moderation pipeline
 - [ ] Availability display: rebuilt UI (per Quality bar) for availability_posts on profiles and discovery, availability post content routed through the same Hive moderation pipeline

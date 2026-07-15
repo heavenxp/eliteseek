@@ -101,11 +101,11 @@ The schema already supports a full social layer (`posts`/likes/comments/follows/
 
 > **Direction settled 15 Jul 2026:** evolve the existing dark theme — the "baby blue glassmorphism" reference came from a superseded pre-rebuild design doc and is removed. Target: simple, clean, modern dark UI (mainstream social-app clarity — flat surfaces, strong typography, generous spacing), not ornate luxury. **Simplicity is the premium signal.**
 
-- [ ] Theme evolution: keep near-black base; demote gold from decoration to **signal only** (verified seal, logo, primary CTAs) — strip it from borders, glows, and background gradients. Cormorant stays for brand/display type, DM Sans for everything else
-- [ ] Kill the marketing landing entirely: root behaves like a social app — signed-in → feed, signed-out → login as the front door (logo, one-line positioning "Verified companion bookings & content — invite-only, Melbourne first", login form, signup link, legally required age-verification footer line). Old landing routes redirect to /login
+- [x] Theme evolution: near-black base, flat surfaces, signal-only brand color — completed, then color pivoted gold → azure #4c9eff (Bluesky-family) per direction; token names keep "gold" (naming debt). Cormorant display + DM Sans
+- [x] Kill the marketing landing entirely: root behaves like a social app — signed-in → /feed, signed-out → /login front door with positioning line + legal age-verification footer; GuestLanding + data/landing deleted; verified live (/ 307s to /login in prod)
 - [ ] shadcn/ui components integrated where wanted (see UI notes below)
-- [ ] Host profile layout modeled on Bluesky's profile structure (open source, safe to draw from): banner + overlapping avatar, tight name/bio block, stat row, availability line, tabs (Posts / Media / About), card feed — restyled entirely in EliteSeek tokens. Borrow the layout only: no photos, bio wording, or advertising conventions from any real profile; host copy stays in Airbnb-experience territory
-- [ ] Copy pass — now in events/host/guest language per PIVOT.md (replaces the companion/booking register); tone still Airbnb-Experiences warmth, never dating-app
+- [x] Host profile layout modeled on Bluesky's profile structure: banner + overlapping avatar, tight name block (age/tags → About), stat row, availability line, tabs Posts / Events / Media / About — verified in-browser
+- [x] Copy pass — events/host/guest language per PIVOT.md: all "Elite Host" copy → host/hosts, metadata/manifest/browse/signup repositioned ("Real events, verified people", Join as Guest/Host); full booking-flow + email copy continues into Phase 6's events rework
 - [ ] Membership tier info stays inside the app, pricing never on profiles (per original decisions)
 
 ## Phases 6–8 — see PIVOT.md §4

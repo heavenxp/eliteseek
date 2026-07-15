@@ -107,7 +107,7 @@ export function CreateEventForm({ userId }: Props) {
             onClick={() => fileInputRef.current?.click()}
             className="flex h-44 w-full flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-white/10 bg-white/[0.04] hover:border-white/20 hover:bg-white/[0.04] transition-colors"
           >
-            <svg className="h-8 w-8 text-[#d4af37]/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.4}>
+            <svg className="h-8 w-8 text-gold/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.4}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
             </svg>
             <span className="text-xs text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
@@ -228,7 +228,7 @@ export function CreateEventForm({ userId }: Props) {
               className={[
                 "flex-1 rounded-xl border py-2.5 text-sm capitalize transition-colors",
                 visibility === v
-                  ? "border-white/20 bg-white/[0.07] text-[#d4af37]"
+                  ? "border-white/20 bg-white/[0.07] text-gold"
                   : "border-white/[0.08] text-white/40 hover:border-white/20 hover:text-white/60",
               ].join(" ")}
               style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -253,7 +253,7 @@ export function CreateEventForm({ userId }: Props) {
       <button
         type="submit"
         disabled={submitting}
-        className="w-full rounded-xl bg-[#d4af37] py-3 text-sm font-semibold text-black hover:bg-[#c9a432] transition-colors disabled:opacity-40"
+        className="w-full rounded-xl bg-gold py-3 text-sm font-semibold text-black hover:bg-gold-light transition-colors disabled:opacity-40"
         style={{ fontFamily: "var(--font-dm-sans)" }}
       >
         {submitting ? "Creating…" : "Create Event"}

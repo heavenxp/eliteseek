@@ -161,7 +161,7 @@ export default async function AdminOverviewPage() {
             Recent Signups
           </h2>
           {recentUsers.data && recentUsers.data.length > 0 ? (
-            <ul className="divide-y divide-[rgba(212,175,55,0.08)]">
+            <ul className="divide-y divide-white/[0.06]">
               {(recentUsers.data as Pick<Profile, "id" | "full_name" | "role" | "created_at">[]).map(
                 (u) => (
                   <li key={u.id} className="flex items-center justify-between py-3">
@@ -203,7 +203,7 @@ export default async function AdminOverviewPage() {
             Pending Moderation
           </h2>
           {pendingMod.data && pendingMod.data.length > 0 ? (
-            <ul className="divide-y divide-[rgba(212,175,55,0.08)]">
+            <ul className="divide-y divide-white/[0.06]">
               {(
                 pendingMod.data as Pick<
                   ContentPost,
@@ -248,7 +248,7 @@ export default async function AdminOverviewPage() {
             Pending KYC
           </h2>
           {pendingKyc.data && pendingKyc.data.length > 0 ? (
-            <ul className="divide-y divide-[rgba(212,175,55,0.08)]">
+            <ul className="divide-y divide-white/[0.06]">
               {(
                 pendingKyc.data as Pick<Profile, "id" | "full_name" | "created_at">[]
               ).map((p) => (

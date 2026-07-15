@@ -93,7 +93,7 @@ export default async function AdminKycPage() {
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[rgba(212,175,55,0.06)]">
+              <tbody className="divide-y divide-white/[0.06]">
                 {profiles.map((p) => (
                   <tr
                     key={p.id}

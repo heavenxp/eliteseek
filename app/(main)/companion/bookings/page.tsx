@@ -144,7 +144,7 @@ export default async function CompanionBookingsPage() {
         </div>
         <Link
           href="/events"
-          className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-[#d4af37]/80 hover:bg-white/[0.07] hover:text-[#d4af37] transition-colors"
+          className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-gold/80 hover:bg-white/[0.07] hover:text-gold transition-colors"
           style={{ fontFamily: "var(--font-dm-sans)" }}
         >
           Events

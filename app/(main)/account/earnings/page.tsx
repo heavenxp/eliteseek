@@ -243,7 +243,7 @@ export default async function EarningsPage() {
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[rgba(212,175,55,0.06)]">
+                <tbody className="divide-y divide-white/[0.06]">
                   {recentTx.map((tx) => (
                     <tr
                       key={tx.id}

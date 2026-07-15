@@ -198,7 +198,7 @@ export function ConversationSidebar({ userId, initialConversations, events = [] 
                               // eslint-disable-next-line @next/next/no-img-element
                               <img src={ev.cover_image_url} alt="" className="h-full w-full object-cover" />
                             ) : (
-                              <span className="text-base font-light text-[#d4af37]/40" style={{ fontFamily: "var(--font-cormorant)" }}>
+                              <span className="text-base font-light text-gold/40" style={{ fontFamily: "var(--font-cormorant)" }}>
                                 {ev.title.charAt(0)}
                               </span>
                             )}

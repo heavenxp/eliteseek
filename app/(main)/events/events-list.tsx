@@ -90,7 +90,7 @@ export function EventsList({ events, joinedEventIds, currentUserId }: Props) {
                     ) : (
                       <div className="flex h-full items-center justify-center">
                         <span
-                          className="text-5xl font-light text-[#d4af37]/20"
+                          className="text-5xl font-light text-gold/20"
                           style={{ fontFamily: "var(--font-cormorant)" }}
                         >
                           {event.title.charAt(0)}
@@ -155,7 +155,7 @@ export function EventsList({ events, joinedEventIds, currentUserId }: Props) {
                         <button
                           onClick={() => handleJoin(event.id)}
                           disabled={joining === event.id}
-                          className="rounded-full bg-white/[0.07] border border-white/20 px-3 py-1 text-xs text-[#d4af37] hover:bg-white/[0.07] transition-colors disabled:opacity-40"
+                          className="rounded-full bg-white/[0.07] border border-white/20 px-3 py-1 text-xs text-gold hover:bg-white/[0.07] transition-colors disabled:opacity-40"
                           style={{ fontFamily: "var(--font-dm-sans)" }}
                         >
                           {joining === event.id ? "Joining…" : "Join"}
@@ -163,7 +163,7 @@ export function EventsList({ events, joinedEventIds, currentUserId }: Props) {
                       )
                     )}
                     {isCreator && (
-                      <span className="rounded-full bg-white/[0.07] px-3 py-1 text-xs text-[#d4af37]/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                      <span className="rounded-full bg-white/[0.07] px-3 py-1 text-xs text-gold/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
                         Your event
                       </span>
                     )}

@@ -23,19 +23,19 @@ function baseLayout(content: string) {
   <title>EliteSeek</title>
   <style>
     body { margin: 0; padding: 0; background: #080810; font-family: 'DM Sans', Arial, sans-serif; color: #c9c2b4; }
-    .wrapper { max-width: 560px; margin: 40px auto; background: #0f0f1a; border: 1px solid rgba(212,175,55,0.15); border-radius: 16px; overflow: hidden; }
-    .header { padding: 28px 32px 20px; border-bottom: 1px solid rgba(212,175,55,0.1); }
-    .logo { font-size: 22px; font-weight: 300; color: #d4af37; letter-spacing: 0.04em; }
+    .wrapper { max-width: 560px; margin: 40px auto; background: #0f0f1a; border: 1px solid rgba(76,158,255,0.15); border-radius: 16px; overflow: hidden; }
+    .header { padding: 28px 32px 20px; border-bottom: 1px solid rgba(76,158,255,0.1); }
+    .logo { font-size: 22px; font-weight: 300; color: #4c9eff; letter-spacing: 0.04em; }
     .body { padding: 28px 32px; }
     h2 { margin: 0 0 12px; font-size: 20px; font-weight: 300; color: #e8e2d9; }
     p { margin: 0 0 14px; font-size: 14px; line-height: 1.6; color: #9a9080; }
-    .detail-box { background: rgba(212,175,55,0.06); border: 1px solid rgba(212,175,55,0.1); border-radius: 10px; padding: 16px 20px; margin: 18px 0; }
+    .detail-box { background: rgba(76,158,255,0.06); border: 1px solid rgba(76,158,255,0.1); border-radius: 10px; padding: 16px 20px; margin: 18px 0; }
     .detail-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; }
     .detail-row:last-child { margin-bottom: 0; }
     .detail-label { color: #6b6358; }
     .detail-value { color: #c9c2b4; }
-    .cta { display: inline-block; margin-top: 4px; padding: 12px 24px; background: #d4af37; color: #080810; border-radius: 10px; font-size: 14px; font-weight: 500; text-decoration: none; }
-    .footer { padding: 16px 32px; border-top: 1px solid rgba(212,175,55,0.08); font-size: 11px; color: #403830; text-align: center; }
+    .cta { display: inline-block; margin-top: 4px; padding: 12px 24px; background: #4c9eff; color: #080810; border-radius: 10px; font-size: 14px; font-weight: 500; text-decoration: none; }
+    .footer { padding: 16px 32px; border-top: 1px solid rgba(76,158,255,0.08); font-size: 11px; color: #403830; text-align: center; }
   </style>
 </head>
 <body>
@@ -141,7 +141,7 @@ export async function sendBookingResponseEmail({
     <p>Hello ${clientName},</p>
     ${
       isConfirmed
-        ? `<p>Great news — <strong style="color:#d4af37">${companionName}</strong> has confirmed your booking.</p>`
+        ? `<p>Great news — <strong style="color:#4c9eff">${companionName}</strong> has confirmed your booking.</p>`
         : `<p><strong style="color:#c9c2b4">${companionName}</strong> was unable to accommodate your booking request at this time.</p>`
     }
     <div class="detail-box">
@@ -191,7 +191,7 @@ export async function sendSubscriptionConfirmationEmail({
 
   const html = baseLayout(`
     <h2>Subscription Active</h2>
-    <p>Hello ${clientName}, you are now subscribed to <strong style="color:#d4af37">${companionName}</strong>'s exclusive content.</p>
+    <p>Hello ${clientName}, you are now subscribed to <strong style="color:#4c9eff">${companionName}</strong>'s exclusive content.</p>
     <div class="detail-box">
       <div class="detail-row"><span class="detail-label">Host</span><span class="detail-value">${companionName}</span></div>
       <div class="detail-row"><span class="detail-label">Monthly Rate</span><span class="detail-value">$${pricePerMonth.toFixed(2)} / month</span></div>
@@ -233,7 +233,7 @@ export async function sendAccessApprovalEmail({
 
   const html = baseLayout(`
     <h2>Profile Access Granted</h2>
-    <p>Hello ${clientName}, your request to view <strong style="color:#d4af37">${companionName}</strong>'s private profile has been approved.</p>
+    <p>Hello ${clientName}, your request to view <strong style="color:#4c9eff">${companionName}</strong>'s private profile has been approved.</p>
     <p>You now have full access to their portfolio, availability, and contact details.</p>
     <a href="${profileUrl}" class="cta">View Profile</a>
   `);

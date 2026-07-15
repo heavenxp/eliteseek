@@ -51,7 +51,7 @@ export default function HostMembershipPage() {
   if (!data) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-white/20 border-t-[#d4af37]" />
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-white/20 border-t-gold" />
       </div>
     );
   }

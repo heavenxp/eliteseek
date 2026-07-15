@@ -43,7 +43,7 @@ export default async function EventsPage() {
           </Link>
           <Link
             href="/events/create"
-            className="rounded-xl bg-[#d4af37] px-4 py-2 text-sm font-semibold text-black hover:bg-[#c9a432] transition-colors"
+            className="rounded-xl bg-gold px-4 py-2 text-sm font-semibold text-black hover:bg-gold-light transition-colors"
             style={{ fontFamily: "var(--font-dm-sans)" }}
           >
             + Create

@@ -92,7 +92,7 @@ function ProgressDots({ step }: { step: number }) {
                   active
                     ? "border-white/20 bg-white/[0.07] text-gold"
                     : done
-                    ? "border-white/20 bg-[#d4af37] text-[#080810]"
+                    ? "border-white/20 bg-gold text-[#080810]"
                     : "border-[rgba(255,255,255,0.1)] text-muted/40",
                 ].join(" ")}
                 style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -252,13 +252,13 @@ export function ClientOnboarding({
             className={[
               "relative w-full rounded-xl border p-4 text-left transition-all duration-200",
               active
-                ? "border-white/20 bg-white/[0.04] shadow-[0_0_20px_rgba(212,175,55,0.08)]"
+                ? "border-white/20 bg-white/[0.04]"
                 : "border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] hover:border-white/10",
             ].join(" ")}
           >
             {opt.highlighted && (
               <span
-                className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-[#d4af37] px-3 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[#080810]"
+                className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-gold px-3 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[#080810]"
                 style={{ fontFamily: "var(--font-dm-sans)" }}
               >
                 Most Popular

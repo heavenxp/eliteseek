@@ -60,7 +60,7 @@ export function PostCard({ post, companion, onBook }: PostCardProps) {
         "group overflow-hidden rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.02)] transition-all duration-300",
         post.is_booked
           ? "opacity-60"
-          : "hover:border-white/20 hover:shadow-[0_8px_32px_rgba(212,175,55,0.06)]",
+          : "hover:border-white/20",
       ].join(" ")}
     >
       {/* Category ribbon */}

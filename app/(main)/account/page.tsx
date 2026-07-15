@@ -355,7 +355,7 @@ export default async function AccountPage({
 
       {/* Cover */}
       <div className="relative h-44 w-full overflow-hidden md:h-56">
-        <div className="h-full w-full bg-gradient-to-br from-[rgba(212,175,55,0.06)] via-[rgba(20,10,40,0.8)] to-[rgba(8,8,16,1)]" />
+        <div className="h-full w-full bg-white/[0.03]" />
         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[rgba(8,8,16,1)] to-transparent" />
       </div>
 
@@ -899,7 +899,7 @@ function CompanionLinks() {
     { href: "/account/settings", icon: "camera", label: "Settings", desc: "Profile & pricing" },
   ];
   return (
-    <ul className="divide-y divide-[rgba(212,175,55,0.08)]">
+    <ul className="divide-y divide-white/[0.06]">
       {links.map((link) => (
         <li key={link.href}>
           <Link

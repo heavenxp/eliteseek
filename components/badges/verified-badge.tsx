@@ -39,8 +39,8 @@ export function VerifiedBadge({ tier, size = "md", showLabel = false, className 
           <polygon points={SEAL_POINTS} fill={`url(#${gradientId})`} />
           <defs>
             <linearGradient id={gradientId} x1="0" y1="0" x2="24" y2="24">
-              <stop offset="0" stopColor="#e8cd6a" />
-              <stop offset="1" stopColor="#b8922a" />
+              <stop offset="0" stopColor="var(--gold-light)" />
+              <stop offset="1" stopColor="#2b7fe0" />
             </linearGradient>
           </defs>
           <path
@@ -56,15 +56,15 @@ export function VerifiedBadge({ tier, size = "md", showLabel = false, className 
         <>
           <polygon
             points={SEAL_POINTS}
-            fill="rgba(212,175,55,0.14)"
-            stroke="#d4af37"
+            fill="var(--gold-dim)"
+            stroke="var(--gold)"
             strokeWidth="1.4"
             strokeLinejoin="round"
           />
           <path
             d="M7.5 12.2l3 3 6-6.2"
             fill="none"
-            stroke="#d4af37"
+            stroke="var(--gold)"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"

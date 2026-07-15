@@ -233,12 +233,12 @@ function RoleCard({
       className={[
         "relative flex flex-col items-center gap-2 rounded-xl border px-4 py-4 text-center transition-all duration-200",
         selected
-          ? "border-white/20 bg-white/[0.04] shadow-[0_0_20px_rgba(212,175,55,0.1)]"
+          ? "border-white/20 bg-white/[0.04]"
           : "border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.02)] hover:border-white/20 hover:bg-white/[0.04]",
       ].join(" ")}
     >
       {selected && (
-        <span className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-[#d4af37]">
+        <span className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-gold">
           <Icon name="check" className="h-2.5 w-2.5 text-[#080810]" />
         </span>
       )}

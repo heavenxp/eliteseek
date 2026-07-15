@@ -333,7 +333,7 @@ export function StoryViewer({ groups, initialGroupIndex, currentUserId, onClose 
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={group.avatarUrl} alt="" className="h-full w-full object-cover" />
               ) : (
-                <span className="text-sm font-medium text-[#d4af37]/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <span className="text-sm font-medium text-gold/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
                   {group.displayName.charAt(0).toUpperCase()}
                 </span>
               )}

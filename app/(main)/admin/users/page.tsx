@@ -157,7 +157,7 @@ export default async function AdminUsersPage({
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[rgba(212,175,55,0.06)]">
+              <tbody className="divide-y divide-white/[0.06]">
                 {users.map((u) => (
                   <tr key={u.id} className="hover:bg-white/[0.04] transition-colors">
                     <td className="px-4 py-3 text-foreground/80">{u.full_name}</td>

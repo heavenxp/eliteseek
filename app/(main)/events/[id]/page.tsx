@@ -54,7 +54,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
         </p>
         <Link
           href="/events/join"
-          className="mt-6 inline-block rounded-xl bg-[#d4af37] px-6 py-2.5 text-sm font-semibold text-black hover:bg-[#c9a432] transition-colors"
+          className="mt-6 inline-block rounded-xl bg-gold px-6 py-2.5 text-sm font-semibold text-black hover:bg-gold-light transition-colors"
           style={{ fontFamily: "var(--font-dm-sans)" }}
         >
           Enter Invite Code
@@ -98,7 +98,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
           <img src={event.cover_image_url} alt="" className="h-full w-full object-cover" />
         ) : (
           <div className="flex h-full items-center justify-center">
-            <span className="text-7xl font-light text-[#d4af37]/15" style={{ fontFamily: "var(--font-cormorant)" }}>
+            <span className="text-7xl font-light text-gold/15" style={{ fontFamily: "var(--font-cormorant)" }}>
               {event.title.charAt(0)}
             </span>
           </div>
@@ -157,13 +157,13 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={m.profile.avatar_url} alt="" className="h-full w-full object-cover" />
                 ) : (
-                  <span className="text-[10px] font-medium text-[#d4af37]/60">
+                  <span className="text-[10px] font-medium text-gold/60">
                     {(m.profile?.full_name ?? "?").charAt(0).toUpperCase()}
                   </span>
                 )}
               </div>
               {m.role === "host" && (
-                <span className="text-[10px] text-[#d4af37]/50" style={{ fontFamily: "var(--font-dm-sans)" }}>Host</span>
+                <span className="text-[10px] text-gold/50" style={{ fontFamily: "var(--font-dm-sans)" }}>Host</span>
               )}
             </div>
           ))}
@@ -180,7 +180,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
         <form action={handleJoin} className="mb-6">
           <button
             type="submit"
-            className="w-full rounded-xl bg-[#d4af37] py-3 text-sm font-semibold text-black hover:bg-[#c9a432] transition-colors"
+            className="w-full rounded-xl bg-gold py-3 text-sm font-semibold text-black hover:bg-gold-light transition-colors"
             style={{ fontFamily: "var(--font-dm-sans)" }}
           >
             Join Event
@@ -202,7 +202,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
                   "rounded-lg border px-3 py-1.5 font-mono text-xs tracking-widest",
                   ic.uses_count >= ic.max_uses
                     ? "border-white/[0.05] text-white/20 line-through"
-                    : "border-white/10 text-[#d4af37]/70",
+                    : "border-white/10 text-gold/70",
                 ].join(" ")}
               >
                 {ic.code}

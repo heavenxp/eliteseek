@@ -64,7 +64,7 @@ export function StoriesBar({ currentUserId }: Props) {
               className={[
                 "h-16 w-16 rounded-full p-[2.5px]",
                 ownGroup
-                  ? "bg-gradient-to-tr from-[#d4af37] via-[#f0d060] to-[#c8963e]"
+                  ? "bg-gradient-to-tr from-gold via-gold-light to-gold"
                   : "bg-white/10",
               ].join(" ")}
             >
@@ -74,7 +74,7 @@ export function StoriesBar({ currentUserId }: Props) {
                   <img src={viewerAvatarUrl} alt="" className="h-full w-full object-cover" />
                 ) : (
                   <span
-                    className="text-lg font-medium text-[#d4af37]/60"
+                    className="text-lg font-medium text-gold/60"
                     style={{ fontFamily: "var(--font-cormorant)" }}
                   >
                     {viewerDisplayName.charAt(0).toUpperCase()}
@@ -86,7 +86,7 @@ export function StoriesBar({ currentUserId }: Props) {
             {/* + badge — always opens create sheet */}
             <button
               onClick={(e) => { e.stopPropagation(); setShowCreate(true); }}
-              className="absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-[#d4af37] border-2 border-[#080810]"
+              className="absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-gold border-2 border-[#080810]"
               aria-label="Add to story"
             >
               <svg className="h-2.5 w-2.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
@@ -115,7 +115,7 @@ export function StoriesBar({ currentUserId }: Props) {
                 className={[
                   "h-16 w-16 rounded-full p-[2.5px]",
                   unseen
-                    ? "bg-gradient-to-tr from-[#d4af37] via-[#f0d060] to-[#c8963e]"
+                    ? "bg-gradient-to-tr from-gold via-gold-light to-gold"
                     : "bg-white/15",
                 ].join(" ")}
               >
@@ -125,7 +125,7 @@ export function StoriesBar({ currentUserId }: Props) {
                     <img src={group.avatarUrl} alt="" className="h-full w-full object-cover" />
                   ) : (
                     <span
-                      className="text-lg font-medium text-[#d4af37]/60"
+                      className="text-lg font-medium text-gold/60"
                       style={{ fontFamily: "var(--font-cormorant)" }}
                     >
                       {group.displayName.charAt(0).toUpperCase()}

@@ -264,7 +264,7 @@ function ClientSettingsForm({ clientFullName, clientPhone, searchable }: { clien
                 name={name}
                 value="1"
                 defaultChecked
-                className="h-4 w-4 accent-[#d4af37]"
+                className="h-4 w-4 accent-gold"
               />
               <span className="text-sm text-foreground/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
                 {label}
@@ -665,7 +665,7 @@ function CompanionSettingsForm({
                 name="cancellation_policy"
                 value={opt.value}
                 defaultChecked={(companion.cancellation_policy ?? "moderate") === opt.value}
-                className="h-3.5 w-3.5 accent-[#d4af37]"
+                className="h-3.5 w-3.5 accent-gold"
               />
               <div>
                 <p className="text-sm text-foreground/80" style={{ fontFamily: "var(--font-dm-sans)" }}>{opt.label}</p>

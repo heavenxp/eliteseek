@@ -81,7 +81,7 @@ function Toggle({
       <div
         className={[
           "relative h-6 w-11 rounded-full transition-colors duration-200",
-          checked ? "bg-[#d4af37]" : "bg-[rgba(255,255,255,0.1)]",
+          checked ? "bg-gold" : "bg-[rgba(255,255,255,0.1)]",
         ].join(" ")}
       >
         <div
@@ -219,7 +219,7 @@ function ProgressDots({ step }: { step: number }) {
                   active
                     ? "border-white/20 bg-white/[0.07] text-gold"
                     : done
-                    ? "border-white/20 bg-[#d4af37] text-[#080810]"
+                    ? "border-white/20 bg-gold text-[#080810]"
                     : "border-[rgba(255,255,255,0.1)] text-muted/40",
                 ].join(" ")}
                 style={{ fontFamily: "var(--font-dm-sans)" }}

@@ -17,7 +17,7 @@ export default function AdminError({
       <div className="glass-card rounded-2xl p-10 max-w-md w-full text-center">
         <p
           className="text-sm uppercase tracking-widest mb-4"
-          style={{ color: "#d4af37", fontFamily: "var(--font-dm-sans)" }}
+          style={{ color: "var(--gold)", fontFamily: "var(--font-dm-sans)" }}
         >
           Error
         </p>

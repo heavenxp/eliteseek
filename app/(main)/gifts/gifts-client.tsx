@@ -277,7 +277,7 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
               </div>
             ) : (
               <div className="glass-card overflow-hidden rounded-2xl">
-                <ul className="divide-y divide-[rgba(212,175,55,0.08)]">
+                <ul className="divide-y divide-white/[0.06]">
                   {sentGifts.map((gift) => (
                     <li key={gift.id} className="flex items-center gap-4 px-5 py-4">
                       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04]">

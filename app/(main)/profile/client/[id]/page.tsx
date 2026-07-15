@@ -105,7 +105,7 @@ export default async function ClientProfilePage({
     <div className="min-h-screen bg-[rgba(8,8,16,1)]">
       {/* Cover */}
       <div className="relative h-36 w-full overflow-hidden md:h-48">
-        <div className="h-full w-full bg-gradient-to-br from-[rgba(212,175,55,0.04)] via-[rgba(20,10,40,0.7)] to-[rgba(8,8,16,1)]" />
+        <div className="h-full w-full bg-white/[0.03]" />
         <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[rgba(8,8,16,1)] to-transparent" />
       </div>
 

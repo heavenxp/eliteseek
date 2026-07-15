@@ -19,7 +19,7 @@ export default async function OnboardingLayout({
     <div className="page-bg relative min-h-screen">
       {/* Ambient glows */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -top-40 left-1/2 h-[700px] w-[700px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.07)_0%,transparent_65%)]" />
+        
         <div className="absolute bottom-0 right-0 h-[400px] w-[400px] rounded-full bg-[radial-gradient(circle,rgba(180,120,40,0.05)_0%,transparent_65%)]" />
       </div>
 

@@ -70,7 +70,7 @@ export default function JoinEventPage() {
         <button
           type="submit"
           disabled={code.trim().length < 6 || submitting}
-          className="w-full rounded-xl bg-[#d4af37] py-3 text-sm font-semibold text-black hover:bg-[#c9a432] transition-colors disabled:opacity-40"
+          className="w-full rounded-xl bg-gold py-3 text-sm font-semibold text-black hover:bg-gold-light transition-colors disabled:opacity-40"
           style={{ fontFamily: "var(--font-dm-sans)" }}
         >
           {submitting ? "Verifying…" : "Join Event"}

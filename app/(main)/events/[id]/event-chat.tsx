@@ -362,7 +362,7 @@ export function EventChat({ eventId, currentUserId, currentUserName, currentUser
             type="button"
             onClick={handleSend}
             disabled={(!text.trim() && !mediaFile) || busy}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#d4af37] text-black hover:bg-[#c9a432] transition-colors disabled:opacity-30"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gold text-black hover:bg-gold-light transition-colors disabled:opacity-30"
           >
             {uploading || sending ? (
               <span className="h-3.5 w-3.5 animate-spin rounded-full border border-black/20 border-t-black" />
@@ -398,7 +398,7 @@ function MessageBubble({
           // eslint-disable-next-line @next/next/no-img-element
           <img src={avatar} alt="" className="h-full w-full object-cover" />
         ) : (
-          <span className="text-[10px] font-medium text-[#d4af37]/60">
+          <span className="text-[10px] font-medium text-gold/60">
             {name.charAt(0).toUpperCase()}
           </span>
         )}

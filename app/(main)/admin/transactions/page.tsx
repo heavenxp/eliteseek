@@ -175,7 +175,7 @@ export default async function AdminTransactionsPage() {
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[rgba(212,175,55,0.06)]">
+              <tbody className="divide-y divide-white/[0.06]">
                 {transactions.map((t) => (
                   <tr
                     key={t.id}

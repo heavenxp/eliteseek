@@ -4,6 +4,7 @@ import { useActionState, useState, useRef, useTransition } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { createBrowserClient } from "@supabase/ssr";
+import { moderateProfilePhoto } from "@/app/actions/moderate";
 import { Icon } from "@/components/icons";
 import { updateCompanionSettings, updateClientSettings } from "@/app/actions/settings";
 import type { VisibilityLevel } from "@/lib/database.types";
@@ -366,6 +367,9 @@ function CompanionSettingsForm({
           await supabase.from("profiles").update({ avatar_url: url }).eq("id", user.id);
         }
       });
+      // Hive scan (Phase 2) — rejected photos are removed server-side
+      const { removed } = await moderateProfilePhoto(url);
+      if (removed) setCurrentAvatarUrl(null);
     });
   }
 
@@ -373,6 +377,9 @@ function CompanionSettingsForm({
     setCurrentCoverUrl(url);
     startTransition(async () => {
       await supabase.from("companion_profiles").update({ cover_image_url: url }).eq("id", companion.id);
+      // Hive scan (Phase 2) — rejected photos are removed server-side
+      const { removed } = await moderateProfilePhoto(url);
+      if (removed) setCurrentCoverUrl(null);
     });
   }
 

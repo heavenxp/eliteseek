@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { scanContent, recordModeration } from "@/lib/moderation";
 
 // ── Shared types ───────────────────────────────────────────────
 
@@ -131,12 +132,29 @@ export async function createStory(
   console.log("[createStory] auth:", { userId: user?.id ?? null, authError });
   if (!user) redirect("/login");
 
+  // Hive scan before the story goes live (stories have no moderation column:
+  // rejected → refuse synchronously, flagged → publish but log for review)
+  const verdict = await scanContent([mediaUrl]);
+  if (verdict.status === "rejected") {
+    await recordModeration({ subjectUserId: user.id, contentType: "story", verdict });
+    return { error: "This story can't be published — it doesn't meet EliteSeek's content guidelines." };
+  }
+
   const { data: insertData, error } = await supabase.from("stories").insert({
     user_id: user.id,
     media_url: mediaUrl,
     media_type: mediaType,
     audience,
   }).select();
+
+  if (!error && verdict.status === "flagged") {
+    await recordModeration({
+      subjectUserId: user.id,
+      contentId: insertData?.[0]?.id,
+      contentType: "story",
+      verdict,
+    });
+  }
 
   console.log("[createStory] insert result:", { insertData, error });
 

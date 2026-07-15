@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { notify } from "@/app/actions/notifications";
+import { scanContent, recordModeration } from "@/lib/moderation";
 
 export type FeedActionResult = { error?: string } | null;
 
@@ -48,10 +49,31 @@ export async function createPost(_: FeedActionResult, formData: FormData): Promi
   const content_min_tier =
     rawMinTier && ["silver", "gold", "platinum"].includes(rawMinTier) ? rawMinTier : null;
 
-  const { error } = await supabase.from("posts").insert({ user_id: user.id, content, tags, image_url, audience, locked_price, content_min_tier });
+  // Hive scan before publish (posts have no moderation column: rejected →
+  // refuse synchronously, flagged → publish but log for the manual queue)
+  const verdict = await scanContent(image_url ? [image_url] : [], content);
+  if (verdict.status === "rejected") {
+    await recordModeration({ subjectUserId: user.id, contentType: "feed_post", verdict });
+    return { error: "This post can't be published — it doesn't meet EliteSeek's content guidelines." };
+  }
+
+  const { data: inserted, error } = await supabase
+    .from("posts")
+    .insert({ user_id: user.id, content, tags, image_url, audience, locked_price, content_min_tier })
+    .select("id")
+    .single();
   if (error) {
     console.error("[createPost] insert error:", error.message);
     return { error: error.message };
+  }
+
+  if (verdict.status === "flagged") {
+    await recordModeration({
+      subjectUserId: user.id,
+      contentId: inserted?.id,
+      contentType: "feed_post",
+      verdict,
+    });
   }
 
   return null;

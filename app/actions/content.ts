@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { scanContent, recordModeration } from "@/lib/moderation";
 
 // ── Types ─────────────────────────────────────────────────────
 
@@ -46,7 +47,7 @@ async function requireCompanion() {
 export async function createContentPost(
   input: ContentPostInput
 ): Promise<ContentActionResult> {
-  const { supabase, companionId } = await requireCompanion();
+  const { supabase, user, companionId } = await requireCompanion();
 
   if (!input.title && !input.body && input.mediaItems.length === 0) {
     return { error: "Add some media or text to publish." };
@@ -55,19 +56,55 @@ export async function createContentPost(
     return { error: "PPV price must be at least $3." };
   }
 
-  const { error } = await supabase.from("content_posts").insert({
-    companion_id: companionId,
-    title: input.title || null,
-    body: input.body || null,
-    media_urls: input.mediaItems,
-    is_ppv: input.isPpv,
-    ppv_price: input.isPpv ? input.ppvPrice : null,
-    is_subscribers_only: input.isSubscribersOnly,
-    moderation_status: "approved", // auto-approve until moderation pipeline exists
-    published_at: new Date().toISOString(),
-  });
+  // Hive scan before publish: rejected → refuse; flagged → hold for manual
+  // review (stays unpublished); unscanned (no HIVE_API_KEY yet) → approve.
+  const verdict = await scanContent(
+    input.mediaItems.map((m) => m.url),
+    [input.title, input.body].filter(Boolean).join("\n")
+  );
+  if (verdict.status === "rejected") {
+    await recordModeration({
+      subjectUserId: user.id,
+      contentType: "content_post",
+      verdict,
+    });
+    return { error: "This post can't be published — it doesn't meet EliteSeek's content guidelines." };
+  }
+
+  const moderationStatus = verdict.status === "flagged" ? "flagged" : "approved";
+
+  const { data: inserted, error } = await supabase
+    .from("content_posts")
+    .insert({
+      companion_id: companionId,
+      title: input.title || null,
+      body: input.body || null,
+      media_urls: input.mediaItems,
+      is_ppv: input.isPpv,
+      ppv_price: input.isPpv ? input.ppvPrice : null,
+      is_subscribers_only: input.isSubscribersOnly,
+      moderation_status: moderationStatus,
+      moderation_score: verdict.score,
+      published_at: moderationStatus === "approved" ? new Date().toISOString() : null,
+    })
+    .select("id")
+    .single();
 
   if (error) return { error: error.message };
+
+  await recordModeration({
+    subjectUserId: user.id,
+    contentId: inserted?.id,
+    contentType: "content_post",
+    verdict,
+  });
+
+  if (moderationStatus === "flagged") {
+    return {
+      error:
+        "Your post is in review — our moderation flagged it for a quick manual check. It will publish automatically once approved.",
+    };
+  }
 
   redirect("/companion/content");
 }

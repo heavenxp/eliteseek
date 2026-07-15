@@ -1,8 +1,10 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { notify } from "@/app/actions/notifications";
+import { scanContent, recordModeration } from "@/lib/moderation";
 
 export type MessageState = { error?: string; success?: boolean } | null;
 
@@ -80,11 +82,28 @@ export async function sendMessage(
 
   if (!conv) return { error: "Conversation not found." };
 
-  const { error } = await supabase
+  const { data: sent, error } = await supabase
     .from("messages")
-    .insert({ conversation_id: conversationId, sender_id: user.id, content: content ?? "", media_url: mediaUrl });
+    .insert({ conversation_id: conversationId, sender_id: user.id, content: content ?? "", media_url: mediaUrl })
+    .select("id")
+    .single();
 
   if (error) return { error: error.message };
+
+  // Phase 2: scan booking chat for intimate-services language / media after
+  // the response is sent — flags go to the manual review queue, sends are
+  // never blocked or delayed.
+  after(async () => {
+    const verdict = await scanContent(mediaUrl ? [mediaUrl] : [], content);
+    if (verdict.status === "flagged" || verdict.status === "rejected") {
+      await recordModeration({
+        subjectUserId: user.id,
+        contentId: sent?.id,
+        contentType: "message",
+        verdict,
+      });
+    }
+  });
 
   const recipientId = conv.client_id === user.id ? conv.companion_id : conv.client_id;
   const { data: profile } = await supabase.from("profiles").select("full_name").eq("id", user.id).single();

@@ -66,14 +66,14 @@ The schema already supports a full social layer (`posts`/likes/comments/follows/
 
 **Goal: complete the creator side.**
 
-- [ ] Subscriptions (min $9.99/mo), PPV ($3 min), profile unlocks ($10) — per existing pricing model, creator-set above minimums
-- [ ] Studio view: content upload, pricing, subscriber management, earnings dashboard
-- [ ] Browse feed with discovery (city, category, verified-only filter)
+- [x] Subscriptions (min $9.99/mo), PPV ($3 min), profile unlocks ($10) — floors now enforced in every write path (settings was open to under-floor pricing); shared constants in `lib/pricing.ts`; DB check constraint backs the subscription floor
+- [x] Studio view: content upload, pricing, subscriber management, earnings dashboard — studio rebuilt with stat tiles, active-subscriber list (renewal dates, recurring total), month/all-time net earnings, moderation-status badges on posts
+- [x] Browse feed with discovery (city, category, verified-only filter) — city filter added (location match); category = experience-type tags; verified-only is structural post-KYC (only verified/select hosts are visible), tier filter narrows to Select
 - [ ] Content stays behind paywall + Hive scan before publish — code complete, pending migration 026 + deploy: `content-media` bucket flips private (Supabase advisor: public bucket let anyone enumerate paywalled files); media served via server-signed 2h URLs only after a per-post entitlement check; locked posts ship NO urls/body to the client (old UI blurred the real files — a paywall bypass); new public `shared-media` bucket for stories/chat/events media (6 legacy prod files already copied + rows repointed via storage API)
 - [x] Fix SECURITY DEFINER views (Supabase ERROR-level): `companion_cards` + `client_membership` flip to security_invoker in migration 026 — definer semantics bypassed base-table RLS; client_membership exposed stripe_customer_id and has no code consumers; companion_cards' only consumer (authed browse) is covered by base policies
-- [ ] Stories viewer: rebuilt UI (per Quality bar), story media routed through the same Hive moderation pipeline before going live
-- [ ] Event group chat: rebuilt UI (per Quality bar) for events / invite codes / group messages, event messages routed through the same Hive moderation pipeline
-- [ ] Availability display: rebuilt UI (per Quality bar) for availability_posts on profiles and discovery, availability post content routed through the same Hive moderation pipeline
+- [x] Stories viewer: rebuilt UI (per Quality bar), story media routed through the same Hive moderation pipeline before going live — load-gated timer, loading/error states, owner delete; scan wired at createStory
+- [x] Event group chat: rebuilt UI (per Quality bar) for events / invite codes / group messages, event messages routed through the same Hive moderation pipeline — send/upload/voice error surfacing, responsive height; scan wired post-send via after()
+- [x] Availability display: rebuilt UI (per Quality bar) for availability_posts on profiles and discovery, availability post content routed through the same Hive moderation pipeline — Booked/urgency states, verified seal in discovery, structured "Based in X · Y {dates}" line on profiles; scan wired at createAvailabilityPost
 - [ ] Payment note: keep content non-explicit while on Stripe. If explicit content is ever allowed, that requires migrating content payments to a specialist processor (Segpay/CCBill class) FIRST — do not flip the content policy before the processor.
 
 **Exit criteria:** a host can earn from both bookings and content; a client can pay for both.

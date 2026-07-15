@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { AdminActionButton } from "../admin-action-button";
-import { approveContent, rejectContent } from "@/app/actions/admin";
+import { approveContent, rejectContent, resolveFlag } from "@/app/actions/admin";
 import type { ContentPost, CompanionProfile } from "@/lib/database.types";
 
 function formatDate(iso: string) {
@@ -52,6 +53,36 @@ export default async function AdminModerationPage() {
     .limit(50);
 
   const posts = (data as PostRow[] | null) ?? [];
+
+  // Hive flags on surfaces without their own moderation column (messages,
+  // feed posts, stories, profile photos). moderation_log is admin-only RLS,
+  // so the service-role client reads it; page access is gated by the admin
+  // layout.
+  const { data: flagRows } = await createAdminClient()
+    .from("moderation_log")
+    .select("id, subject_id, content_id, content_type, action, moderation_score, created_at")
+    .in("action", ["flagged", "rejected"])
+    .is("reviewed_by", null)
+    .order("created_at", { ascending: false })
+    .limit(50);
+
+  const flags = flagRows ?? [];
+  const flagSubjectIds = [...new Set(flags.map((f) => f.subject_id))];
+  const { data: flagProfiles } = flagSubjectIds.length
+    ? await createAdminClient()
+        .from("profiles")
+        .select("id, full_name")
+        .in("id", flagSubjectIds)
+    : { data: [] };
+  const flagNameMap = new Map((flagProfiles ?? []).map((p) => [p.id, p.full_name]));
+
+  const FLAG_TYPE_LABELS: Record<string, string> = {
+    message: "Message",
+    feed_post: "Feed post",
+    story: "Story",
+    profile_photo: "Profile photo",
+    content_post: "Content post",
+  };
 
   return (
     <div className="mx-auto max-w-5xl space-y-6">
@@ -151,6 +182,75 @@ export default async function AdminModerationPage() {
               </li>
             );
           })}
+        </ul>
+      )}
+
+      {/* ── Hive flags (messages, feed posts, stories, photos) ── */}
+      <div className="pt-4">
+        <h2
+          className="text-2xl font-light text-foreground"
+          style={{ fontFamily: "var(--font-cormorant)" }}
+        >
+          Flagged by moderation
+        </h2>
+        <p
+          className="mt-1 text-sm text-muted/50"
+          style={{ fontFamily: "var(--font-dm-sans)" }}
+        >
+          {flags.length} item{flags.length !== 1 ? "s" : ""} awaiting review across messages, feed, stories, and photos
+        </p>
+      </div>
+
+      {flags.length === 0 ? (
+        <div className="glass-card p-8 text-center">
+          <p
+            className="text-base font-light text-foreground/50"
+            style={{ fontFamily: "var(--font-cormorant)" }}
+          >
+            Nothing flagged — the queue is clear.
+          </p>
+        </div>
+      ) : (
+        <ul className="space-y-3">
+          {flags.map((flag) => (
+            <li key={flag.id} className="glass-card flex items-center justify-between gap-4 p-4">
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span
+                    className="rounded-full border border-[rgba(212,175,55,0.25)] bg-[rgba(212,175,55,0.07)] px-2.5 py-0.5 text-xs text-gold"
+                    style={{ fontFamily: "var(--font-dm-sans)" }}
+                  >
+                    {FLAG_TYPE_LABELS[flag.content_type ?? ""] ?? flag.content_type}
+                  </span>
+                  <StatusBadge status={flag.action} />
+                  {flag.moderation_score != null && (
+                    <span className="text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                      score {Number(flag.moderation_score).toFixed(2)}
+                    </span>
+                  )}
+                </div>
+                <p className="mt-1 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                  By <span className="text-foreground/60">{flagNameMap.get(flag.subject_id) ?? flag.subject_id}</span>
+                  {" · "}
+                  {formatDate(flag.created_at)}
+                </p>
+              </div>
+              <div className="flex shrink-0 gap-2">
+                <AdminActionButton
+                  action={() => resolveFlag(flag.id, "dismissed")}
+                  label="Dismiss"
+                  variant="ghost"
+                />
+                {flag.content_id && flag.content_type !== "profile_photo" && (
+                  <AdminActionButton
+                    action={() => resolveFlag(flag.id, "removed")}
+                    label="Remove content"
+                    variant="danger"
+                  />
+                )}
+              </div>
+            </li>
+          ))}
         </ul>
       )}
     </div>

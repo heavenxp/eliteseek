@@ -1,4 +1,5 @@
 import { Icon } from "@/components/icons";
+import { VerifiedBadge } from "@/components/badges/verified-badge";
 import type { AvailabilityPost, AvailabilityCategory, CompanionCard } from "@/lib/database.types";
 
 const CATEGORY_LABELS: Record<AvailabilityCategory, string> = {
@@ -43,19 +44,43 @@ export function PostCard({ post, companion, onBook }: PostCardProps) {
 
   const timeLabel = dateFrom.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
 
+  const daysUntil = Math.ceil((dateFrom.getTime() - Date.now()) / 86_400_000);
+  const urgency =
+    post.is_booked || daysUntil > 7
+      ? null
+      : daysUntil <= 0
+        ? "Today"
+        : daysUntil === 1
+          ? "Tomorrow"
+          : `In ${daysUntil} days`;
+
   return (
-    <div className="group overflow-hidden rounded-2xl border border-[rgba(212,175,55,0.12)] bg-[rgba(255,255,255,0.02)] transition-all duration-300 hover:border-[rgba(212,175,55,0.25)] hover:shadow-[0_8px_32px_rgba(212,175,55,0.06)]">
+    <div
+      className={[
+        "group overflow-hidden rounded-2xl border border-[rgba(212,175,55,0.12)] bg-[rgba(255,255,255,0.02)] transition-all duration-300",
+        post.is_booked
+          ? "opacity-60"
+          : "hover:border-[rgba(212,175,55,0.25)] hover:shadow-[0_8px_32px_rgba(212,175,55,0.06)]",
+      ].join(" ")}
+    >
       {/* Category ribbon */}
       <div className="flex items-center justify-between border-b border-[rgba(212,175,55,0.08)] px-4 py-2.5">
         <span className={`text-[10px] font-medium uppercase tracking-[0.12em] ${CATEGORY_COLORS[post.category]}`} style={{ fontFamily: "var(--font-dm-sans)" }}>
           {CATEGORY_LABELS[post.category]}
         </span>
-        {post.visibility === "locked" && (
-          <span className="flex items-center gap-1 text-[10px] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
-            <Icon name="lock" className="h-3 w-3" />
-            Subscribers only
-          </span>
-        )}
+        <span className="flex items-center gap-2">
+          {urgency && (
+            <span className="rounded-full border border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.08)] px-2 py-0.5 text-[10px] text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              {urgency}
+            </span>
+          )}
+          {post.visibility === "locked" && (
+            <span className="flex items-center gap-1 text-[10px] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <Icon name="lock" className="h-3 w-3" />
+              Subscribers only
+            </span>
+          )}
+        </span>
       </div>
 
       <div className="p-4">
@@ -105,7 +130,14 @@ export function PostCard({ post, companion, onBook }: PostCardProps) {
             <span className="ml-1 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>per person</span>
           </div>
 
-          {onBook ? (
+          {post.is_booked ? (
+            <span
+              className="rounded-xl border border-[rgba(255,255,255,0.1)] px-4 py-2 text-sm text-muted/60"
+              style={{ fontFamily: "var(--font-dm-sans)" }}
+            >
+              Booked
+            </span>
+          ) : onBook ? (
             <button
               onClick={onBook}
               className="btn-gold rounded-xl px-4 py-2 text-sm"
@@ -114,7 +146,8 @@ export function PostCard({ post, companion, onBook }: PostCardProps) {
               Book Now
             </button>
           ) : companion ? (
-            <div className="text-right">
+            <div className="flex items-center gap-1.5 text-right">
+              <VerifiedBadge tier={companion.verification_tier} size="sm" />
               <p className="text-sm text-muted/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
                 {companion.display_name}
               </p>

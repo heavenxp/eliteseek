@@ -55,6 +55,7 @@ export function EventChat({ eventId, currentUserId, currentUserName, currentUser
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [mediaPreview, setMediaPreview] = useState<string | null>(null);
   const [fullscreenSrc, setFullscreenSrc] = useState<string | null>(null);
+  const [sendError, setSendError] = useState<string | null>(null);
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -141,6 +142,7 @@ export function EventChat({ eventId, currentUserId, currentUserName, currentUser
 
     let mediaUrl: string | null = null;
 
+    setSendError(null);
     if (mediaFile) {
       setUploading(true);
       const supabase = createClient();
@@ -151,7 +153,10 @@ export function EventChat({ eventId, currentUserId, currentUserName, currentUser
         .upload(path, mediaFile, { upsert: false, contentType: mediaFile.type });
       setUploading(false);
 
-      if (error || !upload) return;
+      if (error || !upload) {
+        setSendError("Media upload failed — try again.");
+        return;
+      }
       const { data: { publicUrl } } = supabase.storage.from("shared-media").getPublicUrl(upload.path);
       mediaUrl = publicUrl;
     }
@@ -174,6 +179,7 @@ export function EventChat({ eventId, currentUserId, currentUserName, currentUser
     if (result.error) {
       setMessages((prev) => prev.filter((m) => m.id !== tempId));
       setText(content);
+      setSendError("Message didn't send — check your connection and try again.");
     }
     setSending(false);
   }
@@ -213,6 +219,8 @@ export function EventChat({ eventId, currentUserId, currentUserName, currentUser
     if (!error && upload) {
       const { data: { publicUrl } } = supabase.storage.from("shared-media").getPublicUrl(upload.path);
       await sendMessage(eventId, null, "voice", publicUrl);
+    } else {
+      setSendError("Voice note upload failed — try again.");
     }
     setUploading(false);
   }
@@ -226,12 +234,23 @@ export function EventChat({ eventId, currentUserId, currentUserName, currentUser
         <FullscreenImage src={fullscreenSrc} onClose={() => setFullscreenSrc(null)} />
       )}
 
-      <div className="flex flex-col" style={{ height: "420px" }}>
+      <div className="flex flex-col h-[420px] md:h-[min(560px,60vh)]">
         <div className="border-b border-white/[0.06] px-4 py-3">
           <p className="text-xs uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
             Group Chat
           </p>
         </div>
+
+        {sendError && (
+          <div className="flex items-center justify-between gap-2 border-b border-red-500/15 bg-red-500/[0.06] px-4 py-2">
+            <p className="text-xs text-red-400/90" style={{ fontFamily: "var(--font-dm-sans)" }}>{sendError}</p>
+            <button onClick={() => setSendError(null)} className="text-red-400/50 hover:text-red-400" aria-label="Dismiss">
+              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        )}
 
         {/* Messages */}
         <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">

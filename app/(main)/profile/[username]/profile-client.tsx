@@ -170,6 +170,16 @@ export function ProfileBody({
   const vd = visitorData;
   const od = ownerData;
 
+  // Next upcoming availability post in a different city — powers the
+  // "Based in Melbourne · Sydney Jun 7 – 9" line (city-based discovery)
+  const nextAwayPost = availabilityPosts.find(
+    (p) =>
+      p.location_city &&
+      new Date(p.date_from) > new Date() &&
+      (!companion.location ||
+        !companion.location.toLowerCase().includes(p.location_city.toLowerCase()))
+  );
+
   return (
     <div className="min-h-screen bg-[rgba(8,8,16,1)]">
       {/* ── Banner ── */}
@@ -399,8 +409,8 @@ export function ProfileBody({
           </p>
         )}
 
-        {/* Location + travel */}
-        {(companion.location || companion.available_from) && (
+        {/* Location + structured availability: "Based in X · Y, Jun 7 – 9" */}
+        {(companion.location || companion.available_from || nextAwayPost) && (
           <div
             className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted/60"
             style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -408,12 +418,19 @@ export function ProfileBody({
             {companion.location && (
               <span className="flex items-center gap-1.5">
                 <Icon name="map-pin" className="h-3.5 w-3.5 shrink-0 text-gold/50" />
-                {companion.location}
+                Based in {companion.location}
               </span>
             )}
-            {companion.available_from && (
+            {nextAwayPost && (
               <span className="flex items-center gap-1.5">
-                <span className="text-base leading-none">✈️</span>
+                <Icon name="send" className="h-3.5 w-3.5 shrink-0 text-gold/50" />
+                {nextAwayPost.location_city}{" "}
+                {formatTravelDates(nextAwayPost.date_from, nextAwayPost.date_to)}
+              </span>
+            )}
+            {!nextAwayPost && companion.available_from && (
+              <span className="flex items-center gap-1.5">
+                <Icon name="calendar" className="h-3.5 w-3.5 shrink-0 text-gold/50" />
                 {formatTravelDates(companion.available_from, companion.available_until)}
               </span>
             )}

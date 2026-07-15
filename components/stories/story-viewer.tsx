@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { formatDistanceToNowStrict } from "date-fns";
-import { markStoryViewed } from "@/app/actions/stories";
+import { markStoryViewed, deleteStory } from "@/app/actions/stories";
 import type { StoryGroup } from "@/app/actions/stories";
 
 const PHOTO_DURATION = 7000;
@@ -16,10 +17,13 @@ type Props = {
 };
 
 export function StoryViewer({ groups, initialGroupIndex, currentUserId, onClose }: Props) {
+  const router = useRouter();
   const [gi, setGi] = useState(initialGroupIndex);
   const [si, setSi] = useState(0);
   const [fading, setFading] = useState(false);
   const [paused, setPaused] = useState(false);
+  const [mediaState, setMediaState] = useState<"loading" | "ready" | "error">("loading");
+  const [deleting, startDeleteTransition] = useTransition();
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   // Direct DOM ref for the active bar — bypasses React state for zero-jitter animation.
@@ -129,9 +133,10 @@ export function StoryViewer({ groups, initialGroupIndex, currentUserId, onClose 
     cancelRaf();
     elapsedMsRef.current = 0;
     setPaused(false);
+    setMediaState("loading");
     markStoryViewed(story.id).catch(() => {});
     // barRef is reset to 0% by the setBarRef callback when the new bar mounts.
-    if (story.mediaType === "photo") startPhotoRaf(0);
+    // The photo timer starts from onLoad — never against a blank screen.
     return cancelRaf;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gi, si]);
@@ -244,19 +249,28 @@ export function StoryViewer({ groups, initialGroupIndex, currentUserId, onClose 
           {story.mediaType === "photo" ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
+              key={story.id}
               src={story.mediaUrl}
               alt=""
               className="h-full w-full object-cover"
               draggable={false}
+              onLoad={() => {
+                setMediaState("ready");
+                startPhotoRaf(0);
+              }}
+              onError={() => setMediaState("error")}
             />
           ) : (
             <video
+              key={story.id}
               ref={videoRef}
               src={story.mediaUrl}
               autoPlay
               playsInline
               muted={false}
               className="h-full w-full object-cover"
+              onPlaying={() => setMediaState("ready")}
+              onError={() => setMediaState("error")}
               onTimeUpdate={(e) => {
                 const v = e.currentTarget;
                 if (v.duration && barRef.current) {
@@ -268,6 +282,27 @@ export function StoryViewer({ groups, initialGroupIndex, currentUserId, onClose 
             />
           )}
         </div>
+
+        {/* Loading / error states */}
+        {mediaState === "loading" && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#d4af37]/70 border-t-transparent" />
+          </div>
+        )}
+        {mediaState === "error" && (
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3">
+            <p className="text-sm text-white/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              This story couldn&apos;t be loaded.
+            </p>
+            <button
+              onClick={(e) => { e.stopPropagation(); goNext(); }}
+              className="pointer-events-auto rounded-full border border-white/25 bg-black/40 px-4 py-1.5 text-xs text-white/80 backdrop-blur-sm transition-colors hover:bg-black/60"
+              style={{ fontFamily: "var(--font-dm-sans)" }}
+            >
+              Skip
+            </button>
+          </div>
+        )}
 
         {/* Gradient overlays */}
         <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/70 to-transparent pointer-events-none z-10" />
@@ -313,6 +348,26 @@ export function StoryViewer({ groups, initialGroupIndex, currentUserId, onClose 
             </div>
           </div>
           <div className="flex items-center gap-1 pointer-events-auto">
+            {group.userId === currentUserId && (
+              <button
+                disabled={deleting}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  cancelRaf();
+                  startDeleteTransition(async () => {
+                    await deleteStory(story.id);
+                    router.refresh();
+                    goNext();
+                  });
+                }}
+                className="p-2 text-white/50 transition-colors hover:text-red-400 disabled:opacity-40"
+                aria-label="Delete story"
+              >
+                <svg className="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                </svg>
+              </button>
+            )}
             <button
               onClick={(e) => { e.stopPropagation(); onClose(); }}
               className="p-2 text-white/60 hover:text-white transition-colors"

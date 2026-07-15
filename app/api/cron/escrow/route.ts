@@ -98,6 +98,89 @@ export async function GET(req: NextRequest) {
     }
   }
 
+  // ── 1b. Event ticket releases ───────────────────────────────
+  // Schedule: tickets for ended events get release_at = end + 48h; due
+  // tickets transfer the creator's 85% net to their Connect account.
+  const { data: unscheduled } = await admin
+    .from("event_tickets")
+    .select("id, event_id, events!inner(date, end_time)")
+    .eq("escrow_status", "held")
+    .limit(100);
+
+  for (const t of unscheduled ?? []) {
+    const ev = Array.isArray(t.events) ? t.events[0] : t.events;
+    if (!ev) continue;
+    const end = new Date(`${ev.date}T${ev.end_time}`);
+    if (now < end) continue;
+    await admin
+      .from("event_tickets")
+      .update({
+        escrow_status: "release_scheduled",
+        release_at: new Date(end.getTime() + 48 * 3600_000).toISOString(),
+      })
+      .eq("id", t.id)
+      .eq("escrow_status", "held");
+  }
+
+  const { data: dueTickets } = await admin
+    .from("event_tickets")
+    .select("id, event_id, user_id, amount, refunded_amount, stripe_payment_intent_id, events!inner(creator_id)")
+    .eq("escrow_status", "release_scheduled")
+    .lte("release_at", now.toISOString())
+    .limit(50);
+
+  for (const t of dueTickets ?? []) {
+    const ev = Array.isArray(t.events) ? t.events[0] : t.events;
+    if (!ev) continue;
+    const { data: host } = await admin
+      .from("host_profiles")
+      .select("user_id, stripe_account_id, stripe_account_status")
+      .eq("user_id", ev.creator_id)
+      .maybeSingle();
+
+    const payable = +(Number(t.amount) - Number(t.refunded_amount ?? 0)).toFixed(2);
+    const { platformFee, netAmount } = calculateFees("event_ticket", payable);
+
+    if (!stripe || !host?.stripe_account_id || host.stripe_account_status !== "active") {
+      results.releaseSkipped++;
+      continue;
+    }
+
+    try {
+      const transfer = await stripe.transfers.create({
+        amount: Math.round(netAmount * 100),
+        currency: "usd",
+        destination: host.stripe_account_id,
+        transfer_group: `event_${t.event_id}`,
+        metadata: { event_ticket_id: t.id },
+      });
+
+      await admin
+        .from("event_tickets")
+        .update({ escrow_status: "released", stripe_transfer_id: transfer.id })
+        .eq("id", t.id)
+        .eq("escrow_status", "release_scheduled");
+
+      await admin.from("transactions").insert({
+        type: "booking",
+        from_user_id: t.user_id,
+        to_user_id: host.user_id,
+        gross_amount: payable,
+        platform_fee: platformFee,
+        net_amount: netAmount,
+        stripe_payment_intent_id: t.stripe_payment_intent_id,
+        status: "completed",
+        reference_id: t.event_id,
+        reference_type: "event",
+        metadata: { transfer_id: transfer.id, event_ticket_id: t.id },
+      });
+      results.released++;
+    } catch (e) {
+      console.error(`[cron/escrow] ticket transfer failed ${t.id}:`, e);
+      results.releaseSkipped++;
+    }
+  }
+
   // ── 2. SOS: missed check-outs ───────────────────────────────
   // Checked in, not checked out, and 2h past the scheduled end.
   const { data: paidOpen } = await admin

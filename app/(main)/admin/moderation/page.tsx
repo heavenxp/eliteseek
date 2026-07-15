@@ -83,6 +83,7 @@ export default async function AdminModerationPage() {
     profile_photo: "Profile photo",
     content_post: "Content post",
     availability_post: "Availability post",
+    event: "Event",
   };
 
   return (

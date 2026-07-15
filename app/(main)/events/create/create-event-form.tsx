@@ -15,7 +15,13 @@ export function CreateEventForm({ userId }: Props) {
   const [date, setDate] = useState("");
   const [hour, setHour] = useState("");
   const [minute, setMinute] = useState("");
+  const [endHour, setEndHour] = useState("");
+  const [endMinute, setEndMinute] = useState("");
   const [location, setLocation] = useState("");
+  const [eventType, setEventType] = useState<"physical" | "online">("physical");
+  const [price, setPrice] = useState("");
+  const [capacity, setCapacity] = useState("");
+  const [meetingLink, setMeetingLink] = useState("");
   const [visibility, setVisibility] = useState<"public" | "private">("public");
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
@@ -39,8 +45,20 @@ export function CreateEventForm({ userId }: Props) {
     if (!title.trim()) { setError("Title is required."); return; }
     if (!date) { setError("Date is required."); return; }
     if (!hour || !minute) { setError("Time is required."); return; }
+    if (!endHour || !endMinute) { setError("End time is required — events end, that's the point."); return; }
 
     const time = `${hour}:${minute}`;
+    const end_time = `${endHour}:${endMinute}`;
+    if (end_time <= time) { setError("End time must be after the start time."); return; }
+    const parsedCapacity = capacity ? parseInt(capacity, 10) : null;
+    if (eventType === "physical" && (!parsedCapacity || parsedCapacity < 1)) {
+      setError("Physical events need a group size cap."); return;
+    }
+    const parsedPrice = price ? parseFloat(price) : 0;
+    if (isNaN(parsedPrice) || parsedPrice < 0) { setError("Invalid price."); return; }
+    if (eventType === "online" && parsedPrice > 0 && !meetingLink.trim()) {
+      setError("Paid online events need a meeting link — it's revealed to attendees after they join."); return;
+    }
 
     setSubmitting(true);
     setError(null);
@@ -66,7 +84,13 @@ export function CreateEventForm({ userId }: Props) {
       cover_image_url = publicUrl;
     }
 
-    const result = await createEvent({ title, description, date, time, location, visibility, cover_image_url });
+    const result = await createEvent({
+      title, description, date, time, end_time, location, visibility, cover_image_url,
+      event_type: eventType,
+      price: parsedPrice,
+      capacity: parsedCapacity,
+      meeting_link: meetingLink.trim() || null,
+    });
 
     if (result.error) {
       setError(result.error);
@@ -198,9 +222,115 @@ export function CreateEventForm({ userId }: Props) {
             </select>
           </div>
         </div>
+        <div>
+          <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            Ends *
+          </label>
+          <div className="flex gap-1.5">
+            <select
+              value={endHour}
+              onChange={(e) => setEndHour(e.target.value)}
+              className="flex-1 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2.5 text-sm text-foreground focus:border-white/20 focus:outline-none transition-colors appearance-none"
+              style={{ fontFamily: "var(--font-dm-sans)" }}
+            >
+              <option value="" disabled>HH</option>
+              {Array.from({ length: 24 }, (_, i) => String(i).padStart(2, "0")).map((h) => (
+                <option key={h} value={h}>{h}</option>
+              ))}
+            </select>
+            <span className="flex items-center text-white/30 text-sm">:</span>
+            <select
+              value={endMinute}
+              onChange={(e) => setEndMinute(e.target.value)}
+              className="flex-1 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2.5 text-sm text-foreground focus:border-white/20 focus:outline-none transition-colors appearance-none"
+              style={{ fontFamily: "var(--font-dm-sans)" }}
+            >
+              <option value="" disabled>MM</option>
+              {["00", "15", "30", "45"].map((m) => (
+                <option key={m} value={m}>{m}</option>
+              ))}
+            </select>
+          </div>
+        </div>
       </div>
 
+      {/* Type + price + capacity */}
+      <div>
+        <p className="mb-2 text-[11px] uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          Format
+        </p>
+        <div className="grid grid-cols-2 gap-2">
+          {(["physical", "online"] as const).map((t) => (
+            <button
+              key={t}
+              type="button"
+              onClick={() => setEventType(t)}
+              className={`rounded-xl border px-4 py-2.5 text-sm transition-colors ${
+                eventType === t
+                  ? "border-gold/50 bg-gold/10 text-gold"
+                  : "border-white/[0.08] bg-white/[0.03] text-muted/60 hover:border-white/20"
+              }`}
+              style={{ fontFamily: "var(--font-dm-sans)" }}
+            >
+              {t === "physical" ? "In person" : "Online"}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            Price (0 = free)
+          </label>
+          <input
+            type="number"
+            min="0"
+            step="0.01"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            placeholder="0"
+            className={inputClass}
+            style={{ fontFamily: "var(--font-dm-sans)" }}
+          />
+        </div>
+        <div>
+          <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            {eventType === "physical" ? "Group size cap *" : "Capacity (blank = unlimited)"}
+          </label>
+          <input
+            type="number"
+            min="1"
+            step="1"
+            value={capacity}
+            onChange={(e) => setCapacity(e.target.value)}
+            placeholder={eventType === "physical" ? "e.g. 8" : "∞"}
+            className={inputClass}
+            style={{ fontFamily: "var(--font-dm-sans)" }}
+          />
+        </div>
+      </div>
+
+      {eventType === "online" && (
+        <div>
+          <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            Meeting link {price && parseFloat(price) > 0 ? "*" : ""}
+          </label>
+          <input
+            value={meetingLink}
+            onChange={(e) => setMeetingLink(e.target.value)}
+            placeholder="https://meet.google.com/…"
+            className={inputClass}
+            style={{ fontFamily: "var(--font-dm-sans)" }}
+          />
+          <p className="mt-1.5 text-[11px] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            Only revealed to attendees after they join.
+          </p>
+        </div>
+      )}
+
       {/* Location */}
+      {eventType === "physical" && (
       <div>
         <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
           Location
@@ -208,11 +338,12 @@ export function CreateEventForm({ userId }: Props) {
         <input
           value={location}
           onChange={(e) => setLocation(e.target.value)}
-          placeholder="e.g. Nobu, Malibu"
+          placeholder="e.g. Carlton Wine Room, Melbourne"
           className={inputClass}
           style={{ fontFamily: "var(--font-dm-sans)" }}
         />
       </div>
+      )}
 
       {/* Visibility */}
       <div>

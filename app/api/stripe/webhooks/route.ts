@@ -154,6 +154,46 @@ async function handleCheckoutCompleted(
       break;
     }
 
+    case "event_ticket": {
+      const { user_id, event_id } = meta;
+      if (!user_id || !event_id) return;
+
+      // Ticket (financial record) + membership (access) — release scheduled
+      // for event end + 48h by the cron, which computes it from the event row
+      await supabase.from("event_tickets").upsert(
+        {
+          event_id,
+          user_id,
+          amount,
+          escrow_status: "held",
+          stripe_payment_intent_id: session.payment_intent as string,
+        },
+        { onConflict: "event_id,user_id" }
+      );
+      await supabase.from("event_members").upsert(
+        { event_id, user_id, role: "attendee" },
+        { onConflict: "event_id,user_id" }
+      );
+
+      const { data: ev } = await supabase
+        .from("events")
+        .select("creator_id, title")
+        .eq("id", event_id)
+        .single();
+      if (ev && ev.creator_id !== user_id) {
+        const { data: buyer } = await supabase
+          .from("profiles").select("full_name").eq("id", user_id).single();
+        await supabase.from("notifications").insert({
+          user_id: ev.creator_id,
+          type: "event_join",
+          title: `${buyer?.full_name ?? "Someone"} bought a ticket`,
+          body: ev.title,
+          data: { event_id },
+        });
+      }
+      break;
+    }
+
     case "booking_escrow": {
       const { client_id, booking_id } = meta;
       if (!client_id || !booking_id) return;

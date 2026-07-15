@@ -20,6 +20,10 @@ export type EventRow = {
   visibility: "public" | "private";
   cover_image_url: string | null;
   created_at: string;
+  end_time: string;
+  price: number;
+  capacity: number | null;
+  event_type: "physical" | "online";
   member_count?: number;
 };
 
@@ -67,13 +71,54 @@ export async function createEvent(data: {
   description: string;
   date: string;
   time: string;
+  end_time: string;
   location: string;
   visibility: "public" | "private";
   cover_image_url: string | null;
+  event_type: "physical" | "online";
+  price: number;
+  capacity: number | null;
+  meeting_link: string | null;
 }): Promise<{ eventId?: string; error?: string }> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
+
+  // PIVOT: structure is forced — end time always, capacity for physical
+  if (!data.end_time) return { error: "Events need an end time." };
+  if (data.end_time <= data.time) return { error: "End time must be after the start time." };
+  if (data.event_type === "physical" && (!data.capacity || data.capacity < 1)) {
+    return { error: "Physical events need a group size cap." };
+  }
+  if (data.event_type === "online" && data.capacity !== null && data.capacity < 1) {
+    return { error: "Capacity must be at least 1." };
+  }
+  if (data.price < 0) return { error: "Price can't be negative." };
+
+  // Paid events require payout-ready host mode (Stripe Connect active)
+  if (data.price > 0) {
+    const { data: host } = await supabase
+      .from("host_profiles")
+      .select("stripe_account_status")
+      .eq("user_id", user.id)
+      .maybeSingle();
+    if (host?.stripe_account_status !== "active") {
+      return {
+        error:
+          "Paid events need a payout account. Become a host and connect Stripe from Account → Settings first.",
+      };
+    }
+  }
+
+  // Hive scan on the event copy before it goes live
+  const verdict = await scanContent(
+    data.cover_image_url ? [data.cover_image_url] : [],
+    [data.title, data.description].filter(Boolean).join("\n")
+  );
+  if (verdict.status === "rejected") {
+    await recordModeration({ subjectUserId: user.id, contentType: "event", verdict });
+    return { error: "This event can't be published — it doesn't meet the content guidelines." };
+  }
 
   const { data: event, error } = await supabase
     .from("events")
@@ -83,14 +128,26 @@ export async function createEvent(data: {
       description: data.description.trim() || null,
       date: data.date,
       time: data.time,
-      location: data.location.trim() || null,
+      end_time: data.end_time,
+      location: data.event_type === "online" ? "Online" : (data.location.trim() || null),
       visibility: data.visibility,
       cover_image_url: data.cover_image_url,
+      event_type: data.event_type,
+      price: +data.price.toFixed(2),
+      capacity: data.event_type === "physical" ? data.capacity : data.capacity ?? null,
     })
     .select("id")
     .single();
 
   if (error || !event) return { error: error?.message ?? "Failed to create event" };
+
+  // Meeting link lives in the member-gated table, never on events
+  if (data.event_type === "online" && data.meeting_link?.trim()) {
+    await supabase.from("event_meeting_links").insert({
+      event_id: event.id,
+      meeting_link: data.meeting_link.trim(),
+    });
+  }
 
   // Auto-join creator as host
   await supabase.from("event_members").insert({
@@ -137,6 +194,10 @@ export async function getEvents(): Promise<EventRow[]> {
     visibility: e.visibility as "public" | "private",
     cover_image_url: e.cover_image_url,
     created_at: e.created_at,
+    end_time: e.end_time,
+    price: Number(e.price ?? 0),
+    capacity: e.capacity,
+    event_type: (e.event_type ?? "physical") as "physical" | "online",
     member_count: (e.event_members as Array<{ count: number }>)?.[0]?.count ?? 0,
   }));
 }
@@ -150,6 +211,7 @@ export async function getEvent(id: string): Promise<{
   isMember: boolean;
   isCreator: boolean;
   accessDenied: boolean;
+  meetingLink: string | null;
 } | null> {
   const supabase = await createClient();
   const admin = createAdminClient();
@@ -176,6 +238,14 @@ export async function getEvent(id: string): Promise<{
 
   const isMember = !!membershipRow || isCreator;
 
+  // Meeting link is member-gated by RLS — non-members simply get null
+  const { data: linkRow } = await supabase
+    .from("event_meeting_links")
+    .select("meeting_link")
+    .eq("event_id", id)
+    .maybeSingle();
+  const meetingLink = linkRow?.meeting_link ?? null;
+
   if (event.visibility === "private" && !isMember) {
     return {
       event: event as EventRow,
@@ -184,6 +254,7 @@ export async function getEvent(id: string): Promise<{
       isMember: false,
       isCreator: false,
       accessDenied: true,
+      meetingLink: null,
     };
   }
 
@@ -234,6 +305,7 @@ export async function getEvent(id: string): Promise<{
     isMember,
     isCreator,
     accessDenied: false,
+    meetingLink,
   };
 }
 
@@ -252,6 +324,25 @@ export async function joinEvent(eventId: string): Promise<{ error?: string }> {
     .maybeSingle();
 
   if (existing) return {};
+
+  // Paid events join through checkout (webhook admits after payment);
+  // capacity is checked here for free events (waitlists harden this later)
+  const { data: ev } = await supabase
+    .from("events")
+    .select("price, capacity")
+    .eq("id", eventId)
+    .single();
+  if (!ev) return { error: "Event not found." };
+  if (Number(ev.price) > 0) {
+    return { error: "PAID_EVENT" };
+  }
+  if (ev.capacity !== null) {
+    const { count } = await supabase
+      .from("event_members")
+      .select("*", { count: "exact", head: true })
+      .eq("event_id", eventId);
+    if ((count ?? 0) >= ev.capacity) return { error: "This event is full." };
+  }
 
   const { error } = await supabase.from("event_members").insert({
     event_id: eventId,
@@ -544,4 +635,70 @@ export async function getProfile(
     .single();
   if (!data) return null;
   return { full_name: data.full_name, avatar_url: data.avatar_url as string | null };
+}
+
+// ── Paid join: escrow checkout (Phase 4 pattern, 15% platform cut) ──
+
+export async function createEventTicketCheckout(
+  eventId: string
+): Promise<{ error?: string }> {
+  const { getStripe, getOrigin } = await import("@/lib/stripe");
+  const stripe = getStripe();
+  if (!stripe) return { error: "Payment not configured." };
+
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+
+  const { data: ev } = await supabase
+    .from("events")
+    .select("id, title, price, capacity, date, time")
+    .eq("id", eventId)
+    .single();
+  if (!ev || Number(ev.price) <= 0) return { error: "Event not found." };
+
+  const [{ data: existing }, { count: memberCount }] = await Promise.all([
+    supabase
+      .from("event_members")
+      .select("id")
+      .eq("event_id", eventId)
+      .eq("user_id", user.id)
+      .maybeSingle(),
+    supabase
+      .from("event_members")
+      .select("*", { count: "exact", head: true })
+      .eq("event_id", eventId),
+  ]);
+  if (existing) return { error: "You've already joined this event." };
+  if (ev.capacity !== null && (memberCount ?? 0) >= ev.capacity) {
+    return { error: "This event is full." };
+  }
+
+  const session = await stripe.checkout.sessions.create({
+    mode: "payment",
+    line_items: [
+      {
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: `Ticket — ${ev.title}`,
+            description:
+              "Held securely by Stripe until 48 hours after the event ends.",
+          },
+          unit_amount: Math.round(Number(ev.price) * 100),
+        },
+        quantity: 1,
+      },
+    ],
+    payment_intent_data: { transfer_group: `event_${eventId}` },
+    success_url: `${getOrigin()}/events/${eventId}?joined=1`,
+    cancel_url: `${getOrigin()}/events/${eventId}`,
+    metadata: {
+      type: "event_ticket",
+      user_id: user.id,
+      event_id: eventId,
+    },
+  });
+
+  redirect(session.url!);
 }

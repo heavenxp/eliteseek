@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { getEvent, joinEvent } from "@/app/actions/events";
+import { getEvent, joinEvent, createEventTicketCheckout } from "@/app/actions/events";
 import { EventChat } from "./event-chat";
 import { EventActions } from "./event-actions";
 
@@ -21,7 +21,9 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
   const result = await getEvent(id);
   if (!result) notFound();
 
-  const { event, members, inviteCodes, isMember, isCreator, accessDenied } = result;
+  const { event, members, inviteCodes, isMember, isCreator, accessDenied, meetingLink } = result;
+  const spotsLeft = event.capacity !== null ? Math.max(0, event.capacity - members.length) : null;
+  const isFull = spotsLeft === 0;
 
   // Fetch current user's profile for chat
   const admin = createAdminClient();
@@ -70,10 +72,13 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
     );
   }
 
-  // Join action (for public events, non-members)
+  // Join action (for public events, non-members): paid → escrow checkout
   async function handleJoin() {
     "use server";
-    await joinEvent(id);
+    const result = await joinEvent(id);
+    if (result?.error === "PAID_EVENT") {
+      await createEventTicketCheckout(id); // redirects to Stripe
+    }
     redirect(`/events/${id}`);
   }
 
@@ -180,12 +185,34 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
         <form action={handleJoin} className="mb-6">
           <button
             type="submit"
-            className="w-full rounded-xl bg-gold py-3 text-sm font-semibold text-black hover:bg-gold-light transition-colors"
+            disabled={isFull}
+            className="w-full rounded-xl bg-gold py-3 text-sm font-semibold text-black hover:bg-gold-light transition-colors disabled:cursor-not-allowed disabled:opacity-40"
             style={{ fontFamily: "var(--font-dm-sans)" }}
           >
-            Join Event
+            {isFull
+              ? "Sold out"
+              : event.price > 0
+                ? `Get ticket · $${Number(event.price)}`
+                : "Join Event"}
           </button>
+          {!isFull && spotsLeft !== null && spotsLeft <= 5 && (
+            <p className="mt-2 text-center text-[11px] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              {spotsLeft} spot{spotsLeft === 1 ? "" : "s"} left
+            </p>
+          )}
         </form>
+      )}
+
+      {/* Meeting link — members only (RLS enforces; this just renders) */}
+      {isMember && meetingLink && (
+        <div className="mb-6 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+          <p className="mb-1 text-[11px] uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            Meeting link
+          </p>
+          <a href={meetingLink} target="_blank" rel="noopener noreferrer" className="break-all text-sm text-gold hover:text-gold-light" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            {meetingLink}
+          </a>
+        </div>
       )}
 
       {/* Invite codes (creator of private event) */}

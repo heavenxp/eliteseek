@@ -22,7 +22,7 @@ export function hiveConfigured(): boolean {
 export async function recordModeration(opts: {
   subjectUserId: string;
   contentId?: string | null;
-  contentType: "content_post" | "feed_post" | "story" | "message" | "profile_photo" | "availability_post";
+  contentType: "content_post" | "feed_post" | "story" | "message" | "profile_photo" | "availability_post" | "event";
   verdict: ModerationVerdict;
 }): Promise<void> {
   const { createAdminClient } = await import("@/lib/supabase/admin");

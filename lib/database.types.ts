@@ -400,6 +400,7 @@ export const PLATFORM_FEES = {
   tip: 0.20,
   gift: 0.20,
   booking: 0.15,
+  event_ticket: 0.15,
   membership: 1.00, // platform keeps all
 } as const;
 

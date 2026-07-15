@@ -114,7 +114,7 @@ The events pivot replaces the original Phase 6 (Melbourne Launch). Tracking:
 
 ### Phase 6 — The Refocus
 - [x] One-account model: profile split merged (migrations 028–031: host_profiles rename with all 10 FKs intact, client_profiles folded into profiles, signup-trigger fix, compat views dropped after deploy, self-insert policy); code swept (43 files + 10 rekeyed reads); signup collapsed to one account type; "become a host" upgrade flow (account CTA → host_profiles row + role flip → existing onboarding/Identity/Connect chain)
-- [ ] Events extended: end time, ticketing (price × capacity via escrow), online event type
+- [x] Events extended: end time (DB NOT NULL), ticketing on the P4 escrow (event_tickets, webhook-admitted, cron-released at end+48h, 15% cut), online type with member-gated meeting links (separate RLS table — column would leak via PostgREST), capacity DB-required for physical; create form + event page (ticket CTA, sold-out, spots-left) — migration 032 applied, deployed, verified in-browser
 - [ ] Public share pages: no-account view, join-first flow (view → pay → account creation last)
 - [ ] Discovery pulse feed (event cards: host + verified avatars, countdown, spots left) + waitlists; calendar as secondary toggle only
 - [ ] Decaying-refund curve on event escrow (100% → 7d slide → 50% floor → locked inside 48h) with the transparent refund visual

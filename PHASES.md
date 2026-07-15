@@ -110,10 +110,26 @@ The schema already supports a full social layer (`posts`/likes/comments/follows/
 
 ## Phases 6–8 — see PIVOT.md §4
 
-The events pivot replaces the original Phase 6 (Melbourne Launch) with:
-- **Phase 6 — The Refocus**: one-account model (merge profile split, "become a host" upgrade), events extended (end time, ticketing, online type, public share pages), discovery pulse feed + waitlists, decaying-refund escrow curve, sitewide events/host/guest copy
-- **Phase 7 — Communities**: event group = chat + feed, post-event persistence with paid membership, paywalled group posts, all through Hive
-- **Phase 8 — Melbourne Launch (revised)**: 15–20 founding hosts with existing audiences, inner-Melbourne depth, online events funnel, "this week in Melbourne" launch surface. Ops gates unchanged (HIVE_API_KEY, CRON_SECRET + GH Actions cron, Stripe dashboard items, dispute-resolution UI, USD→AUD decision, end-to-end escrow test, rename/domain decision)
+The events pivot replaces the original Phase 6 (Melbourne Launch). Tracking:
+
+### Phase 6 — The Refocus
+- [x] One-account model: profile split merged (migrations 028–031: host_profiles rename with all 10 FKs intact, client_profiles folded into profiles, signup-trigger fix, compat views dropped after deploy, self-insert policy); code swept (43 files + 10 rekeyed reads); signup collapsed to one account type; "become a host" upgrade flow (account CTA → host_profiles row + role flip → existing onboarding/Identity/Connect chain)
+- [ ] Events extended: end time, ticketing (price × capacity via escrow), online event type
+- [ ] Public share pages: no-account view, join-first flow (view → pay → account creation last)
+- [ ] Discovery pulse feed (event cards: host + verified avatars, countdown, spots left) + waitlists; calendar as secondary toggle only
+- [ ] Decaying-refund curve on event escrow (100% → 7d slide → 50% floor → locked inside 48h) with the transparent refund visual
+- [ ] Copy: remaining booking-flow + email copy → events language (bulk done in P5)
+- [ ] **Decision needed:** profile locks + membership_tier (companion-era DNA) — keep, kill, or fold into client_tier; parked from the 028 review
+- [ ] Role-column retirement: nav/routing still gate on profiles.role; move to "has host_profiles row" as the host-mode signal
+
+### Phase 7 — Communities
+- [ ] Event group = chat + feed (merge event_messages with posts engine)
+- [ ] Post-event persistence: host keeps group open, sets join fee / recurring membership
+- [ ] Paywalled posts inside groups (existing PPV engine); all group content through Hive
+
+### Phase 8 — Melbourne Launch (revised)
+- [ ] 15–20 founding hosts with existing audiences; inner-Melbourne depth; online events funnel; "this week in Melbourne" launch surface
+- [ ] Ops gates (unchanged): HIVE_API_KEY, CRON_SECRET + GH Actions cron, Stripe dashboard items, dispute-resolution admin UI, USD→AUD decision, end-to-end escrow test, rename/domain decision
 
 ---
 

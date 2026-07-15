@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { scanContent, recordModeration } from "@/lib/moderation";
+import { PRICE_FLOORS } from "@/lib/pricing";
 
 // ── Types ─────────────────────────────────────────────────────
 
@@ -52,8 +53,8 @@ export async function createContentPost(
   if (!input.title && !input.body && input.mediaItems.length === 0) {
     return { error: "Add some media or text to publish." };
   }
-  if (input.isPpv && (!input.ppvPrice || input.ppvPrice < 3)) {
-    return { error: "PPV price must be at least $3." };
+  if (input.isPpv && (!input.ppvPrice || input.ppvPrice < PRICE_FLOORS.ppv)) {
+    return { error: `PPV price must be at least $${PRICE_FLOORS.ppv}.` };
   }
 
   // Hive scan before publish: rejected → refuse; flagged → hold for manual

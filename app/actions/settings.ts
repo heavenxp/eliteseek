@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { PRICE_FLOORS } from "@/lib/pricing";
 import type { VisibilityLevel } from "@/lib/database.types";
 
 export type SettingsState = { error?: string; success?: boolean } | null;
@@ -36,6 +37,15 @@ export async function updateCompanionSettings(
   const profileUnlockFee = unlockFeeRaw ? parseFloat(unlockFeeRaw) : null;
   const subscriptionPrice = subPriceRaw ? parseFloat(subPriceRaw) : null;
   const bookingRateHourly = bookingRateRaw ? parseFloat(bookingRateRaw) : null;
+
+  // Enforce platform floors here too — onboarding checks alone left this
+  // path open to under-floor pricing.
+  if (subscriptionPrice && subscriptionPrice > 0 && subscriptionPrice < PRICE_FLOORS.subscription) {
+    return { error: `Subscription price must be at least $${PRICE_FLOORS.subscription}.` };
+  }
+  if (profileUnlockFee && profileUnlockFee > 0 && profileUnlockFee < PRICE_FLOORS.profile_unlock) {
+    return { error: `Profile unlock fee must be at least $${PRICE_FLOORS.profile_unlock}.` };
+  }
 
   const { error } = await supabase
     .from("companion_profiles")

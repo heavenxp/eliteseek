@@ -23,6 +23,7 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
   const currentTier = searchParams.get("tier") ?? "";
   const currentAvailable = searchParams.get("available") === "1";
   const currentSort = searchParams.get("sort") ?? "featured";
+  const currentCity = searchParams.get("city") ?? "";
 
   const updateParam = useCallback(
     (updates: Record<string, string>) => {
@@ -47,7 +48,7 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
     updateParam({ tags: next.join(",") });
   };
 
-  const hasFilters = currentTags.length > 0 || currentTier || currentAvailable;
+  const hasFilters = currentTags.length > 0 || currentTier || currentAvailable || currentCity;
 
   const clearAll = () => {
     startTransition(() => {
@@ -110,6 +111,35 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
               )}
             </button>
           ))}
+        </div>
+      </div>
+
+      <div className="gold-divider" />
+
+      {/* City */}
+      <div>
+        <p className="mb-2 text-xs uppercase tracking-[0.12em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          City
+        </p>
+        <div className="relative">
+          <Icon name="map-pin" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gold/40" />
+          <input
+            type="text"
+            defaultValue={currentCity}
+            placeholder="e.g. Melbourne"
+            className="auth-input pl-9"
+            style={{ fontFamily: "var(--font-dm-sans)" }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                updateParam({ city: (e.target as HTMLInputElement).value.trim() });
+              }
+            }}
+            onBlur={(e) => {
+              const v = e.target.value.trim();
+              if (v !== currentCity) updateParam({ city: v });
+            }}
+            aria-label="Filter by city"
+          />
         </div>
       </div>
 

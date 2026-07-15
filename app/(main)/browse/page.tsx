@@ -34,6 +34,7 @@ export default async function BrowsePage({
   const q = typeof sp.q === "string" ? sp.q.trim() : "";
   const tags = typeof sp.tags === "string" && sp.tags ? sp.tags.split(",").filter(Boolean) : [];
   const tier = typeof sp.tier === "string" ? sp.tier : "";
+  const city = typeof sp.city === "string" ? sp.city.trim() : "";
   const available = sp.available === "1";
   const sort = typeof sp.sort === "string" ? sp.sort : "featured";
   const page = Math.max(1, parseInt(typeof sp.page === "string" ? sp.page : "1", 10) || 1);
@@ -52,6 +53,7 @@ export default async function BrowsePage({
   if (q) query = query.or(`display_name.ilike.%${q}%,location.ilike.%${q}%`);
   if (tags.length > 0) query = query.overlaps("tags", tags);
   if (tier === "verified" || tier === "select") query = query.eq("verification_tier", tier);
+  if (city) query = query.ilike("location", `%${city}%`);
   if (available) query = query.eq("is_available", true);
 
   switch (sort) {

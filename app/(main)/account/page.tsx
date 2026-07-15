@@ -4,6 +4,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { Icon } from "@/components/icons";
+import { becomeHost } from "@/app/actions/host";
 
 type ClientTab = "activity" | "unlocked" | "bookings";
 
@@ -468,6 +469,24 @@ export default async function AccountPage({
             ))}
           </div>
         </div>
+
+        {/* Become a host (one-account model: host is a mode) */}
+        <form action={becomeHost} className="mb-2">
+          <button
+            type="submit"
+            className="flex w-full items-center justify-between rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-left transition-colors hover:border-white/20"
+          >
+            <div>
+              <p className="text-sm font-medium text-foreground" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                Become a host
+              </p>
+              <p className="mt-0.5 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                Host events, build a community, and earn — ID verification included.
+              </p>
+            </div>
+            <Icon name="arrow-right" className="h-4 w-4 shrink-0 text-gold" />
+          </button>
+        </form>
 
         {/* Tabs: Activity | Unlocked | Bookings */}
         <div className="sticky top-[65px] z-20 -mx-4 bg-[rgba(8,8,16,0.95)] px-4 backdrop-blur-sm">

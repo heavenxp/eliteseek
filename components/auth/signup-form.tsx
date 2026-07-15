@@ -1,15 +1,13 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState } from "react";
 import Link from "next/link";
 import { signUp, signInWithGoogle, type AuthState } from "@/app/actions/auth";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Icon } from "@/components/icons";
 
-type Role = "client" | "companion";
 
 export function SignupForm() {
-  const [role, setRole] = useState<Role>("client");
   const [state, formAction, isPending] = useActionState<AuthState, FormData>(signUp, null);
 
   return (
@@ -53,32 +51,9 @@ export function SignupForm() {
           </div>
         ) : (
           <>
-            {/* Role selector */}
             <div className="mb-6">
-              <p
-                className="mb-3 text-xs text-muted/70"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
-              >
-                I want to join as a…
-              </p>
-              <div className="grid grid-cols-2 gap-3">
-                <RoleCard
-                  value="client"
-                  selected={role === "client"}
-                  onSelect={() => setRole("client")}
-                  icon="diamond"
-                  title="Guest"
-                  description="Join events & book hosts"
-                />
-                <RoleCard
-                  value="companion"
-                  selected={role === "companion"}
-                  onSelect={() => setRole("companion")}
-                  icon="star"
-                  title="Host"
-                  description="Host events & earn"
-                />
-              </div>
+              
+              
             </div>
 
             {/* Google OAuth */}
@@ -104,7 +79,7 @@ export function SignupForm() {
 
             {/* Form */}
             <form action={formAction} className="space-y-4">
-              <input type="hidden" name="role" value={role} />
+              <input type="hidden" name="role" value="client" />
 
               <div>
                 <label
@@ -179,7 +154,7 @@ export function SignupForm() {
                 className="btn-gold mt-2 w-full rounded-xl py-3 text-sm disabled:opacity-60"
                 style={{ fontFamily: "var(--font-dm-sans)" }}
               >
-                {isPending ? "Creating account…" : `Join as ${role === "client" ? "Guest" : "Host"}`}
+                {isPending ? "Creating account…" : "Create account"}
               </button>
             </form>
 
@@ -208,68 +183,6 @@ export function SignupForm() {
         . You must be 18+ to use EliteSeek.
       </p>
     </div>
-  );
-}
-
-function RoleCard({
-  value,
-  selected,
-  onSelect,
-  icon,
-  title,
-  description,
-}: {
-  value: Role;
-  selected: boolean;
-  onSelect: () => void;
-  icon: string;
-  title: string;
-  description: string;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onSelect}
-      className={[
-        "relative flex flex-col items-center gap-2 rounded-xl border px-4 py-4 text-center transition-all duration-200",
-        selected
-          ? "border-white/20 bg-white/[0.04]"
-          : "border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.02)] hover:border-white/20 hover:bg-white/[0.04]",
-      ].join(" ")}
-    >
-      {selected && (
-        <span className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-gold">
-          <Icon name="check" className="h-2.5 w-2.5 text-[#080810]" />
-        </span>
-      )}
-      <div
-        className={[
-          "flex h-9 w-9 items-center justify-center rounded-full border transition-colors",
-          selected
-            ? "border-white/20 bg-white/[0.07]"
-            : "border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.04)]",
-        ].join(" ")}
-      >
-        <Icon
-          name={icon}
-          className={`h-4 w-4 ${selected ? "text-gold" : "text-muted"}`}
-        />
-      </div>
-      <div>
-        <p
-          className={`text-sm font-medium ${selected ? "text-foreground" : "text-muted"}`}
-          style={{ fontFamily: "var(--font-dm-sans)" }}
-        >
-          {title}
-        </p>
-        <p
-          className="mt-0.5 text-[11px] text-muted/60 leading-tight"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
-        >
-          {description}
-        </p>
-      </div>
-    </button>
   );
 }
 

@@ -101,7 +101,7 @@ function HostMembershipContent({
             className="text-4xl font-light text-white"
             style={{ fontFamily: "var(--font-cormorant)" }}
           >
-            Elite Host Status
+            host Status
           </h1>
           <p className="mt-2 text-sm text-white/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
             Your tier is earned automatically through client ratings

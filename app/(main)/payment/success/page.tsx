@@ -7,7 +7,7 @@ import { Icon } from "@/components/icons";
 const COPY = {
   unlock: {
     title: "Profile Unlocked",
-    body: "You now have full access to this Elite Host's profile.",
+    body: "You now have full access to this host's profile.",
     cta: "View Profile",
   },
   ppv: {
@@ -17,7 +17,7 @@ const COPY = {
   },
   subscription: {
     title: "Subscription Active",
-    body: "You're now subscribed. Enjoy exclusive content from this Elite Host.",
+    body: "You're now subscribed. Enjoy exclusive content from this host.",
     cta: "Browse Content",
   },
   booking: {
@@ -112,7 +112,7 @@ export default async function PaymentSuccessPage({
             className="btn-ghost w-full rounded-xl px-5 py-2.5 text-sm"
             style={{ fontFamily: "var(--font-dm-sans)" }}
           >
-            Browse Elite Hosts
+            Browse hosts
           </Link>
         </div>
       </div>

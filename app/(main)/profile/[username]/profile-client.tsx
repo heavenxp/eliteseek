@@ -10,7 +10,6 @@ import { sendAccessRequest, type AccessState } from "@/app/actions/access";
 import { BookingModal } from "@/components/booking/booking-modal";
 import { MessageButton } from "@/components/messages/message-button";
 import { SubscribeButton } from "@/components/subscriptions/subscribe-button";
-import { PostCard } from "@/components/posts/post-card";
 import type { AvailabilityPost } from "@/lib/database.types";
 import { getFollowerList, getFollowingList, type FollowListItem } from "@/app/actions/follows";
 import { TierBadge } from "@/components/badges/tier-badge";
@@ -112,7 +111,7 @@ export function ProfileBody({
   visitorData,
 }: ProfileBodyProps) {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<"posts" | "availability" | "media" | "videos">("posts");
+  const [activeTab, setActiveTab] = useState<"posts" | "events" | "media" | "about">("posts");
   const [isFollowing, setIsFollowing] = useState(visitorData?.isFollowing ?? false);
   const [followerCount, setFollowerCount] = useState(initialFollowerCount);
   const [followPending, startFollowTransition] = useTransition();
@@ -324,11 +323,6 @@ export function ProfileBody({
               style={{ fontFamily: "var(--font-cormorant)" }}
             >
               {companion.displayName}
-              {companion.age && (
-                <span className="ml-1.5 text-xl font-light text-muted/50">
-                  {companion.age}
-                </span>
-              )}
             </h1>
             <VerifiedBadge tier={companion.verification_tier} size="lg" />
             {companion.host_tier && companion.host_tier !== "pearl" && (
@@ -458,21 +452,6 @@ export function ProfileBody({
           </span>
         </div>
 
-        {/* Tags */}
-        {companion.tags.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-1.5">
-            {companion.tags.map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-0.5 text-[11px] text-gold/70"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
-
         {/* ── Owner dashboard section ── */}
         {isOwner && od && (
           <div className="mt-6">
@@ -533,7 +512,7 @@ export function ProfileBody({
         {/* ── Tabs ── */}
         <div className="sticky top-[65px] z-20 mt-6 -mx-4 bg-[rgba(8,8,16,0.95)] px-4 backdrop-blur-sm">
           <div className="flex border-b border-[rgba(255,255,255,0.06)]">
-            {(["posts", "availability", "media", "videos"] as const).map((tab) => (
+            {(["posts", "events", "media", "about"] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -559,7 +538,7 @@ export function ProfileBody({
               onDelete={async (postId) => { await deletePost(postId); router.refresh(); }}
             />
           )}
-          {activeTab === "availability" && (
+          {activeTab === "events" && (
             <AvailabilityTab
               posts={availabilityPosts}
               isOwner={isOwner}
@@ -567,18 +546,23 @@ export function ProfileBody({
             />
           )}
           {activeTab === "media" && (
-            <MediaTab
-              items={mediaItems}
-              isFullyVisible={isOwner || (vd?.isFullyVisible ?? false)}
-            />
+            <>
+              <MediaTab
+                items={mediaItems}
+                isFullyVisible={isOwner || (vd?.isFullyVisible ?? false)}
+              />
+              {videoItems.length > 0 && (
+                <div className="mt-4">
+                  <VideosTab
+                    items={videoItems}
+                    isSubscribed={vd?.isSubscribed ?? true}
+                    isFullyVisible={isOwner || (vd?.isFullyVisible ?? false)}
+                  />
+                </div>
+              )}
+            </>
           )}
-          {activeTab === "videos" && (
-            <VideosTab
-              items={videoItems}
-              isSubscribed={vd?.isSubscribed ?? true}
-              isFullyVisible={isOwner || (vd?.isFullyVisible ?? false)}
-            />
-          )}
+          {activeTab === "about" && <AboutTab companion={companion} />}
 
           {/* Locked overlay — covers tab content when profile is not fully visible */}
           {!isOwner && vd && !vd.isFullyVisible && vd.lockStatus !== "public" && (
@@ -1017,6 +1001,62 @@ const CATEGORY_LABELS: Record<string, string> = {
   gallery_art: "Gallery & Art",
   weekend_getaway: "Weekend Getaway",
 };
+
+function AboutTab({ companion }: { companion: CompanionData }) {
+  const rows: Array<[string, string]> = [];
+  if (companion.age) rows.push(["Age", String(companion.age)]);
+  if (companion.location) rows.push(["Based in", companion.location]);
+  if (companion.languages.length > 0) rows.push(["Languages", companion.languages.join(", ")]);
+  if (companion.booking_rate_hourly) rows.push(["Hourly rate", `$${companion.booking_rate_hourly}`]);
+
+  return (
+    <div className="space-y-6">
+      {rows.length > 0 && (
+        <div className="divide-y divide-white/[0.06] rounded-2xl border border-white/[0.08]">
+          {rows.map(([label, value]) => (
+            <div key={label} className="flex items-center justify-between px-4 py-3">
+              <span className="text-xs uppercase tracking-[0.08em] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                {label}
+              </span>
+              <span className="text-sm text-foreground/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                {value}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {companion.tags.length > 0 && (
+        <div>
+          <p className="mb-2 text-xs uppercase tracking-[0.08em] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            Event types
+          </p>
+          <div className="flex flex-wrap gap-1.5">
+            {companion.tags.map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-0.5 text-[11px] text-muted/70"
+                style={{ fontFamily: "var(--font-dm-sans)" }}
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {(companion.verification_tier === "verified" || companion.verification_tier === "select") && (
+        <div className="flex items-center gap-2.5 rounded-2xl border border-white/[0.08] bg-white/[0.03] px-4 py-3">
+          <VerifiedBadge tier={companion.verification_tier} size="md" />
+          <p className="text-sm text-muted/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            Identity verified via Stripe Identity
+            {companion.verification_tier === "select" ? " · handpicked Select host" : ""}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
 
 function AvailabilityTab({
   posts,

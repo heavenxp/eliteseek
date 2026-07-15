@@ -56,7 +56,7 @@ export async function createBookingRequest(
     .eq("id", userId)
     .single();
   if (viewerProfile?.role === "companion") {
-    return { error: "Elite Hosts cannot send booking requests." };
+    return { error: "Hosts cannot send booking requests." };
   }
 
   // Phase 2: clients must be ID-verified to book (browsing and content

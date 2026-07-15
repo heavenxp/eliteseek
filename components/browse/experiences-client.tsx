@@ -92,7 +92,7 @@ export function ExperiencesClient({ posts, isAuthenticated }: Props) {
             No experiences available
           </p>
           <p className="text-sm text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
-            Check back soon — Elite Hosts post new availability regularly.
+            Check back soon — hosts post new availability regularly.
           </p>
         </div>
       ) : (
@@ -109,7 +109,7 @@ export function ExperiencesClient({ posts, isAuthenticated }: Props) {
                   </p>
                   {post.companion.verification_tier === "select" && (
                     <span className="text-[10px] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
-                      Select Elite Host
+                      Select host
                     </span>
                   )}
                 </div>
@@ -142,7 +142,7 @@ export function ExperiencesClient({ posts, isAuthenticated }: Props) {
             Sign in to book experiences
           </p>
           <p className="mt-1 text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
-            Create a free account to send booking requests to Elite Hosts.
+            Create a free account to send booking requests to hosts.
           </p>
           <a
             href="/login"

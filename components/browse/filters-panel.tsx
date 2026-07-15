@@ -176,7 +176,7 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
         </p>
         <div className="space-y-1">
           {[
-            { value: "", label: "All Elite Hosts" },
+            { value: "", label: "All hosts" },
             { value: "verified", label: "Verified" },
             { value: "select", label: "EliteSeek Select" },
           ].map((opt) => (

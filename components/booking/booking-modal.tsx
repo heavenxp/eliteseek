@@ -227,7 +227,7 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
             {/* Message */}
             <div>
               <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
-                Message to Elite Host <span className="normal-case">(optional)</span>
+                Message to host <span className="normal-case">(optional)</span>
               </label>
               <textarea
                 name="notes"

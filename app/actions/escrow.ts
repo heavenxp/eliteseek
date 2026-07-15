@@ -55,7 +55,7 @@ export async function createBookingEscrowCheckout(
         price_data: {
           currency: "usd",
           product_data: {
-            name: `Booking — ${companion?.display_name ?? "Elite Host"}`,
+            name: `Booking — ${companion?.display_name ?? "host"}`,
             description:
               "Held securely by Stripe until 48 hours after your booking completes.",
           },

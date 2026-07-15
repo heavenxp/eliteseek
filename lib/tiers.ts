@@ -28,7 +28,7 @@ export const CLIENT_TIERS: {
     color: "#cd7f32",
     minSpend: 0,
     perks: [
-      "Follow Elite Hosts",
+      "Follow hosts",
       "Post on the feed",
       "Basic browse & discovery",
     ],
@@ -62,7 +62,7 @@ export const CLIENT_TIERS: {
     minSpend: 2000,
     perks: [
       "Everything in Gold",
-      "Direct message Elite Hosts",
+      "Direct message hosts",
       "Early access to availability posts",
       "Unlock all content tiers",
     ],

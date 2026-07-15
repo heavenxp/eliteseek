@@ -118,7 +118,7 @@ export default async function AccountPage({
                   {profile.full_name}
                 </h1>
                 <p className="text-sm text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
-                  Elite Host · Since {memberSince}
+                  host · Since {memberSince}
                 </p>
                 <span
                   className="mt-1.5 inline-block rounded-full border border-white/20 bg-white/[0.04] px-3 py-0.5 text-xs text-gold"

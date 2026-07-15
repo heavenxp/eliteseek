@@ -28,7 +28,7 @@ const MEMBERSHIP_OPTIONS: {
     period: "",
     tagline: "Begin your journey",
     features: [
-      "Browse public Elite Host profiles",
+      "Browse public host profiles",
       "View public content feeds",
       "Basic search & filters",
     ],
@@ -57,7 +57,7 @@ const MEMBERSHIP_OPTIONS: {
       "Everything in Silver",
       "Access Elite Only profiles",
       "Personal concierge service",
-      "First access to new Elite Hosts",
+      "First access to new hosts",
       "Private events & introductions",
       "Exclusive Elite Lounge",
     ],
@@ -344,7 +344,7 @@ export function ClientOnboarding({
           </h1>
           <p className="mt-1.5 text-sm text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>
             {step === 1
-              ? "Tell us what you're looking for so we can surface the right Elite Hosts."
+              ? "Tell us what you're looking for so we can surface the right hosts."
               : "Upgrade anytime. Start free and explore."}
           </p>
         </div>

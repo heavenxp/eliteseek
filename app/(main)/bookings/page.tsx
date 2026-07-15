@@ -177,7 +177,7 @@ function BookingCard({ booking }: { booking: BookingRow }) {
             <p className="text-sm text-foreground/90" style={{ fontFamily: "var(--font-dm-sans)" }}>
               {TYPE_LABELS[booking.booking_type]} ·{" "}
               <Link href={profileHref} className="text-gold/70 hover:text-gold">
-                {booking.host?.display_name ?? "Elite Host"}
+                {booking.host?.display_name ?? "host"}
               </Link>
             </p>
             <span
@@ -207,7 +207,7 @@ function BookingCard({ booking }: { booking: BookingRow }) {
           </div>
           {booking.status === "pending" && (
             <p className="mt-2 text-xs text-amber-400/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
-              Awaiting Elite Host response — usually within 24 hours
+              Awaiting host response — usually within 24 hours
             </p>
           )}
           {booking.status === "confirmed" && booking.escrow_status === "unpaid" && (

@@ -404,7 +404,7 @@ export function CompanionOnboarding({
         <FieldInput
           value={tagline}
           onChange={(e) => setTagline(e.target.value.slice(0, 80))}
-          placeholder="Art curator & the most captivating dinner Elite Host"
+          placeholder="Art curator & the most captivating dinner host"
         />
       </div>
       <div>

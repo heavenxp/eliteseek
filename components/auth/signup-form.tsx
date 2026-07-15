@@ -67,16 +67,16 @@ export function SignupForm() {
                   selected={role === "client"}
                   onSelect={() => setRole("client")}
                   icon="diamond"
-                  title="Client"
-                  description="Discover & book Elite Hosts"
+                  title="Guest"
+                  description="Join events & book hosts"
                 />
                 <RoleCard
                   value="companion"
                   selected={role === "companion"}
                   onSelect={() => setRole("companion")}
                   icon="star"
-                  title="Elite Host"
-                  description="Share experiences & earn"
+                  title="Host"
+                  description="Host events & earn"
                 />
               </div>
             </div>
@@ -179,7 +179,7 @@ export function SignupForm() {
                 className="btn-gold mt-2 w-full rounded-xl py-3 text-sm disabled:opacity-60"
                 style={{ fontFamily: "var(--font-dm-sans)" }}
               >
-                {isPending ? "Creating account…" : `Join as ${role === "client" ? "Client" : "Elite Host"}`}
+                {isPending ? "Creating account…" : `Join as ${role === "client" ? "Guest" : "Host"}`}
               </button>
             </form>
 

@@ -11,14 +11,14 @@ export default function MessagesPage() {
         Your messages
       </p>
       <p className="text-sm text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
-        Select a conversation or start one from an Elite Host&apos;s profile.
+        Select a conversation or start one from a host&apos;s profile.
       </p>
       <Link
         href="/browse"
         className="btn-gold mt-2 rounded-xl px-6 py-2.5 text-sm"
         style={{ fontFamily: "var(--font-dm-sans)" }}
       >
-        Browse Elite Hosts
+        Browse hosts
       </Link>
     </div>
   );

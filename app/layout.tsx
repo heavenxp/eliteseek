@@ -20,10 +20,10 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "EliteSeek — Curated Elite Hosts",
+  title: "EliteSeek — Real events, verified people",
   description:
-    "A verified companion booking and content platform. Book ID-verified Elite Hosts for dinners, events, and travel, or subscribe to exclusive content. Private and secure.",
-  keywords: ["Elite Host", "experiences", "luxury", "premium", "social"],
+    "A verified companion booking and content platform. Book ID-verified hosts for dinners, events, and travel, or subscribe to exclusive content. Private and secure.",
+  keywords: ["events", "hosts", "verified", "social", "community"],
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
@@ -31,18 +31,18 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
   },
   openGraph: {
-    title: "EliteSeek — Curated Elite Hosts",
+    title: "EliteSeek — Real events, verified people",
     description:
-      "Discover extraordinary social experiences with handpicked Elite Hosts.",
+      "Paid events by verified hosts — where everyone in the room is real.",
     type: "website",
     url: "https://eliteseek.com",
     siteName: "EliteSeek",
   },
   twitter: {
     card: "summary_large_image",
-    title: "EliteSeek — Curated Elite Hosts",
+    title: "EliteSeek — Real events, verified people",
     description:
-      "Discover extraordinary social experiences with handpicked Elite Hosts.",
+      "Paid events by verified hosts — where everyone in the room is real.",
   },
   icons: {
     icon: [

@@ -118,7 +118,7 @@ export default async function ClientVerificationPage({
                 className="btn-gold rounded-full px-6 py-2.5 text-sm"
                 style={{ fontFamily: "var(--font-dm-sans)" }}
               >
-                Browse Elite Hosts
+                Browse hosts
               </Link>
             </div>
           </div>

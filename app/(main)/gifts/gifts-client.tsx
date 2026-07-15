@@ -83,7 +83,7 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
             className="mt-1 text-sm text-muted/50"
             style={{ fontFamily: "var(--font-dm-sans)" }}
           >
-            Delight an Elite Host with something from their wishlist or a custom gift.
+            Delight a host with something from their wishlist or a custom gift.
           </p>
         </div>
 
@@ -122,7 +122,7 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
                   className="btn-gold mt-4 inline-block rounded-xl px-5 py-2.5 text-sm"
                   style={{ fontFamily: "var(--font-dm-sans)" }}
                 >
-                  Browse Elite Hosts
+                  Browse hosts
                 </Link>
               </div>
             ) : (

@@ -36,7 +36,7 @@ export function ContentFeedClient({ posts, currentUserId, stripeConfigured = fal
             Content
           </h1>
           <p className="mt-1 text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
-            Explore exclusive content from Elite Hosts
+            Explore exclusive content from hosts
           </p>
         </div>
 
@@ -133,11 +133,11 @@ function ContentCard({ post, stripeConfigured }: { post: FeedPost; stripeConfigu
               className="text-sm font-medium text-foreground hover:text-gold"
               style={{ fontFamily: "var(--font-dm-sans)" }}
             >
-              {post.companion?.display_name ?? "Elite Host"}
+              {post.companion?.display_name ?? "host"}
             </Link>
           ) : (
             <p className="text-sm font-medium text-foreground" style={{ fontFamily: "var(--font-dm-sans)" }}>
-              {post.companion?.display_name ?? "Elite Host"}
+              {post.companion?.display_name ?? "host"}
             </p>
           )}
           <p className="text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>

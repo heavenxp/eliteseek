@@ -7,18 +7,18 @@ import { Pagination } from "@/components/browse/pagination";
 import type { CompanionCard as CompanionCardType, MembershipTier } from "@/lib/database.types";
 
 export const metadata: Metadata = {
-  title: "Browse Elite Hosts — EliteSeek",
-  description: "Discover and book verified Elite Hosts for private dinners, travel, events, and exclusive social experiences.",
+  title: "Browse Hosts — EliteSeek",
+  description: "Discover verified hosts — book dinners, activities, travel, and online sessions where everyone is real.",
   openGraph: {
-    title: "Browse Elite Hosts — EliteSeek",
-    description: "Discover handpicked Elite Hosts for every occasion.",
+    title: "Browse Hosts — EliteSeek",
+    description: "Verified hosts for every occasion.",
     type: "website",
     url: "https://eliteseek.com/browse",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Browse Elite Hosts — EliteSeek",
-    description: "Discover handpicked Elite Hosts for every occasion.",
+    title: "Browse Hosts — EliteSeek",
+    description: "Verified hosts for every occasion.",
   },
 };
 
@@ -127,7 +127,7 @@ function ResultsMeta({ total, page, pageSize }: { total: number; page: number; p
   const to = Math.min(page * pageSize, total);
   return (
     <p className="mb-5 text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
-      Showing {from}–{to} of {total} Elite Host{total !== 1 ? "s" : ""}
+      Showing {from}–{to} of {total} host{total !== 1 ? "s" : ""}
     </p>
   );
 }
@@ -141,7 +141,7 @@ function EmptyState({ hasFilters }: { hasFilters: boolean }) {
         </svg>
       </div>
       <p className="text-lg font-light text-foreground/70" style={{ fontFamily: "var(--font-cormorant)" }}>
-        {hasFilters ? "No Elite Hosts match your filters" : "No Elite Hosts found"}
+        {hasFilters ? "No hosts match your filters" : "No hosts found"}
       </p>
       {hasFilters && (
         <p className="mt-1 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>

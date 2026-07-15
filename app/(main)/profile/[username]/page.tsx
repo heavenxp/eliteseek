@@ -24,7 +24,7 @@ export async function generateMetadata({
 
   // Unverified profiles are not live — don't leak their details in metadata
   if (!data || data.verification_tier === "unverified") {
-    return { title: "Elite Host — EliteSeek" };
+    return { title: "Host — EliteSeek" };
   }
 
   const name = data.display_name ?? username;
@@ -34,10 +34,10 @@ export async function generateMetadata({
     `Book ${name} for exclusive social experiences on EliteSeek.`;
 
   return {
-    title: `${name} — Elite Host on EliteSeek`,
+    title: `${name} — Host on EliteSeek`,
     description,
     openGraph: {
-      title: `${name} — Elite Host on EliteSeek`,
+      title: `${name} — Host on EliteSeek`,
       description,
       type: "profile",
       url: `https://eliteseek.com/profile/${username}`,
@@ -47,7 +47,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: `${name} — Elite Host on EliteSeek`,
+      title: `${name} — Host on EliteSeek`,
       description,
       ...(data.cover_image_url ? { images: [data.cover_image_url] } : {}),
     },

@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "EliteSeek",
     short_name: "EliteSeek",
     description:
-      "A verified companion booking and content platform. Book ID-verified Elite Hosts for dinners, events, and travel, or subscribe to exclusive content.",
+      "A verified companion booking and content platform. Book ID-verified hosts for dinners, events, and travel, or subscribe to exclusive content.",
     start_url: "/feed",
     display: "standalone",
     orientation: "portrait",
@@ -37,7 +37,7 @@ export default function manifest(): MetadataRoute.Manifest {
       {
         name: "Browse Hosts",
         short_name: "Browse",
-        description: "Discover Elite Hosts",
+        description: "Discover hosts and events",
         url: "/browse",
         icons: [{ src: "/icon-192x192.png", sizes: "192x192" }],
       },

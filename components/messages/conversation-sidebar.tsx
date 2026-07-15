@@ -113,7 +113,7 @@ export function ConversationSidebar({ userId, initialConversations, events = [] 
               className="text-xs text-muted/40 underline underline-offset-2 hover:text-gold"
               style={{ fontFamily: "var(--font-dm-sans)" }}
             >
-              Browse Elite Hosts →
+              Browse hosts →
             </Link>
           </div>
         ) : (

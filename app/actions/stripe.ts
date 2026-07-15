@@ -42,7 +42,7 @@ export async function createUnlockCheckout(
         price_data: {
           currency: "usd",
           product_data: {
-            name: `Unlock ${companion.display_name ?? "Elite Host"}'s Profile`,
+            name: `Unlock ${companion.display_name ?? "host"}'s Profile`,
           },
           unit_amount: Math.round(companion.profile_unlock_fee * 100),
         },
@@ -96,7 +96,7 @@ export async function createPpvCheckout(postId: string): Promise<StripeResult> {
           product_data: {
             name:
               post.title ??
-              `Exclusive content from ${companion?.display_name ?? "Elite Host"}`,
+              `Exclusive content from ${companion?.display_name ?? "host"}`,
           },
           unit_amount: Math.round(post.ppv_price * 100),
         },
@@ -145,7 +145,7 @@ export async function createSubscriptionCheckout(
     unit_amount: Math.round(companion.subscription_price * 100),
     recurring: { interval: "month" },
     product_data: {
-      name: `Monthly subscription to ${companion.display_name ?? "Elite Host"}`,
+      name: `Monthly subscription to ${companion.display_name ?? "host"}`,
     },
   });
 
@@ -217,7 +217,7 @@ export async function createBookingDepositCheckout(
         price_data: {
           currency: "usd",
           product_data: {
-            name: `Booking deposit — ${companion?.display_name ?? "Elite Host"}`,
+            name: `Booking deposit — ${companion?.display_name ?? "host"}`,
             description: `15% deposit for ${booking.booking_type} booking. Balance collected on confirmation.`,
           },
           unit_amount: Math.round(depositAmount * 100),

@@ -24,7 +24,9 @@ export default async function SettingsPage() {
       .select(`
         id, visibility, profile_unlock_fee, subscription_price,
         booking_rate_hourly, bio, tagline, location, is_available,
-        cover_image_url, stripe_account_id
+        cover_image_url, stripe_account_id,
+        cancellation_policy, trusted_contact_name,
+        trusted_contact_email, trusted_contact_phone
       `)
       .eq("user_id", user.id)
       .single();

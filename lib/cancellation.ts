@@ -4,6 +4,8 @@
 
 export type CancellationPolicy = "flexible" | "moderate" | "strict";
 
+export const DISPUTE_WINDOW_HOURS = 48;
+
 export const CANCELLATION_POLICIES: Record<
   CancellationPolicy,
   { label: string; description: string }

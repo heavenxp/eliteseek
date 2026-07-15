@@ -2,7 +2,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Icon } from "@/components/icons";
-import type { BookingStatus, BookingType } from "@/lib/database.types";
+import { ClientBookingActions } from "./client-booking-actions";
+import type { BookingStatus, BookingType, EscrowStatus } from "@/lib/database.types";
 
 export const metadata = { title: "My Bookings — EliteSeek" };
 
@@ -34,6 +35,9 @@ type BookingRow = {
   id: string;
   booking_type: BookingType;
   status: BookingStatus;
+  escrow_status: EscrowStatus;
+  release_at: string | null;
+  cancellation_policy: string | null;
   scheduled_at: string;
   duration_hours: number;
   location: string | null;
@@ -58,6 +62,9 @@ export default async function ClientBookingsPage() {
       id,
       booking_type,
       status,
+      escrow_status,
+      release_at,
+      cancellation_policy,
       scheduled_at,
       duration_hours,
       location,
@@ -203,9 +210,9 @@ function BookingCard({ booking }: { booking: BookingRow }) {
               Awaiting Elite Host response — usually within 24 hours
             </p>
           )}
-          {booking.status === "confirmed" && (
+          {booking.status === "confirmed" && booking.escrow_status === "unpaid" && (
             <p className="mt-2 text-xs text-emerald-400/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
-              Your experience is confirmed. Full payment captured on completion.
+              Confirmed — pay now to secure it. Stripe holds your payment until 48h after completion.
             </p>
           )}
         </div>
@@ -219,6 +226,19 @@ function BookingCard({ booking }: { booking: BookingRow }) {
           </p>
         </div>
       </div>
+
+      {["pending", "confirmed", "completed", "disputed"].includes(booking.status) && (
+        <div className="mt-4 border-t border-[rgba(255,255,255,0.05)] pt-4">
+          <ClientBookingActions
+            bookingId={booking.id}
+            status={booking.status}
+            escrowStatus={booking.escrow_status}
+            releaseAt={booking.release_at}
+            scheduledAt={booking.scheduled_at}
+            cancellationPolicy={booking.cancellation_policy}
+          />
+        </div>
+      )}
     </div>
   );
 }

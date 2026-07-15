@@ -21,6 +21,10 @@ type CompanionData = {
   is_available: boolean;
   cover_image_url: string | null;
   stripe_account_id: string | null;
+  cancellation_policy?: "flexible" | "moderate" | "strict";
+  trusted_contact_name?: string | null;
+  trusted_contact_email?: string | null;
+  trusted_contact_phone?: string | null;
 } | null;
 
 type Props = {
@@ -634,6 +638,80 @@ function CompanionSettingsForm({
             <div className="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-muted/30 transition-all peer-checked:translate-x-5 peer-checked:bg-gold" />
           </div>
         </label>
+      </section>
+
+      <div className="gold-divider" />
+
+      {/* ── Cancellation policy ── */}
+      <section>
+        <h2 className="mb-1 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+          Cancellation Policy
+        </h2>
+        <p className="mb-4 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          Applies when a client cancels. Each booking locks in the policy active when it was made.
+        </p>
+        <div className="space-y-2">
+          {([
+            { value: "flexible", label: "Flexible", desc: "Full refund until 24h before; 50% after" },
+            { value: "moderate", label: "Moderate", desc: "Full refund until 5 days before; 50% until 24h; none inside 24h" },
+            { value: "strict", label: "Strict", desc: "50% refund until 7 days before; none inside 7 days" },
+          ] as const).map((opt) => (
+            <label
+              key={opt.value}
+              className="flex cursor-pointer items-center gap-3 rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.02)] px-4 py-3 transition-colors has-[:checked]:border-[rgba(212,175,55,0.4)] has-[:checked]:bg-[rgba(212,175,55,0.05)]"
+            >
+              <input
+                type="radio"
+                name="cancellation_policy"
+                value={opt.value}
+                defaultChecked={(companion.cancellation_policy ?? "moderate") === opt.value}
+                className="h-3.5 w-3.5 accent-[#d4af37]"
+              />
+              <div>
+                <p className="text-sm text-foreground/80" style={{ fontFamily: "var(--font-dm-sans)" }}>{opt.label}</p>
+                <p className="text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>{opt.desc}</p>
+              </div>
+            </label>
+          ))}
+        </div>
+      </section>
+
+      <div className="gold-divider" />
+
+      {/* ── Trusted contact (SOS) ── */}
+      <section>
+        <h2 className="mb-1 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+          Trusted Contact
+        </h2>
+        <p className="mb-4 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          If you don&apos;t check out of a booking within 2 hours of its scheduled end, we alert this person automatically. Never shown to clients.
+        </p>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <input
+            name="trusted_contact_name"
+            type="text"
+            placeholder="Name"
+            defaultValue={companion.trusted_contact_name ?? ""}
+            className="auth-input"
+            style={{ fontFamily: "var(--font-dm-sans)" }}
+          />
+          <input
+            name="trusted_contact_email"
+            type="email"
+            placeholder="Email"
+            defaultValue={companion.trusted_contact_email ?? ""}
+            className="auth-input"
+            style={{ fontFamily: "var(--font-dm-sans)" }}
+          />
+          <input
+            name="trusted_contact_phone"
+            type="tel"
+            placeholder="Phone"
+            defaultValue={companion.trusted_contact_phone ?? ""}
+            className="auth-input"
+            style={{ fontFamily: "var(--font-dm-sans)" }}
+          />
+        </div>
       </section>
 
       <div className="gold-divider" />

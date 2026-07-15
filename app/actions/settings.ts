@@ -33,6 +33,13 @@ export async function updateCompanionSettings(
   const location = (formData.get("location") as string)?.trim() || null;
   const isAvailable = formData.get("is_available") === "1";
   const searchable = formData.get("searchable") === "1";
+  const rawPolicy = formData.get("cancellation_policy") as string | null;
+  const cancellationPolicy = ["flexible", "moderate", "strict"].includes(rawPolicy ?? "")
+    ? rawPolicy
+    : "moderate";
+  const trustedName = (formData.get("trusted_contact_name") as string)?.trim() || null;
+  const trustedEmail = (formData.get("trusted_contact_email") as string)?.trim() || null;
+  const trustedPhone = (formData.get("trusted_contact_phone") as string)?.trim() || null;
 
   const profileUnlockFee = unlockFeeRaw ? parseFloat(unlockFeeRaw) : null;
   const subscriptionPrice = subPriceRaw ? parseFloat(subPriceRaw) : null;
@@ -57,6 +64,10 @@ export async function updateCompanionSettings(
       bio,
       tagline,
       location,
+      cancellation_policy: cancellationPolicy,
+      trusted_contact_name: trustedName,
+      trusted_contact_email: trustedEmail,
+      trusted_contact_phone: trustedPhone,
       is_available: isAvailable,
     })
     .eq("id", companion.id);

@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getStripe, getOrigin } from "@/lib/stripe";
-import { refundFraction, isCancellationPolicy } from "@/lib/cancellation";
+import { refundFraction, isCancellationPolicy, DISPUTE_WINDOW_HOURS } from "@/lib/cancellation";
 import { notify } from "@/app/actions/notifications";
 
 // ── Phase 4: Stripe-native escrow (separate charges & transfers) ──
@@ -13,8 +13,6 @@ import { notify } from "@/app/actions/notifications";
 // transferred to the host only after check-out + the 48h dispute window.
 // escrow_status mirrors Stripe state; PaymentIntents/Transfers/Refunds are
 // the source of truth.
-
-export const DISPUTE_WINDOW_HOURS = 48;
 
 type EscrowResult = { error?: string; success?: boolean };
 

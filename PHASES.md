@@ -47,14 +47,18 @@ The schema already supports a full social layer (`posts`/likes/comments/follows/
 **Goal: verification as the moat.**
 
 - [x] Stripe Identity KYC for **hosts** (required before profile goes live) — migration 025 live; hosted flow at /api/stripe/identity/start; webhook promotes verification_tier (single source of truth for visibility); unverified hosts hidden from browse/search/experiences/feed/stories/profile+metadata; Verification Centre at /companion/verification. ⚠️ Ops: enable Stripe Identity on the account + add identity.verification_session.verified / .requires_input to the webhook endpoint's events, then run one real verification end-to-end
-- [ ] Stripe Identity for **clients** — required to book, NOT required to browse or subscribe to content
-- [ ] "Verified" badge system (this replaces the planned membership badges as the primary badge; SVGs from Creative Market/Flaticon per original plan)
-- [ ] Hive moderation integration:
-  - All profile photos and content scanned on upload
-  - Message scanning for booking chat (intimate-services language → flag for review)
-- [ ] Manual review queue in admin (ajkibira@gmail.com account) for flagged content
+- [x] Stripe Identity for **clients** — required to book, NOT required to browse or subscribe to content — same hosted flow (profiles.kyc_status is client truth), createBookingRequest gated, /account/verification page
+- [x] "Verified" badge system (this replaces the planned membership badges as the primary badge) — custom SVG seal component (`components/badges/verified-badge.tsx`, outlined=verified / filled=select) on browse cards + profile headers; no purchased SVGs needed
+- [x] Hive moderation integration (code complete, env-gated on HIVE_API_KEY):
+  - All profile photos and content scanned on upload (content posts: reject/hold-for-review; feed/stories: reject synchronously, flag async; photos: rejected images cleared)
+  - Message scanning for booking chat (intimate-services language → flag for review; scanned post-response via next/server after(), never blocks sends)
+- [x] Manual review queue in admin (ajkibira@gmail.com account) for flagged content — /admin/moderation now covers content posts AND Hive flags on messages/feed/stories/photos, with dismiss/remove; admin KYC approve now genuinely verifies (promotes verification_tier)
 
 **Exit criteria:** no unverified host visible, no unverified client can book, moderation pipeline live.
+
+### Deferred ops (external config, not code)
+- [ ] Stripe dashboard: enable Stripe Identity; add `identity.verification_session.verified` + `identity.verification_session.requires_input` to the webhook endpoint events; then run one real host + one real client verification end-to-end
+- [ ] Hive: create account, set `HIVE_API_KEY` in Vercel env — until then scans are "unscanned" and content auto-approves (decisions still logged to moderation_log)
 
 > **Reordered 14 Jul 2026:** the Content Engine now comes before Safe Bookings — finish all product surface first; payment/escrow work sits just before the design pass.
 

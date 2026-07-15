@@ -1,6 +1,6 @@
 # EliteSeek — Master Project Brief
 
-> **Read PHASES.md first.** It defines the current scope, roadmap, and product discipline; this brief is background reference. Where the two disagree, PHASES.md wins.
+> **Superseded by PIVOT.md (the events pivot) for positioning, and PHASES.md for roadmap.** Read order: PIVOT.md → PHASES.md → this file. This brief remains background reference for brand/stack/schema history.
 
 ## What is EliteSeek?
 

@@ -33,7 +33,7 @@ export function LoginForm() {
             Welcome back
           </h1>
           <p className="mt-2 text-sm text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>
-            Verified companion bookings &amp; content — invite-only, Melbourne first
+            Paid events by verified hosts — invite-only, Melbourne first
           </p>
         </div>
 

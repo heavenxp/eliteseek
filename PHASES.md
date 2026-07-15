@@ -1,6 +1,6 @@
 # EliteSeek — Phased Build Roadmap
 
-> Companion to BRIEF.md. This document supersedes the previous scope. Read this first in any new session.
+> **Reframed by PIVOT.md (15 Jul 2026) — the events pivot.** Read order for any new session: PIVOT.md → this file → BRIEF.md. Phases 1–5 below are history/in-flight as written; Phases 6–8 are replaced by PIVOT.md §4 (The Refocus, Communities, Melbourne Launch revised).
 
 ## Repositioning (read before building anything)
 
@@ -105,20 +105,15 @@ The schema already supports a full social layer (`posts`/likes/comments/follows/
 - [ ] Kill the marketing landing entirely: root behaves like a social app — signed-in → feed, signed-out → login as the front door (logo, one-line positioning "Verified companion bookings & content — invite-only, Melbourne first", login form, signup link, legally required age-verification footer line). Old landing routes redirect to /login
 - [ ] shadcn/ui components integrated where wanted (see UI notes below)
 - [ ] Host profile layout modeled on Bluesky's profile structure (open source, safe to draw from): banner + overlapping avatar, tight name/bio block, stat row, availability line, tabs (Posts / Media / About), card feed — restyled entirely in EliteSeek tokens. Borrow the layout only: no photos, bio wording, or advertising conventions from any real profile; host copy stays in Airbnb-experience territory
-- [ ] Copy pass: study Airbnb Experiences and high-end matchmaking tone — not OnlyFans, not dating apps
+- [ ] Copy pass — now in events/host/guest language per PIVOT.md (replaces the companion/booking register); tone still Airbnb-Experiences warmth, never dating-app
 - [ ] Membership tier info stays inside the app, pricing never on profiles (per original decisions)
 
-## Phase 6 — Melbourne Launch
+## Phases 6–8 — see PIVOT.md §4
 
-**Goal: dense in one city, not thin everywhere.**
-
-- [ ] Geo-scope launch to Melbourne: host onboarding invite-only or hand-approved
-- [ ] Target: ~20 excellent, fully verified hosts before public marketing
-- [ ] Connect eliteseek.com custom domain (final step, per original plan)
-- [ ] Standard business marketing is now possible (this is a legal, normal business — real ads, socials, PR)
-- [ ] Instrument: booking conversion, content attach rate, host retention
-
-**Expansion rule:** don't open city #2 until Melbourne has repeat bookings.
+The events pivot replaces the original Phase 6 (Melbourne Launch) with:
+- **Phase 6 — The Refocus**: one-account model (merge profile split, "become a host" upgrade), events extended (end time, ticketing, online type, public share pages), discovery pulse feed + waitlists, decaying-refund escrow curve, sitewide events/host/guest copy
+- **Phase 7 — Communities**: event group = chat + feed, post-event persistence with paid membership, paywalled group posts, all through Hive
+- **Phase 8 — Melbourne Launch (revised)**: 15–20 founding hosts with existing audiences, inner-Melbourne depth, online events funnel, "this week in Melbourne" launch surface. Ops gates unchanged (HIVE_API_KEY, CRON_SECRET + GH Actions cron, Stripe dashboard items, dispute-resolution UI, USD→AUD decision, end-to-end escrow test, rename/domain decision)
 
 ---
 

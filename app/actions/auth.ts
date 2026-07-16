@@ -30,7 +30,7 @@ export async function signUp(_: AuthState, formData: FormData): Promise<AuthStat
     password,
     options: {
       data: { full_name: fullName, role },
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/auth/callback?next=/onboarding/${role}`,
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/auth/callback?next=${encodeURIComponent((formData.get("next") as string) || `/onboarding/${role}`)}`,
     },
   });
 

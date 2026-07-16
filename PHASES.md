@@ -115,7 +115,7 @@ The events pivot replaces the original Phase 6 (Melbourne Launch). Tracking:
 ### Phase 6 — The Refocus
 - [x] One-account model: profile split merged (migrations 028–031: host_profiles rename with all 10 FKs intact, client_profiles folded into profiles, signup-trigger fix, compat views dropped after deploy, self-insert policy); code swept (43 files + 10 rekeyed reads); signup collapsed to one account type; "become a host" upgrade flow (account CTA → host_profiles row + role flip → existing onboarding/Identity/Connect chain)
 - [x] Events extended: end time (DB NOT NULL), ticketing on the P4 escrow (event_tickets, webhook-admitted, cron-released at end+48h, 15% cut), online type with member-gated meeting links (separate RLS table — column would leak via PostgREST), capacity DB-required for physical; create form + event page (ticket CTA, sold-out, spots-left) — migration 032 applied, deployed, verified in-browser
-- [ ] Public share pages: no-account view, join-first flow (view → pay → account creation last)
+- [x] Public share pages: no-account view, join-first flow (view → pay → account creation last) — /e/[id] (service-role read, public events only, OG metadata = the link preview, never exposes meeting links/invite codes); paid events get a GUEST Stripe checkout with a post-payment claim page (stateless: claim verifies session against Stripe — paid, right event, email matches account, unclaimed PI); free events → login/signup with next-param continuation → autojoin; Share button on event pages; sold-out/ended honest states; anon-verified locally incl. leak + 404 checks
 - [ ] Discovery pulse feed (event cards: host + verified avatars, countdown, spots left) + waitlists; calendar as secondary toggle only
 - [ ] Decaying-refund curve on event escrow (100% → 7d slide → 50% floor → locked inside 48h) with the transparent refund visual
 - [ ] Copy: remaining booking-flow + email copy → events language (bulk done in P5)
@@ -129,7 +129,7 @@ The events pivot replaces the original Phase 6 (Melbourne Launch). Tracking:
 
 ### Phase 8 — Melbourne Launch (revised)
 - [ ] 15–20 founding hosts with existing audiences; inner-Melbourne depth; online events funnel; "this week in Melbourne" launch surface
-- [ ] Ops gates: HIVE_API_KEY, Stripe dashboard items, dispute-resolution admin UI, USD→AUD decision, end-to-end escrow test, rename/domain decision
+- [ ] Ops gates: HIVE_API_KEY, Stripe dashboard items, dispute-resolution admin UI, USD→AUD decision, end-to-end escrow test, rename/domain decision, unclaimed guest-ticket sweep (paid checkout sessions with no matching event_tickets PI → nudge email or refund; guest flow ships without it)
 - [x] ~~CRON_SECRET + GH Actions cron~~ — CLOSED 16 Jul 2026: secret live in Vercel (Production+Preview, Sensitive) and GitHub Actions; escrow-cron.yml on main firing every 30 min; manual dispatch verified end-to-end (200, {"released":0,"releaseSkipped":0,"sosNotified":0})
 
 ---

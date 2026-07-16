@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getEvent, joinEvent, createEventTicketCheckout } from "@/app/actions/events";
+import { ShareLinkButton } from "@/components/events/share-link-button";
 import { EventChat } from "./event-chat";
 import { EventActions } from "./event-actions";
 
@@ -12,7 +13,14 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return { title: result ? `${result.event.title} — EliteSeek` : "Event — EliteSeek" };
 }
 
-export default async function EventPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function EventPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ join?: string }>;
+}) {
+  const { join } = await searchParams;
   const { id } = await params;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -22,6 +30,12 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
   if (!result) notFound();
 
   const { event, members, inviteCodes, isMember, isCreator, accessDenied, meetingLink } = result;
+
+  // Arrived from the public share page with intent to join a free event
+  if (join === "1" && !isMember && Number(event.price) === 0) {
+    const joined = await joinEvent(id);
+    if (!joined?.error) redirect(`/events/${id}?joined=1`);
+  }
   const spotsLeft = event.capacity !== null ? Math.max(0, event.capacity - members.length) : null;
   const isFull = spotsLeft === 0;
 
@@ -179,6 +193,13 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
           )}
         </div>
       </div>
+
+      {/* Share (public events) */}
+      {event.visibility === "public" && (
+        <div className="mb-4 flex justify-end">
+          <ShareLinkButton eventId={event.id} />
+        </div>
+      )}
 
       {/* Join button (non-members, public events) */}
       {!isMember && event.visibility === "public" && (

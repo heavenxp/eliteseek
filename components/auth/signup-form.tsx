@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { signUp, signInWithGoogle, type AuthState } from "@/app/actions/auth";
 import { GlassCard } from "@/components/ui/glass-card";
@@ -9,6 +10,7 @@ import { Icon } from "@/components/icons";
 
 export function SignupForm() {
   const [state, formAction, isPending] = useActionState<AuthState, FormData>(signUp, null);
+  const next = useSearchParams().get("next");
 
   return (
     <div className="w-full max-w-md">
@@ -80,6 +82,7 @@ export function SignupForm() {
             {/* Form */}
             <form action={formAction} className="space-y-4">
               <input type="hidden" name="role" value="client" />
+              {next && <input type="hidden" name="next" value={next} />}
 
               <div>
                 <label

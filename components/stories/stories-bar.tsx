@@ -75,7 +75,7 @@ export function StoriesBar({ currentUserId }: Props) {
                 ) : (
                   <span
                     className="text-lg font-medium text-gold/60"
-                    style={{ fontFamily: "var(--font-cormorant)" }}
+                   
                   >
                     {viewerDisplayName.charAt(0).toUpperCase()}
                   </span>
@@ -96,7 +96,7 @@ export function StoriesBar({ currentUserId }: Props) {
           </div>
           <span
             className="max-w-[64px] truncate text-[11px] text-white/50"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Your story
           </span>
@@ -126,7 +126,7 @@ export function StoriesBar({ currentUserId }: Props) {
                   ) : (
                     <span
                       className="text-lg font-medium text-gold/60"
-                      style={{ fontFamily: "var(--font-cormorant)" }}
+                     
                     >
                       {group.displayName.charAt(0).toUpperCase()}
                     </span>
@@ -135,7 +135,7 @@ export function StoriesBar({ currentUserId }: Props) {
               </div>
               <span
                 className="max-w-[64px] truncate text-[11px] text-white/50"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {group.displayName.split(" ")[0]}
               </span>

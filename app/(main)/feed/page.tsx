@@ -294,7 +294,7 @@ function PageShell({ children }: { children: React.ReactNode }) {
         <div className="mx-auto max-w-5xl px-4 py-3.5">
           <h1
             className="text-[17px] font-semibold text-white/90"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Feed
           </h1>

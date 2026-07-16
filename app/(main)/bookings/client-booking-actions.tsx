@@ -59,23 +59,23 @@ export function ClientBookingActions({
             onClick={() => run(() => createBookingEscrowCheckout(bookingId))}
             disabled={pending}
             className="btn-gold rounded-xl px-4 py-1.5 text-xs disabled:opacity-40"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Pay to secure booking
           </button>
         )}
         {escrowStatus === "held" && (
-          <span className="rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2.5 py-1 text-[11px] text-emerald-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <span className="rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2.5 py-1 text-[11px] text-emerald-400">
             Paid — held by Stripe until 48h after completion
           </span>
         )}
         {escrowStatus === "release_scheduled" && releaseAt && (
-          <span className="rounded-full border border-white/20 bg-white/[0.04] px-2.5 py-1 text-[11px] text-gold/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <span className="rounded-full border border-white/20 bg-white/[0.04] px-2.5 py-1 text-[11px] text-gold/80">
             Releases to host {new Date(releaseAt).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
           </span>
         )}
         {escrowStatus === "disputed" && (
-          <span className="rounded-full border border-red-500/25 bg-red-500/10 px-2.5 py-1 text-[11px] text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <span className="rounded-full border border-red-500/25 bg-red-500/10 px-2.5 py-1 text-[11px] text-red-400">
             Dispute under review
           </span>
         )}
@@ -85,7 +85,7 @@ export function ClientBookingActions({
             onClick={() => setDisputeOpen(true)}
             disabled={pending}
             className="rounded-xl border border-[rgba(255,255,255,0.08)] px-3 py-1.5 text-xs text-muted/50 transition-colors hover:text-muted disabled:opacity-40"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Something went wrong?
           </button>
@@ -96,7 +96,7 @@ export function ClientBookingActions({
             onClick={() => setConfirmCancel(true)}
             disabled={pending}
             className="rounded-xl border border-[rgba(255,255,255,0.08)] px-3 py-1.5 text-xs text-muted/50 transition-colors hover:text-muted disabled:opacity-40"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Cancel
           </button>
@@ -105,7 +105,7 @@ export function ClientBookingActions({
 
       {confirmCancel && (
         <div className="flex flex-wrap items-center gap-2 rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] px-3 py-2">
-          <p className="text-[11px] text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="text-[11px] text-muted/60">
             {escrowStatus === "held"
               ? `You'd be refunded ${refundPct}% right now${refundPct === 0 ? " — refunds are locked inside 48h" : refundPct < 100 ? " — the refund slides down as the booking approaches" : ""}.`
               : "Cancel this request?"}
@@ -114,7 +114,7 @@ export function ClientBookingActions({
             onClick={() => run(() => cancelBookingAsClient(bookingId))}
             disabled={pending}
             className="rounded-xl border border-[rgba(248,113,113,0.4)] bg-[rgba(248,113,113,0.1)] px-3 py-1.5 text-xs text-red-400 disabled:opacity-40"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Confirm
           </button>
@@ -122,7 +122,7 @@ export function ClientBookingActions({
             onClick={() => setConfirmCancel(false)}
             disabled={pending}
             className="rounded-xl border border-[rgba(255,255,255,0.07)] px-3 py-1.5 text-xs text-muted/50 disabled:opacity-40"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Keep booking
           </button>
@@ -138,14 +138,14 @@ export function ClientBookingActions({
             rows={2}
             maxLength={2000}
             className="auth-input w-full !text-xs"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           />
           <div className="flex gap-2">
             <button
               onClick={() => run(() => disputeBooking(bookingId, disputeReason))}
               disabled={pending || !disputeReason.trim()}
               className="rounded-xl border border-[rgba(248,113,113,0.4)] bg-[rgba(248,113,113,0.1)] px-3 py-1.5 text-xs text-red-400 disabled:opacity-40"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Open dispute
             </button>
@@ -153,7 +153,7 @@ export function ClientBookingActions({
               onClick={() => setDisputeOpen(false)}
               disabled={pending}
               className="rounded-xl border border-[rgba(255,255,255,0.07)] px-3 py-1.5 text-xs text-muted/50 disabled:opacity-40"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Never mind
             </button>
@@ -162,7 +162,7 @@ export function ClientBookingActions({
       )}
 
       {error && (
-        <p className="text-xs text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>{error}</p>
+        <p className="text-xs text-red-400">{error}</p>
       )}
     </div>
   );

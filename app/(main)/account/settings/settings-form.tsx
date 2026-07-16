@@ -101,7 +101,7 @@ function PhotoUpload({ label, currentUrl, uploadPath, onUploaded, aspect = "squa
 
   return (
     <div>
-      <p className="mb-2 text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+      <p className="mb-2 text-xs uppercase tracking-[0.1em] text-muted/50">
         {label}
       </p>
       <button
@@ -136,7 +136,7 @@ function PhotoUpload({ label, currentUrl, uploadPath, onUploaded, aspect = "squa
           ) : (
             <>
               <Icon name="camera" className="h-5 w-5 text-gold/70" />
-              <span className="text-[10px] text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <span className="text-[10px] text-muted/60">
                 {previewUrl ? "Change" : "Upload"}
               </span>
             </>
@@ -144,7 +144,7 @@ function PhotoUpload({ label, currentUrl, uploadPath, onUploaded, aspect = "squa
         </div>
       </button>
       {uploadError && (
-        <p className="mt-1 text-xs text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>{uploadError}</p>
+        <p className="mt-1 text-xs text-red-400">{uploadError}</p>
       )}
       <input
         ref={inputRef}
@@ -169,28 +169,28 @@ function ClientSettingsForm({ clientFullName, clientPhone, searchable }: { clien
       {state?.success && (
         <div className="flex items-center gap-3 rounded-xl border border-[rgba(52,211,153,0.25)] bg-[rgba(52,211,153,0.06)] px-4 py-3">
           <Icon name="check" className="h-4 w-4 text-emerald-400" />
-          <p className="text-sm text-emerald-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="text-sm text-emerald-400">
             Settings saved successfully.
           </p>
         </div>
       )}
       {state?.error && (
         <div className="rounded-xl border border-[rgba(248,113,113,0.25)] bg-[rgba(248,113,113,0.06)] px-4 py-3">
-          <p className="text-sm text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>{state.error}</p>
+          <p className="text-sm text-red-400">{state.error}</p>
         </div>
       )}
 
       {/* ── Account info ── */}
       <section>
-        <h2 className="mb-1 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+        <h2 className="mb-1 text-base font-semibold text-foreground">
           Account Details
         </h2>
-        <p className="mb-4 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mb-4 text-xs text-muted/50">
           Your name and contact information.
         </p>
         <div className="space-y-4">
           <div>
-            <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50">
               Display name
             </label>
             <input
@@ -200,11 +200,11 @@ function ClientSettingsForm({ clientFullName, clientPhone, searchable }: { clien
               defaultValue={clientFullName ?? ""}
               placeholder="Your full name"
               className="auth-input w-full"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50">
               Phone number <span className="normal-case text-muted/30">(optional)</span>
             </label>
             <input
@@ -213,7 +213,7 @@ function ClientSettingsForm({ clientFullName, clientPhone, searchable }: { clien
               defaultValue={clientPhone ?? ""}
               placeholder="+1 555 000 0000"
               className="auth-input w-full"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             />
           </div>
         </div>
@@ -223,10 +223,10 @@ function ClientSettingsForm({ clientFullName, clientPhone, searchable }: { clien
 
       {/* ── Notification preferences ── */}
       <section>
-        <h2 className="mb-1 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+        <h2 className="mb-1 text-base font-semibold text-foreground">
           Notification Preferences
         </h2>
-        <p className="mb-4 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mb-4 text-xs text-muted/50">
           Choose which emails you receive from EliteSeek.
         </p>
         <div className="space-y-3">
@@ -246,7 +246,7 @@ function ClientSettingsForm({ clientFullName, clientPhone, searchable }: { clien
                 defaultChecked
                 className="h-4 w-4 accent-gold"
               />
-              <span className="text-sm text-foreground/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <span className="text-sm text-foreground/80">
                 {label}
               </span>
             </label>
@@ -258,16 +258,16 @@ function ClientSettingsForm({ clientFullName, clientPhone, searchable }: { clien
 
       {/* ── Membership ── */}
       <section>
-        <h2 className="mb-1 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+        <h2 className="mb-1 text-base font-semibold text-foreground">
           Membership
         </h2>
-        <p className="mb-4 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mb-4 text-xs text-muted/50">
           Upgrade your membership to access exclusive companions and features.
         </p>
         <Link
           href="/membership"
           className="btn-gold inline-block rounded-xl px-6 py-2.5 text-sm"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           Manage Membership
         </Link>
@@ -277,18 +277,18 @@ function ClientSettingsForm({ clientFullName, clientPhone, searchable }: { clien
 
       {/* ── Search visibility ── */}
       <section>
-        <h2 className="mb-1 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+        <h2 className="mb-1 text-base font-semibold text-foreground">
           Discoverability
         </h2>
-        <p className="mb-4 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mb-4 text-xs text-muted/50">
           Control whether others can find you via search.
         </p>
         <label className="flex cursor-pointer items-center justify-between rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.02)] px-4 py-3.5">
           <div>
-            <p className="text-sm text-foreground/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="text-sm text-foreground/80">
               Allow others to find me in search
             </p>
-            <p className="text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="text-xs text-muted/50">
               When off, your profile will not appear in any search results
             </p>
           </div>
@@ -310,7 +310,7 @@ function ClientSettingsForm({ clientFullName, clientPhone, searchable }: { clien
         type="submit"
         disabled={isPending}
         className="btn-gold w-full rounded-xl py-3 text-sm disabled:opacity-60"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         {isPending ? "Saving…" : "Save Settings"}
       </button>
@@ -375,23 +375,23 @@ function CompanionSettingsForm({
       {state?.success && (
         <div className="flex items-center gap-3 rounded-xl border border-[rgba(52,211,153,0.25)] bg-[rgba(52,211,153,0.06)] px-4 py-3">
           <Icon name="check" className="h-4 w-4 text-emerald-400" />
-          <p className="text-sm text-emerald-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="text-sm text-emerald-400">
             Settings saved successfully.
           </p>
         </div>
       )}
       {state?.error && (
         <div className="rounded-xl border border-[rgba(248,113,113,0.25)] bg-[rgba(248,113,113,0.06)] px-4 py-3">
-          <p className="text-sm text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>{state.error}</p>
+          <p className="text-sm text-red-400">{state.error}</p>
         </div>
       )}
 
       {/* ── Profile Photos ── */}
       <section>
-        <h2 className="mb-1 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+        <h2 className="mb-1 text-base font-semibold text-foreground">
           Profile Photos
         </h2>
-        <p className="mb-4 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mb-4 text-xs text-muted/50">
           Upload your avatar and cover banner. Changes are saved immediately on upload.
         </p>
         <div className="flex flex-wrap gap-6">
@@ -420,19 +420,19 @@ function CompanionSettingsForm({
 
       {/* ── Pricing ── */}
       <section>
-        <h2 className="mb-1 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+        <h2 className="mb-1 text-base font-semibold text-foreground">
           Rates
         </h2>
-        <p className="mb-4 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mb-4 text-xs text-muted/50">
           Set your booking and subscription prices. Leave blank to disable.
         </p>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50">
               Hourly booking rate
             </label>
             <div className="relative">
-              <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>$</span>
+              <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted/40">$</span>
               <input
                 name="booking_rate_hourly"
                 type="number"
@@ -441,16 +441,16 @@ function CompanionSettingsForm({
                 defaultValue={companion.booking_rate_hourly ?? ""}
                 placeholder="e.g. 500"
                 className="auth-input w-full pl-7"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               />
             </div>
           </div>
           <div>
-            <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50">
               Monthly subscription
             </label>
             <div className="relative">
-              <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>$</span>
+              <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted/40">$</span>
               <input
                 name="subscription_price"
                 type="number"
@@ -459,7 +459,7 @@ function CompanionSettingsForm({
                 defaultValue={companion.subscription_price ?? ""}
                 placeholder="e.g. 49"
                 className="auth-input w-full pl-7"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               />
             </div>
           </div>
@@ -470,15 +470,15 @@ function CompanionSettingsForm({
 
       {/* ── Profile info ── */}
       <section>
-        <h2 className="mb-1 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+        <h2 className="mb-1 text-base font-semibold text-foreground">
           Profile Details
         </h2>
-        <p className="mb-4 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mb-4 text-xs text-muted/50">
           How you appear to clients on your profile page.
         </p>
         <div className="space-y-4">
           <div>
-            <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50">
               Tagline
             </label>
             <input
@@ -487,11 +487,11 @@ function CompanionSettingsForm({
               defaultValue={companion.tagline ?? ""}
               placeholder="A short line that captures your essence…"
               className="auth-input w-full"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50">
               Bio
             </label>
             <textarea
@@ -500,11 +500,11 @@ function CompanionSettingsForm({
               defaultValue={companion.bio ?? ""}
               placeholder="Tell potential clients about yourself, your background, and what makes your company exceptional…"
               className="auth-input w-full resize-none"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50">
               Location
             </label>
             <input
@@ -513,7 +513,7 @@ function CompanionSettingsForm({
               defaultValue={companion.location ?? ""}
               placeholder="e.g. London, UK"
               className="auth-input w-full"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             />
           </div>
         </div>
@@ -523,18 +523,18 @@ function CompanionSettingsForm({
 
       {/* ── Availability toggle ── */}
       <section>
-        <h2 className="mb-1 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+        <h2 className="mb-1 text-base font-semibold text-foreground">
           Availability Status
         </h2>
-        <p className="mb-4 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mb-4 text-xs text-muted/50">
           Show clients whether you are currently taking bookings.
         </p>
         <label className="flex cursor-pointer items-center justify-between rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.02)] px-4 py-3.5">
           <div>
-            <p className="text-sm text-foreground/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="text-sm text-foreground/80">
               Available for bookings
             </p>
-            <p className="text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="text-xs text-muted/50">
               Clients will see a green Available indicator on your card and profile
             </p>
           </div>
@@ -557,10 +557,10 @@ function CompanionSettingsForm({
 
       {/* ── Trusted contact (SOS) ── */}
       <section>
-        <h2 className="mb-1 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+        <h2 className="mb-1 text-base font-semibold text-foreground">
           Trusted Contact
         </h2>
-        <p className="mb-4 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mb-4 text-xs text-muted/50">
           If you don&apos;t check out of a booking within 2 hours of its scheduled end, we alert this person automatically. Never shown to clients.
         </p>
         <div className="grid gap-3 sm:grid-cols-3">
@@ -570,7 +570,7 @@ function CompanionSettingsForm({
             placeholder="Name"
             defaultValue={companion.trusted_contact_name ?? ""}
             className="auth-input"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           />
           <input
             name="trusted_contact_email"
@@ -578,7 +578,7 @@ function CompanionSettingsForm({
             placeholder="Email"
             defaultValue={companion.trusted_contact_email ?? ""}
             className="auth-input"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           />
           <input
             name="trusted_contact_phone"
@@ -586,7 +586,7 @@ function CompanionSettingsForm({
             placeholder="Phone"
             defaultValue={companion.trusted_contact_phone ?? ""}
             className="auth-input"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           />
         </div>
       </section>
@@ -595,10 +595,10 @@ function CompanionSettingsForm({
 
       {/* ── Payouts (Stripe Connect) ── */}
       <section>
-        <h2 className="mb-1 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+        <h2 className="mb-1 text-base font-semibold text-foreground">
           Payouts
         </h2>
-        <p className="mb-4 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mb-4 text-xs text-muted/50">
           Connect a Stripe account to receive payouts from bookings and subscriptions.
         </p>
 
@@ -606,23 +606,23 @@ function CompanionSettingsForm({
           <div className="flex items-center gap-3 rounded-xl border border-[rgba(52,211,153,0.25)] bg-[rgba(52,211,153,0.06)] px-4 py-4">
             <Icon name="check" className="h-5 w-5 shrink-0 text-emerald-400" />
             <div>
-              <p className="text-sm font-medium text-emerald-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="text-sm font-medium text-emerald-400">
                 Stripe account connected
               </p>
-              <p className="mt-0.5 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="mt-0.5 text-xs text-muted/50">
                 Payouts will be sent to your connected Stripe account after each completed booking.
               </p>
             </div>
           </div>
         ) : (
           <div className="rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.02)] px-4 py-4">
-            <p className="mb-3 text-sm text-foreground/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="mb-3 text-sm text-foreground/70">
               You need a Stripe account to receive payments. The setup takes about 5 minutes and is handled securely by Stripe.
             </p>
             <a
               href="/api/stripe/connect/onboard"
               className="btn-gold inline-block rounded-xl px-6 py-2.5 text-sm"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Connect Stripe Account
             </a>
@@ -634,7 +634,7 @@ function CompanionSettingsForm({
         type="submit"
         disabled={isPending}
         className="btn-gold w-full rounded-xl py-3 text-sm disabled:opacity-60"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         {isPending ? "Saving…" : "Save Settings"}
       </button>
@@ -652,7 +652,7 @@ export function SettingsForm({ role, companion, clientFullName, clientPhone, ava
   if (!companion) {
     return (
       <div className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.02)] p-6 text-center">
-        <p className="text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="text-sm text-muted/50">
           Complete your profile setup first.
         </p>
       </div>

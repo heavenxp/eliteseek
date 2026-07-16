@@ -124,19 +124,19 @@ export default async function ContentStudioPage() {
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1
-              className="text-3xl font-light text-foreground md:text-4xl"
-              style={{ fontFamily: "var(--font-cormorant)" }}
+              className="text-xl font-bold tracking-tight text-foreground md:text-4xl"
+             
             >
               Content Studio
             </h1>
-            <p className="mt-1 text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="mt-1 text-sm text-muted/50">
               Your content, subscribers, and earnings in one place.
             </p>
           </div>
           <Link
             href="/companion/content/new"
             className="btn-gold flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             <Icon name="plus" className="h-4 w-4" />
             New Post
@@ -154,20 +154,20 @@ export default async function ContentStudioPage() {
         {/* Subscribers */}
         <section className="mb-10">
           <div className="mb-3 flex items-baseline justify-between">
-            <h2 className="text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+            <h2 className="text-base font-semibold text-foreground">
               Subscribers
             </h2>
             <Link
               href="/account/earnings"
               className="text-xs text-gold/70 transition-colors hover:text-gold"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Full earnings →
             </Link>
           </div>
           {subscribers.length === 0 ? (
             <div className="glass-card rounded-2xl p-6 text-center">
-              <p className="text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="text-sm text-muted/50">
                 No active subscribers yet. Subscriber-only posts and a fair monthly
                 price are the fastest way to change that.
               </p>
@@ -181,22 +181,22 @@ export default async function ContentStudioPage() {
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={s.avatar_url} alt="" className="h-full w-full object-cover" />
                     ) : (
-                      <span className="text-sm text-muted/40" style={{ fontFamily: "var(--font-cormorant)" }}>
+                      <span className="text-sm text-muted/40">
                         {s.name.charAt(0)}
                       </span>
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm text-foreground/90" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                    <p className="truncate text-sm text-foreground/90">
                       {s.name}
                     </p>
-                    <p className="text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                    <p className="text-xs text-muted/40">
                       since {new Date(s.created_at).toLocaleDateString("en-GB", { month: "short", year: "numeric" })}
                       {" · renews "}
                       {new Date(s.current_period_end).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
                     </p>
                   </div>
-                  <span className="shrink-0 text-sm text-gold/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                  <span className="shrink-0 text-sm text-gold/80">
                     ${Number(s.price_per_month)}/mo
                   </span>
                 </div>
@@ -207,7 +207,7 @@ export default async function ContentStudioPage() {
 
         {/* Posts */}
         <section>
-          <h2 className="mb-3 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+          <h2 className="mb-3 text-base font-semibold text-foreground">
             Posts
           </h2>
           {allPosts.length === 0 ? (
@@ -228,14 +228,14 @@ export default async function ContentStudioPage() {
 function StatTile({ label, value, sub, gold }: { label: string; value: string; sub?: string; gold?: boolean }) {
   return (
     <div className={`${gold ? "glass-gold" : "glass-card"} rounded-2xl px-4 py-3.5`}>
-      <p className="text-[11px] uppercase tracking-[0.12em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+      <p className="text-[11px] uppercase tracking-[0.12em] text-muted/50">
         {label}
       </p>
-      <p className="mt-1 text-2xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+      <p className="mt-1 text-lg font-bold tracking-tight text-foreground">
         {value}
       </p>
       {sub && (
-        <p className="mt-0.5 text-[11px] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mt-0.5 text-[11px] text-muted/40">
           {sub}
         </p>
       )}
@@ -278,7 +278,7 @@ function ContentRow({ post }: { post: ContentPost }) {
         <div className="flex flex-wrap items-center gap-1.5">
           <p
             className="truncate text-sm text-foreground/90"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             {post.title || post.body?.slice(0, 50) || "Untitled post"}
           </p>
@@ -305,7 +305,7 @@ function ContentRow({ post }: { post: ContentPost }) {
         </div>
         <p
           className="mt-0.5 text-xs text-muted/40"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           {date} · {mediaCount} {mediaCount === 1 ? "file" : "files"}
         </p>
@@ -323,21 +323,21 @@ function EmptyState() {
         <Icon name="photo" className="h-6 w-6 text-muted/40" />
       </div>
       <p
-        className="text-xl font-light text-foreground/60"
-        style={{ fontFamily: "var(--font-cormorant)" }}
+        className="text-base font-semibold text-foreground/60"
+       
       >
         No content yet
       </p>
       <p
         className="text-sm text-muted/40"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         Upload photos and videos for your subscribers.
       </p>
       <Link
         href="/companion/content/new"
         className="btn-gold mt-2 rounded-xl px-6 py-2.5 text-sm"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         Create your first post
       </Link>

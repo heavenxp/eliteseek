@@ -93,8 +93,8 @@ export function StoryCreateSheet({ userId, onClose, onCreated }: Props) {
         {/* Header */}
         <div className="mb-5 flex items-center justify-between">
           <h2
-            className="text-xl font-light text-foreground"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+            className="text-base font-semibold text-foreground"
+           
           >
             Add to Your Story
           </h2>
@@ -117,7 +117,7 @@ export function StoryCreateSheet({ userId, onClose, onCreated }: Props) {
             </svg>
             <p
               className="text-sm text-white/40"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Choose photo or video
             </p>
@@ -154,7 +154,7 @@ export function StoryCreateSheet({ userId, onClose, onCreated }: Props) {
         <div className="mt-4">
           <p
             className="mb-2 text-[11px] uppercase tracking-[0.1em] text-white/30"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Audience
           </p>
@@ -170,7 +170,7 @@ export function StoryCreateSheet({ userId, onClose, onCreated }: Props) {
                     ? "border-white/20 bg-white/[0.07] text-gold"
                     : "border-white/10 text-white/40 hover:border-white/20 hover:text-white/60",
                 ].join(" ")}
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {a === "public" ? "Everyone" : "Followers"}
               </button>
@@ -179,7 +179,7 @@ export function StoryCreateSheet({ userId, onClose, onCreated }: Props) {
         </div>
 
         {error && (
-          <p className="mt-3 text-xs text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="mt-3 text-xs text-red-400">
             {error}
           </p>
         )}
@@ -189,7 +189,7 @@ export function StoryCreateSheet({ userId, onClose, onCreated }: Props) {
             <svg className="h-4 w-4 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
             </svg>
-            <span className="text-sm font-semibold text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <span className="text-sm font-semibold text-gold">
               Story shared!
             </span>
           </div>
@@ -198,7 +198,7 @@ export function StoryCreateSheet({ userId, onClose, onCreated }: Props) {
             onClick={handleSubmit}
             disabled={!file || uploading}
             className="mt-5 w-full rounded-xl bg-gold py-3 text-sm font-semibold text-black transition-opacity disabled:opacity-40 hover:bg-gold-light"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             {uploading ? "Sharing…" : "Share Story"}
           </button>

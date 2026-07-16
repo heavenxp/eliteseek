@@ -38,7 +38,7 @@ function ResultCard({ result }: { result: SearchResult }) {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={result.avatar_url} alt="" className="h-full w-full object-cover" />
         ) : (
-          <span style={{ fontFamily: "var(--font-dm-sans)" }}>{initial}</span>
+          <span>{initial}</span>
         )}
       </div>
 
@@ -46,7 +46,7 @@ function ResultCard({ result }: { result: SearchResult }) {
         <div className="flex items-center gap-2">
           <p
             className="truncate text-sm text-foreground/90"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             {displayName}
           </p>
@@ -56,7 +56,7 @@ function ResultCard({ result }: { result: SearchResult }) {
                 ? "bg-white/[0.07] text-gold/80"
                 : "bg-[rgba(255,255,255,0.06)] text-muted/60"
             }`}
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             {result.role === "companion" ? "Host" : "Client"}
           </span>
@@ -64,7 +64,7 @@ function ResultCard({ result }: { result: SearchResult }) {
         {(result.location || result.country) && (
           <p
             className="mt-0.5 truncate text-xs text-muted/50"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             {[result.location, result.country].filter(Boolean).join(", ")}
           </p>
@@ -118,7 +118,7 @@ export function SearchClient() {
         <div className="mx-auto max-w-[600px] px-4 py-3.5">
           <h1
             className="mb-3 text-[17px] font-semibold text-white/90"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Search
           </h1>
@@ -143,7 +143,7 @@ export function SearchClient() {
                 if (e.key === "Enter") runSearch({ q: (e.target as HTMLInputElement).value });
               }}
               className="w-full rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.04)] py-2.5 pl-10 pr-4 text-sm text-foreground placeholder-muted/40 outline-none transition-colors focus:border-white/20"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             />
           </div>
 
@@ -161,7 +161,7 @@ export function SearchClient() {
                     ? "bg-white/[0.07] text-gold"
                     : "text-muted/60 hover:text-foreground"
                 }`}
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {tab.label}
               </button>
@@ -180,7 +180,7 @@ export function SearchClient() {
               runSearch({ country: e.target.value });
             }}
             className="flex-1 rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.04)] px-3 py-2 text-sm text-foreground/80 outline-none transition-colors focus:border-white/20"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             <option value="">Any Country</option>
             {COUNTRIES.map((c) => (
@@ -197,7 +197,7 @@ export function SearchClient() {
               runSearch({ city: e.target.value });
             }}
             className="flex-1 rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.04)] px-3 py-2 text-sm text-foreground/80 placeholder-muted/40 outline-none transition-colors focus:border-white/20"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           />
         </div>
 
@@ -212,7 +212,7 @@ export function SearchClient() {
           {!isPending && results === null && (
             <p
               className="py-12 text-center text-sm text-muted/40"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Search by name, country, or city
             </p>
@@ -221,7 +221,7 @@ export function SearchClient() {
           {!isPending && results !== null && results.length === 0 && (
             <p
               className="py-12 text-center text-sm text-muted/40"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               No results found
             </p>

@@ -39,10 +39,10 @@ export function CreatePostForm() {
       {/* Progress */}
       <div className="mb-8">
         <div className="mb-2 flex items-center justify-between">
-          <p className="text-xs text-muted/50 uppercase tracking-[0.1em]" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="text-xs text-muted/50 uppercase tracking-[0.1em]">
             Step {step} of 3
           </p>
-          <p className="text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="text-xs text-muted/50">
             {step === 1 ? "The Experience" : step === 2 ? "The Details" : "Publish"}
           </p>
         </div>
@@ -63,10 +63,10 @@ export function CreatePostForm() {
         {step === 1 && (
           <div className="space-y-6">
             <div>
-              <h2 className="mb-1 text-2xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+              <h2 className="mb-1 text-lg font-bold tracking-tight text-foreground">
                 What are you offering?
               </h2>
-              <p className="text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="text-sm text-muted/50">
                 Choose the type of experience you want to post.
               </p>
             </div>
@@ -85,7 +85,7 @@ export function CreatePostForm() {
                   ].join(" ")}
                 >
                   <span className="text-2xl">{cat.icon}</span>
-                  <span className="text-xs leading-tight" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                  <span className="text-xs leading-tight">
                     {cat.label}
                   </span>
                 </button>
@@ -93,7 +93,7 @@ export function CreatePostForm() {
             </div>
 
             <div>
-              <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50">
                 Title <span className="text-muted/40">*</span>
               </label>
               <input
@@ -102,12 +102,12 @@ export function CreatePostForm() {
                 required
                 placeholder="e.g. Dinner at Nobu, Melbourne"
                 className="auth-input w-full"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               />
             </div>
 
             <div>
-              <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50">
                 Description
               </label>
               <textarea
@@ -115,7 +115,7 @@ export function CreatePostForm() {
                 rows={4}
                 placeholder="Describe the experience — the venue, the atmosphere, what makes it special…"
                 className="auth-input w-full resize-none"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               />
             </div>
 
@@ -124,7 +124,7 @@ export function CreatePostForm() {
               onClick={() => canNext1 && setStep(2)}
               disabled={!canNext1}
               className="btn-gold w-full rounded-xl py-3 text-sm disabled:opacity-40"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Continue
             </button>
@@ -135,17 +135,17 @@ export function CreatePostForm() {
         {step === 2 && (
           <div className="space-y-6">
             <div>
-              <h2 className="mb-1 text-2xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+              <h2 className="mb-1 text-lg font-bold tracking-tight text-foreground">
                 When & where?
               </h2>
-              <p className="text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="text-sm text-muted/50">
                 Set the date, location, and pricing details.
               </p>
             </div>
 
             {/* Multi-day toggle */}
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <span className="text-sm text-muted/70">
                 Multi-day experience
               </span>
               <button
@@ -164,7 +164,7 @@ export function CreatePostForm() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50">
                   {isMultiDay ? "Start date & time" : "Date & time"} <span className="text-muted/40">*</span>
                 </label>
                 <input
@@ -173,12 +173,12 @@ export function CreatePostForm() {
                   required
                   min={new Date().toISOString().slice(0, 16)}
                   className="auth-input w-full"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 />
               </div>
               {isMultiDay && (
                 <div>
-                  <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                  <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50">
                     End date & time
                   </label>
                   <input
@@ -186,7 +186,7 @@ export function CreatePostForm() {
                     type="datetime-local"
                     min={new Date().toISOString().slice(0, 16)}
                     className="auth-input w-full"
-                    style={{ fontFamily: "var(--font-dm-sans)" }}
+
                   />
                 </div>
               )}
@@ -194,7 +194,7 @@ export function CreatePostForm() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50">
                   City <span className="text-muted/40">*</span>
                 </label>
                 <input
@@ -203,17 +203,17 @@ export function CreatePostForm() {
                   required
                   placeholder="e.g. London"
                   className="auth-input w-full"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 />
               </div>
               <div>
-                <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50">
                   Venue type
                 </label>
                 <select
                   name="venue_type"
                   className="auth-input w-full"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 >
                   <option value="">Select…</option>
                   {VENUE_TYPES.map((v) => (
@@ -225,11 +225,11 @@ export function CreatePostForm() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50">
                   Price (per person, USD) <span className="text-muted/40">*</span>
                 </label>
                 <div className="relative">
-                  <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>$</span>
+                  <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted/40">$</span>
                   <input
                     name="price"
                     type="number"
@@ -238,12 +238,12 @@ export function CreatePostForm() {
                     step="0.01"
                     placeholder="0.00"
                     className="auth-input w-full pl-7"
-                    style={{ fontFamily: "var(--font-dm-sans)" }}
+
                   />
                 </div>
               </div>
               <div>
-                <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50">
                   Max guests
                 </label>
                 <input
@@ -253,7 +253,7 @@ export function CreatePostForm() {
                   max="20"
                   defaultValue="1"
                   className="auth-input w-full"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 />
               </div>
             </div>
@@ -263,7 +263,7 @@ export function CreatePostForm() {
                 type="button"
                 onClick={() => setStep(1)}
                 className="btn-ghost flex items-center gap-2 rounded-xl px-4 py-3 text-sm"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 <Icon name="chevron-left" className="h-4 w-4" />
                 Back
@@ -272,7 +272,7 @@ export function CreatePostForm() {
                 type="button"
                 onClick={() => setStep(3)}
                 className="btn-gold flex-1 rounded-xl py-3 text-sm"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 Continue
               </button>
@@ -284,23 +284,23 @@ export function CreatePostForm() {
         {step === 3 && (
           <div className="space-y-6">
             <div>
-              <h2 className="mb-1 text-2xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+              <h2 className="mb-1 text-lg font-bold tracking-tight text-foreground">
                 Photos & visibility
               </h2>
-              <p className="text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="text-sm text-muted/50">
                 Add photos and choose who can see this post.
               </p>
             </div>
 
             {/* Photo placeholder */}
             <div>
-              <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50">
                 Photos
               </label>
               <div className="flex h-32 items-center justify-center rounded-xl border border-dashed border-white/10 bg-[rgba(255,255,255,0.02)] text-muted/40 transition-colors hover:border-white/20 hover:text-muted/60 cursor-pointer">
                 <div className="flex flex-col items-center gap-2 text-center">
                   <Icon name="camera" className="h-7 w-7" />
-                  <span className="text-xs" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                  <span className="text-xs">
                     Photo uploads coming soon
                   </span>
                 </div>
@@ -309,7 +309,7 @@ export function CreatePostForm() {
 
             {/* Visibility */}
             <div>
-              <label className="mb-2 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <label className="mb-2 block text-xs uppercase tracking-[0.1em] text-muted/50">
                 Who can see this post?
               </label>
               <div className="space-y-2">
@@ -332,8 +332,8 @@ export function CreatePostForm() {
                       {visibility === opt.value && <span className="h-1.5 w-1.5 rounded-full bg-black" />}
                     </div>
                     <div>
-                      <p className="text-sm text-foreground/80" style={{ fontFamily: "var(--font-dm-sans)" }}>{opt.label}</p>
-                      <p className="text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>{opt.desc}</p>
+                      <p className="text-sm text-foreground/80">{opt.label}</p>
+                      <p className="text-xs text-muted/50">{opt.desc}</p>
                     </div>
                   </button>
                 ))}
@@ -341,7 +341,7 @@ export function CreatePostForm() {
             </div>
 
             {state?.error && (
-              <p className="text-xs text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="text-xs text-red-400">
                 {state.error}
               </p>
             )}
@@ -351,7 +351,7 @@ export function CreatePostForm() {
                 type="button"
                 onClick={() => setStep(2)}
                 className="btn-ghost flex items-center gap-2 rounded-xl px-4 py-3 text-sm"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 <Icon name="chevron-left" className="h-4 w-4" />
                 Back
@@ -360,7 +360,7 @@ export function CreatePostForm() {
                 type="submit"
                 disabled={isPending}
                 className="btn-gold flex-1 rounded-xl py-3 text-sm disabled:opacity-60"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {isPending ? "Publishing…" : "Publish Post"}
               </button>

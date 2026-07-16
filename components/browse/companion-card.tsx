@@ -63,12 +63,12 @@ export function CompanionCard({
         {/* Top badges */}
         <div className="absolute left-3 top-3 flex items-center gap-2">
           {companion.is_available ? (
-            <span className="flex items-center gap-1.5 rounded-full bg-[rgba(8,8,16,0.65)] px-2.5 py-1 text-[10px] text-emerald-400 backdrop-blur-sm" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <span className="flex items-center gap-1.5 rounded-full bg-[rgba(8,8,16,0.65)] px-2.5 py-1 text-[10px] text-emerald-400 backdrop-blur-sm">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
               Available
             </span>
           ) : (
-            <span className="flex items-center gap-1.5 rounded-full bg-[rgba(8,8,16,0.65)] px-2.5 py-1 text-[10px] text-muted/60 backdrop-blur-sm" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <span className="flex items-center gap-1.5 rounded-full bg-[rgba(8,8,16,0.65)] px-2.5 py-1 text-[10px] text-muted/60 backdrop-blur-sm">
               <span className="h-1.5 w-1.5 rounded-full bg-muted/40" />
               Unavailable
             </span>
@@ -82,7 +82,7 @@ export function CompanionCard({
 
         {/* Location */}
         <div className="absolute bottom-3 left-3">
-          <span className="rounded-full bg-[rgba(8,8,16,0.65)] px-2.5 py-1 text-[10px] text-muted/80 backdrop-blur-sm" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <span className="rounded-full bg-[rgba(8,8,16,0.65)] px-2.5 py-1 text-[10px] text-muted/80 backdrop-blur-sm">
             {companion.location}
           </span>
         </div>
@@ -92,7 +92,7 @@ export function CompanionCard({
       <div className={`p-4 ${isLocked ? "blur-[2px]" : ""}`}>
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
-            <p className="truncate text-lg font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+            <p className="truncate text-base font-semibold text-foreground">
               {companion.display_name}
               {companion.age && (
                 <span className="ml-1.5 text-base text-muted/50">{companion.age}</span>
@@ -107,11 +107,11 @@ export function CompanionCard({
           {companion.average_rating && (
             <div className="flex shrink-0 items-center gap-1">
               <Icon name="star" className="h-3.5 w-3.5 text-gold" />
-              <span className="text-sm text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <span className="text-sm text-muted">
                 {Number(companion.average_rating).toFixed(1)}
               </span>
               {companion.total_reviews > 0 && (
-                <span className="text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <span className="text-xs text-muted/50">
                   ({companion.total_reviews})
                 </span>
               )}
@@ -120,7 +120,7 @@ export function CompanionCard({
         </div>
 
         {companion.tagline && (
-          <p className="mt-1 line-clamp-1 text-xs text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="mt-1 line-clamp-1 text-xs text-muted/60">
             {companion.tagline}
           </p>
         )}
@@ -128,12 +128,12 @@ export function CompanionCard({
         {companion.tags && companion.tags.length > 0 && (
           <div className="mt-2.5 flex flex-wrap gap-1.5">
             {companion.tags.slice(0, 3).map((tag) => (
-              <span key={tag} className="rounded-full bg-white/[0.04] px-2 py-0.5 text-[10px] text-muted/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <span key={tag} className="rounded-full bg-white/[0.04] px-2 py-0.5 text-[10px] text-muted/70">
                 {tag}
               </span>
             ))}
             {companion.tags.length > 3 && (
-              <span className="text-[10px] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <span className="text-[10px] text-muted/40">
                 +{companion.tags.length - 3}
               </span>
             )}
@@ -141,7 +141,7 @@ export function CompanionCard({
         )}
 
         <div className="mt-4 flex items-center justify-end">
-          <span className="text-xs text-gold/70 transition-all duration-200 group-hover:text-gold group-hover:translate-x-0.5" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <span className="text-xs text-gold/70 transition-all duration-200 group-hover:text-gold group-hover:translate-x-0.5">
             View profile →
           </span>
         </div>
@@ -156,7 +156,7 @@ export function CompanionCard({
 
           <p
             className="text-sm font-light text-foreground/90"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+           
           >
             {lockLabel}
           </p>
@@ -164,14 +164,14 @@ export function CompanionCard({
           {qualifies ? (
             <span
               className="rounded-full border border-white/20 bg-white/[0.07] px-4 py-1.5 text-xs text-gold transition-colors hover:bg-white/[0.07]"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Request Access
             </span>
           ) : (
             <p
               className="px-6 text-center text-xs text-muted/55"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {reqMessage}
             </p>

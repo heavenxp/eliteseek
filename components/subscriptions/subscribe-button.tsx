@@ -36,7 +36,7 @@ export function SubscribeButton({ companionId, price, stripeConfigured = false }
         onClick={handleClick}
         disabled={isPending}
         className="btn-ghost flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm disabled:opacity-50"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         {isPending
           ? stripeConfigured
@@ -45,7 +45,7 @@ export function SubscribeButton({ companionId, price, stripeConfigured = false }
           : `Subscribe · $${price}/mo`}
       </button>
       {error && (
-        <span className="text-xs text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <span className="text-xs text-red-400">
           {error}
         </span>
       )}

@@ -27,12 +27,12 @@ export function LoginForm() {
         {/* Header */}
         <div className="mb-8 text-center">
           <h1
-            className="text-4xl font-light text-foreground"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+            className="text-2xl font-bold tracking-tight text-foreground"
+           
           >
             Welcome back
           </h1>
-          <p className="mt-2 text-sm text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="mt-2 text-sm text-muted">
             Paid events by verified hosts — invite-only, Melbourne first
           </p>
         </div>
@@ -43,7 +43,7 @@ export function LoginForm() {
           <button
             type="submit"
             className="btn-ghost flex w-full items-center justify-center gap-3 rounded-xl py-3 text-sm transition-all"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             <GoogleIcon />
             Continue with Google
@@ -53,7 +53,7 @@ export function LoginForm() {
         {/* Divider */}
         <div className="my-6 flex items-center gap-4">
           <div className="gold-divider flex-1" />
-          <span className="text-xs text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <span className="text-xs text-muted/60">
             or
           </span>
           <div className="gold-divider flex-1" />
@@ -67,7 +67,7 @@ export function LoginForm() {
             <label
               htmlFor="email"
               className="mb-1.5 block text-xs text-muted/80"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Email address
             </label>
@@ -87,14 +87,14 @@ export function LoginForm() {
               <label
                 htmlFor="password"
                 className="text-xs text-muted/80"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 Password
               </label>
               <Link
                 href="#"
                 className="text-xs text-gold/80 transition hover:text-gold"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 Forgot password?
               </Link>
@@ -113,7 +113,7 @@ export function LoginForm() {
           {errorMessage && (
             <div className="flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3">
               <Icon name="shield" className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
-              <p className="text-sm text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="text-sm text-red-400">
                 {errorMessage}
               </p>
             </div>
@@ -123,7 +123,7 @@ export function LoginForm() {
             type="submit"
             disabled={isPending}
             className="btn-gold mt-2 w-full rounded-xl py-3 text-sm disabled:opacity-60"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             {isPending ? "Signing in…" : "Sign In"}
           </button>
@@ -132,7 +132,7 @@ export function LoginForm() {
         {/* Footer */}
         <p
           className="mt-6 text-center text-sm text-muted"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           Don&apos;t have an account?{" "}
           <Link href="/signup" className="text-gold transition hover:text-gold-light">
@@ -143,7 +143,7 @@ export function LoginForm() {
 
       <p
         className="mt-6 text-center text-xs text-muted/40"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         By signing in you agree to our{" "}
         <Link href="#" className="underline underline-offset-2 hover:text-muted/70">

@@ -291,13 +291,13 @@ export function StoryViewer({ groups, initialGroupIndex, currentUserId, onClose 
         )}
         {mediaState === "error" && (
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3">
-            <p className="text-sm text-white/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="text-sm text-white/70">
               This story couldn&apos;t be loaded.
             </p>
             <button
               onClick={(e) => { e.stopPropagation(); goNext(); }}
               className="pointer-events-auto rounded-full border border-white/25 bg-black/40 px-4 py-1.5 text-xs text-white/80 backdrop-blur-sm transition-colors hover:bg-black/60"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Skip
             </button>
@@ -333,16 +333,16 @@ export function StoryViewer({ groups, initialGroupIndex, currentUserId, onClose 
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={group.avatarUrl} alt="" className="h-full w-full object-cover" />
               ) : (
-                <span className="text-sm font-medium text-gold/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <span className="text-sm font-medium text-gold/70">
                   {group.displayName.charAt(0).toUpperCase()}
                 </span>
               )}
             </div>
             <div>
-              <p className="text-sm font-semibold text-white leading-tight" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="text-sm font-semibold text-white leading-tight">
                 {group.displayName}
               </p>
-              <p className="text-[11px] text-white/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="text-[11px] text-white/50">
                 {formatDistanceToNowStrict(new Date(story.createdAt), { addSuffix: true })}
               </p>
             </div>
@@ -384,7 +384,7 @@ export function StoryViewer({ groups, initialGroupIndex, currentUserId, onClose 
           <div className="absolute bottom-6 inset-x-0 flex justify-center pointer-events-none z-20">
             <span
               className="rounded-full border border-white/20 bg-black/40 px-3 py-1 text-[11px] text-white/60 backdrop-blur-sm"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Followers only
             </span>

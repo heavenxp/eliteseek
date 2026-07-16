@@ -37,7 +37,7 @@ export function NotificationBell() {
     if (!userId) return;
     const supabase = createClient();
     const channel = supabase
-      .channel("notification-bell")
+      .channel(`notification-bell-${Math.random().toString(36).slice(2)}`) // unique per mount — the shell renders two bells (mobile bar + desktop rail)
       .on(
         "postgres_changes",
         {
@@ -108,7 +108,7 @@ export function NotificationBell() {
       {open && (
         <div className="absolute right-0 top-10 z-50 w-80 overflow-hidden rounded-2xl border border-white/10 bg-[rgba(8,8,16,0.98)] shadow-[0_8px_48px_rgba(0,0,0,0.6)] backdrop-blur-xl">
           <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
-            <p className="text-sm font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+            <p className="text-sm font-light text-foreground">
               Notifications
             </p>
             {unread > 0 && (
@@ -116,7 +116,7 @@ export function NotificationBell() {
                 onClick={markAllRead}
                 disabled={marking}
                 className="text-[10px] text-muted/40 hover:text-gold disabled:opacity-40"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 Mark all read
               </button>
@@ -124,7 +124,7 @@ export function NotificationBell() {
           </div>
 
           {notifications.length === 0 ? (
-            <div className="px-4 py-8 text-center text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <div className="px-4 py-8 text-center text-xs text-muted/40">
               No notifications yet
             </div>
           ) : (
@@ -146,15 +146,15 @@ export function NotificationBell() {
                       <div className="flex items-start gap-2.5">
                         <div className={`mt-1 h-1.5 w-1.5 shrink-0 rounded-full ${!n.is_read ? "bg-gold" : "bg-transparent"}`} />
                         <div className="min-w-0 flex-1">
-                          <p className="text-sm text-foreground/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                          <p className="text-sm text-foreground/80">
                             {n.title}
                           </p>
                           {n.body && (
-                            <p className="mt-0.5 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                            <p className="mt-0.5 text-xs text-muted/50">
                               {n.body}
                             </p>
                           )}
-                          <p className="mt-1 text-[10px] text-muted/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                          <p className="mt-1 text-[10px] text-muted/30">
                             {formatTime(n.created_at)}
                           </p>
                         </div>

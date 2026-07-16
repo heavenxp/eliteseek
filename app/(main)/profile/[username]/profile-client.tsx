@@ -182,7 +182,7 @@ export function ProfileBody({
   return (
     <div className="min-h-screen bg-[rgba(8,8,16,1)]">
       {/* ── Banner ── */}
-      <div className="relative h-56 w-full overflow-hidden md:h-72">
+      <div className="relative h-36 w-full overflow-hidden md:h-44">
         <button
           onClick={() => router.back()}
           className="absolute left-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-[rgba(8,8,16,0.6)] backdrop-blur-sm transition-colors hover:bg-[rgba(8,8,16,0.8)]"
@@ -208,12 +208,12 @@ export function ProfileBody({
       {/* ── Profile header ── */}
       <div className="mx-auto max-w-2xl px-4">
         {/* Avatar + action row */}
-        <div className="-mt-12 flex items-end justify-between md:-mt-14">
-          <div className="companion-placeholder h-24 w-24 shrink-0 overflow-hidden rounded-full border-4 border-[rgba(8,8,16,1)] md:h-28 md:w-28">
+        <div className="-mt-10 flex items-end justify-between md:-mt-12">
+          <div className="companion-placeholder h-20 w-20 shrink-0 overflow-hidden rounded-full border-4 border-[rgba(8,8,16,1)] md:h-24 md:w-24">
             <div className="flex h-full w-full items-center justify-center">
               <span
-                className="text-3xl font-light text-muted/40 md:text-4xl"
-                style={{ fontFamily: "var(--font-cormorant)" }}
+                className="text-xl font-bold tracking-tight text-muted/40 md:text-4xl"
+               
               >
                 {companion.displayName.charAt(0)}
               </span>
@@ -228,7 +228,7 @@ export function ProfileBody({
                   <button
                     onClick={() => setNewPostOpen((o) => !o)}
                     className="btn-gold flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm"
-                    style={{ fontFamily: "var(--font-dm-sans)" }}
+
                   >
                     <Icon name="plus" className="h-4 w-4" />
                     New Post
@@ -240,7 +240,7 @@ export function ProfileBody({
                         href="/feed"
                         onClick={() => setNewPostOpen(false)}
                         className="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm text-muted/70 transition-colors hover:bg-white/[0.04] hover:text-foreground"
-                        style={{ fontFamily: "var(--font-dm-sans)" }}
+
                       >
                         <Icon name="feed" className="h-4 w-4" /> Social Post
                       </Link>
@@ -248,7 +248,7 @@ export function ProfileBody({
                         href="/companion/posts/new"
                         onClick={() => setNewPostOpen(false)}
                         className="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm text-muted/70 transition-colors hover:bg-white/[0.04] hover:text-foreground"
-                        style={{ fontFamily: "var(--font-dm-sans)" }}
+
                       >
                         <Icon name="calendar" className="h-4 w-4" /> Availability Post
                       </Link>
@@ -258,7 +258,7 @@ export function ProfileBody({
                 <Link
                   href="/account/settings"
                   className="btn-ghost rounded-xl px-4 py-2 text-sm"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 >
                   Edit
                 </Link>
@@ -272,7 +272,7 @@ export function ProfileBody({
                     ? "border border-white/20 bg-transparent text-gold hover:bg-white/[0.04]"
                     : "btn-gold"
                 }`}
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {isFollowing ? "Following" : "Follow"}
               </button>
@@ -320,7 +320,7 @@ export function ProfileBody({
           <div className="flex flex-wrap items-center gap-2">
             <h1
               className="text-2xl font-semibold text-foreground md:text-3xl"
-              style={{ fontFamily: "var(--font-cormorant)" }}
+             
             >
               {companion.displayName}
             </h1>
@@ -331,7 +331,7 @@ export function ProfileBody({
           </div>
           <p
             className="mt-0.5 text-sm text-muted/50"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             @{companion.username}
           </p>
@@ -340,7 +340,7 @@ export function ProfileBody({
         {/* Stats row */}
         <div
           className="mt-4 flex gap-5 border-b border-[rgba(255,255,255,0.06)] pb-4"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           <button
             onClick={() => setFollowersModalOpen(true)}
@@ -376,7 +376,7 @@ export function ProfileBody({
               <button
                 onClick={() => setShowBookingModal(true)}
                 className="btn-gold flex items-center gap-1.5 rounded-xl px-5 py-2.5 text-sm"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 <Icon name="calendar" className="h-4 w-4" />
                 Book
@@ -397,7 +397,7 @@ export function ProfileBody({
         {companion.bio && (
           <p
             className="mt-4 text-sm leading-relaxed text-foreground/70"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             {companion.bio}
           </p>
@@ -407,7 +407,7 @@ export function ProfileBody({
         {(companion.location || companion.available_from || nextAwayPost) && (
           <div
             className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted/60"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             {companion.location && (
               <span className="flex items-center gap-1.5">
@@ -444,7 +444,7 @@ export function ProfileBody({
             className={`text-xs ${
               companion.is_available ? "text-emerald-400" : "text-muted/40"
             }`}
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             {companion.is_available
               ? "Available for bookings"
@@ -457,7 +457,7 @@ export function ProfileBody({
           <div className="mt-6">
             <p
               className="mb-3 text-xs uppercase tracking-[0.1em] text-muted/40"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Dashboard
             </p>
@@ -510,7 +510,7 @@ export function ProfileBody({
                     ? "border-b-2 border-gold font-medium text-gold"
                     : "text-muted/50 hover:text-muted/80"
                 }`}
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {tab}
               </button>
@@ -620,15 +620,15 @@ function DashCard({
       <Icon name={icon} className="h-4 w-4 text-muted/40 transition-colors group-hover:text-gold/70" />
       <p
         className="text-xl font-semibold text-foreground"
-        style={{ fontFamily: "var(--font-cormorant)" }}
+       
       >
         {value}
       </p>
       <div>
-        <p className="text-xs font-medium text-foreground/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="text-xs font-medium text-foreground/70">
           {label}
         </p>
-        <p className="text-[10px] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="text-[10px] text-muted/40">
           {sub}
         </p>
       </div>
@@ -662,13 +662,13 @@ function OptionsItem({
     "flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm text-muted/70 transition-colors hover:bg-white/[0.04] hover:text-foreground";
   if (href) {
     return (
-      <Link href={href} className={cls} style={{ fontFamily: "var(--font-dm-sans)" }}>
+      <Link href={href} className={cls}>
         {children}
       </Link>
     );
   }
   return (
-    <button onClick={onClick} className={cls} style={{ fontFamily: "var(--font-dm-sans)" }}>
+    <button onClick={onClick} className={cls}>
       {children}
     </button>
   );
@@ -734,8 +734,8 @@ function FollowListModal({
       <div className="relative z-10 mx-4 w-full max-w-sm rounded-2xl border border-white/10 bg-[rgba(16,12,32,0.98)] p-5 shadow-2xl">
         <div className="mb-4 flex items-center justify-between">
           <h2
-            className="text-lg font-light text-foreground"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+            className="text-base font-semibold text-foreground"
+           
           >
             {title}
             {!loading && (
@@ -757,7 +757,7 @@ function FollowListModal({
         ) : items.length === 0 ? (
           <p
             className="py-8 text-center text-sm text-muted/30"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             None yet
           </p>
@@ -775,14 +775,14 @@ function FollowListModal({
                     <div className="flex flex-wrap items-center gap-1.5">
                       <span
                         className="truncate text-sm text-foreground/90"
-                        style={{ fontFamily: "var(--font-dm-sans)" }}
+
                       >
                         {item.name}
                       </span>
                       {tierBadge && (
                         <span
                           className={`shrink-0 rounded-full px-1.5 py-0.5 text-[9px] font-medium ${tierBadge.cls}`}
-                          style={{ fontFamily: "var(--font-dm-sans)" }}
+
                         >
                           {tierBadge.label}
                         </span>
@@ -790,7 +790,7 @@ function FollowListModal({
                     </div>
                     <p
                       className="text-[10px] text-muted/30"
-                      style={{ fontFamily: "var(--font-dm-sans)" }}
+
                     >
                       {item.username ? `@${item.username} · ` : ""}{relativeTime(item.followedAt)}
                     </p>
@@ -846,10 +846,10 @@ function AboutTab({ companion }: { companion: CompanionData }) {
         <div className="divide-y divide-white/[0.06] rounded-2xl border border-white/[0.08]">
           {rows.map(([label, value]) => (
             <div key={label} className="flex items-center justify-between px-4 py-3">
-              <span className="text-xs uppercase tracking-[0.08em] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <span className="text-xs uppercase tracking-[0.08em] text-muted/40">
                 {label}
               </span>
-              <span className="text-sm text-foreground/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <span className="text-sm text-foreground/80">
                 {value}
               </span>
             </div>
@@ -859,7 +859,7 @@ function AboutTab({ companion }: { companion: CompanionData }) {
 
       {companion.tags.length > 0 && (
         <div>
-          <p className="mb-2 text-xs uppercase tracking-[0.08em] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="mb-2 text-xs uppercase tracking-[0.08em] text-muted/40">
             Event types
           </p>
           <div className="flex flex-wrap gap-1.5">
@@ -867,7 +867,7 @@ function AboutTab({ companion }: { companion: CompanionData }) {
               <span
                 key={tag}
                 className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-0.5 text-[11px] text-muted/70"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {tag}
               </span>
@@ -879,7 +879,7 @@ function AboutTab({ companion }: { companion: CompanionData }) {
       {(companion.verification_tier === "verified" || companion.verification_tier === "select") && (
         <div className="flex items-center gap-2.5 rounded-2xl border border-white/[0.08] bg-white/[0.03] px-4 py-3">
           <VerifiedBadge tier={companion.verification_tier} size="md" />
-          <p className="text-sm text-muted/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="text-sm text-muted/70">
             Identity verified via Stripe Identity
             {companion.verification_tier === "select" ? " · handpicked Select host" : ""}
           </p>
@@ -904,14 +904,14 @@ function AvailabilityTab({
         <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
           <Icon name="calendar" className="h-5 w-5 text-muted/40" />
         </div>
-        <p className="text-sm text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="text-sm text-muted/40">
           {isOwner ? "No upcoming availability posts" : "No upcoming availability"}
         </p>
         {isOwner && (
           <Link
             href="/companion/posts/new"
             className="btn-gold rounded-xl px-5 py-2 text-sm"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Add Availability
           </Link>
@@ -931,16 +931,16 @@ function AvailabilityTab({
             <div className="flex-1 min-w-0">
               <p
                 className="text-sm font-medium text-foreground/90"
-                style={{ fontFamily: "var(--font-cormorant)" }}
+               
               >
                 {post.title}
               </p>
-              <p className="mt-0.5 text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="mt-0.5 text-xs text-muted/40">
                 {CATEGORY_LABELS[post.category] ?? post.category}
               </p>
               <div
                 className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted/50"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 <span>
                   {new Date(post.date_from).toLocaleDateString("en-GB", {
@@ -957,7 +957,7 @@ function AvailabilityTab({
               <button
                 onClick={() => onBook(post)}
                 className="shrink-0 btn-gold rounded-xl px-4 py-2 text-sm"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 Book
               </button>
@@ -966,7 +966,7 @@ function AvailabilityTab({
           {post.description && (
             <p
               className="mt-2 text-xs leading-relaxed text-muted/50 whitespace-pre-wrap"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {post.description}
             </p>
@@ -996,11 +996,11 @@ function PostsTab({
         <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
           <Icon name="photo" className="h-5 w-5 text-muted/40" />
         </div>
-        <p className="text-sm text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="text-sm text-muted/40">
           {isOwner ? "You haven't posted to the feed yet" : "No posts yet"}
         </p>
         {isOwner && (
-          <Link href="/feed" className="btn-gold rounded-xl px-5 py-2 text-sm" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <Link href="/feed" className="btn-gold rounded-xl px-5 py-2 text-sm">
             Go to feed
           </Link>
         )}
@@ -1024,12 +1024,12 @@ function PostsTab({
             key={post.id}
             className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.02)] p-4"
           >
-            <p className="text-xs text-muted/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="text-xs text-muted/30">
               {timeAgo}
             </p>
             <p
               className="mt-1.5 text-sm leading-relaxed text-foreground/75 whitespace-pre-wrap break-words"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {post.content}
             </p>
@@ -1048,7 +1048,7 @@ function PostsTab({
                   <span
                     key={tag}
                     className="rounded-full bg-white/[0.04] px-2 py-0.5 text-[10px] text-muted/40"
-                    style={{ fontFamily: "var(--font-dm-sans)" }}
+
                   >
                     #{tag}
                   </span>
@@ -1057,7 +1057,7 @@ function PostsTab({
             )}
             {isOwner && (
               <div className="mt-2 flex items-center justify-between">
-                <span className="text-[10px] text-muted/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <span className="text-[10px] text-muted/30">
                   {post.audience === "public"
                     ? "Public"
                     : post.audience === "followers"
@@ -1102,7 +1102,7 @@ function MediaTab({
         <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
           <Icon name="photo" className="h-5 w-5 text-muted/40" />
         </div>
-        <p className="text-sm text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="text-sm text-muted/40">
           No photos yet
         </p>
       </div>
@@ -1146,7 +1146,7 @@ function VideosTab({
         </div>
         <p
           className="text-sm text-muted/40"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           No videos yet
         </p>
@@ -1179,7 +1179,7 @@ function VideosTab({
                 {item.post.is_ppv && item.post.ppv_price && (
                   <span
                     className="rounded-full border border-white/20 bg-[rgba(8,8,16,0.7)] px-3 py-1 text-xs text-gold"
-                    style={{ fontFamily: "var(--font-dm-sans)" }}
+
                   >
                     Unlock for ${item.post.ppv_price}
                   </span>
@@ -1189,7 +1189,7 @@ function VideosTab({
             {item.post.title && !locked && (
               <p
                 className="mt-1.5 px-1 text-xs text-muted/50"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {item.post.title}
               </p>

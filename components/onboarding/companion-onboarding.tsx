@@ -43,7 +43,7 @@ const STEP_LABELS = ["About", "Offerings", "Pricing", "Launch"];
 // ── Shared UI primitives ─────────────────────────────────────
 function Label({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mb-1.5 text-xs text-muted/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
+    <p className="mb-1.5 text-xs text-muted/70">
       {children}
     </p>
   );
@@ -58,7 +58,7 @@ function FieldTextarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>)
     <textarea
       {...props}
       className="auth-input min-h-[100px] resize-none"
-      style={{ fontFamily: "var(--font-dm-sans)" }}
+
     />
   );
 }
@@ -91,7 +91,7 @@ function Toggle({
           ].join(" ")}
         />
       </div>
-      <span className="text-sm text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>
+      <span className="text-sm text-muted">
         {label}
       </span>
     </button>
@@ -122,7 +122,7 @@ function ChipSelect({
                 ? "border-white/20 bg-white/[0.07] text-gold"
                 : "border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.02)] text-muted hover:border-white/20",
             ].join(" ")}
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             {opt}
           </button>
@@ -160,7 +160,7 @@ function TagInput({
           <span
             key={t}
             className="flex items-center gap-1.5 rounded-full border border-white/20 bg-white/[0.04] px-3 py-1 text-xs text-gold"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             {t}
             <button type="button" onClick={() => onChange(tags.filter((x) => x !== t))}>
@@ -195,7 +195,7 @@ function ErrorBanner({ message }: { message: string }) {
   return (
     <div className="flex items-center gap-2 rounded-xl border border-red-500/20 bg-red-500/08 px-4 py-3">
       <Icon name="shield" className="h-4 w-4 shrink-0 text-red-400" />
-      <p className="text-sm text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+      <p className="text-sm text-red-400">
         {message}
       </p>
     </div>
@@ -222,13 +222,13 @@ function ProgressDots({ step }: { step: number }) {
                     ? "border-white/20 bg-gold text-[#080810]"
                     : "border-[rgba(255,255,255,0.1)] text-muted/40",
                 ].join(" ")}
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {done ? <Icon name="check" className="h-3.5 w-3.5" /> : idx}
               </div>
               <span
                 className={`text-[10px] ${active ? "text-gold" : done ? "text-muted" : "text-muted/30"}`}
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {label}
               </span>
@@ -270,7 +270,7 @@ function NavButtons({
           onClick={onBack}
           disabled={isPending}
           className="btn-ghost flex-1 rounded-xl py-3 text-sm disabled:opacity-40"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           Back
         </button>
@@ -280,7 +280,7 @@ function NavButtons({
         onClick={onNext}
         disabled={isPending}
         className="btn-gold flex-[2] rounded-xl py-3 text-sm disabled:opacity-60"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         {isPending ? "Saving…" : (nextLabel ?? "Continue")}
       </button>
@@ -467,7 +467,7 @@ export function CompanionOnboarding({
           <div className="mt-3">
             <Label>Monthly price (min $9.99)</Label>
             <div className="relative">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>$</span>
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-muted/60">$</span>
               <FieldInput
                 type="number"
                 value={subPrice}
@@ -489,7 +489,7 @@ export function CompanionOnboarding({
           <div className="mt-3">
             <Label>Hourly rate</Label>
             <div className="relative">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>$</span>
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-muted/60">$</span>
               <FieldInput
                 type="number"
                 value={bookingRate}
@@ -511,7 +511,7 @@ export function CompanionOnboarding({
           <div className="mt-3">
             <Label>Unlock fee (min $10)</Label>
             <div className="relative">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>$</span>
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-muted/60">$</span>
               <FieldInput
                 type="number"
                 value={unlockFee}
@@ -543,7 +543,7 @@ export function CompanionOnboarding({
                 className="flex-[2]"
               />
               <div className="relative flex-1">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>$</span>
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-muted/60">$</span>
                 <FieldInput
                   type="number"
                   value={item.amount}
@@ -572,7 +572,7 @@ export function CompanionOnboarding({
               type="button"
               onClick={() => setTipMenu([...tipMenu, { name: "", amount: "" }])}
               className="btn-ghost w-full rounded-xl py-2.5 text-xs"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               + Add tip item
             </button>
@@ -639,11 +639,11 @@ export function CompanionOnboarding({
             <div className="flex-1">
               <p
                 className={`text-sm font-medium ${visibility === opt.value ? "text-foreground" : "text-muted"}`}
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {opt.label}
               </p>
-              <p className="mt-0.5 text-xs text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="mt-0.5 text-xs text-muted/60">
                 {opt.description}
               </p>
             </div>
@@ -706,16 +706,16 @@ export function CompanionOnboarding({
         <ProgressDots step={step} />
 
         <div className="mb-6">
-          <p className="text-xs uppercase tracking-[0.15em] text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="text-xs uppercase tracking-[0.15em] text-gold">
             Step {step} of {TOTAL_STEPS}
           </p>
           <h1
-            className="mt-1 text-3xl font-light text-foreground"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+            className="mt-1 text-xl font-bold tracking-tight text-foreground"
+           
           >
             {current.title}
           </h1>
-          <p className="mt-1.5 text-sm text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="mt-1.5 text-sm text-muted">
             {current.subtitle}
           </p>
         </div>
@@ -733,7 +733,7 @@ export function CompanionOnboarding({
         />
       </GlassCard>
 
-      <p className="mt-4 text-center text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+      <p className="mt-4 text-center text-xs text-muted/40">
         You can update everything from your profile settings later.
       </p>
     </div>

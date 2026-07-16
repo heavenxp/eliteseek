@@ -136,8 +136,8 @@ export default async function EarningsPage() {
             ‹
           </Link>
           <h1
-            className="text-3xl font-light text-foreground"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+            className="text-xl font-bold tracking-tight text-foreground"
+           
           >
             Earnings
           </h1>
@@ -156,20 +156,20 @@ export default async function EarningsPage() {
               className="glass-card rounded-2xl p-5 text-center"
             >
               <p
-                className="text-2xl font-light text-gold"
-                style={{ fontFamily: "var(--font-cormorant)" }}
+                className="text-lg font-bold tracking-tight text-gold"
+               
               >
                 {card.value}
               </p>
               <p
                 className="mt-1 text-xs text-muted/60"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {card.label}
               </p>
               <p
                 className="text-[10px] text-muted/30"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {card.sub}
               </p>
@@ -181,8 +181,8 @@ export default async function EarningsPage() {
         {Object.keys(byType).length > 0 && (
           <div className="glass-card mb-8 rounded-2xl p-6">
             <h2
-              className="mb-4 text-lg font-light text-foreground"
-              style={{ fontFamily: "var(--font-cormorant)" }}
+              className="mb-4 text-base font-semibold text-foreground"
+             
             >
               Earnings by Category
             </h2>
@@ -196,13 +196,13 @@ export default async function EarningsPage() {
                   >
                     <span
                       className="text-sm text-foreground/80"
-                      style={{ fontFamily: "var(--font-dm-sans)" }}
+
                     >
                       {TYPE_LABELS[type as TransactionType] ?? type}
                     </span>
                     <span
                       className="text-sm font-medium text-gold"
-                      style={{ fontFamily: "var(--font-dm-sans)" }}
+
                     >
                       {fmt(net)}
                     </span>
@@ -215,8 +215,8 @@ export default async function EarningsPage() {
         {/* Recent transactions */}
         <div className="glass-card mb-8 rounded-2xl p-6">
           <h2
-            className="mb-4 text-lg font-light text-foreground"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+            className="mb-4 text-base font-semibold text-foreground"
+           
           >
             Recent Transactions
           </h2>
@@ -224,13 +224,13 @@ export default async function EarningsPage() {
           {recentTx.length === 0 ? (
             <p
               className="py-8 text-center text-sm text-muted/40"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               No completed transactions yet.
             </p>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full text-sm" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-white/10">
                     {["Date", "Type", "Gross", "Fee", "Net"].map((h) => (
@@ -275,8 +275,8 @@ export default async function EarningsPage() {
         {/* Payout status */}
         <div className="glass-card rounded-2xl p-6">
           <h2
-            className="mb-3 text-lg font-light text-foreground"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+            className="mb-3 text-base font-semibold text-foreground"
+           
           >
             Payout Status
           </h2>
@@ -287,14 +287,14 @@ export default async function EarningsPage() {
                 <span className="inline-block h-2 w-2 rounded-full bg-emerald-400" />
                 <span
                   className="text-sm text-emerald-400"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 >
                   Stripe connected · payouts active
                 </span>
               </div>
               <p
                 className="text-xs text-muted/40"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 Earnings are transferred automatically within 2–3 business days
                 of each completed transaction. Visit your{" "}
@@ -313,14 +313,14 @@ export default async function EarningsPage() {
                 <span className="inline-block h-2 w-2 rounded-full bg-amber-500" />
                 <span
                   className="text-sm text-amber-500"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 >
                   Stripe payouts — not connected
                 </span>
               </div>
               <p
                 className="mb-4 text-xs text-muted/40"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 Connect your Stripe account to receive direct payouts for your
                 earnings. Setup takes less than five minutes.
@@ -328,7 +328,7 @@ export default async function EarningsPage() {
               <Link
                 href="/account/settings"
                 className="btn-gold inline-block rounded-xl px-4 py-2 text-sm"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 Connect in Settings
               </Link>

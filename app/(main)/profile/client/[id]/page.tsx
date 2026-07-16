@@ -114,8 +114,8 @@ export default async function ClientProfilePage({
         <div className="-mt-10 flex items-end justify-between md:-mt-12">
           <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-[rgba(8,8,16,1)] bg-white/[0.04] md:h-24 md:w-24">
             <span
-              className="text-3xl font-light text-muted/40 md:text-4xl"
-              style={{ fontFamily: "var(--font-cormorant)" }}
+              className="text-xl font-bold tracking-tight text-muted/40 md:text-4xl"
+             
             >
               {initials}
             </span>
@@ -131,7 +131,7 @@ export default async function ClientProfilePage({
                       ? "border border-white/20 bg-transparent text-gold hover:bg-white/[0.04]"
                       : "btn-gold"
                   }`}
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 >
                   {isFollowing ? "Following" : "Follow"}
                 </button>
@@ -145,18 +145,18 @@ export default async function ClientProfilePage({
         <div className="mt-3">
           <h1
             className="text-2xl font-semibold text-foreground md:text-3xl"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+           
           >
             {profile.full_name}
           </h1>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <span
               className={`rounded-full border px-3 py-0.5 text-xs ${TIER_CLS[tier]}`}
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {TIER_LABEL[tier]} Member
             </span>
-            <span className="text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <span className="text-xs text-muted/40">
               Member since {memberSince}
             </span>
           </div>
@@ -176,7 +176,7 @@ export default async function ClientProfilePage({
                   ? "border-b-2 border-gold font-medium text-gold"
                   : "text-muted/50 hover:text-muted/80"
               }`}
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {t}
             </a>
@@ -187,7 +187,7 @@ export default async function ClientProfilePage({
         <div className="pb-24 pt-4">
           {activeTab === "posts" && (
             posts.length === 0 ? (
-              <p className="py-12 text-center text-sm text-muted/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="py-12 text-center text-sm text-muted/30">
                 No posts yet
               </p>
             ) : (
@@ -206,7 +206,7 @@ export default async function ClientProfilePage({
           {activeTab === "media" && (() => {
             const mediaItems = posts.filter((p) => p.image_url != null);
             return mediaItems.length === 0 ? (
-              <p className="py-12 text-center text-sm text-muted/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="py-12 text-center text-sm text-muted/30">
                 No photos yet
               </p>
             ) : (
@@ -263,13 +263,13 @@ function ClientPost({
     <div className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.02)] p-4">
       <p
         className="text-xs text-muted/30"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         {timeAgo}
       </p>
       <p
         className="mt-1.5 text-sm leading-relaxed text-foreground/75 whitespace-pre-wrap break-words"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         {post.content}
       </p>
@@ -288,7 +288,7 @@ function ClientPost({
             <span
               key={tag}
               className="rounded-full bg-white/[0.04] px-2 py-0.5 text-[10px] text-muted/40"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               #{tag}
             </span>
@@ -297,7 +297,7 @@ function ClientPost({
       )}
       {isOwner && (
         <div className="mt-2 flex items-center justify-between">
-          <span className="text-[10px] text-muted/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <span className="text-[10px] text-muted/30">
             {post.audience === "public"
               ? "Public"
               : post.audience === "followers"

@@ -23,7 +23,7 @@ function StatusBadge({ status }: { status: string }) {
         "rounded-full border px-2.5 py-0.5 text-xs",
         colors[String(status)] ?? "bg-white/5 text-muted/50 border-white/10",
       ].join(" ")}
-      style={{ fontFamily: "var(--font-dm-sans)" }}
+
     >
       {status.toString().replace(/_/g, " ")}
     </span>
@@ -89,14 +89,14 @@ export default async function AdminUsersPage({
     <div className="mx-auto max-w-6xl space-y-6">
       <div>
         <h1
-          className="text-3xl font-light text-foreground"
-          style={{ fontFamily: "var(--font-cormorant)" }}
+          className="text-xl font-bold tracking-tight text-foreground"
+         
         >
           Users
         </h1>
         <p
           className="mt-1 text-sm text-muted/50"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           {count ?? 0} total users
         </p>
@@ -110,13 +110,13 @@ export default async function AdminUsersPage({
           defaultValue={search}
           placeholder="Search name..."
           className="auth-input w-48 text-sm"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         />
         <select
           name="role"
           defaultValue={roleFilter}
           className="auth-input w-36 text-sm"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           <option value="">All roles</option>
           <option value="client">Client</option>
@@ -126,7 +126,7 @@ export default async function AdminUsersPage({
           Filter
         </button>
         {(search || roleFilter) && (
-          <Link href="/admin/users" className="text-xs text-muted/50 hover:text-muted transition-colors" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <Link href="/admin/users" className="text-xs text-muted/50 hover:text-muted transition-colors">
             Clear
           </Link>
         )}
@@ -135,16 +135,16 @@ export default async function AdminUsersPage({
       {/* Table */}
       <div className="glass-card overflow-hidden">
         {error ? (
-          <p className="p-6 text-sm text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="p-6 text-sm text-red-400">
             Failed to load users.
           </p>
         ) : users.length === 0 ? (
-          <p className="p-6 text-center text-sm text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="p-6 text-center text-sm text-muted/40">
             No users found.
           </p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/10">
                   {["Name", "Role", "KYC Status", "Suspended", "Joined", "Actions"].map((h) => (
@@ -198,7 +198,7 @@ export default async function AdminUsersPage({
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center gap-2" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <div className="flex items-center gap-2">
           {page > 1 && (
             <Link href={buildUrl({ page: String(page - 1) })} className="btn-ghost text-xs px-3 py-1.5">
               Previous

@@ -30,12 +30,12 @@ export function ContentFeedClient({ posts, currentUserId, stripeConfigured = fal
       <div className="mx-auto max-w-2xl px-4 py-8">
         <div className="mb-6">
           <h1
-            className="text-3xl font-light text-foreground"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+            className="text-xl font-bold tracking-tight text-foreground"
+           
           >
             Content
           </h1>
-          <p className="mt-1 text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="mt-1 text-sm text-muted/50">
             Explore exclusive content from hosts
           </p>
         </div>
@@ -51,7 +51,7 @@ export function ContentFeedClient({ posts, currentUserId, stripeConfigured = fal
                   ? "bg-white/[0.07] text-gold"
                   : "text-muted/50 hover:text-muted/80"
               }`}
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {f === "subscribed" ? "My Subscriptions" : f.charAt(0).toUpperCase() + f.slice(1)}
             </button>
@@ -131,16 +131,16 @@ function ContentCard({ post, stripeConfigured }: { post: FeedPost; stripeConfigu
             <Link
               href={companionHref}
               className="text-sm font-medium text-foreground hover:text-gold"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {post.companion?.display_name ?? "host"}
             </Link>
           ) : (
-            <p className="text-sm font-medium text-foreground" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="text-sm font-medium text-foreground">
               {post.companion?.display_name ?? "host"}
             </p>
           )}
-          <p className="text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="text-xs text-muted/40">
             {formatDate(post.published_at)}
             {post.companion?.verification_tier === "select" && " · EliteSeek Select"}
             {post.companion?.verification_tier === "verified" && " · Verified"}
@@ -149,7 +149,7 @@ function ContentCard({ post, stripeConfigured }: { post: FeedPost; stripeConfigu
         {post.is_ppv && !isUnlocked && (
           <span
             className="shrink-0 rounded-full border border-white/20 bg-white/[0.04] px-2.5 py-0.5 text-xs text-gold"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             PPV · ${post.ppv_price}
           </span>
@@ -157,7 +157,7 @@ function ContentCard({ post, stripeConfigured }: { post: FeedPost; stripeConfigu
         {post.is_subscribers_only && !isUnlocked && (
           <span
             className="shrink-0 rounded-full border border-white/10 px-2.5 py-0.5 text-xs text-muted/50"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Subs only
           </span>
@@ -191,7 +191,7 @@ function ContentCard({ post, stripeConfigured }: { post: FeedPost; stripeConfigu
           {post.title && (
             <p
               className="text-base font-light text-foreground"
-              style={{ fontFamily: "var(--font-cormorant)" }}
+             
             >
               {post.title}
             </p>
@@ -199,13 +199,13 @@ function ContentCard({ post, stripeConfigured }: { post: FeedPost; stripeConfigu
           {post.body && isUnlocked && (
             <p
               className="mt-1 text-sm text-foreground/70"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {post.body}
             </p>
           )}
           {post.body && !isUnlocked && (
-            <p className="mt-1 select-none blur-sm text-sm text-foreground/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="mt-1 select-none blur-sm text-sm text-foreground/70">
               {post.body}
             </p>
           )}
@@ -213,7 +213,7 @@ function ContentCard({ post, stripeConfigured }: { post: FeedPost; stripeConfigu
       )}
 
       {error && (
-        <p className="px-4 pb-3 text-xs text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="px-4 pb-3 text-xs text-red-400">
           {error}
         </p>
       )}
@@ -283,7 +283,7 @@ function LockOverlay({
             onClick={onPurchase}
             disabled={isPending}
             className="btn-gold rounded-xl px-5 py-2 text-sm disabled:opacity-50"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             {isPending ? "Unlocking…" : `Unlock for $${post.ppv_price}`}
           </button>
@@ -293,7 +293,7 @@ function LockOverlay({
             onClick={onSubscribe}
             disabled={isPending}
             className="btn-ghost rounded-xl px-5 py-2 text-sm disabled:opacity-50"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             {isPending ? "Subscribing…" : `Subscribe · $${post.companion.subscription_price}/mo`}
           </button>
@@ -310,14 +310,14 @@ function EmptyFeed({ filter }: { filter: Filter }) {
         <Icon name="photo" className="h-6 w-6 text-muted/40" />
       </div>
       <p
-        className="text-xl font-light text-foreground/60"
-        style={{ fontFamily: "var(--font-cormorant)" }}
+        className="text-base font-semibold text-foreground/60"
+       
       >
         {filter === "subscribed" ? "No subscribed content yet" : "Nothing here yet"}
       </p>
       <p
         className="max-w-xs text-sm text-muted/40"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         Hosts haven&apos;t posted content yet — check back soon
       </p>

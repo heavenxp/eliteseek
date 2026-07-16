@@ -99,17 +99,17 @@ export default async function ClientBookingsPage() {
     <div className="mx-auto max-w-3xl px-4 py-8 md:px-6 md:py-12">
       <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+          <h1 className="text-xl font-bold tracking-tight text-foreground">
             My Bookings
           </h1>
-          <p className="mt-1 text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="mt-1 text-sm text-muted/50">
             {upcoming.length} upcoming · {past.length} past
           </p>
         </div>
         <Link
           href="/events"
           className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-gold/80 hover:bg-white/[0.07] hover:text-gold transition-colors"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           Events
         </Link>
@@ -153,7 +153,7 @@ function Section({
 }) {
   return (
     <section className={faded ? "opacity-60" : ""}>
-      <p className="mb-3 text-xs uppercase tracking-[0.1em] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+      <p className="mb-3 text-xs uppercase tracking-[0.1em] text-muted/40">
         {title} · {count}
       </p>
       <div className="space-y-3">{children}</div>
@@ -174,7 +174,7 @@ function BookingCard({ booking }: { booking: BookingRow }) {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <p className="text-sm text-foreground/90" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="text-sm text-foreground/90">
               {TYPE_LABELS[booking.booking_type]} ·{" "}
               <Link href={profileHref} className="text-gold/70 hover:text-gold">
                 {booking.host?.display_name ?? "host"}
@@ -182,12 +182,12 @@ function BookingCard({ booking }: { booking: BookingRow }) {
             </p>
             <span
               className={`rounded-full px-2 py-0.5 text-[10px] ${STATUS_COLORS[booking.status]}`}
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {STATUS_LABELS[booking.status]}
             </span>
           </div>
-          <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted/50">
             <span className="flex items-center gap-1">
               <Icon name="calendar" className="h-3 w-3 text-muted/40" />
               {date.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" })}
@@ -206,22 +206,22 @@ function BookingCard({ booking }: { booking: BookingRow }) {
             )}
           </div>
           {booking.status === "pending" && (
-            <p className="mt-2 text-xs text-amber-400/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="mt-2 text-xs text-amber-400/70">
               Awaiting host response — usually within 24 hours
             </p>
           )}
           {booking.status === "confirmed" && booking.escrow_status === "unpaid" && (
-            <p className="mt-2 text-xs text-emerald-400/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="mt-2 text-xs text-emerald-400/70">
               Confirmed — pay now to secure it. Stripe holds your payment until 48h after completion.
             </p>
           )}
         </div>
 
         <div className="flex flex-col items-end gap-1">
-          <p className="text-lg font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+          <p className="text-base font-semibold text-foreground">
             ${booking.total_amount.toLocaleString()}
           </p>
-          <p className="text-[10px] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="text-[10px] text-muted/40">
             total
           </p>
         </div>
@@ -249,16 +249,16 @@ function EmptyState() {
       <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
         <Icon name="calendar" className="h-6 w-6 text-muted/40" />
       </div>
-      <p className="text-xl font-light text-foreground/60" style={{ fontFamily: "var(--font-cormorant)" }}>
+      <p className="text-base font-semibold text-foreground/60">
         No bookings yet
       </p>
-      <p className="text-sm text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+      <p className="text-sm text-muted/40">
         Browse experiences and send your first booking request.
       </p>
       <Link
         href="/browse/experiences"
         className="btn-gold mt-2 rounded-xl px-6 py-2.5 text-sm"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         Browse Experiences
       </Link>

@@ -25,7 +25,7 @@ function StatusBadge({ status }: { status: string }) {
         "rounded-full border px-2.5 py-0.5 text-xs",
         colors[status] ?? "bg-white/5 text-muted/50 border-white/10",
       ].join(" ")}
-      style={{ fontFamily: "var(--font-dm-sans)" }}
+
     >
       {status}
     </span>
@@ -90,34 +90,34 @@ export default async function AdminModerationPage() {
     <div className="mx-auto max-w-5xl space-y-6">
       <div>
         <h1
-          className="text-3xl font-light text-foreground"
-          style={{ fontFamily: "var(--font-cormorant)" }}
+          className="text-xl font-bold tracking-tight text-foreground"
+         
         >
           Content Moderation
         </h1>
         <p
           className="mt-1 text-sm text-muted/50"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           {posts.length} post{posts.length !== 1 ? "s" : ""} awaiting review
         </p>
       </div>
 
       {error ? (
-        <p className="text-sm text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="text-sm text-red-400">
           Failed to load posts.
         </p>
       ) : posts.length === 0 ? (
         <div className="glass-card p-12 text-center">
           <p
-            className="text-xl font-light text-foreground/50"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+            className="text-base font-semibold text-foreground/50"
+           
           >
             No posts pending review
           </p>
           <p
             className="mt-1 text-sm text-muted/40"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             All content is up to date.
           </p>
@@ -143,7 +143,7 @@ export default async function AdminModerationPage() {
                     <div className="flex items-center gap-2 flex-wrap">
                       <h2
                         className="text-base font-light text-foreground"
-                        style={{ fontFamily: "var(--font-cormorant)" }}
+                       
                       >
                         {post.title ?? "(untitled)"}
                       </h2>
@@ -151,7 +151,7 @@ export default async function AdminModerationPage() {
                     </div>
                     <p
                       className="mt-1 text-xs text-muted/50"
-                      style={{ fontFamily: "var(--font-dm-sans)" }}
+
                     >
                       By <span className="text-foreground/60">{companionName}</span>
                       {" · "}
@@ -161,7 +161,7 @@ export default async function AdminModerationPage() {
                     {bodyExcerpt && (
                       <p
                         className="mt-2 text-sm text-muted/60 leading-relaxed"
-                        style={{ fontFamily: "var(--font-dm-sans)" }}
+
                       >
                         {bodyExcerpt}
                       </p>
@@ -190,14 +190,14 @@ export default async function AdminModerationPage() {
       {/* ── Hive flags (messages, feed posts, stories, photos) ── */}
       <div className="pt-4">
         <h2
-          className="text-2xl font-light text-foreground"
-          style={{ fontFamily: "var(--font-cormorant)" }}
+          className="text-lg font-bold tracking-tight text-foreground"
+         
         >
           Flagged by moderation
         </h2>
         <p
           className="mt-1 text-sm text-muted/50"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           {flags.length} item{flags.length !== 1 ? "s" : ""} awaiting review across messages, feed, stories, and photos
         </p>
@@ -207,7 +207,7 @@ export default async function AdminModerationPage() {
         <div className="glass-card p-8 text-center">
           <p
             className="text-base font-light text-foreground/50"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+           
           >
             Nothing flagged — the queue is clear.
           </p>
@@ -220,18 +220,18 @@ export default async function AdminModerationPage() {
                 <div className="flex flex-wrap items-center gap-2">
                   <span
                     className="rounded-full border border-white/20 bg-white/[0.04] px-2.5 py-0.5 text-xs text-gold"
-                    style={{ fontFamily: "var(--font-dm-sans)" }}
+
                   >
                     {FLAG_TYPE_LABELS[flag.content_type ?? ""] ?? flag.content_type}
                   </span>
                   <StatusBadge status={flag.action} />
                   {flag.moderation_score != null && (
-                    <span className="text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                    <span className="text-xs text-muted/50">
                       score {Number(flag.moderation_score).toFixed(2)}
                     </span>
                   )}
                 </div>
-                <p className="mt-1 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <p className="mt-1 text-xs text-muted/50">
                   By <span className="text-foreground/60">{flagNameMap.get(flag.subject_id) ?? flag.subject_id}</span>
                   {" · "}
                   {formatDate(flag.created_at)}

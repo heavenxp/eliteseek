@@ -35,7 +35,7 @@ export function ProfileActions({ post, companionId, companionName, hourlyRate, i
         <button
           onClick={() => setShowModal(true)}
           className="btn-gold flex items-center gap-2 rounded-xl px-6 py-3 text-sm"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           <Icon name="calendar" className="h-4 w-4" />
           Request a Booking

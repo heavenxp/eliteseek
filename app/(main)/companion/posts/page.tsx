@@ -44,17 +44,17 @@ export default async function CompanionPostsPage() {
     <div className="mx-auto max-w-3xl px-4 py-8 md:px-6 md:py-12">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+          <h1 className="text-xl font-bold tracking-tight text-foreground">
             My Posts
           </h1>
-          <p className="mt-1 text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="mt-1 text-sm text-muted/50">
             {upcoming.length} upcoming · {past.length} past
           </p>
         </div>
         <Link
           href="/companion/posts/new"
           className="btn-gold flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           <Icon name="plus" className="h-4 w-4" />
           New Post
@@ -67,7 +67,7 @@ export default async function CompanionPostsPage() {
         <div className="space-y-8">
           {upcoming.length > 0 && (
             <section>
-              <p className="mb-3 text-xs uppercase tracking-[0.1em] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="mb-3 text-xs uppercase tracking-[0.1em] text-muted/40">
                 Upcoming
               </p>
               <div className="space-y-3">
@@ -80,7 +80,7 @@ export default async function CompanionPostsPage() {
 
           {past.length > 0 && (
             <section>
-              <p className="mb-3 text-xs uppercase tracking-[0.1em] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="mb-3 text-xs uppercase tracking-[0.1em] text-muted/40">
                 Past
               </p>
               <div className="space-y-3 opacity-60">
@@ -102,7 +102,7 @@ function PostRow({ post, isPast = false }: { post: AvailabilityPost; isPast?: bo
     <div className="flex items-center justify-between gap-4 rounded-xl border border-white/10 bg-[rgba(255,255,255,0.02)] px-4 py-3.5">
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <p className="truncate text-sm text-foreground/90" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="truncate text-sm text-foreground/90">
             {post.title}
           </p>
           {post.is_booked && (
@@ -112,7 +112,7 @@ function PostRow({ post, isPast = false }: { post: AvailabilityPost; isPast?: bo
             <span className="shrink-0 rounded-full bg-white/[0.04] px-2 py-0.5 text-[10px] text-gold/70">Subs only</span>
           )}
         </div>
-        <div className="mt-1 flex items-center gap-3 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <div className="mt-1 flex items-center gap-3 text-xs text-muted/50">
           <span>{CATEGORY_LABELS[post.category]}</span>
           <span>·</span>
           <span>{date.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</span>
@@ -135,16 +135,16 @@ function EmptyState() {
       <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
         <Icon name="calendar" className="h-6 w-6 text-muted/40" />
       </div>
-      <p className="text-xl font-light text-foreground/60" style={{ fontFamily: "var(--font-cormorant)" }}>
+      <p className="text-base font-semibold text-foreground/60">
         No availability posts yet
       </p>
-      <p className="text-sm text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+      <p className="text-sm text-muted/40">
         Share when you are available and let clients book experiences with you.
       </p>
       <Link
         href="/companion/posts/new"
         className="btn-gold mt-2 rounded-xl px-6 py-2.5 text-sm"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         Create your first post
       </Link>

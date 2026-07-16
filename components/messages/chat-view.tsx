@@ -248,14 +248,14 @@ export function ChatView({
           <Link href="/messages" className="flex items-center text-muted/50 hover:text-muted md:hidden">
             <Icon name="chevron-left" className="h-5 w-5" />
           </Link>
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/[0.07] text-sm font-medium text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/[0.07] text-sm font-medium text-gold">
             {otherName.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
             <Link
               href={otherProfileHref}
               className="truncate text-sm text-foreground/80 hover:text-gold transition-colors"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {otherName}
             </Link>
@@ -267,7 +267,7 @@ export function ChatView({
           {messages.length === 0 ? (
             <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
               <Icon name="message" className="h-10 w-10 text-gold/20" />
-              <p className="text-sm text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="text-sm text-muted/40">
                 Start the conversation with {otherName}
               </p>
             </div>
@@ -277,7 +277,7 @@ export function ChatView({
                 <div key={date}>
                   <div className="mb-4 flex items-center gap-3">
                     <div className="h-px flex-1 bg-[rgba(255,255,255,0.05)]" />
-                    <span className="text-[10px] text-muted/30" style={{ fontFamily: "var(--font-dm-sans)" }}>{date}</span>
+                    <span className="text-[10px] text-muted/30">{date}</span>
                     <div className="h-px flex-1 bg-[rgba(255,255,255,0.05)]" />
                   </div>
                   <div className="space-y-2">
@@ -306,7 +306,7 @@ export function ChatView({
                                 style={isOwn ? { background: "transparent", boxShadow: "0 0 12px rgba(70,0,0,0.8), 0 0 4px rgba(200,0,0,0.6), inset 0 0 8px rgba(70,0,0,0.3)" } : undefined}
                               >
                                 {hasText && (
-                                  <p className="text-sm leading-relaxed" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                                  <p className="text-sm leading-relaxed">
                                     {msg.content}
                                   </p>
                                 )}
@@ -315,7 +315,7 @@ export function ChatView({
                                 )}
                                 {/* Timestamp inside bubble when no visual media follows */}
                                 {!isVisual && (
-                                  <p className={`mt-1 ${timestampCls}`} style={{ fontFamily: "var(--font-dm-sans)" }}>
+                                  <p className={`mt-1 ${timestampCls}`}>
                                     {timeStr}
                                   </p>
                                 )}
@@ -346,7 +346,7 @@ export function ChatView({
 
                             {/* Timestamp below visual media */}
                             {isVisual && (
-                              <p className={timestampCls} style={{ fontFamily: "var(--font-dm-sans)" }}>
+                              <p className={timestampCls}>
                                 {timeStr}
                               </p>
                             )}
@@ -390,7 +390,7 @@ export function ChatView({
         {recording && (
           <div className="border-t border-white/10 px-4 py-2 flex items-center gap-2">
             <span className="h-2 w-2 animate-pulse rounded-full bg-red-400" />
-            <span className="text-xs text-red-400/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <span className="text-xs text-red-400/80">
               Recording… release to send
             </span>
           </div>
@@ -448,7 +448,7 @@ export function ChatView({
               placeholder={recording ? "Recording…" : uploading ? "Uploading…" : `Message ${otherName}…`}
               disabled={recording || uploading}
               className="auth-input flex-1 resize-none py-2.5 text-sm"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
@@ -471,7 +471,7 @@ export function ChatView({
             </button>
           </div>
           {error && (
-            <p className="mt-1.5 text-xs text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="mt-1.5 text-xs text-red-400">
               {error}
             </p>
           )}

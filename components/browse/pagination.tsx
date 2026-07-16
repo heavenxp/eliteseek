@@ -42,7 +42,7 @@ export function Pagination({ currentPage, totalPages }: Props) {
 
       {pages.map((p, i) =>
         p === "…" ? (
-          <span key={`ellipsis-${i}`} className="flex h-9 w-9 items-center justify-center text-sm text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <span key={`ellipsis-${i}`} className="flex h-9 w-9 items-center justify-center text-sm text-muted/40">
             …
           </span>
         ) : (
@@ -55,7 +55,7 @@ export function Pagination({ currentPage, totalPages }: Props) {
                 ? "bg-white/[0.07] text-gold border border-white/20"
                 : "border border-[rgba(255,255,255,0.07)] text-muted hover:border-white/10 hover:text-foreground",
             ].join(" ")}
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             {p}
           </button>

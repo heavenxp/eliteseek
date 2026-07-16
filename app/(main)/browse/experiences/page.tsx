@@ -37,12 +37,12 @@ export default async function ExperiencesPage() {
         {/* Header */}
         <div className="mb-8">
           <h1
-            className="text-4xl font-light text-foreground md:text-5xl"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+            className="text-2xl font-bold tracking-tight text-foreground md:text-3xl"
+           
           >
             Experiences
           </h1>
-          <p className="mt-2 text-sm text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="mt-2 text-sm text-muted/60">
             Curated availability from EliteSeek&apos;s most exceptional hosts
           </p>
         </div>

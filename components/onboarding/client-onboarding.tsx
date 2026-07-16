@@ -69,7 +69,7 @@ function ErrorBanner({ message }: { message: string }) {
   return (
     <div className="flex items-center gap-2 rounded-xl border border-red-500/20 bg-red-500/08 px-4 py-3">
       <Icon name="shield" className="h-4 w-4 shrink-0 text-red-400" />
-      <p className="text-sm text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+      <p className="text-sm text-red-400">
         {message}
       </p>
     </div>
@@ -95,13 +95,13 @@ function ProgressDots({ step }: { step: number }) {
                     ? "border-white/20 bg-gold text-[#080810]"
                     : "border-[rgba(255,255,255,0.1)] text-muted/40",
                 ].join(" ")}
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {done ? <Icon name="check" className="h-3.5 w-3.5" /> : idx}
               </div>
               <span
                 className={`text-[10px] ${active ? "text-gold" : done ? "text-muted" : "text-muted/30"}`}
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {label}
               </span>
@@ -174,14 +174,14 @@ export function ClientOnboarding({
       <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
         <p
           className="text-sm text-muted/80"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           Welcome, <span className="font-medium text-foreground">{fullName.split(" ")[0]}</span>. Let's personalise your EliteSeek experience.
         </p>
       </div>
 
       <div>
-        <p className="mb-3 text-xs text-muted/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mb-3 text-xs text-muted/70">
           What kinds of experiences interest you?
         </p>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -214,7 +214,7 @@ export function ClientOnboarding({
                 </div>
                 <span
                   className={`text-xs font-medium ${active ? "text-foreground" : "text-muted"}`}
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 >
                   {opt.label}
                 </span>
@@ -225,7 +225,7 @@ export function ClientOnboarding({
       </div>
 
       <div>
-        <p className="mb-1.5 text-xs text-muted/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mb-1.5 text-xs text-muted/70">
           Your city <span className="text-muted/40">(optional)</span>
         </p>
         <input
@@ -259,7 +259,7 @@ export function ClientOnboarding({
             {opt.highlighted && (
               <span
                 className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-gold px-3 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[#080810]"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 Most Popular
               </span>
@@ -268,12 +268,12 @@ export function ClientOnboarding({
               <div className="flex-1">
                 <div className="flex items-baseline gap-1.5">
                   <span
-                    className={`text-xl font-light ${active ? "text-gold" : "text-foreground"}`}
-                    style={{ fontFamily: "var(--font-cormorant)" }}
+                    className={`text-base font-semibold ${active ? "text-gold" : "text-foreground"}`}
+                   
                   >
                     {opt.tier.charAt(0).toUpperCase() + opt.tier.slice(1)}
                   </span>
-                  <span className="text-xs text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                  <span className="text-xs text-muted/60">
                     — {opt.tagline}
                   </span>
                 </div>
@@ -282,14 +282,14 @@ export function ClientOnboarding({
                     <li
                       key={f}
                       className="flex items-center gap-2 text-xs text-muted/70"
-                      style={{ fontFamily: "var(--font-dm-sans)" }}
+
                     >
                       <Icon name="check" className="h-3 w-3 shrink-0 text-gold/70" />
                       {f}
                     </li>
                   ))}
                   {opt.features.length > 3 && (
-                    <li className="text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                    <li className="text-xs text-muted/40">
                       +{opt.features.length - 3} more
                     </li>
                   )}
@@ -297,13 +297,13 @@ export function ClientOnboarding({
               </div>
               <div className="text-right">
                 <span
-                  className={`text-2xl font-light ${active ? "text-gold" : "text-foreground"}`}
-                  style={{ fontFamily: "var(--font-cormorant)" }}
+                  className={`text-lg font-bold tracking-tight ${active ? "text-gold" : "text-foreground"}`}
+                 
                 >
                   {opt.price}
                 </span>
                 {opt.period && (
-                  <p className="text-[10px] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                  <p className="text-[10px] text-muted/50">
                     {opt.period}
                   </p>
                 )}
@@ -319,7 +319,7 @@ export function ClientOnboarding({
       })}
 
       {selectedTier !== "bronze" && (
-        <p className="text-center text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="text-center text-xs text-muted/50">
           Billing setup is handled on the next screen.
           You won&apos;t be charged until you confirm.
         </p>
@@ -333,16 +333,16 @@ export function ClientOnboarding({
         <ProgressDots step={step} />
 
         <div className="mb-6">
-          <p className="text-xs uppercase tracking-[0.15em] text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="text-xs uppercase tracking-[0.15em] text-gold">
             Step {step} of 2
           </p>
           <h1
-            className="mt-1 text-3xl font-light text-foreground"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+            className="mt-1 text-xl font-bold tracking-tight text-foreground"
+           
           >
             {step === 1 ? "Your interests" : "Choose your membership"}
           </h1>
-          <p className="mt-1.5 text-sm text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="mt-1.5 text-sm text-muted">
             {step === 1
               ? "Tell us what you're looking for so we can surface the right hosts."
               : "Upgrade anytime. Start free and explore."}
@@ -360,7 +360,7 @@ export function ClientOnboarding({
               onClick={() => { setError(null); setStep(1); }}
               disabled={isPending}
               className="btn-ghost flex-1 rounded-xl py-3 text-sm disabled:opacity-40"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Back
             </button>
@@ -370,7 +370,7 @@ export function ClientOnboarding({
             onClick={step === 1 ? handleStep1Next : handleFinish}
             disabled={isPending}
             className="btn-gold flex-[2] rounded-xl py-3 text-sm disabled:opacity-60"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             {isPending
               ? "Saving…"
@@ -383,7 +383,7 @@ export function ClientOnboarding({
         </div>
       </GlassCard>
 
-      <p className="mt-4 text-center text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+      <p className="mt-4 text-center text-xs text-muted/40">
         You can change your membership anytime from account settings.
       </p>
     </div>

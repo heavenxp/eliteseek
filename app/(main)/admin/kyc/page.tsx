@@ -21,7 +21,7 @@ function RoleBadge({ role }: { role: string }) {
           ? "bg-white/[0.07] text-gold border-white/10"
           : "bg-white/5 text-muted/70 border-white/10",
       ].join(" ")}
-      style={{ fontFamily: "var(--font-dm-sans)" }}
+
     >
       {role}
     </span>
@@ -45,34 +45,34 @@ export default async function AdminKycPage() {
     <div className="mx-auto max-w-4xl space-y-6">
       <div>
         <h1
-          className="text-3xl font-light text-foreground"
-          style={{ fontFamily: "var(--font-cormorant)" }}
+          className="text-xl font-bold tracking-tight text-foreground"
+         
         >
           KYC Reviews
         </h1>
         <p
           className="mt-1 text-sm text-muted/50"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           {profiles.length} verification{profiles.length !== 1 ? "s" : ""} pending
         </p>
       </div>
 
       {error ? (
-        <p className="text-sm text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="text-sm text-red-400">
           Failed to load KYC queue.
         </p>
       ) : profiles.length === 0 ? (
         <div className="glass-card p-12 text-center">
           <p
-            className="text-xl font-light text-foreground/50"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+            className="text-base font-semibold text-foreground/50"
+           
           >
             No pending verifications
           </p>
           <p
             className="mt-1 text-sm text-muted/40"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             All KYC submissions are resolved.
           </p>
@@ -80,7 +80,7 @@ export default async function AdminKycPage() {
       ) : (
         <div className="glass-card overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/10">
                   {["Name", "Role", "User ID", "Submitted", "Actions"].map((h) => (

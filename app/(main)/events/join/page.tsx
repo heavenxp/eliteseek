@@ -39,12 +39,12 @@ export default function JoinEventPage() {
           </div>
         </div>
         <h1
-          className="text-3xl font-light text-foreground"
-          style={{ fontFamily: "var(--font-cormorant)" }}
+          className="text-xl font-bold tracking-tight text-foreground"
+         
         >
           Join with Code
         </h1>
-        <p className="mt-2 text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mt-2 text-sm text-muted/50">
           Enter your invite code to access a private event
         </p>
       </div>
@@ -62,7 +62,7 @@ export default function JoinEventPage() {
         />
 
         {error && (
-          <p className="text-center text-sm text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="text-center text-sm text-red-400">
             {error}
           </p>
         )}
@@ -71,7 +71,7 @@ export default function JoinEventPage() {
           type="submit"
           disabled={code.trim().length < 6 || submitting}
           className="w-full rounded-xl bg-gold py-3 text-sm font-semibold text-black hover:bg-gold-light transition-colors disabled:opacity-40"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           {submitting ? "Verifying…" : "Join Event"}
         </button>
@@ -81,7 +81,7 @@ export default function JoinEventPage() {
         <Link
           href="/events"
           className="text-sm text-white/30 hover:text-white/60 transition-colors"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           ← Browse public events
         </Link>

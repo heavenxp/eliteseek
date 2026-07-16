@@ -164,8 +164,8 @@ export default async function EventSharePage({
 
         {/* Title + host */}
         <h1
-          className="text-balance text-4xl font-light leading-tight text-foreground"
-          style={{ fontFamily: "var(--font-cormorant)" }}
+          className="text-balance text-2xl font-bold tracking-tight leading-tight text-foreground"
+         
         >
           {ev.title}
         </h1>
@@ -176,12 +176,12 @@ export default async function EventSharePage({
               // eslint-disable-next-line @next/next/no-img-element
               <img src={creator.avatar_url} alt="" className="h-full w-full object-cover" />
             ) : (
-              <span className="text-sm text-muted/60" style={{ fontFamily: "var(--font-cormorant)" }}>
+              <span className="text-sm text-muted/60">
                 {hostName.charAt(0)}
               </span>
             )}
           </div>
-          <span className="text-sm text-foreground/85" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <span className="text-sm text-foreground/85">
             Hosted by {hostName}
           </span>
           {hostProfile && <VerifiedBadge tier={hostProfile.verification_tier} size="sm" />}
@@ -223,7 +223,7 @@ export default async function EventSharePage({
                 </div>
               ))}
             </div>
-            <span className="text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <span className="text-xs text-muted/50">
               Every attendee is ID-verified
             </span>
           </div>
@@ -233,7 +233,7 @@ export default async function EventSharePage({
         {ev.description && (
           <p
             className="mt-6 whitespace-pre-line text-sm leading-relaxed text-foreground/75"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             {ev.description}
           </p>
@@ -249,18 +249,18 @@ export default async function EventSharePage({
         {/* CTA */}
         <div className="mt-8">
           {ended ? (
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] py-3.5 text-center text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] py-3.5 text-center text-sm text-muted/50">
               This event has ended
             </div>
           ) : soldOut ? (
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] py-3.5 text-center text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] py-3.5 text-center text-sm text-muted/50">
               Sold out
             </div>
           ) : user ? (
             <Link
               href={`/events/${ev.id}${price > 0 ? "" : "?join=1"}`}
               className="btn-gold block w-full rounded-2xl py-3.5 text-center text-sm font-semibold"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {price > 0 ? `Get ticket · $${price}` : "Join event"}
             </Link>
@@ -269,11 +269,11 @@ export default async function EventSharePage({
               <button
                 type="submit"
                 className="btn-gold w-full rounded-2xl py-3.5 text-sm font-semibold"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 Get ticket · ${price}
               </button>
-              <p className="mt-2 text-center text-[11px] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="mt-2 text-center text-[11px] text-muted/40">
                 Pay first — you&apos;ll create your account after checkout.
               </p>
             </form>
@@ -281,7 +281,7 @@ export default async function EventSharePage({
             <Link
               href={`/login?next=${encodeURIComponent(`/events/${ev.id}?join=1`)}`}
               className="btn-gold block w-full rounded-2xl py-3.5 text-center text-sm font-semibold"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Join event
             </Link>
@@ -291,7 +291,7 @@ export default async function EventSharePage({
 
       {/* Legal footer (required on public surfaces) */}
       <footer className="px-6 pb-8 text-center">
-        <p className="text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="text-xs text-muted/40">
           © 2026 EliteSeek Pty Ltd · All hosts are age-verified (18+) under the Australian Online Safety Act.
         </p>
       </footer>
@@ -303,7 +303,7 @@ function Fact({ icon, children }: { icon: string; children: React.ReactNode }) {
   return (
     <div className="flex items-start gap-2.5">
       <Icon name={icon} className="mt-0.5 h-4 w-4 shrink-0 text-muted/40" />
-      <span className="text-sm text-foreground/85" style={{ fontFamily: "var(--font-dm-sans)" }}>
+      <span className="text-sm text-foreground/85">
         {children}
       </span>
     </div>

@@ -23,7 +23,7 @@ export default async function NewPostPage() {
         <Link
           href="/companion/posts"
           className="flex items-center gap-1.5 text-sm text-muted/60 hover:text-muted"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           <Icon name="chevron-left" className="h-4 w-4" />
           My Posts
@@ -31,10 +31,10 @@ export default async function NewPostPage() {
       </div>
 
       <div className="mb-8">
-        <h1 className="text-3xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+        <h1 className="text-xl font-bold tracking-tight text-foreground">
           New Availability Post
         </h1>
-        <p className="mt-1 text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mt-1 text-sm text-muted/50">
           Share when you are available and let clients discover and book experiences with you.
         </p>
       </div>

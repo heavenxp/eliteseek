@@ -41,7 +41,7 @@ export function SafetyActions({ bookingId, escrowStatus, checkinAt, checkoutAt }
     <div className="space-y-2">
       <div className="flex flex-wrap items-center gap-2">
         {escrowStatus === "unpaid" && (
-          <span className="rounded-full border border-amber-500/25 bg-amber-500/10 px-2.5 py-1 text-[11px] text-amber-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <span className="rounded-full border border-amber-500/25 bg-amber-500/10 px-2.5 py-1 text-[11px] text-amber-400">
             Awaiting client payment
           </span>
         )}
@@ -50,7 +50,7 @@ export function SafetyActions({ bookingId, escrowStatus, checkinAt, checkoutAt }
             onClick={() => run(() => checkInBooking(bookingId))}
             disabled={pending}
             className="btn-gold rounded-xl px-4 py-1.5 text-xs disabled:opacity-40"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Check in
           </button>
@@ -60,13 +60,13 @@ export function SafetyActions({ bookingId, escrowStatus, checkinAt, checkoutAt }
             onClick={() => run(() => checkOutBooking(bookingId))}
             disabled={pending}
             className="btn-gold rounded-xl px-4 py-1.5 text-xs disabled:opacity-40"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Check out — I&apos;m safe
           </button>
         )}
         {paid && checkinAt && !checkoutAt && (
-          <span className="flex items-center gap-1.5 text-[11px] text-emerald-400/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <span className="flex items-center gap-1.5 text-[11px] text-emerald-400/80">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
             Checked in
           </span>
@@ -78,21 +78,21 @@ export function SafetyActions({ bookingId, escrowStatus, checkinAt, checkoutAt }
             onClick={() => setConfirmCancel(true)}
             disabled={pending}
             className="rounded-xl border border-[rgba(255,255,255,0.08)] px-3 py-1.5 text-xs text-muted/50 transition-colors hover:text-muted disabled:opacity-40"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Cancel booking
           </button>
         )}
         {confirmCancel && (
           <>
-            <span className="text-[11px] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <span className="text-[11px] text-muted/50">
               Cancel? The client is refunded in full — no penalty to you.
             </span>
             <button
               onClick={() => run(() => cancelBookingAsHost(bookingId))}
               disabled={pending}
               className="rounded-xl border border-[rgba(248,113,113,0.4)] bg-[rgba(248,113,113,0.1)] px-3 py-1.5 text-xs text-red-400 disabled:opacity-40"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Confirm cancel
             </button>
@@ -100,7 +100,7 @@ export function SafetyActions({ bookingId, escrowStatus, checkinAt, checkoutAt }
               onClick={() => setConfirmCancel(false)}
               disabled={pending}
               className="rounded-xl border border-[rgba(255,255,255,0.07)] px-3 py-1.5 text-xs text-muted/50 disabled:opacity-40"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Keep
             </button>
@@ -108,7 +108,7 @@ export function SafetyActions({ bookingId, escrowStatus, checkinAt, checkoutAt }
         )}
       </div>
       {error && (
-        <p className="text-xs text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>{error}</p>
+        <p className="text-xs text-red-400">{error}</p>
       )}
     </div>
   );
@@ -136,7 +136,7 @@ export function RateClientForm({ bookingId }: { bookingId: string }) {
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-2">
-        <span className="text-[11px] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <span className="text-[11px] text-muted/50">
           Rate this client
         </span>
         <div className="flex" onMouseLeave={() => setHover(0)}>
@@ -163,19 +163,19 @@ export function RateClientForm({ bookingId }: { bookingId: string }) {
           placeholder="Optional note for other hosts"
           maxLength={200}
           className="auth-input !w-auto flex-1 !py-1 !text-xs"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         />
         <button
           onClick={submit}
           disabled={pending}
           className="btn-gold rounded-xl px-3 py-1.5 text-xs disabled:opacity-40"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           Submit
         </button>
       </div>
       {error && (
-        <p className="text-xs text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>{error}</p>
+        <p className="text-xs text-red-400">{error}</p>
       )}
     </div>
   );

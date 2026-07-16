@@ -98,12 +98,12 @@ function HostMembershipContent({
         {/* Header */}
         <div className="mb-10 text-center">
           <h1
-            className="text-4xl font-light text-white"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+            className="text-2xl font-bold tracking-tight text-white"
+           
           >
             host Status
           </h1>
-          <p className="mt-2 text-sm text-white/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="mt-2 text-sm text-white/40">
             Your tier is earned automatically through client ratings
           </p>
         </div>
@@ -137,10 +137,10 @@ function HostMembershipContent({
                 filter={`drop-shadow(0 0 8px ${current.color}80)`}
               />
               {/* Center */}
-              <text x="88" y="82" textAnchor="middle" fill={current.color} fontSize="26" fontWeight="300" style={{ fontFamily: "var(--font-cormorant)" }}>
+              <text x="88" y="82" textAnchor="middle" fill={current.color} fontSize="26" fontWeight="300">
                 {current.label}
               </text>
-              <text x="88" y="100" textAnchor="middle" fill="rgba(255,255,255,0.35)" fontSize="11" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <text x="88" y="100" textAnchor="middle" fill="rgba(255,255,255,0.35)" fontSize="11">
                 {current.subtitle}
               </text>
             </svg>
@@ -155,10 +155,10 @@ function HostMembershipContent({
               { label: "Earned", value: `$${totalEarned.toLocaleString()}` },
             ].map((s) => (
               <div key={s.label} className="flex flex-col items-center gap-0.5">
-                <span className="text-xl font-light text-white" style={{ fontFamily: "var(--font-cormorant)" }}>
+                <span className="text-base font-semibold text-white">
                   {s.value}
                 </span>
-                <span className="text-[10px] uppercase tracking-widest text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <span className="text-[10px] uppercase tracking-widest text-white/30">
                   {s.label}
                 </span>
               </div>
@@ -168,7 +168,7 @@ function HostMembershipContent({
           {/* Progress toward next tier */}
           {next && (
             <div className="w-full max-w-sm">
-              <div className="mb-2 flex items-center justify-between text-xs text-white/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <div className="mb-2 flex items-center justify-between text-xs text-white/40">
                 <span>{current.label} ({current.minRating.toFixed(1)}★)</span>
                 <span>{next.label} ({next.minRating.toFixed(1)}★)</span>
               </div>
@@ -182,7 +182,7 @@ function HostMembershipContent({
                   }}
                 />
               </div>
-              <p className="mt-2 text-center text-[11px] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="mt-2 text-center text-[11px] text-white/30">
                 {avgRating !== null
                   ? `${Math.max(0, next.minRating - avgRating).toFixed(2)} more rating points to ${next.label}`
                   : `Earn ${next.minRating.toFixed(1)}★ average to reach ${next.label}`}
@@ -190,7 +190,7 @@ function HostMembershipContent({
             </div>
           )}
           {!next && (
-            <p className="text-sm text-white/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="text-sm text-white/40">
               You have reached the highest tier ✦
             </p>
           )}
@@ -243,7 +243,7 @@ function HostMembershipContent({
                   >
                     {tier.label}
                   </p>
-                  <p className="text-[9px] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                  <p className="text-[9px] text-white/30">
                     {tier.minRating > 0 ? `${tier.minRating.toFixed(1)}★+` : "Starting tier"}
                   </p>
                 </div>
@@ -264,19 +264,19 @@ function HostMembershipContent({
 
         {/* How tiers work */}
         <div className="mt-8 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5">
-          <p className="mb-3 text-sm font-light text-white/70" style={{ fontFamily: "var(--font-cormorant)" }}>
+          <p className="mb-3 text-sm font-light text-white/70">
             How tiers are earned
           </p>
           <ul className="space-y-1.5">
             {HOST_TIERS.slice(1).map((tier) => (
-              <li key={tier.key} className="flex items-center gap-3 text-xs text-white/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <li key={tier.key} className="flex items-center gap-3 text-xs text-white/40">
                 <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: tier.color }} />
                 <span style={{ color: tier.color }}>{tier.label}</span>
                 <span>— {tier.minRating.toFixed(1)}★ average rating from clients</span>
               </li>
             ))}
           </ul>
-          <p className="mt-3 text-[11px] text-white/25" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="mt-3 text-[11px] text-white/25">
             Tier updates automatically when your average rating changes.
           </p>
         </div>

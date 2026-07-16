@@ -20,14 +20,14 @@ function OnlineBubble({ user }: { user: OnlineUser }) {
             // eslint-disable-next-line @next/next/no-img-element
             <img src={user.avatar_url} alt="" className="h-full w-full object-cover" />
           ) : (
-            <span style={{ fontFamily: "var(--font-dm-sans)" }}>{initial}</span>
+            <span>{initial}</span>
           )}
         </div>
         <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-[rgba(8,8,16,1)] bg-emerald-400" />
       </div>
       <span
         className="max-w-[52px] truncate text-[9px] text-foreground/60"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         {firstName}
       </span>
@@ -48,7 +48,7 @@ export function OnlineRow({
     <div className="border-b border-white/[0.06] px-4 py-3">
       <p
         className="mb-3 text-[10px] font-medium uppercase tracking-[0.12em] text-muted/40"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         Online Now
       </p>
@@ -59,7 +59,7 @@ export function OnlineRow({
               <div className="flex flex-col justify-center pt-1 shrink-0">
                 <span
                   className="text-[9px] uppercase tracking-widest text-muted/30"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 >
                   Hosts
                 </span>
@@ -79,7 +79,7 @@ export function OnlineRow({
               <div className="flex flex-col justify-center pt-1 shrink-0">
                 <span
                   className="text-[9px] uppercase tracking-widest text-muted/30"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 >
                   Clients
                 </span>

@@ -31,10 +31,10 @@ export function VerifyIdentityBanner({ status }: { status: IdentityStatus }) {
             <Icon name="shield" className="h-4 w-4 text-gold" />
           </div>
           <div>
-            <p className="text-sm font-medium text-foreground" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="text-sm font-medium text-foreground">
               {copy.title}
             </p>
-            <p className="mt-0.5 text-xs leading-relaxed text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="mt-0.5 text-xs leading-relaxed text-muted">
               {copy.body}
             </p>
           </div>
@@ -42,7 +42,7 @@ export function VerifyIdentityBanner({ status }: { status: IdentityStatus }) {
         <Link
           href="/companion/verification"
           className="btn-gold shrink-0 self-start rounded-full px-4 py-2 text-xs sm:self-center"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           {copy.cta}
         </Link>

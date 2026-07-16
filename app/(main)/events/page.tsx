@@ -21,35 +21,16 @@ export default async function PulsePage() {
   const now = new Date();
 
   return (
-    <div className="mx-auto max-w-xl px-4 py-8 md:px-6 md:py-12">
+    <div className="mx-auto max-w-xl px-4 py-4 md:py-6">
       {/* Header */}
-      <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1
-            className="text-3xl font-light text-foreground"
-            style={{ fontFamily: "var(--font-cormorant)" }}
-          >
-            Events
-          </h1>
-          <p className="mt-1 text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
-            What&apos;s alive right now ·{" "}
-            <Link href="/events/all" className="text-gold hover:text-gold-light">all events</Link>
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Link
-            href="/events/join"
-            className="rounded-xl border border-white/[0.1] px-4 py-2 text-sm text-white/60 transition-colors hover:border-white/20 hover:text-white/80"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
-          >
-            Enter Code
+      <div className="mb-4 flex items-center justify-between">
+        <h1 className="text-xl font-bold tracking-tight text-foreground">Home</h1>
+        <div className="flex items-center gap-3 text-sm">
+          <Link href="/events/all" className="text-muted/60 transition-colors hover:text-foreground">
+            All events
           </Link>
-          <Link
-            href="/events/create"
-            className="rounded-xl bg-gold px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-gold-light"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
-          >
-            + Create
+          <Link href="/events/join" className="text-muted/60 transition-colors hover:text-foreground">
+            Enter code
           </Link>
         </div>
       </div>
@@ -60,22 +41,22 @@ export default async function PulsePage() {
           <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
             <Icon name="calendar" className="h-6 w-6 text-muted/40" />
           </div>
-          <p className="text-xl font-light text-foreground/60" style={{ fontFamily: "var(--font-cormorant)" }}>
+          <p className="text-base font-semibold text-foreground/60">
             Nothing coming up yet
           </p>
-          <p className="text-sm text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="text-sm text-muted/40">
             Be the first — host something small.
           </p>
           <Link
             href="/events/create"
             className="btn-gold mt-2 rounded-xl px-6 py-2.5 text-sm"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Create an event
           </Link>
         </div>
       ) : (
-        <div className="space-y-5">
+        <div className="space-y-4">
           {feed.map((event) => (
             <PulseCard key={event.id} event={event} now={now} />
           ))}

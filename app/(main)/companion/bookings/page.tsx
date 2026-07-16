@@ -135,17 +135,17 @@ export default async function CompanionBookingsPage() {
       {/* Header */}
       <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+          <h1 className="text-xl font-bold tracking-tight text-foreground">
             Booking Requests
           </h1>
-          <p className="mt-1 text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="mt-1 text-sm text-muted/50">
             {pending.length} pending · {upcoming.length} confirmed upcoming
           </p>
         </div>
         <Link
           href="/events"
           className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-gold/80 hover:bg-white/[0.07] hover:text-gold transition-colors"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           Events
         </Link>
@@ -160,10 +160,10 @@ export default async function CompanionBookingsPage() {
           { label: "Earnings", value: `$${totalEarnings.toLocaleString()}`, color: "text-foreground/80" },
         ].map((stat) => (
           <div key={stat.label} className="rounded-xl border border-white/10 bg-[rgba(255,255,255,0.02)] p-4">
-            <p className={`text-2xl font-light ${stat.color}`} style={{ fontFamily: "var(--font-cormorant)" }}>
+            <p className={`text-lg font-bold tracking-tight ${stat.color}`}>
               {stat.value}
             </p>
-            <p className="mt-0.5 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="mt-0.5 text-xs text-muted/50">
               {stat.label}
             </p>
           </div>
@@ -221,7 +221,7 @@ function Section({
 }) {
   return (
     <section className={faded ? "opacity-60" : ""}>
-      <p className="mb-3 text-xs uppercase tracking-[0.1em] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+      <p className="mb-3 text-xs uppercase tracking-[0.1em] text-muted/40">
         {title} · {count}
       </p>
       <div className="space-y-3">{children}</div>
@@ -244,29 +244,29 @@ function BookingCard({
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <p className="text-sm text-foreground/90" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="text-sm text-foreground/90">
               {TYPE_LABELS[booking.booking_type]} with {clientName.split(" ")[0]}
             </p>
             <span
               className={`rounded-full px-2 py-0.5 text-[10px] ${STATUS_COLORS[booking.status]}`}
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {STATUS_LABELS[booking.status]}
             </span>
             {booking.clientRating && (
               booking.clientRating.count > 0 ? (
-                <span className="flex items-center gap-1 rounded-full bg-white/[0.04] px-2 py-0.5 text-[10px] text-gold/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <span className="flex items-center gap-1 rounded-full bg-white/[0.04] px-2 py-0.5 text-[10px] text-gold/80">
                   <Icon name="star" className="h-2.5 w-2.5" />
                   {booking.clientRating.average} · {booking.clientRating.count} host review{booking.clientRating.count !== 1 ? "s" : ""}
                 </span>
               ) : (
-                <span className="rounded-full bg-[rgba(255,255,255,0.05)] px-2 py-0.5 text-[10px] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <span className="rounded-full bg-[rgba(255,255,255,0.05)] px-2 py-0.5 text-[10px] text-muted/40">
                   New client
                 </span>
               )
             )}
           </div>
-          <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted/50">
             <span className="flex items-center gap-1">
               <Icon name="calendar" className="h-3 w-3 text-muted/40" />
               {date.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" })}
@@ -285,17 +285,17 @@ function BookingCard({
             )}
           </div>
           {booking.notes && (
-            <p className="mt-2 text-xs italic text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="mt-2 text-xs italic text-muted/40">
               &ldquo;{booking.notes}&rdquo;
             </p>
           )}
         </div>
 
         <div className="flex flex-col items-end gap-2">
-          <p className="text-lg font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+          <p className="text-base font-semibold text-foreground">
             ${booking.companion_earnings.toLocaleString()}
           </p>
-          <p className="text-[10px] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="text-[10px] text-muted/40">
             your earnings
           </p>
         </div>
@@ -333,10 +333,10 @@ function EmptyState() {
       <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
         <Icon name="calendar" className="h-6 w-6 text-muted/40" />
       </div>
-      <p className="text-xl font-light text-foreground/60" style={{ fontFamily: "var(--font-cormorant)" }}>
+      <p className="text-base font-semibold text-foreground/60">
         No bookings yet
       </p>
-      <p className="text-sm text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+      <p className="text-sm text-muted/40">
         Booking requests will appear here once clients discover your profile.
       </p>
     </div>

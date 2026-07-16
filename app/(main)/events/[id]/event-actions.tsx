@@ -33,7 +33,7 @@ export function EventActions({ eventId, isCreator }: Props) {
   return (
     <div className="mt-6 flex flex-col gap-2">
       {error && (
-        <p className="text-xs text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="text-xs text-red-400">
           {error}
         </p>
       )}
@@ -42,7 +42,7 @@ export function EventActions({ eventId, isCreator }: Props) {
           onClick={handleDelete}
           disabled={pending}
           className="w-full rounded-xl border border-red-500/20 bg-red-500/[0.06] py-2.5 text-sm text-red-400/80 hover:bg-red-500/10 hover:text-red-400 transition-colors disabled:opacity-40"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           {pending ? "Deleting…" : "Delete Event"}
         </button>
@@ -51,7 +51,7 @@ export function EventActions({ eventId, isCreator }: Props) {
           onClick={handleLeave}
           disabled={pending}
           className="w-full rounded-xl border border-white/[0.08] bg-white/[0.02] py-2.5 text-sm text-white/40 hover:border-white/20 hover:text-white/60 transition-colors disabled:opacity-40"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           {pending ? "Leaving…" : "Leave Event"}
         </button>

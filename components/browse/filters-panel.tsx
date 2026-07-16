@@ -62,8 +62,8 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <h2
-          className="text-lg font-light text-foreground"
-          style={{ fontFamily: "var(--font-cormorant)" }}
+          className="text-base font-semibold text-foreground"
+         
         >
           Filters
         </h2>
@@ -72,7 +72,7 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
             <button
               onClick={clearAll}
               className="text-xs text-gold/70 underline underline-offset-2 hover:text-gold"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Clear all
             </button>
@@ -89,7 +89,7 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
 
       {/* Sort */}
       <div>
-        <p className="mb-2 text-xs uppercase tracking-[0.12em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mb-2 text-xs uppercase tracking-[0.12em] text-muted/50">
           Sort by
         </p>
         <div className="space-y-1">
@@ -103,7 +103,7 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
                   ? "bg-white/[0.04] text-gold"
                   : "text-muted hover:bg-[rgba(255,255,255,0.03)] hover:text-foreground",
               ].join(" ")}
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {opt.label}
               {(currentSort === opt.value || (opt.value === "featured" && !currentSort)) && (
@@ -118,7 +118,7 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
 
       {/* City */}
       <div>
-        <p className="mb-2 text-xs uppercase tracking-[0.12em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mb-2 text-xs uppercase tracking-[0.12em] text-muted/50">
           City
         </p>
         <div className="relative">
@@ -128,7 +128,7 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
             defaultValue={currentCity}
             placeholder="e.g. Melbourne"
             className="auth-input pl-9"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 updateParam({ city: (e.target as HTMLInputElement).value.trim() });
@@ -147,7 +147,7 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
 
       {/* Availability */}
       <div>
-        <p className="mb-2 text-xs uppercase tracking-[0.12em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mb-2 text-xs uppercase tracking-[0.12em] text-muted/50">
           Availability
         </p>
         <button
@@ -160,7 +160,7 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
           ].join(" ")}
         >
           <div className={`h-2 w-2 rounded-full ${currentAvailable ? "bg-emerald-400" : "bg-muted/30"}`} />
-          <span className={`text-sm ${currentAvailable ? "text-foreground" : "text-muted"}`} style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <span className={`text-sm ${currentAvailable ? "text-foreground" : "text-muted"}`}>
             Available now
           </span>
           {currentAvailable && <Icon name="check" className="ml-auto h-3.5 w-3.5 text-gold" />}
@@ -171,7 +171,7 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
 
       {/* Verification tier */}
       <div>
-        <p className="mb-2 text-xs uppercase tracking-[0.12em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mb-2 text-xs uppercase tracking-[0.12em] text-muted/50">
           Tier
         </p>
         <div className="space-y-1">
@@ -189,7 +189,7 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
                   ? "bg-white/[0.04] text-gold"
                   : "text-muted hover:bg-[rgba(255,255,255,0.03)] hover:text-foreground",
               ].join(" ")}
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {opt.label}
               {currentTier === opt.value && <Icon name="check" className="h-3.5 w-3.5" />}
@@ -202,7 +202,7 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
 
       {/* Experience types */}
       <div>
-        <p className="mb-3 text-xs uppercase tracking-[0.12em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mb-3 text-xs uppercase tracking-[0.12em] text-muted/50">
           Experience types
         </p>
         <div className="flex flex-wrap gap-2">
@@ -218,7 +218,7 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
                     ? "border-white/20 bg-white/[0.07] text-gold"
                     : "border-[rgba(255,255,255,0.07)] text-muted/70 hover:border-white/10 hover:text-muted",
                 ].join(" ")}
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {tag}
               </button>

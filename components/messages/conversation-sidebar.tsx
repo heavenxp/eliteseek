@@ -88,13 +88,13 @@ export function ConversationSidebar({ userId, initialConversations, events = [] 
       {/* Header */}
       <div className="border-b border-white/10 px-4 py-4">
         <h2
-          className="text-xl font-light text-foreground"
-          style={{ fontFamily: "var(--font-cormorant)" }}
+          className="text-base font-semibold text-foreground"
+         
         >
           Messages
         </h2>
         {conversations.length > 0 && (
-          <p className="mt-0.5 text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="mt-0.5 text-xs text-muted/40">
             {conversations.reduce((n, c) => n + c.unread_count, 0)} unread
           </p>
         )}
@@ -105,13 +105,13 @@ export function ConversationSidebar({ userId, initialConversations, events = [] 
         {conversations.length === 0 && events.length === 0 ? (
           <div className="flex flex-col items-center gap-3 px-4 py-16 text-center">
             <Icon name="message" className="h-8 w-8 text-gold/20" />
-            <p className="text-sm text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="text-sm text-muted/40">
               No conversations yet
             </p>
             <Link
               href="/browse"
               className="text-xs text-muted/40 underline underline-offset-2 hover:text-gold"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Browse hosts →
             </Link>
@@ -137,7 +137,7 @@ export function ConversationSidebar({ userId, initialConversations, events = [] 
                             : "hover:bg-[rgba(255,255,255,0.02)]",
                         ].join(" ")}
                       >
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.07] text-sm font-medium text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.07] text-sm font-medium text-gold">
                           {conv.other_name.charAt(0).toUpperCase()}
                         </div>
 
@@ -145,16 +145,16 @@ export function ConversationSidebar({ userId, initialConversations, events = [] 
                           <div className="flex items-baseline justify-between gap-2">
                             <p
                               className={`truncate text-sm ${conv.unread_count > 0 ? "font-medium text-foreground" : "text-foreground/70"}`}
-                              style={{ fontFamily: "var(--font-dm-sans)" }}
+
                             >
                               {conv.other_name}
                             </p>
-                            <span className="shrink-0 text-[10px] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                            <span className="shrink-0 text-[10px] text-muted/40">
                               {timeLabel}
                             </span>
                           </div>
                           <div className="mt-0.5 flex items-center justify-between gap-2">
-                            <p className="truncate text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                            <p className="truncate text-xs text-muted/50">
                               {conv.last_message ?? "No messages yet"}
                             </p>
                             {conv.unread_count > 0 && (
@@ -173,7 +173,7 @@ export function ConversationSidebar({ userId, initialConversations, events = [] 
 
             {events.length > 0 && (
               <div>
-                <p className="px-4 pb-2 pt-4 text-[10px] uppercase tracking-[0.1em] text-white/25" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <p className="px-4 pb-2 pt-4 text-[10px] uppercase tracking-[0.1em] text-white/25">
                   Events
                 </p>
                 <ul>
@@ -198,17 +198,17 @@ export function ConversationSidebar({ userId, initialConversations, events = [] 
                               // eslint-disable-next-line @next/next/no-img-element
                               <img src={ev.cover_image_url} alt="" className="h-full w-full object-cover" />
                             ) : (
-                              <span className="text-base font-light text-gold/40" style={{ fontFamily: "var(--font-cormorant)" }}>
+                              <span className="text-base font-light text-gold/40">
                                 {ev.title.charAt(0)}
                               </span>
                             )}
                           </div>
 
                           <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm text-foreground/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                            <p className="truncate text-sm text-foreground/70">
                               {ev.title}
                             </p>
-                            <p className="mt-0.5 text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                            <p className="mt-0.5 text-xs text-muted/40">
                               {dateLabel} · Group chat
                             </p>
                           </div>

@@ -76,10 +76,10 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
         {/* Header */}
         <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
           <div>
-            <h2 className="text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+            <h2 className="text-base font-semibold text-foreground">
               {step === 3 ? "Request Sent" : "Book an Experience"}
             </h2>
-            <p className="text-xs text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="text-xs text-muted/60">
               with {companionName}
             </p>
           </div>
@@ -93,10 +93,10 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
           <div className="flex border-b border-white/10 px-6 py-3">
             {[1, 2].map((s) => (
               <div key={s} className="flex items-center">
-                <div className={`flex h-6 w-6 items-center justify-center rounded-full text-[10px] transition-colors ${step >= s ? "bg-gold text-black" : "border border-[rgba(255,255,255,0.1)] text-muted/40"}`} style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <div className={`flex h-6 w-6 items-center justify-center rounded-full text-[10px] transition-colors ${step >= s ? "bg-gold text-black" : "border border-[rgba(255,255,255,0.1)] text-muted/40"}`}>
                   {step > s ? <Icon name="check" className="h-3 w-3" /> : s}
                 </div>
-                <span className={`ml-2 text-xs ${step >= s ? "text-foreground/70" : "text-muted/40"}`} style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <span className={`ml-2 text-xs ${step >= s ? "text-foreground/70" : "text-muted/40"}`}>
                   {s === 1 ? "Date & Time" : "Review & Pay"}
                 </span>
                 {s < 2 && <div className={`mx-4 h-px w-8 ${step > s ? "bg-gold/30" : "bg-[rgba(255,255,255,0.07)]"}`} />}
@@ -110,10 +110,10 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
           <div className="space-y-5 p-6">
             {post ? (
               <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
-                <p className="text-sm font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+                <p className="text-sm font-light text-foreground">
                   {post.title}
                 </p>
-                <p className="mt-1 text-xs text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <p className="mt-1 text-xs text-muted/60">
                   {new Date(post.date_from).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
                   {" · "}
                   {post.location_city}
@@ -122,7 +122,7 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
             ) : (
               <>
                 <div>
-                  <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                  <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50">
                     Date & Time
                   </label>
                   <input
@@ -131,11 +131,11 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
                     onChange={(e) => setDate(e.target.value)}
                     min={new Date().toISOString().slice(0, 16)}
                     className="auth-input w-full"
-                    style={{ fontFamily: "var(--font-dm-sans)" }}
+
                   />
                 </div>
                 <div>
-                  <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                  <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50">
                     Duration
                   </label>
                   <div className="flex flex-wrap gap-2">
@@ -150,7 +150,7 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
                             ? "border-white/20 bg-white/[0.07] text-gold"
                             : "border-[rgba(255,255,255,0.07)] text-muted hover:border-white/10",
                         ].join(" ")}
-                        style={{ fontFamily: "var(--font-dm-sans)" }}
+
                       >
                         {h}h
                       </button>
@@ -161,7 +161,7 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
             )}
 
             <div>
-              <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50">
                 Preferred venue / location
               </label>
               <input
@@ -170,7 +170,7 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 className="auth-input w-full"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               />
             </div>
 
@@ -178,7 +178,7 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
               onClick={() => { if (!post && !date) return; setStep(2); }}
               disabled={!post && !date}
               className="btn-gold w-full rounded-xl py-3 text-sm disabled:opacity-40"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Continue
             </button>
@@ -198,26 +198,26 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
 
             {/* Summary */}
             <div className="rounded-xl border border-white/10 bg-[rgba(255,255,255,0.02)] p-4 space-y-2">
-              <div className="flex justify-between text-sm" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <div className="flex justify-between text-sm">
                 <span className="text-muted/60">Experience</span>
                 <span className="text-foreground/80">{post ? post.title : `${duration}h booking`}</span>
               </div>
-              <div className="flex justify-between text-sm" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <div className="flex justify-between text-sm">
                 <span className="text-muted/60">Date</span>
                 <span className="text-foreground/80">
                   {new Date(post?.date_from ?? date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
                 </span>
               </div>
               {location && (
-                <div className="flex justify-between text-sm" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <div className="flex justify-between text-sm">
                   <span className="text-muted/60">Venue</span>
                   <span className="text-foreground/80">{location}</span>
                 </div>
               )}
               <div className="gold-divider" />
-              <div className="flex justify-between" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <div className="flex justify-between">
                 <span className="text-sm text-muted/60">Total</span>
-                <span className="text-lg font-light text-gold" style={{ fontFamily: "var(--font-cormorant)" }}>
+                <span className="text-base font-semibold text-gold">
                   ${totalAmount.toLocaleString()}
                 </span>
               </div>
@@ -226,7 +226,7 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
 
             {/* Message */}
             <div>
-              <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <label className="mb-1.5 block text-xs uppercase tracking-[0.1em] text-muted/50">
                 Message to host <span className="normal-case">(optional)</span>
               </label>
               <textarea
@@ -236,12 +236,12 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Tell them about the occasion or any special requests…"
                 className="auth-input w-full resize-none"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               />
             </div>
 
             {(state?.error || stripeError) && (
-              <p className="text-xs text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="text-xs text-red-400">
                 {state?.error ?? stripeError}
               </p>
             )}
@@ -251,7 +251,7 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
                 type="button"
                 onClick={() => setStep(1)}
                 className="btn-ghost flex items-center gap-2 rounded-xl px-4 py-3 text-sm"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 <Icon name="chevron-left" className="h-4 w-4" />
                 Back
@@ -260,7 +260,7 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
                 type="submit"
                 disabled={isPending || stripePending}
                 className="btn-gold flex-1 rounded-xl py-3 text-sm disabled:opacity-60"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {stripePending
                   ? "Redirecting to payment…"
@@ -280,10 +280,10 @@ export function BookingModal({ companionId, companionName, post, hourlyRate, onC
             <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-white/[0.04]">
               <Icon name="send" className="h-6 w-6 text-gold" />
             </div>
-            <p className="text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+            <p className="text-base font-semibold text-foreground">
               Request sent to {companionName}
             </p>
-            <p className="text-sm text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="text-sm text-muted/60">
               You will be notified once they respond, usually within 24 hours.
             </p>
           </div>

@@ -100,17 +100,17 @@ export default async function AccessRequestsPage() {
     <div className="mx-auto max-w-3xl px-4 py-8 md:px-6 md:py-12">
       <div className="mb-8 flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+          <h1 className="text-xl font-bold tracking-tight text-foreground">
             Access Requests
           </h1>
-          <p className="mt-1 text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="mt-1 text-sm text-muted/50">
             {pending.length} pending · {approved.length} approved
           </p>
         </div>
         <Link
           href="/account/settings"
           className="btn-ghost flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           <Icon name="lock" className="h-4 w-4" />
           Lock settings
@@ -122,10 +122,10 @@ export default async function AccessRequestsPage() {
         <div className="mb-6 flex items-start gap-3 rounded-xl border border-[rgba(251,191,36,0.2)] bg-[rgba(251,191,36,0.05)] p-4">
           <Icon name="eye" className="mt-0.5 h-4 w-4 shrink-0 text-amber-400/70" />
           <div>
-            <p className="text-sm text-amber-400/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="text-sm text-amber-400/80">
               Your profile is currently public — no access control is active.
             </p>
-            <Link href="/account/settings" className="mt-1 text-xs text-amber-400/60 underline underline-offset-2 hover:text-amber-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <Link href="/account/settings" className="mt-1 text-xs text-amber-400/60 underline underline-offset-2 hover:text-amber-400">
               Set to Locked or Elite Only to use access control →
             </Link>
           </div>
@@ -176,7 +176,7 @@ function Section({
 }) {
   return (
     <section className={faded ? "opacity-60" : ""}>
-      <p className="mb-3 text-xs uppercase tracking-[0.1em] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+      <p className="mb-3 text-xs uppercase tracking-[0.1em] text-muted/40">
         {title} · {count}
       </p>
       <div className="space-y-3">{children}</div>
@@ -201,18 +201,18 @@ function RequestCard({
   return (
     <div className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.02)] p-4">
       <div className="flex items-start gap-3">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/[0.07] text-xs font-medium text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/[0.07] text-xs font-medium text-gold">
           {initials}
         </div>
         <div className="flex-1 min-w-0">
           {/* Name row */}
           <div className="flex flex-wrap items-center gap-2">
-            <p className="text-sm font-medium text-foreground/90" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="text-sm font-medium text-foreground/90">
               {request.clientName}
             </p>
             <span
               className={`rounded-full px-2 py-0.5 text-[10px] ${STATUS_COLORS[request.status]}`}
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {STATUS_LABELS[request.status]}
             </span>
@@ -220,23 +220,23 @@ function RequestCard({
 
           {/* Handle + tier + member since */}
           <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
-            <span className="text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <span className="text-xs text-muted/40">
               {request.clientHandle}
             </span>
             <TierBadge type="client" tier={request.clientTier} />
-            <span className="text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <span className="text-xs text-muted/40">
               Member since {request.memberSince}
             </span>
           </div>
 
           {/* Request date */}
-          <p className="mt-1.5 text-xs text-muted/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="mt-1.5 text-xs text-muted/30">
             Requested {new Date(request.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
           </p>
 
           {/* Optional message */}
           {request.message && (
-            <p className="mt-2 text-xs italic text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="mt-2 text-xs italic text-muted/50">
               &ldquo;{request.message}&rdquo;
             </p>
           )}
@@ -258,10 +258,10 @@ function EmptyState({ isLocked }: { isLocked: boolean }) {
       <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
         <Icon name="lock" className="h-6 w-6 text-muted/40" />
       </div>
-      <p className="text-xl font-light text-foreground/60" style={{ fontFamily: "var(--font-cormorant)" }}>
+      <p className="text-base font-semibold text-foreground/60">
         No access requests yet
       </p>
-      <p className="text-sm text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+      <p className="text-sm text-muted/40">
         {isLocked
           ? "When clients request to view your locked profile, they'll appear here."
           : "Lock your profile to start receiving access requests."}
@@ -270,7 +270,7 @@ function EmptyState({ isLocked }: { isLocked: boolean }) {
         <Link
           href="/account/settings"
           className="btn-gold mt-2 rounded-xl px-6 py-2.5 text-sm"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           Configure profile lock
         </Link>

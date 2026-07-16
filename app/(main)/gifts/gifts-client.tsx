@@ -74,14 +74,14 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
       <div className="mx-auto max-w-3xl px-4 py-10">
         <div className="mb-8">
           <h1
-            className="text-4xl font-light text-foreground"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+            className="text-2xl font-bold tracking-tight text-foreground"
+           
           >
             Send a Gift
           </h1>
           <p
             className="mt-1 text-sm text-muted/50"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Delight a host with something from their wishlist or a custom gift.
           </p>
@@ -98,7 +98,7 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
                   ? "bg-white/[0.07] text-gold"
                   : "text-muted/50 hover:text-muted/80"
               }`}
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {t === "wishlist" ? "Wishlists" : t === "custom" ? "Custom Gift" : "Sent"}
             </button>
@@ -113,14 +113,14 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
                 <Icon name="star" className="mx-auto mb-3 h-8 w-8 text-muted/40" />
                 <p
                   className="text-sm text-muted/40"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 >
                   No wishlist items available.
                 </p>
                 <Link
                   href="/browse"
                   className="btn-gold mt-4 inline-block rounded-xl px-5 py-2.5 text-sm"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 >
                   Browse hosts
                 </Link>
@@ -148,13 +148,13 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
                 <div>
                   <p
                     className="text-sm text-foreground"
-                    style={{ fontFamily: "var(--font-dm-sans)" }}
+
                   >
                     {selectedItem.name}
                   </p>
                   <p
                     className="text-xs text-muted/40"
-                    style={{ fontFamily: "var(--font-dm-sans)" }}
+
                   >
                     From {selectedItem.companion?.display_name ?? "wishlist"}
                   </p>
@@ -173,7 +173,7 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
                 <div>
                   <label
                     className="mb-1.5 block text-xs text-muted/50"
-                    style={{ fontFamily: "var(--font-dm-sans)" }}
+
                   >
                     Recipient (Companion ID)
                   </label>
@@ -184,7 +184,7 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
                     placeholder="companion_id"
                     className="auth-input w-full"
                     required
-                    style={{ fontFamily: "var(--font-dm-sans)" }}
+
                   />
                 </div>
               )}
@@ -192,7 +192,7 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
               <div>
                 <label
                   className="mb-1.5 block text-xs text-muted/50"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 >
                   Amount (USD)
                 </label>
@@ -209,7 +209,7 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
                     placeholder="50"
                     className="auth-input w-full pl-7"
                     required
-                    style={{ fontFamily: "var(--font-dm-sans)" }}
+
                   />
                 </div>
               </div>
@@ -217,7 +217,7 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
               <div>
                 <label
                   className="mb-1.5 block text-xs text-muted/50"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 >
                   Message (optional)
                 </label>
@@ -227,14 +227,14 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
                   placeholder="Add a personal note…"
                   rows={3}
                   className="auth-input w-full resize-none"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 />
               </div>
 
               {errorMsg && (
                 <p
                   className="text-sm text-red-400"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 >
                   {errorMsg}
                 </p>
@@ -244,7 +244,7 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
                 type="submit"
                 disabled={isPending}
                 className="btn-gold w-full rounded-xl px-5 py-2.5 text-sm disabled:opacity-50"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {isPending ? "Sending…" : "Send Gift"}
               </button>
@@ -259,7 +259,7 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
               <div className="mb-4 rounded-xl border border-white/20 bg-white/[0.04] px-4 py-3">
                 <p
                   className="text-sm text-gold"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 >
                   {successMsg}
                 </p>
@@ -270,7 +270,7 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
                 <Icon name="star" className="mx-auto mb-3 h-8 w-8 text-muted/40" />
                 <p
                   className="text-sm text-muted/40"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 >
                   You haven&apos;t sent any gifts yet.
                 </p>
@@ -286,14 +286,14 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
                       <div className="flex-1 min-w-0">
                         <p
                           className="text-sm text-foreground"
-                          style={{ fontFamily: "var(--font-dm-sans)" }}
+
                         >
                           {gift.virtual_gift_name ?? "Custom gift"} · $
                           {gift.amount.toLocaleString()}
                         </p>
                         <p
                           className="truncate text-xs text-muted/40"
-                          style={{ fontFamily: "var(--font-dm-sans)" }}
+
                         >
                           To {gift.recipient?.display_name ?? "Unknown"} ·{" "}
                           {new Date(gift.created_at).toLocaleDateString()}
@@ -307,7 +307,7 @@ export function GiftsClient({ currentUserId, wishlistItems, sentGifts, companion
                               ? "bg-blue-500/10 text-blue-400"
                               : "bg-white/[0.07] text-muted/40"
                         }`}
-                        style={{ fontFamily: "var(--font-dm-sans)" }}
+
                       >
                         {gift.status}
                       </span>
@@ -348,13 +348,13 @@ function WishlistCard({
         <div className="flex items-start justify-between gap-2">
           <h3
             className="text-base font-light text-foreground"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+           
           >
             {item.name}
           </h3>
           <span
             className="shrink-0 text-base text-gold"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+           
           >
             ${item.price.toLocaleString()}
           </span>
@@ -362,7 +362,7 @@ function WishlistCard({
         {item.description && (
           <p
             className="mt-1 line-clamp-2 text-xs text-muted/50"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             {item.description}
           </p>
@@ -370,7 +370,7 @@ function WishlistCard({
         {item.companion?.display_name && (
           <p
             className="mt-2 text-xs text-muted/40"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Wished by{" "}
             {companionHref ? (
@@ -387,7 +387,7 @@ function WishlistCard({
         <button
           onClick={() => onSend(item)}
           className="btn-gold flex-1 rounded-xl px-4 py-2 text-sm"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           Send Gift
         </button>

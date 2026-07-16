@@ -31,7 +31,7 @@ export function PulseCard({ event, now }: { event: PulseEvent; now: Date }) {
   return (
     <Link
       href={`/events/${event.id}`}
-      className="group block overflow-hidden rounded-3xl border border-white/[0.08] bg-white/[0.02] transition-colors hover:border-white/20"
+      className="group block overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] transition-colors hover:border-white/20"
     >
       {/* Cover */}
       <div className="relative aspect-[1.91/1] w-full overflow-hidden">
@@ -50,7 +50,7 @@ export function PulseCard({ event, now }: { event: PulseEvent; now: Date }) {
         {/* Countdown chip — the live signal */}
         <span
           className="absolute left-3 top-3 rounded-full bg-[rgba(8,8,16,0.75)] px-3 py-1 text-[11px] font-medium text-gold backdrop-blur-sm"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           {urgent}
         </span>
@@ -59,14 +59,14 @@ export function PulseCard({ event, now }: { event: PulseEvent; now: Date }) {
           {event.event_type === "online" && (
             <span
               className="rounded-full bg-[rgba(8,8,16,0.75)] px-2.5 py-1 text-[11px] text-foreground/80 backdrop-blur-sm"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Online
             </span>
           )}
           <span
             className="rounded-full bg-[rgba(8,8,16,0.75)] px-2.5 py-1 text-[11px] font-medium text-foreground backdrop-blur-sm"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             {event.price > 0 ? `$${event.price}` : "Free"}
           </span>
@@ -79,12 +79,12 @@ export function PulseCard({ event, now }: { event: PulseEvent; now: Date }) {
               // eslint-disable-next-line @next/next/no-img-element
               <img src={event.host.avatar_url} alt="" className="h-full w-full object-cover" />
             ) : (
-              <span className="text-[11px] text-foreground/70" style={{ fontFamily: "var(--font-cormorant)" }}>
+              <span className="text-[11px] text-foreground/70">
                 {event.host.name.charAt(0)}
               </span>
             )}
           </div>
-          <span className="text-xs text-foreground/90" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <span className="text-xs text-foreground/90">
             {event.host.name}
           </span>
           {event.host.verification_tier && (
@@ -94,14 +94,14 @@ export function PulseCard({ event, now }: { event: PulseEvent; now: Date }) {
       </div>
 
       {/* Body */}
-      <div className="p-4">
+      <div className="p-3.5">
         <h2
-          className="text-xl font-light leading-snug text-foreground"
-          style={{ fontFamily: "var(--font-cormorant)" }}
+          className="text-[15px] font-semibold leading-snug text-foreground"
+         
         >
           {event.title}
         </h2>
-        <p className="mt-1 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mt-1 text-xs text-muted/50">
           {event.time.slice(0, 5)}–{event.end_time.slice(0, 5)}
           {event.location ? ` · ${event.location}` : ""}
         </p>
@@ -126,17 +126,17 @@ export function PulseCard({ event, now }: { event: PulseEvent; now: Date }) {
                 ))}
               </div>
             )}
-            <span className="text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <span className="text-xs text-muted/50">
               {event.memberCount} going
             </span>
           </div>
 
           {soldOut ? (
-            <span className="text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <span className="text-xs text-muted/40">
               Sold out
             </span>
           ) : spotsLeft !== null && spotsLeft <= 5 ? (
-            <span className="text-xs font-medium text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <span className="text-xs font-medium text-gold">
               {spotsLeft} spot{spotsLeft === 1 ? "" : "s"} left
             </span>
           ) : (

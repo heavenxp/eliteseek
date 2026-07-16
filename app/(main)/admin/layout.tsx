@@ -31,7 +31,7 @@ export default async function AdminLayout({
   if (!adminEmails.includes(user.email ?? "")) redirect("/browse");
 
   return (
-    <div className="flex min-h-screen" style={{ fontFamily: "var(--font-dm-sans)" }}>
+    <div className="flex min-h-screen">
       {/* Sidebar — hidden on mobile, fixed on desktop */}
       <aside className="hidden md:flex md:flex-col md:fixed md:inset-y-0 md:top-[65px] md:left-0 md:w-56 shrink-0 border-r border-white/10 bg-[rgba(8,8,16,0.6)] backdrop-blur-sm z-30">
         <div className="px-4 pt-8 pb-4">

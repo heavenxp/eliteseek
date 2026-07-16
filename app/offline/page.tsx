@@ -20,14 +20,14 @@ export default function OfflinePage() {
       </div>
       <div>
         <h1
-          className="text-3xl font-light text-foreground"
-          style={{ fontFamily: "var(--font-cormorant)" }}
+          className="text-xl font-bold tracking-tight text-foreground"
+         
         >
           You&apos;re offline
         </h1>
         <p
           className="mt-2 text-sm text-muted/60"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           Check your connection and try again.
         </p>
@@ -35,7 +35,7 @@ export default function OfflinePage() {
       <button
         onClick={() => window.location.reload()}
         className="btn-gold rounded-xl px-6 py-2.5 text-sm"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         Retry
       </button>

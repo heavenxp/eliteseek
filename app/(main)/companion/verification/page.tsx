@@ -102,14 +102,14 @@ export default async function VerificationCentrePage({
             <Icon name="shield" className="h-7 w-7 text-gold" />
           </div>
           <h1
-            className="text-4xl font-light text-foreground md:text-5xl"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+            className="text-2xl font-bold tracking-tight text-foreground md:text-3xl"
+           
           >
             Verification Centre
           </h1>
           <p
             className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-muted"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Every EliteSeek host is ID-verified before going live. It&apos;s what makes
             this the platform where everyone&apos;s real — and everyone&apos;s safe.
@@ -122,10 +122,10 @@ export default async function VerificationCentrePage({
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-white/[0.07]">
               <Icon name="check" className="h-6 w-6 text-gold" />
             </div>
-            <h2 className="text-2xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+            <h2 className="text-lg font-bold tracking-tight text-foreground">
               You&apos;re verified
             </h2>
-            <p className="mt-2 text-sm text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="mt-2 text-sm text-muted">
               {verifiedAt
                 ? `Identity confirmed ${new Date(verifiedAt).toLocaleDateString("en-AU", { day: "numeric", month: "long", year: "numeric" })}. `
                 : ""}
@@ -135,7 +135,7 @@ export default async function VerificationCentrePage({
               <Link
                 href={`/profile/${companion.username ?? ""}`}
                 className="btn-gold rounded-full px-6 py-2.5 text-sm"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 View your profile
               </Link>
@@ -150,7 +150,7 @@ export default async function VerificationCentrePage({
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold opacity-60" />
                   <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-gold" />
                 </span>
-                <p className="text-sm text-foreground" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <p className="text-sm text-foreground">
                   Verification in progress — this usually clears within minutes.
                   Refresh to check.
                 </p>
@@ -159,7 +159,7 @@ export default async function VerificationCentrePage({
             {status === "failed" && (
               <div className="mb-6 flex items-start gap-3 rounded-2xl border border-[rgba(229,72,77,0.3)] bg-[rgba(229,72,77,0.06)] px-4 py-3">
                 <Icon name="x" className="mt-0.5 h-4 w-4 shrink-0 text-[#e5484d]" />
-                <p className="text-sm leading-relaxed text-foreground" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <p className="text-sm leading-relaxed text-foreground">
                   Your last attempt couldn&apos;t be completed — usually a blurry photo
                   or document mismatch. You can retry right where you left off.
                 </p>
@@ -174,11 +174,11 @@ export default async function VerificationCentrePage({
                     <Icon name={step.icon} className="h-5 w-5 text-gold" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-foreground" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                    <p className="text-sm font-medium text-foreground">
                       <span className="mr-2 text-muted/40">{i + 1}</span>
                       {step.title}
                     </p>
-                    <p className="mt-1 text-sm leading-relaxed text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                    <p className="mt-1 text-sm leading-relaxed text-muted">
                       {step.body}
                     </p>
                   </div>
@@ -193,7 +193,7 @@ export default async function VerificationCentrePage({
               <a
                 href="/api/stripe/identity/start"
                 className="btn-gold block w-full rounded-2xl py-3.5 text-center text-sm"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {status === "pending"
                   ? "Continue verification"
@@ -202,12 +202,12 @@ export default async function VerificationCentrePage({
                     : "Verify your identity"}
               </a>
             ) : (
-              <p className="text-center text-sm text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="text-center text-sm text-muted">
                 Verification isn&apos;t available right now. Please try again later.
               </p>
             )}
 
-            <p className="mt-4 text-center text-xs leading-relaxed text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="mt-4 text-center text-xs leading-relaxed text-muted/60">
               Verification is handled end-to-end by Stripe Identity.
               EliteSeek never sees or stores your documents.
             </p>

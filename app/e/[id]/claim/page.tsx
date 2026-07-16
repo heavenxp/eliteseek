@@ -45,10 +45,10 @@ export default async function ClaimPage({
             <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-emerald-500/30 bg-emerald-500/10">
               <Icon name="check" className="h-7 w-7 text-emerald-400" />
             </div>
-            <h1 className="text-3xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+            <h1 className="text-xl font-bold tracking-tight text-foreground">
               Payment received
             </h1>
-            <p className="mt-3 text-sm leading-relaxed text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="mt-3 text-sm leading-relaxed text-muted">
               Your ticket is reserved{result.email ? <> under <span className="text-foreground/85">{result.email}</span></> : null}.
               Create your account with that email to claim it — takes about a minute,
               and it&apos;s how everyone in the room stays verified.
@@ -57,14 +57,14 @@ export default async function ClaimPage({
               <Link
                 href={`/signup?next=${encodeURIComponent(claimUrl)}`}
                 className="btn-gold w-full rounded-2xl py-3.5 text-sm font-semibold"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 Create account &amp; claim ticket
               </Link>
               <Link
                 href={`/login?next=${encodeURIComponent(claimUrl)}`}
                 className="btn-ghost w-full rounded-2xl py-3.5 text-sm"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 I already have an account
               </Link>
@@ -75,10 +75,10 @@ export default async function ClaimPage({
             <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-amber-500/30 bg-amber-500/10">
               <Icon name="shield" className="h-7 w-7 text-amber-400" />
             </div>
-            <h1 className="text-3xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+            <h1 className="text-xl font-bold tracking-tight text-foreground">
               Different email
             </h1>
-            <p className="mt-3 text-sm leading-relaxed text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="mt-3 text-sm leading-relaxed text-muted">
               This ticket was paid for{result.sessionEmail ? <> under <span className="text-foreground/85">{result.sessionEmail}</span></> : " under a different email"},
               but you&apos;re signed in with a different address. Sign in with the
               purchase email to claim it.
@@ -86,7 +86,7 @@ export default async function ClaimPage({
             <Link
               href={`/login?next=${encodeURIComponent(claimUrl)}`}
               className="btn-gold mt-7 w-full rounded-2xl py-3.5 text-sm font-semibold"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Switch account
             </Link>
@@ -96,16 +96,16 @@ export default async function ClaimPage({
             <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-red-500/30 bg-red-500/10">
               <Icon name="x" className="h-7 w-7 text-red-400" />
             </div>
-            <h1 className="text-3xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
+            <h1 className="text-xl font-bold tracking-tight text-foreground">
               Something went wrong
             </h1>
-            <p className="mt-3 text-sm text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="mt-3 text-sm text-muted">
               {result.message}
             </p>
             <Link
               href={`/e/${id}`}
               className="btn-ghost mt-7 rounded-2xl px-6 py-3 text-sm"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Back to the event
             </Link>
@@ -114,7 +114,7 @@ export default async function ClaimPage({
       </main>
 
       <footer className="px-6 pb-8 text-center">
-        <p className="text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="text-xs text-muted/40">
           © 2026 EliteSeek Pty Ltd · All hosts are age-verified (18+) under the Australian Online Safety Act.
         </p>
       </footer>

@@ -47,10 +47,10 @@ export default async function MembershipPage() {
 
         {/* Header */}
         <div className="mb-10 text-center">
-          <h1 className="text-4xl font-light text-white" style={{ fontFamily: "var(--font-cormorant)" }}>
+          <h1 className="text-2xl font-bold tracking-tight text-white">
             Your Membership
           </h1>
-          <p className="mt-2 text-sm text-white/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="mt-2 text-sm text-white/40">
             Unlock more of EliteSeek as you spend and engage
           </p>
         </div>
@@ -74,10 +74,10 @@ export default async function MembershipPage() {
                 strokeDashoffset={circ / 4}
                 style={{ filter: `drop-shadow(0 0 8px ${current.color}80)` }}
               />
-              <text x="88" y="82" textAnchor="middle" fill={current.color} fontSize="26" fontWeight="300" style={{ fontFamily: "var(--font-cormorant)" }}>
+              <text x="88" y="82" textAnchor="middle" fill={current.color} fontSize="26" fontWeight="300">
                 {current.label}
               </text>
-              <text x="88" y="100" textAnchor="middle" fill="rgba(255,255,255,0.35)" fontSize="10" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <text x="88" y="100" textAnchor="middle" fill="rgba(255,255,255,0.35)" fontSize="10">
                 MEMBER
               </text>
             </svg>
@@ -86,10 +86,10 @@ export default async function MembershipPage() {
           {/* Total spent */}
           <div className="flex gap-8">
             <div className="flex flex-col items-center gap-0.5">
-              <span className="text-2xl font-light text-white" style={{ fontFamily: "var(--font-cormorant)" }}>
+              <span className="text-lg font-bold tracking-tight text-white">
                 ${totalSpent.toLocaleString()}
               </span>
-              <span className="text-[10px] uppercase tracking-widest text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <span className="text-[10px] uppercase tracking-widest text-white/30">
                 Total Spent
               </span>
             </div>
@@ -98,7 +98,7 @@ export default async function MembershipPage() {
           {/* Progress toward next tier */}
           {next ? (
             <div className="w-full max-w-sm">
-              <div className="mb-2 flex items-center justify-between text-xs text-white/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <div className="mb-2 flex items-center justify-between text-xs text-white/40">
                 <span>{current.label} ($0)</span>
                 <span>{next.label} (${next.minSpend.toLocaleString()})</span>
               </div>
@@ -113,12 +113,12 @@ export default async function MembershipPage() {
                   }}
                 />
               </div>
-              <p className="mt-2 text-center text-[11px] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="mt-2 text-center text-[11px] text-white/30">
                 ${Math.max(0, next.minSpend - totalSpent).toLocaleString()} more to reach {next.label}
               </p>
             </div>
           ) : (
-            <p className="text-sm text-white/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="text-sm text-white/40">
               You have reached the highest tier ✦
             </p>
           )}
@@ -166,7 +166,7 @@ export default async function MembershipPage() {
                       <p className="text-base font-light" style={{ color: tier.color, fontFamily: "var(--font-cormorant)" }}>
                         {tier.label}
                       </p>
-                      <p className="text-[10px] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                      <p className="text-[10px] text-white/30">
                         {tier.minSpend === 0 ? "Free" : `$${tier.minSpend.toLocaleString()}+ spent`}
                       </p>
                     </div>
@@ -176,7 +176,7 @@ export default async function MembershipPage() {
 
                 <ul className="mb-4 space-y-1.5">
                   {tier.perks.map((perk) => (
-                    <li key={perk} className="flex items-start gap-2 text-xs text-white/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                    <li key={perk} className="flex items-start gap-2 text-xs text-white/50">
                       <span className="mt-0.5 h-1 w-1 shrink-0 rounded-full" style={{ background: tier.color }} />
                       {perk}
                     </li>
@@ -209,7 +209,7 @@ export default async function MembershipPage() {
           })}
         </div>
 
-        <p className="mt-8 text-center text-[11px] text-white/20" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mt-8 text-center text-[11px] text-white/20">
           Tiers are earned automatically when spending thresholds are met, or can be purchased instantly. Payment coming soon.
         </p>
       </div>

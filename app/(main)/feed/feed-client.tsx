@@ -114,7 +114,7 @@ function TrendingTags({
             ? "border-white/20 bg-white/10 text-gold"
             : "border-white/10 text-white/35 hover:text-white/70",
         ].join(" ")}
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         All
       </button>
@@ -128,7 +128,7 @@ function TrendingTags({
               ? "border-white/20 bg-white/10 text-gold"
               : "border-white/10 text-white/35 hover:text-white/70",
           ].join(" ")}
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           {tag}
         </button>
@@ -251,7 +251,7 @@ export function ComposeBox({ viewer }: { viewer: ViewerProfile }) {
         <Avatar name={viewer.name} url={viewer.avatar} size={38} />
         <span
           className="flex-1 select-none text-[15px] text-white/25"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           What&apos;s on your mind?
         </span>
@@ -259,7 +259,7 @@ export function ComposeBox({ viewer }: { viewer: ViewerProfile }) {
           type="button"
           onClick={(e) => { e.stopPropagation(); setExpanded(true); }}
           className="shrink-0 rounded-full border border-white/20 px-4 py-2 text-[13px] font-semibold text-gold transition-colors hover:bg-white/10 sm:py-1.5"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           Post
         </button>
@@ -281,7 +281,7 @@ export function ComposeBox({ viewer }: { viewer: ViewerProfile }) {
         <div className="mb-3 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <Avatar name={viewer.name} url={viewer.avatar} size={36} />
-            <span className="text-[14px] font-semibold text-white/90" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <span className="text-[14px] font-semibold text-white/90">
               {viewer.name}
             </span>
           </div>
@@ -300,7 +300,7 @@ export function ComposeBox({ viewer }: { viewer: ViewerProfile }) {
           placeholder="What's on your mind?"
           onChange={(e) => setChars(e.target.value.length)}
           className="w-full resize-none bg-transparent text-[15px] leading-relaxed text-white/90 placeholder:text-white/25 focus:outline-none"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         />
 
         {imagePreview && (
@@ -318,7 +318,7 @@ export function ComposeBox({ viewer }: { viewer: ViewerProfile }) {
         {selectedTags.length > 0 && (
           <div className="mt-2.5 flex flex-wrap gap-1.5">
             {selectedTags.map((tag) => (
-              <span key={tag} className="flex items-center gap-1 rounded-full border border-white/20 bg-white/[0.06] px-2.5 py-0.5 text-[11px] font-medium text-gold/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <span key={tag} className="flex items-center gap-1 rounded-full border border-white/20 bg-white/[0.06] px-2.5 py-0.5 text-[11px] font-medium text-gold/80">
                 #{tag}
                 <button type="button" onClick={() => removeTag(tag)} className="leading-none opacity-60 transition-opacity hover:opacity-100">×</button>
               </span>
@@ -331,7 +331,7 @@ export function ComposeBox({ viewer }: { viewer: ViewerProfile }) {
             {(["public", "followers", "private"] as const).map((a) => (
               <button key={a} type="button" onClick={() => { setAudience(a); setShowAudienceMenu(false); }}
                 className={["rounded-full border px-3 py-1 text-[12px] font-medium transition-all", audience === a ? "border-white/20 bg-white/10 text-gold" : "border-white/10 text-white/30 hover:border-white/20 hover:text-white/60"].join(" ")}
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {audienceLabels[a]}
               </button>
@@ -347,7 +347,7 @@ export function ComposeBox({ viewer }: { viewer: ViewerProfile }) {
               return (
                 <button key={tag} type="button" onClick={() => togglePresetTag(tag)} disabled={disabled}
                   className={["rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all", active ? "border-white/20 bg-white/10 text-gold" : disabled ? "border-white/[0.04] text-white/15" : "border-white/10 text-white/30 hover:border-white/20 hover:text-white/50"].join(" ")}
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 >
                   {tag}
                 </button>
@@ -363,9 +363,9 @@ export function ComposeBox({ viewer }: { viewer: ViewerProfile }) {
               placeholder={selectedTags.length >= MAX_TAGS ? `${MAX_TAGS} tags max` : "Custom tag…"}
               disabled={selectedTags.length >= MAX_TAGS}
               className="flex-1 rounded-full bg-white/[0.04] px-3 py-1.5 text-[12px] text-white/70 placeholder:text-white/20 focus:outline-none focus:ring-1 focus:ring-white/10 disabled:opacity-30"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             />
-            <button type="button" onClick={addCustomTag} disabled={!customTagInput.trim() || selectedTags.length >= MAX_TAGS} className="text-[12px] text-white/40 transition-opacity hover:text-white/70 disabled:opacity-30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <button type="button" onClick={addCustomTag} disabled={!customTagInput.trim() || selectedTags.length >= MAX_TAGS} className="text-[12px] text-white/40 transition-opacity hover:text-white/70 disabled:opacity-30">
               Add
             </button>
           </div>
@@ -373,14 +373,14 @@ export function ComposeBox({ viewer }: { viewer: ViewerProfile }) {
 
         {isHost && (
           <div className="mt-2.5 flex flex-wrap items-center gap-2">
-            <span className="text-[11px] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>Visible to:</span>
+            <span className="text-[11px] text-white/30">Visible to:</span>
             {[null, "silver", "gold", "platinum"].map((t) => {
               const label = t === null ? "Everyone" : `${getClientTier(t).label}+`;
               const active = contentMinTier === t;
               return (
                 <button key={t ?? "all"} type="button" onClick={() => setContentMinTier(t)}
                   className={["rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all", active ? "border-white/20 bg-white/10 text-gold" : "border-white/10 text-white/30 hover:border-white/20 hover:text-white/50"].join(" ")}
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 >
                   {label}
                 </button>
@@ -400,7 +400,7 @@ export function ComposeBox({ viewer }: { viewer: ViewerProfile }) {
 
             <button type="button" onClick={() => setShowAudienceMenu((v) => !v)}
               className={["flex items-center gap-1 p-1 text-[12px] font-medium transition-colors", showAudienceMenu || audience !== "public" ? "text-gold" : "text-white/35 hover:text-white/70"].join(" ")}
-              style={{ fontFamily: "var(--font-dm-sans)" }} aria-label="Audience"
+ aria-label="Audience"
             >
               <svg className="h-[22px] w-[22px] sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253M3 12c0 .778.099 1.533.284 2.253" />
@@ -411,13 +411,13 @@ export function ComposeBox({ viewer }: { viewer: ViewerProfile }) {
           </div>
 
           <div className="flex items-center gap-3">
-            {error && <span className="text-[12px] text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>{error}</span>}
-            <span className={`text-[12px] tabular-nums ${chars > 450 ? "text-red-400" : "text-white/20"}`} style={{ fontFamily: "var(--font-dm-sans)" }}>
+            {error && <span className="text-[12px] text-red-400">{error}</span>}
+            <span className={`text-[12px] tabular-nums ${chars > 450 ? "text-red-400" : "text-white/20"}`}>
               {chars}/500
             </span>
             <button type="submit" disabled={isPending || chars === 0}
               className="rounded-full bg-gold px-5 py-2 text-[13px] font-semibold text-black transition-opacity disabled:opacity-40 hover:bg-gold-light sm:py-1.5"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {isPending ? "Posting…" : "Post"}
             </button>
@@ -439,7 +439,7 @@ function FeedTabs({ activeTab }: { activeTab: FeedTab }) {
       {tabs.map((tab) => (
         <Link key={tab.value} href={tab.href}
           className={["flex flex-1 items-center justify-center py-3.5 text-center text-[14px] font-medium transition-colors", activeTab === tab.value ? "-mb-px border-b-2 border-white text-white" : "text-white/35 hover:text-white/60"].join(" ")}
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           {tab.label}
         </Link>
@@ -463,7 +463,7 @@ function FollowButton({ authorId, isFollowing }: { authorId: string; isFollowing
   return (
     <button onClick={handle} disabled={isPending}
       className={["min-h-[36px] px-1 text-[13px] font-medium transition-colors disabled:opacity-50", optimisticFollowing ? "text-white/30 hover:text-red-400" : "text-gold hover:text-gold-light"].join(" ")}
-      style={{ fontFamily: "var(--font-dm-sans)" }}
+
     >
       {optimisticFollowing ? "Following" : "Follow"}
     </button>
@@ -477,12 +477,12 @@ function CommentItem({ comment }: { comment: FeedComment }) {
       <Avatar name={comment.author.full_name} url={comment.author.avatar_url} size={26} />
       <div className="flex-1 min-w-0">
         <div className="flex items-baseline gap-2">
-          <span className="text-[12px] font-semibold text-white/80" style={{ fontFamily: "var(--font-dm-sans)" }}>{comment.author.full_name}</span>
-          <span className="text-[10px] text-white/25" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <span className="text-[12px] font-semibold text-white/80">{comment.author.full_name}</span>
+          <span className="text-[10px] text-white/25">
             {formatDistanceToNowStrict(new Date(comment.created_at), { addSuffix: true })}
           </span>
         </div>
-        <p className="mt-0.5 text-[13px] leading-relaxed text-white/70" style={{ fontFamily: "var(--font-dm-sans)" }}>{comment.content}</p>
+        <p className="mt-0.5 text-[13px] leading-relaxed text-white/70">{comment.content}</p>
       </div>
     </div>
   );
@@ -520,7 +520,7 @@ function CommentSection({ postId, comments, commentCount, currentUserId }: { pos
   return (
     <div className="mt-2 border-t border-white/[0.05] pt-2">
       {remaining > 0 && (
-        <p className="mb-1 text-[11px] text-white/25" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mb-1 text-[11px] text-white/25">
           {remaining} more comment{remaining !== 1 ? "s" : ""}
         </p>
       )}
@@ -534,14 +534,14 @@ function CommentSection({ postId, comments, commentCount, currentUserId }: { pos
             maxLength={300}
             placeholder="Add a comment…"
             className="flex-1 rounded-full bg-white/[0.04] px-3.5 py-2 text-[13px] text-white/80 placeholder:text-white/20 focus:outline-none focus:ring-1 focus:ring-white/10 sm:py-1.5"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           />
-          <button onClick={submit} disabled={isPending || !text.trim()} className="min-h-[36px] px-1 text-[12px] font-medium text-gold transition-opacity disabled:opacity-30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <button onClick={submit} disabled={isPending || !text.trim()} className="min-h-[36px] px-1 text-[12px] font-medium text-gold transition-opacity disabled:opacity-30">
             {isPending ? "…" : "Post"}
           </button>
         </div>
       )}
-      {error && <p className="mt-1 text-[11px] text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>{error}</p>}
+      {error && <p className="mt-1 text-[11px] text-red-400">{error}</p>}
     </div>
   );
 }
@@ -599,10 +599,10 @@ function PostCard({ post, currentUserId, viewerClientTier }: { post: FeedPost; c
         <div className="min-w-0 flex-1 pb-0.5">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <Link href={profileHref} className="text-[14px] font-semibold text-white/90 transition-colors hover:text-white" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <Link href={profileHref} className="text-[14px] font-semibold text-white/90 transition-colors hover:text-white">
                 {post.author.full_name}
               </Link>
-              <span className="ml-2 text-[12px] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <span className="ml-2 text-[12px] text-white/30">
                 {formatDistanceToNowStrict(new Date(post.created_at), { addSuffix: true })}
               </span>
             </div>
@@ -622,7 +622,7 @@ function PostCard({ post, currentUserId, viewerClientTier }: { post: FeedPost; c
 
           <div className="relative mt-2">
             <div className={(followersGated || lockedGated || tierGated) ? "blur-[4px] select-none pointer-events-none" : ""}>
-              <p className="text-[15px] leading-relaxed text-white/85 whitespace-pre-wrap break-words" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="text-[15px] leading-relaxed text-white/85 whitespace-pre-wrap break-words">
                 {post.content}
               </p>
               {post.image_url && (
@@ -634,7 +634,7 @@ function PostCard({ post, currentUserId, viewerClientTier }: { post: FeedPost; c
               {post.tags.length > 0 && (
                 <div className="mt-2 flex flex-wrap gap-1">
                   {post.tags.map((tag) => (
-                    <span key={tag} className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[11px] text-gold/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                    <span key={tag} className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[11px] text-gold/50">
                       #{tag}
                     </span>
                   ))}
@@ -647,7 +647,7 @@ function PostCard({ post, currentUserId, viewerClientTier }: { post: FeedPost; c
                 <svg className="h-5 w-5 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                 </svg>
-                <p className="text-[12px] text-white/35" style={{ fontFamily: "var(--font-dm-sans)" }}>Followers only</p>
+                <p className="text-[12px] text-white/35">Followers only</p>
               </div>
             )}
 
@@ -657,7 +657,7 @@ function PostCard({ post, currentUserId, viewerClientTier }: { post: FeedPost; c
                   <svg className="h-5 w-5 text-gold/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                   </svg>
-                  <p className="text-[13px] font-medium text-white/75" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                  <p className="text-[13px] font-medium text-white/75">
                     Locked post
                   </p>
                 </div>
@@ -670,10 +670,10 @@ function PostCard({ post, currentUserId, viewerClientTier }: { post: FeedPost; c
                   <svg className="h-5 w-5 text-gold/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                   </svg>
-                  <p className="text-[13px] font-medium text-white/75" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                  <p className="text-[13px] font-medium text-white/75">
                     {getClientTier(post.content_min_tier!).label}+ members only
                   </p>
-                  <Link href="/membership" className="text-[11px] text-gold/60 underline underline-offset-2 hover:text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                  <Link href="/membership" className="text-[11px] text-gold/60 underline underline-offset-2 hover:text-gold">
                     Upgrade membership →
                   </Link>
                 </div>
@@ -687,7 +687,7 @@ function PostCard({ post, currentUserId, viewerClientTier }: { post: FeedPost; c
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
               </svg>
               {optimisticPost.like_count > 0 && (
-                <span className={`text-[13px] tabular-nums ${optimisticPost.is_liked ? "text-red-400" : ""}`} style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <span className={`text-[13px] tabular-nums ${optimisticPost.is_liked ? "text-red-400" : ""}`}>
                   {optimisticPost.like_count}
                 </span>
               )}
@@ -698,7 +698,7 @@ function PostCard({ post, currentUserId, viewerClientTier }: { post: FeedPost; c
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" />
               </svg>
               {optimisticPost.comment_count > 0 && (
-                <span className="text-[13px] tabular-nums" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <span className="text-[13px] tabular-nums">
                   {optimisticPost.comment_count}
                 </span>
               )}
@@ -716,7 +716,7 @@ function PostCard({ post, currentUserId, viewerClientTier }: { post: FeedPost; c
           )}
 
           {isOwnPost && (
-            <div className="mt-2 flex items-center gap-1 text-[10px] text-white/20" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <div className="mt-2 flex items-center gap-1 text-[10px] text-white/20">
               <svg className="h-2.5 w-2.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 {post.audience === "public" ? (
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253M3 12c0 .778.099 1.533.284 2.253" />
@@ -745,14 +745,14 @@ function SidebarOnlineNow({ onlineUsers }: { onlineUsers: { hosts: OnlineUser[];
         <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
         <h3
           className="text-[10px] font-medium uppercase tracking-[0.14em] text-white/30"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           Online Now
         </h3>
       </div>
 
       {all.length === 0 ? (
-        <p className="text-[12px] text-white/20" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="text-[12px] text-white/20">
           No one online right now
         </p>
       ) : (
@@ -772,17 +772,17 @@ function SidebarOnlineNow({ onlineUsers }: { onlineUsers: { hosts: OnlineUser[];
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={u.avatar_url} alt="" className="h-full w-full object-cover" />
                   ) : (
-                    <span style={{ fontFamily: "var(--font-dm-sans)" }}>{initial}</span>
+                    <span>{initial}</span>
                   )}
                 </div>
                 <span className="absolute -bottom-px -right-px h-2 w-2 rounded-full border border-[#080810] bg-emerald-400" />
               </div>
-              <span className="flex-1 truncate text-[13px] text-white/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <span className="flex-1 truncate text-[13px] text-white/70">
                 {firstName}
               </span>
               <span
                 className={`shrink-0 text-[10px] ${u.role === "companion" ? "text-gold/55" : "text-white/20"}`}
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {u.role === "companion" ? "Host" : "Client"}
               </span>
@@ -817,7 +817,7 @@ function SidebarSearch() {
     <div className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-4">
       <h3
         className="mb-3 text-[10px] font-medium uppercase tracking-[0.14em] text-white/30"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         Search
       </h3>
@@ -827,7 +827,7 @@ function SidebarSearch() {
         onChange={(e) => { setQuery(e.target.value); doSearch(e.target.value, country, city); }}
         placeholder="Search by name…"
         className="mb-2 w-full rounded-xl bg-white/[0.05] px-3 py-2 text-[13px] text-white/80 placeholder:text-white/20 focus:outline-none focus:ring-1 focus:ring-white/20"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       />
 
       <div className="mb-3 flex gap-2">
@@ -835,7 +835,7 @@ function SidebarSearch() {
           value={country}
           onChange={(e) => { setCountry(e.target.value); doSearch(query, e.target.value, city); }}
           className="flex-1 rounded-xl bg-white/[0.05] px-2 py-1.5 text-[12px] text-white/50 focus:outline-none focus:ring-1 focus:ring-white/20"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           <option value="">Country</option>
           {COUNTRIES.map((c) => (
@@ -847,15 +847,15 @@ function SidebarSearch() {
           onChange={(e) => { setCity(e.target.value); doSearch(query, country, e.target.value); }}
           placeholder="City"
           className="flex-1 rounded-xl bg-white/[0.05] px-2 py-1.5 text-[12px] text-white/50 placeholder:text-white/20 focus:outline-none focus:ring-1 focus:ring-white/20"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         />
       </div>
 
       {isPending && (
-        <p className="py-2 text-center text-[12px] text-white/25" style={{ fontFamily: "var(--font-dm-sans)" }}>Searching…</p>
+        <p className="py-2 text-center text-[12px] text-white/25">Searching…</p>
       )}
       {!isPending && hasQuery && results.length === 0 && (
-        <p className="py-2 text-center text-[12px] text-white/25" style={{ fontFamily: "var(--font-dm-sans)" }}>No results</p>
+        <p className="py-2 text-center text-[12px] text-white/25">No results</p>
       )}
       {!isPending && results.length > 0 && (
       <div className="overflow-y-auto" style={{ maxHeight: 400 }}>
@@ -869,20 +869,20 @@ function SidebarSearch() {
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={r.avatar_url} alt="" className="h-full w-full object-cover" />
               ) : (
-                <span style={{ fontFamily: "var(--font-dm-sans)" }}>{initial}</span>
+                <span>{initial}</span>
               )}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-[13px] text-white/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="truncate text-[13px] text-white/80">
                 {r.full_name}
               </p>
               {r.location && (
-                <p className="truncate text-[11px] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>{r.location}</p>
+                <p className="truncate text-[11px] text-white/30">{r.location}</p>
               )}
             </div>
             <span
               className={`shrink-0 text-[10px] ${r.role === "companion" ? "text-gold/55" : "text-white/20"}`}
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {r.role === "companion" ? "Host" : "Client"}
             </span>
@@ -914,20 +914,20 @@ export function FeedClient({ posts, currentUserId, activeTab, trendingTags, view
         {isEmpty ? (
           <div className="flex flex-col items-center justify-center px-6 py-24 text-center">
             {activeTag ? (
-              <p className="text-[15px] text-white/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="text-[15px] text-white/40">
                 No posts tagged #{activeTag} yet.
               </p>
             ) : activeTab === "following" ? (
               <>
-                <p className="text-[15px] text-white/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <p className="text-[15px] text-white/40">
                   No posts from people you follow yet.
                 </p>
-                <p className="mt-1 text-[12px] text-white/25" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <p className="mt-1 text-[12px] text-white/25">
                   Follow someone from the For You tab.
                 </p>
               </>
             ) : (
-              <p className="text-[15px] text-white/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <p className="text-[15px] text-white/40">
                 Nothing yet. Be the first to post.
               </p>
             )}

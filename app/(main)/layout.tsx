@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { AppNav } from "@/components/layout/app-nav";
+import { AppShell } from "@/components/layout/app-shell";
 import { PresenceTracker } from "@/components/layout/presence-tracker";
 
 export default async function MainLayout({
@@ -36,16 +36,16 @@ export default async function MainLayout({
   return (
     <div className="page-bg min-h-screen">
       <PresenceTracker />
-      <AppNav
+      <AppShell
         user={{
           fullName: profile.full_name,
           role: profile.role as "companion" | "client",
           avatarUrl: profile.avatar_url,
           username: companionUsername,
         }}
-      />
-      {/* Offset for fixed top nav on desktop, bottom nav on mobile */}
-      <div className="pb-20 pt-0 md:pb-0 md:pt-[65px]">{children}</div>
+      >
+        {children}
+      </AppShell>
     </div>
   );
 }

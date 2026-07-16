@@ -108,7 +108,7 @@ export function CreateEventForm({ userId }: Props) {
     <form onSubmit={handleSubmit} className="space-y-5">
       {/* Cover image */}
       <div>
-        <p className="mb-2 text-[11px] uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mb-2 text-[11px] uppercase tracking-[0.1em] text-white/30">
           Cover Image
         </p>
         {coverPreview ? (
@@ -134,7 +134,7 @@ export function CreateEventForm({ userId }: Props) {
             <svg className="h-8 w-8 text-gold/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.4}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
             </svg>
-            <span className="text-xs text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <span className="text-xs text-white/30">
               Upload cover image (optional)
             </span>
           </button>
@@ -150,7 +150,7 @@ export function CreateEventForm({ userId }: Props) {
 
       {/* Title */}
       <div>
-        <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30">
           Title *
         </label>
         <input
@@ -158,14 +158,14 @@ export function CreateEventForm({ userId }: Props) {
           onChange={(e) => setTitle(e.target.value)}
           placeholder="e.g. Rooftop Dinner at Nobu"
           className={inputClass}
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
           maxLength={120}
         />
       </div>
 
       {/* Description */}
       <div>
-        <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30">
           Description
         </label>
         <textarea
@@ -174,14 +174,14 @@ export function CreateEventForm({ userId }: Props) {
           placeholder="Tell guests what to expect…"
           rows={3}
           className={`${inputClass} resize-none`}
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         />
       </div>
 
       {/* Date & Time */}
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30">
             Date *
           </label>
           <input
@@ -189,11 +189,11 @@ export function CreateEventForm({ userId }: Props) {
             value={date}
             onChange={(e) => setDate(e.target.value)}
             className={`${inputClass} [color-scheme:dark]`}
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           />
         </div>
         <div>
-          <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30">
             Time *
           </label>
           <div className="flex gap-1.5">
@@ -201,7 +201,7 @@ export function CreateEventForm({ userId }: Props) {
               value={hour}
               onChange={(e) => setHour(e.target.value)}
               className="flex-1 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2.5 text-sm text-foreground focus:border-white/20 focus:outline-none transition-colors appearance-none"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               <option value="" disabled>HH</option>
               {Array.from({ length: 24 }, (_, i) => String(i).padStart(2, "0")).map((h) => (
@@ -213,7 +213,7 @@ export function CreateEventForm({ userId }: Props) {
               value={minute}
               onChange={(e) => setMinute(e.target.value)}
               className="flex-1 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2.5 text-sm text-foreground focus:border-white/20 focus:outline-none transition-colors appearance-none"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               <option value="" disabled>MM</option>
               {["00", "15", "30", "45"].map((m) => (
@@ -223,7 +223,7 @@ export function CreateEventForm({ userId }: Props) {
           </div>
         </div>
         <div>
-          <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30">
             Ends *
           </label>
           <div className="flex gap-1.5">
@@ -231,7 +231,7 @@ export function CreateEventForm({ userId }: Props) {
               value={endHour}
               onChange={(e) => setEndHour(e.target.value)}
               className="flex-1 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2.5 text-sm text-foreground focus:border-white/20 focus:outline-none transition-colors appearance-none"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               <option value="" disabled>HH</option>
               {Array.from({ length: 24 }, (_, i) => String(i).padStart(2, "0")).map((h) => (
@@ -243,7 +243,7 @@ export function CreateEventForm({ userId }: Props) {
               value={endMinute}
               onChange={(e) => setEndMinute(e.target.value)}
               className="flex-1 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2.5 text-sm text-foreground focus:border-white/20 focus:outline-none transition-colors appearance-none"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               <option value="" disabled>MM</option>
               {["00", "15", "30", "45"].map((m) => (
@@ -256,7 +256,7 @@ export function CreateEventForm({ userId }: Props) {
 
       {/* Type + price + capacity */}
       <div>
-        <p className="mb-2 text-[11px] uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mb-2 text-[11px] uppercase tracking-[0.1em] text-white/30">
           Format
         </p>
         <div className="grid grid-cols-2 gap-2">
@@ -270,7 +270,7 @@ export function CreateEventForm({ userId }: Props) {
                   ? "border-gold/50 bg-gold/10 text-gold"
                   : "border-white/[0.08] bg-white/[0.03] text-muted/60 hover:border-white/20"
               }`}
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {t === "physical" ? "In person" : "Online"}
             </button>
@@ -280,7 +280,7 @@ export function CreateEventForm({ userId }: Props) {
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30">
             Price (0 = free)
           </label>
           <input
@@ -291,11 +291,11 @@ export function CreateEventForm({ userId }: Props) {
             onChange={(e) => setPrice(e.target.value)}
             placeholder="0"
             className={inputClass}
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           />
         </div>
         <div>
-          <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30">
             {eventType === "physical" ? "Group size cap *" : "Capacity (blank = unlimited)"}
           </label>
           <input
@@ -306,14 +306,14 @@ export function CreateEventForm({ userId }: Props) {
             onChange={(e) => setCapacity(e.target.value)}
             placeholder={eventType === "physical" ? "e.g. 8" : "∞"}
             className={inputClass}
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           />
         </div>
       </div>
 
       {eventType === "online" && (
         <div>
-          <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30">
             Meeting link {price && parseFloat(price) > 0 ? "*" : ""}
           </label>
           <input
@@ -321,9 +321,9 @@ export function CreateEventForm({ userId }: Props) {
             onChange={(e) => setMeetingLink(e.target.value)}
             placeholder="https://meet.google.com/…"
             className={inputClass}
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           />
-          <p className="mt-1.5 text-[11px] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="mt-1.5 text-[11px] text-muted/40">
             Only revealed to attendees after they join.
           </p>
         </div>
@@ -332,7 +332,7 @@ export function CreateEventForm({ userId }: Props) {
       {/* Location */}
       {eventType === "physical" && (
       <div>
-        <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <label className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-white/30">
           Location
         </label>
         <input
@@ -340,14 +340,14 @@ export function CreateEventForm({ userId }: Props) {
           onChange={(e) => setLocation(e.target.value)}
           placeholder="e.g. Carlton Wine Room, Melbourne"
           className={inputClass}
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         />
       </div>
       )}
 
       {/* Visibility */}
       <div>
-        <p className="mb-2 text-[11px] uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mb-2 text-[11px] uppercase tracking-[0.1em] text-white/30">
           Visibility
         </p>
         <div className="flex gap-2">
@@ -362,21 +362,21 @@ export function CreateEventForm({ userId }: Props) {
                   ? "border-white/20 bg-white/[0.07] text-gold"
                   : "border-white/[0.08] text-white/40 hover:border-white/20 hover:text-white/60",
               ].join(" ")}
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {v}
             </button>
           ))}
         </div>
         {visibility === "private" && (
-          <p className="mt-2 text-xs text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="mt-2 text-xs text-white/30">
             10 single-use invite codes will be generated automatically.
           </p>
         )}
       </div>
 
       {error && (
-        <p className="text-xs text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="text-xs text-red-400">
           {error}
         </p>
       )}
@@ -385,7 +385,7 @@ export function CreateEventForm({ userId }: Props) {
         type="submit"
         disabled={submitting}
         className="w-full rounded-xl bg-gold py-3 text-sm font-semibold text-black hover:bg-gold-light transition-colors disabled:opacity-40"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         {submitting ? "Creating…" : "Create Event"}
       </button>

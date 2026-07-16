@@ -13,12 +13,12 @@ export default async function CreateEventPage() {
     <div className="mx-auto max-w-2xl px-4 py-8 md:px-6 md:py-12">
       <div className="mb-8">
         <h1
-          className="text-3xl font-light text-foreground"
-          style={{ fontFamily: "var(--font-cormorant)" }}
+          className="text-xl font-bold tracking-tight text-foreground"
+         
         >
           Create Event
         </h1>
-        <p className="mt-1 text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mt-1 text-sm text-muted/50">
           Host a private or public experience for your guests
         </p>
       </div>

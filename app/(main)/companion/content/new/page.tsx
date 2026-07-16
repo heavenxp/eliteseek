@@ -26,7 +26,7 @@ export default async function NewContentPage() {
           <Link
             href="/companion/content"
             className="flex items-center gap-1.5 text-sm text-muted/60 hover:text-muted"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             <Icon name="chevron-left" className="h-4 w-4" />
             Content Studio
@@ -35,14 +35,14 @@ export default async function NewContentPage() {
 
         <div className="mb-8">
           <h1
-            className="text-3xl font-light text-foreground"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+            className="text-xl font-bold tracking-tight text-foreground"
+           
           >
             New Post
           </h1>
           <p
             className="mt-1 text-sm text-muted/50"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Upload photos or videos, set access options, and publish to your subscribers.
           </p>

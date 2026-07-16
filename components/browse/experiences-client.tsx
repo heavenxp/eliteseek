@@ -74,7 +74,7 @@ export function ExperiencesClient({ posts, isAuthenticated }: Props) {
                   ? "border-white/20 bg-white/[0.07] text-gold"
                   : "border-[rgba(255,255,255,0.07)] text-muted/60 hover:border-white/10 hover:text-muted",
               ].join(" ")}
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {tab.label}
             </button>
@@ -88,10 +88,10 @@ export function ExperiencesClient({ posts, isAuthenticated }: Props) {
           <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
             <Icon name="calendar" className="h-6 w-6 text-muted/40" />
           </div>
-          <p className="text-lg font-light text-foreground/60" style={{ fontFamily: "var(--font-cormorant)" }}>
+          <p className="text-base font-semibold text-foreground/60">
             No experiences available
           </p>
-          <p className="text-sm text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="text-sm text-muted/40">
             Check back soon — hosts post new availability regularly.
           </p>
         </div>
@@ -100,15 +100,15 @@ export function ExperiencesClient({ posts, isAuthenticated }: Props) {
           {filtered.map((post) => (
             <div key={post.id}>
               <div className="mb-3 flex items-center gap-2.5">
-                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/[0.07] text-xs font-medium text-gold" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/[0.07] text-xs font-medium text-gold">
                   {post.companion.display_name.charAt(0)}
                 </div>
                 <div>
-                  <p className="text-sm text-foreground/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                  <p className="text-sm text-foreground/80">
                     {post.companion.display_name}
                   </p>
                   {post.companion.verification_tier === "select" && (
-                    <span className="text-[10px] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                    <span className="text-[10px] text-muted/40">
                       Select host
                     </span>
                   )}
@@ -138,16 +138,16 @@ export function ExperiencesClient({ posts, isAuthenticated }: Props) {
       {/* Unauthenticated CTA */}
       {!isAuthenticated && posts.length > 0 && (
         <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.04] p-6 text-center">
-          <p className="text-base font-light text-foreground/80" style={{ fontFamily: "var(--font-cormorant)" }}>
+          <p className="text-base font-light text-foreground/80">
             Sign in to book experiences
           </p>
-          <p className="mt-1 text-sm text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="mt-1 text-sm text-muted/50">
             Create a free account to send booking requests to hosts.
           </p>
           <a
             href="/login"
             className="btn-gold mt-4 inline-block rounded-xl px-6 py-2.5 text-sm"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Sign in or join free
           </a>

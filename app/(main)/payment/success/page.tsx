@@ -87,14 +87,14 @@ export default async function PaymentSuccessPage({
         </div>
 
         <h1
-          className="text-2xl font-light text-foreground"
-          style={{ fontFamily: "var(--font-cormorant)" }}
+          className="text-lg font-bold tracking-tight text-foreground"
+         
         >
           {copy.title}
         </h1>
         <p
           className="mt-2 text-sm text-muted/60"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           {copy.body}
         </p>
@@ -103,14 +103,14 @@ export default async function PaymentSuccessPage({
           <Link
             href={ctaHref}
             className="btn-gold w-full rounded-xl px-5 py-2.5 text-sm"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             {copy.cta}
           </Link>
           <Link
             href="/browse"
             className="btn-ghost w-full rounded-xl px-5 py-2.5 text-sm"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Browse hosts
           </Link>

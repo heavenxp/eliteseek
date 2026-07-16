@@ -96,7 +96,7 @@ export default async function BrowsePage({
       <BrowseShell activeFilters={activeFilters}>
         {error ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">
-            <p className="text-sm text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="text-sm text-muted/60">
               Something went wrong. Please try again.
             </p>
           </div>
@@ -126,7 +126,7 @@ function ResultsMeta({ total, page, pageSize }: { total: number; page: number; p
   const from = (page - 1) * pageSize + 1;
   const to = Math.min(page * pageSize, total);
   return (
-    <p className="mb-5 text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+    <p className="mb-5 text-xs text-muted/40">
       Showing {from}–{to} of {total} host{total !== 1 ? "s" : ""}
     </p>
   );
@@ -140,11 +140,11 @@ function EmptyState({ hasFilters }: { hasFilters: boolean }) {
           <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
         </svg>
       </div>
-      <p className="text-lg font-light text-foreground/70" style={{ fontFamily: "var(--font-cormorant)" }}>
+      <p className="text-base font-semibold text-foreground/70">
         {hasFilters ? "No hosts match your filters" : "No hosts found"}
       </p>
       {hasFilters && (
-        <p className="mt-1 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mt-1 text-xs text-muted/50">
           Try adjusting your search or clearing filters
         </p>
       )}

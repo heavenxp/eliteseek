@@ -41,12 +41,12 @@ export function AdminActionButton({
         onClick={handleClick}
         disabled={isPending}
         className={[variantClasses[variant], className, "disabled:opacity-50 disabled:cursor-not-allowed"].join(" ")}
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         {isPending ? "..." : label}
       </button>
       {error && (
-        <span className="text-[10px] text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <span className="text-[10px] text-red-400">
           {error}
         </span>
       )}

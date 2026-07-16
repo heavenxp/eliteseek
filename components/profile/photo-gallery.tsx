@@ -24,8 +24,8 @@ export function PhotoGallery({
           >
             <div className="absolute inset-0 flex items-center justify-center">
               <span
-                className="text-3xl font-light text-gold/10"
-                style={{ fontFamily: "var(--font-cormorant)" }}
+                className="text-xl font-bold tracking-tight text-gold/10"
+               
               >
                 {i + 1}
               </span>
@@ -34,7 +34,7 @@ export function PhotoGallery({
               <div className="absolute inset-0 flex items-center justify-center bg-[rgba(8,8,16,0.4)]">
                 <span
                   className="text-xs text-muted/40"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 >
                   + Add photos
                 </span>
@@ -68,8 +68,8 @@ export function PhotoGallery({
           >
             <div className="absolute inset-0 flex items-center justify-center">
               <span
-                className="text-3xl font-light text-gold/15"
-                style={{ fontFamily: "var(--font-cormorant)" }}
+                className="text-xl font-bold tracking-tight text-gold/15"
+               
               >
                 {photo.sort_order + 1}
               </span>

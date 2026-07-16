@@ -25,7 +25,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
       {/* Legally required line (Australian Online Safety Act) */}
       <footer className="relative z-10 px-6 pb-8 text-center">
-        <p className="text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="text-xs text-muted/40">
           © 2026 EliteSeek Pty Ltd · All hosts are age-verified (18+) under the Australian Online Safety Act.
         </p>
       </footer>

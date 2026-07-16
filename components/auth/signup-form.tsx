@@ -18,12 +18,12 @@ export function SignupForm() {
         {/* Header */}
         <div className="mb-8 text-center">
           <h1
-            className="text-4xl font-light text-foreground"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+            className="text-2xl font-bold tracking-tight text-foreground"
+           
           >
             Join EliteSeek
           </h1>
-          <p className="mt-2 text-sm text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="mt-2 text-sm text-muted">
             Create your account to get started
           </p>
         </div>
@@ -35,18 +35,18 @@ export function SignupForm() {
               <Icon name="check" className="h-8 w-8 text-gold" />
             </div>
             <p
-              className="text-xl font-light text-foreground"
-              style={{ fontFamily: "var(--font-cormorant)" }}
+              className="text-base font-semibold text-foreground"
+             
             >
               Almost there
             </p>
-            <p className="text-sm text-muted" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <p className="text-sm text-muted">
               {state.message}
             </p>
             <Link
               href="/login"
               className="btn-ghost mt-2 block rounded-xl py-3 text-center text-sm"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Back to Sign In
             </Link>
@@ -63,7 +63,7 @@ export function SignupForm() {
               <button
                 type="submit"
                 className="btn-ghost flex w-full items-center justify-center gap-3 rounded-xl py-3 text-sm"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 <GoogleIcon />
                 Continue with Google
@@ -73,7 +73,7 @@ export function SignupForm() {
             {/* Divider */}
             <div className="my-5 flex items-center gap-4">
               <div className="gold-divider flex-1" />
-              <span className="text-xs text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
+              <span className="text-xs text-muted/60">
                 or
               </span>
               <div className="gold-divider flex-1" />
@@ -88,7 +88,7 @@ export function SignupForm() {
                 <label
                   htmlFor="full_name"
                   className="mb-1.5 block text-xs text-muted/80"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 >
                   Full name
                 </label>
@@ -107,7 +107,7 @@ export function SignupForm() {
                 <label
                   htmlFor="email"
                   className="mb-1.5 block text-xs text-muted/80"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 >
                   Email address
                 </label>
@@ -126,7 +126,7 @@ export function SignupForm() {
                 <label
                   htmlFor="password"
                   className="mb-1.5 block text-xs text-muted/80"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
+
                 >
                   Password
                 </label>
@@ -145,7 +145,7 @@ export function SignupForm() {
               {state?.error && (
                 <div className="flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3">
                   <Icon name="shield" className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
-                  <p className="text-sm text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+                  <p className="text-sm text-red-400">
                     {state.error}
                   </p>
                 </div>
@@ -155,7 +155,7 @@ export function SignupForm() {
                 type="submit"
                 disabled={isPending}
                 className="btn-gold mt-2 w-full rounded-xl py-3 text-sm disabled:opacity-60"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+
               >
                 {isPending ? "Creating account…" : "Create account"}
               </button>
@@ -164,7 +164,7 @@ export function SignupForm() {
             {/* Footer */}
             <p
               className="mt-6 text-center text-sm text-muted"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Already have an account?{" "}
               <Link href="/login" className="text-gold transition hover:text-gold-light">
@@ -177,7 +177,7 @@ export function SignupForm() {
 
       <p
         className="mt-6 text-center text-xs text-muted/40"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         By creating an account you agree to our{" "}
         <Link href="#" className="underline underline-offset-2 hover:text-muted/70">

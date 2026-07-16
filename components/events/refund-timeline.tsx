@@ -25,10 +25,10 @@ export function RefundTimeline({ start, now = new Date() }: { start: Date; now?:
   return (
     <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] px-4 py-3">
       <div className="flex items-baseline justify-between gap-3">
-        <p className="text-sm text-foreground/85" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="text-sm text-foreground/85">
           {phase.headline}
         </p>
-        <span className="text-[11px] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <span className="text-[11px] text-muted/40">
           the refund timer
         </span>
       </div>
@@ -42,7 +42,7 @@ export function RefundTimeline({ start, now = new Date() }: { start: Date; now?:
           style={{ left: `calc(${Math.min(98, Math.max(0, progress * 100))}% - 5px)` }}
         />
       </div>
-      <p className="mt-2 text-[11px] text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+      <p className="mt-2 text-[11px] text-muted/40">
         {phase.detail}
       </p>
     </div>

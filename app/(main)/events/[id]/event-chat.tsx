@@ -236,14 +236,14 @@ export function EventChat({ eventId, currentUserId, currentUserName, currentUser
 
       <div className="flex flex-col h-[420px] md:h-[min(560px,60vh)]">
         <div className="border-b border-white/[0.06] px-4 py-3">
-          <p className="text-xs uppercase tracking-[0.1em] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <p className="text-xs uppercase tracking-[0.1em] text-white/30">
             Group Chat
           </p>
         </div>
 
         {sendError && (
           <div className="flex items-center justify-between gap-2 border-b border-red-500/15 bg-red-500/[0.06] px-4 py-2">
-            <p className="text-xs text-red-400/90" style={{ fontFamily: "var(--font-dm-sans)" }}>{sendError}</p>
+            <p className="text-xs text-red-400/90">{sendError}</p>
             <button onClick={() => setSendError(null)} className="text-red-400/50 hover:text-red-400" aria-label="Dismiss">
               <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -255,10 +255,10 @@ export function EventChat({ eventId, currentUserId, currentUserName, currentUser
         {/* Messages */}
         <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
           {!loaded && (
-            <p className="text-center text-xs text-white/20 pt-8" style={{ fontFamily: "var(--font-dm-sans)" }}>Loading…</p>
+            <p className="text-center text-xs text-white/20 pt-8">Loading…</p>
           )}
           {loaded && messages.length === 0 && (
-            <p className="text-center text-xs text-white/20 pt-8" style={{ fontFamily: "var(--font-dm-sans)" }}>No messages yet. Say hello!</p>
+            <p className="text-center text-xs text-white/20 pt-8">No messages yet. Say hello!</p>
           )}
           {messages.map((msg) => (
             <MessageBubble
@@ -275,7 +275,7 @@ export function EventChat({ eventId, currentUserId, currentUserName, currentUser
         {recording && (
           <div className="border-t border-white/[0.06] px-4 py-2 flex items-center gap-2">
             <span className="h-2 w-2 animate-pulse rounded-full bg-red-400" />
-            <span className="text-xs text-red-400/80" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <span className="text-xs text-red-400/80">
               Recording… release to send
             </span>
           </div>
@@ -355,7 +355,7 @@ export function EventChat({ eventId, currentUserId, currentUserName, currentUser
             placeholder={recording ? "Recording…" : uploading ? "Uploading…" : "Send a message…"}
             disabled={recording || uploading}
             className="flex-1 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-foreground placeholder:text-white/20 focus:border-white/20 focus:outline-none disabled:opacity-40 transition-colors"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           />
 
           <button
@@ -406,7 +406,7 @@ function MessageBubble({
 
       <div className={`flex flex-col gap-0.5 max-w-[72%] ${isOwn ? "items-end" : "items-start"}`}>
         {!isOwn && (
-          <span className="px-1 text-[10px] text-white/30" style={{ fontFamily: "var(--font-dm-sans)" }}>
+          <span className="px-1 text-[10px] text-white/30">
             {name}
           </span>
         )}
@@ -417,7 +417,7 @@ function MessageBubble({
               ? "bg-white/[0.07] text-white/90 rounded-tr-sm"
               : "bg-white/[0.05] text-white/80 rounded-tl-sm",
           ].join(" ")}
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           {message.message_type === "voice" && message.audio_url ? (
             <audio src={message.audio_url} controls className="h-8 max-w-[200px] [&::-webkit-media-controls-panel]:bg-transparent" />
@@ -445,7 +445,7 @@ function MessageBubble({
             </>
           )}
         </div>
-        <span className="px-1 text-[9px] text-white/20" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <span className="px-1 text-[9px] text-white/20">
           {new Date(message.created_at).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}
         </span>
       </div>

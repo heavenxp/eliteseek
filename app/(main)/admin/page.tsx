@@ -25,7 +25,7 @@ function StatusBadge({ status }: { status: string }) {
         "rounded-full border px-2.5 py-0.5 text-xs",
         colors[status] ?? "bg-white/5 text-muted/50 border-white/10",
       ].join(" ")}
-      style={{ fontFamily: "var(--font-dm-sans)" }}
+
     >
       {status.replace("_", " ")}
     </span>
@@ -108,14 +108,14 @@ export default async function AdminOverviewPage() {
     <div className="mx-auto max-w-6xl space-y-8">
       <div>
         <h1
-          className="text-3xl font-light text-foreground"
-          style={{ fontFamily: "var(--font-cormorant)" }}
+          className="text-xl font-bold tracking-tight text-foreground"
+         
         >
           Admin Overview
         </h1>
         <p
           className="mt-1 text-sm text-muted/50"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           EliteSeek platform dashboard
         </p>
@@ -127,22 +127,22 @@ export default async function AdminOverviewPage() {
           <div key={card.label} className="glass-card p-5">
             <p
               className="text-xs uppercase tracking-widest text-muted/50"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {card.label}
             </p>
             <p
               className={[
-                "mt-2 text-4xl font-light",
+                "mt-2 text-2xl font-bold tracking-tight",
                 card.highlight ? "text-amber-400" : "text-foreground",
               ].join(" ")}
-              style={{ fontFamily: "var(--font-cormorant)" }}
+             
             >
               {card.value}
             </p>
             <p
               className="mt-1 text-xs text-muted/40"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               {card.note}
             </p>
@@ -156,7 +156,7 @@ export default async function AdminOverviewPage() {
         <div className="glass-card p-5">
           <h2
             className="mb-4 text-base font-light text-foreground"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+           
           >
             Recent Signups
           </h2>
@@ -168,13 +168,13 @@ export default async function AdminOverviewPage() {
                     <div>
                       <p
                         className="text-sm text-foreground/80"
-                        style={{ fontFamily: "var(--font-dm-sans)" }}
+
                       >
                         {u.full_name}
                       </p>
                       <p
                         className="text-xs text-muted/40"
-                        style={{ fontFamily: "var(--font-dm-sans)" }}
+
                       >
                         {formatDate(u.created_at)}
                       </p>
@@ -187,7 +187,7 @@ export default async function AdminOverviewPage() {
           ) : (
             <p
               className="py-6 text-center text-sm text-muted/40"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               No users yet
             </p>
@@ -198,7 +198,7 @@ export default async function AdminOverviewPage() {
         <div className="glass-card p-5">
           <h2
             className="mb-4 text-base font-light text-foreground"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+           
           >
             Pending Moderation
           </h2>
@@ -213,14 +213,14 @@ export default async function AdminOverviewPage() {
                 <li key={post.id} className="py-3">
                   <p
                     className="truncate text-sm text-foreground/80"
-                    style={{ fontFamily: "var(--font-dm-sans)" }}
+
                   >
                     {post.title ?? "(untitled)"}
                   </p>
                   <div className="mt-1 flex items-center justify-between gap-2">
                     <p
                       className="truncate text-xs text-muted/40"
-                      style={{ fontFamily: "var(--font-dm-sans)" }}
+
                     >
                       {formatDate(post.created_at)}
                     </p>
@@ -232,7 +232,7 @@ export default async function AdminOverviewPage() {
           ) : (
             <p
               className="py-6 text-center text-sm text-muted/40"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               No pending posts
             </p>
@@ -243,7 +243,7 @@ export default async function AdminOverviewPage() {
         <div className="glass-card p-5">
           <h2
             className="mb-4 text-base font-light text-foreground"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+           
           >
             Pending KYC
           </h2>
@@ -256,13 +256,13 @@ export default async function AdminOverviewPage() {
                   <div>
                     <p
                       className="text-sm text-foreground/80"
-                      style={{ fontFamily: "var(--font-dm-sans)" }}
+
                     >
                       {p.full_name}
                     </p>
                     <p
                       className="text-xs text-muted/40"
-                      style={{ fontFamily: "var(--font-dm-sans)" }}
+
                     >
                       {formatDate(p.created_at)}
                     </p>
@@ -274,7 +274,7 @@ export default async function AdminOverviewPage() {
           ) : (
             <p
               className="py-6 text-center text-sm text-muted/40"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               No pending KYC
             </p>

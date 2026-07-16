@@ -30,7 +30,7 @@ function StatusBadge({ status }: { status: string }) {
         "rounded-full border px-2.5 py-0.5 text-xs",
         colors[status] ?? "bg-white/5 text-muted/50 border-white/10",
       ].join(" ")}
-      style={{ fontFamily: "var(--font-dm-sans)" }}
+
     >
       {status}
     </span>
@@ -60,14 +60,14 @@ export default async function AdminTransactionsPage() {
     <div className="mx-auto max-w-6xl space-y-6">
       <div>
         <h1
-          className="text-3xl font-light text-foreground"
-          style={{ fontFamily: "var(--font-cormorant)" }}
+          className="text-xl font-bold tracking-tight text-foreground"
+         
         >
           Transactions
         </h1>
         <p
           className="mt-1 text-sm text-muted/50"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           Last {transactions.length} transactions
         </p>
@@ -79,13 +79,13 @@ export default async function AdminTransactionsPage() {
           <div className="glass-card p-4">
             <p
               className="text-xs uppercase tracking-widest text-muted/40"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Total Gross
             </p>
             <p
-              className="mt-2 text-3xl font-light text-foreground"
-              style={{ fontFamily: "var(--font-cormorant)" }}
+              className="mt-2 text-xl font-bold tracking-tight text-foreground"
+             
             >
               {formatCurrency(totalGross)}
             </p>
@@ -93,13 +93,13 @@ export default async function AdminTransactionsPage() {
           <div className="glass-card p-4">
             <p
               className="text-xs uppercase tracking-widest text-muted/40"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Platform Fees
             </p>
             <p
-              className="mt-2 text-3xl font-light text-gold"
-              style={{ fontFamily: "var(--font-cormorant)" }}
+              className="mt-2 text-xl font-bold tracking-tight text-gold"
+             
             >
               {formatCurrency(totalFees)}
             </p>
@@ -107,13 +107,13 @@ export default async function AdminTransactionsPage() {
           <div className="glass-card p-4">
             <p
               className="text-xs uppercase tracking-widest text-muted/40"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             >
               Net to Companions
             </p>
             <p
-              className="mt-2 text-3xl font-light text-foreground"
-              style={{ fontFamily: "var(--font-cormorant)" }}
+              className="mt-2 text-xl font-bold tracking-tight text-foreground"
+             
             >
               {formatCurrency(totalGross - totalFees)}
             </p>
@@ -125,7 +125,7 @@ export default async function AdminTransactionsPage() {
       {error ? (
         <p
           className="text-sm text-red-400"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           Failed to load transactions.
         </p>
@@ -147,14 +147,14 @@ export default async function AdminTransactionsPage() {
             </svg>
           </div>
           <p
-            className="text-xl font-light text-foreground/50"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+            className="text-base font-semibold text-foreground/50"
+           
           >
             No transactions yet
           </p>
           <p
             className="mt-1 text-sm text-muted/40"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Stripe integration is not yet live. Transactions will appear here once payments are enabled.
           </p>
@@ -162,7 +162,7 @@ export default async function AdminTransactionsPage() {
       ) : (
         <div className="glass-card overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm" style={{ fontFamily: "var(--font-dm-sans)" }}>
+            <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/10">
                   {["Date", "Type", "Gross", "Platform Fee", "Net", "Status"].map((h) => (

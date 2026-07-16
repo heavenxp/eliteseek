@@ -47,7 +47,7 @@ export function MessageButton({
         onClick={handleClick}
         disabled={isPending}
         className="btn-ghost flex w-full items-center gap-2 rounded-xl px-5 py-2.5 text-sm disabled:opacity-60"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         {isPending ? (
           <span className="h-4 w-4 animate-spin rounded-full border border-muted/30 border-t-muted" />
@@ -57,7 +57,7 @@ export function MessageButton({
         {label}
       </button>
       {debugError && (
-        <p className="mt-1 px-3 pb-1 text-xs text-red-400 break-words" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mt-1 px-3 pb-1 text-xs text-red-400 break-words">
           ⚠ {debugError}
         </p>
       )}

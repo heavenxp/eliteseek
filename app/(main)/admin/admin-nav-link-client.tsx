@@ -23,7 +23,7 @@ export function AdminNavLinkClient({
           ? "bg-white/[0.04] text-gold"
           : "text-muted/70 hover:text-foreground",
       ].join(" ")}
-      style={{ fontFamily: "var(--font-dm-sans)" }}
+
     >
       {label}
     </Link>

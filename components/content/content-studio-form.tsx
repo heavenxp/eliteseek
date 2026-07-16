@@ -142,10 +142,10 @@ export function ContentStudioForm() {
         }`}
       >
         <Icon name="upload" className="mx-auto mb-3 h-8 w-8 text-muted/40" />
-        <p className="text-sm text-foreground/70" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="text-sm text-foreground/70">
           Drop photos or videos here
         </p>
-        <p className="mt-1 text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="mt-1 text-xs text-muted/40">
           JPG, PNG, WebP, GIF, MP4, MOV, WebM · Max 50 MB per file · Up to 10 files
         </p>
         <input
@@ -199,7 +199,7 @@ export function ContentStudioForm() {
       <div>
         <label
           className="mb-1.5 block text-xs uppercase tracking-[0.08em] text-muted/50"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           Title (optional)
         </label>
@@ -208,14 +208,14 @@ export function ContentStudioForm() {
           type="text"
           placeholder="Give this post a title…"
           className="auth-input w-full"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         />
       </div>
 
       <div>
         <label
           className="mb-1.5 block text-xs uppercase tracking-[0.08em] text-muted/50"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         >
           Caption (optional)
         </label>
@@ -224,7 +224,7 @@ export function ContentStudioForm() {
           rows={3}
           placeholder="Write something for your subscribers…"
           className="auth-input w-full resize-none"
-          style={{ fontFamily: "var(--font-dm-sans)" }}
+
         />
       </div>
 
@@ -250,7 +250,7 @@ export function ContentStudioForm() {
         <div>
           <label
             className="mb-1.5 block text-xs uppercase tracking-[0.08em] text-muted/50"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Unlock price (min $3)
           </label>
@@ -265,14 +265,14 @@ export function ContentStudioForm() {
               placeholder="10"
               className="auth-input w-full pl-7"
               required={isPpv}
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+
             />
           </div>
         </div>
       )}
 
       {error && (
-        <p className="text-sm text-red-400" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="text-sm text-red-400">
           {error}
         </p>
       )}
@@ -281,7 +281,7 @@ export function ContentStudioForm() {
         type="submit"
         disabled={isPending}
         className="btn-gold w-full rounded-xl px-5 py-3 text-sm disabled:opacity-50"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+
       >
         {uploadProgress ?? (isPending ? "Publishing…" : "Publish")}
       </button>
@@ -308,10 +308,10 @@ function ToggleRow({
       className="flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-white/10 bg-[rgba(255,255,255,0.02)] px-4 py-3"
     >
       <div>
-        <p className="text-sm text-foreground" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="text-sm text-foreground">
           {label}
         </p>
-        <p className="text-xs text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>
+        <p className="text-xs text-muted/40">
           {description}
         </p>
       </div>

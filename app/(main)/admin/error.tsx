@@ -22,7 +22,7 @@ export default function AdminError({
           Error
         </p>
         <h1
-          className="text-3xl font-light mb-3"
+          className="text-xl font-bold tracking-tight mb-3"
           style={{ fontFamily: "var(--font-cormorant)", color: "#f5f0e8" }}
         >
           Unable to load admin panel
@@ -45,14 +45,14 @@ export default function AdminError({
           <button
             onClick={reset}
             className="btn-gold px-6 py-2.5 rounded-xl text-sm"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Try again
           </button>
           <Link
             href="/browse"
             className="btn-ghost px-6 py-2.5 rounded-xl text-sm inline-flex items-center justify-center"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
+
           >
             Go home
           </Link>

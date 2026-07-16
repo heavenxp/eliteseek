@@ -15,6 +15,7 @@ type NavUser = {
 };
 
 const CLIENT_NAV = [
+  { label: "Events", href: "/events", icon: "calendar" },
   { label: "Browse", href: "/browse", icon: "eye" },
   { label: "Search", href: "/search", icon: "search" },
   { label: "Feed", href: "/feed", icon: "feed" },
@@ -145,6 +146,7 @@ export function AppNav({ user }: { user: NavUser }) {
 
   const companionNav = [
     ...(user.username ? [{ label: "Profile", href: `/profile/${user.username}`, icon: "user" }] : []),
+    { label: "Events", href: "/events", icon: "calendar" },
     { label: "Feed", href: "/feed", icon: "feed" },
     { label: "Search", href: "/search", icon: "search" },
     { label: "Schedule", href: "/companion/posts", icon: "calendar" },

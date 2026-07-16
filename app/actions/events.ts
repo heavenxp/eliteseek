@@ -702,3 +702,117 @@ export async function createEventTicketCheckout(
 
   redirect(session.url!);
 }
+
+// ── Pulse feed (PIVOT §2 discovery): live-feeling upcoming events ──
+
+export type PulseEvent = {
+  id: string;
+  title: string;
+  date: string;
+  time: string;
+  end_time: string;
+  location: string | null;
+  price: number;
+  capacity: number | null;
+  event_type: "physical" | "online";
+  cover_image_url: string | null;
+  memberCount: number;
+  memberAvatars: Array<{ id: string; name: string; avatar_url: string | null }>;
+  host: { name: string; avatar_url: string | null; verification_tier: string | null };
+  creatorFollowed: boolean;
+};
+
+export async function getPulseFeed(): Promise<PulseEvent[]> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return [];
+
+  const admin = createAdminClient();
+  const today = new Date().toISOString().slice(0, 10);
+
+  const { data: rawEvents } = await admin
+    .from("events")
+    .select("id, creator_id, title, date, time, end_time, location, price, capacity, event_type, cover_image_url")
+    .eq("visibility", "public")
+    .gte("date", today)
+    .order("date", { ascending: true })
+    .order("time", { ascending: true })
+    .limit(40);
+
+  const now = new Date();
+  const upcoming = (rawEvents ?? []).filter(
+    (e) => new Date(`${e.date}T${e.end_time}`) > now
+  );
+  if (upcoming.length === 0) return [];
+
+  const eventIds = upcoming.map((e) => e.id);
+  const creatorIds = [...new Set(upcoming.map((e) => e.creator_id))];
+
+  const [membersRes, followsRes, hostsRes] = await Promise.all([
+    admin.from("event_members").select("event_id, user_id").in("event_id", eventIds),
+    supabase.from("follows").select("following_id").eq("follower_id", user.id),
+    admin
+      .from("host_profiles")
+      .select("user_id, display_name, verification_tier")
+      .in("user_id", creatorIds),
+  ]);
+
+  const memberRows = membersRes.data ?? [];
+  const memberIdsByEvent = new Map<string, string[]>();
+  for (const m of memberRows) {
+    const list = memberIdsByEvent.get(m.event_id) ?? [];
+    list.push(m.user_id);
+    memberIdsByEvent.set(m.event_id, list);
+  }
+
+  const profileIds = [
+    ...new Set([...creatorIds, ...memberRows.map((m) => m.user_id)]),
+  ];
+  const { data: profiles } = await admin
+    .from("profiles")
+    .select("id, full_name, avatar_url")
+    .in("id", profileIds);
+  const profileMap = new Map((profiles ?? []).map((p) => [p.id, p]));
+  const hostMap = new Map((hostsRes.data ?? []).map((h) => [h.user_id, h]));
+  const followed = new Set((followsRes.data ?? []).map((f) => f.following_id));
+
+  const feed: PulseEvent[] = upcoming.map((e) => {
+    const memberIds = memberIdsByEvent.get(e.id) ?? [];
+    const host = hostMap.get(e.creator_id);
+    const creatorProfile = profileMap.get(e.creator_id);
+    return {
+      id: e.id,
+      title: e.title,
+      date: e.date,
+      time: e.time,
+      end_time: e.end_time,
+      location: e.location,
+      price: Number(e.price ?? 0),
+      capacity: e.capacity,
+      event_type: (e.event_type ?? "physical") as "physical" | "online",
+      cover_image_url: e.cover_image_url,
+      memberCount: memberIds.length,
+      memberAvatars: memberIds.slice(0, 4).map((id) => {
+        const p = profileMap.get(id);
+        return { id, name: p?.full_name ?? "Member", avatar_url: p?.avatar_url ?? null };
+      }),
+      host: {
+        name: host?.display_name ?? creatorProfile?.full_name ?? "Host",
+        avatar_url: creatorProfile?.avatar_url ?? null,
+        verification_tier: host?.verification_tier ?? null,
+      },
+      creatorFollowed: followed.has(e.creator_id),
+    };
+  });
+
+  // Followed hosts float up; within each band, soonest first.
+  // ("Nearest" awaits real geo data — location is free text today.)
+  feed.sort((a, b) => {
+    if (a.creatorFollowed !== b.creatorFollowed) return a.creatorFollowed ? -1 : 1;
+    return (
+      new Date(`${a.date}T${a.time}`).getTime() -
+      new Date(`${b.date}T${b.time}`).getTime()
+    );
+  });
+  return feed;
+}

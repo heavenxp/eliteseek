@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { after } from "next/server";
 import { scanContent, recordModeration } from "@/lib/moderation";
+import { eventEnd } from "@/lib/event-time";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { notify } from "@/app/actions/notifications";
 
@@ -741,7 +742,7 @@ export async function getPulseFeed(): Promise<PulseEvent[]> {
 
   const now = new Date();
   const upcoming = (rawEvents ?? []).filter(
-    (e) => new Date(`${e.date}T${e.end_time}`) > now
+    (e) => eventEnd(e.date, e.end_time) > now
   );
   if (upcoming.length === 0) return [];
 

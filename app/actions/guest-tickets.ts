@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getStripe, getOrigin } from "@/lib/stripe";
+import { eventEnd } from "@/lib/event-time";
 
 // ── Public share page: join-first flow (PIVOT §2 growth loop) ──
 // Guests pay BEFORE creating an account. Stripe collects their email at
@@ -24,7 +25,7 @@ export async function createGuestTicketCheckout(eventId: string): Promise<{ erro
   if (!ev || ev.visibility !== "public" || Number(ev.price) <= 0) {
     return { error: "Event not found." };
   }
-  if (new Date(`${ev.date}T${ev.end_time}`) < new Date()) {
+  if (eventEnd(ev.date, ev.end_time) < new Date()) {
     return { error: "This event has ended." };
   }
   if (ev.capacity !== null) {

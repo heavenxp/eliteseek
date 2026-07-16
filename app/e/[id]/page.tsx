@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createGuestTicketCheckout } from "@/app/actions/guest-tickets";
 import { VerifiedBadge } from "@/components/badges/verified-badge";
+import { eventStart, eventEnd, EVENT_TZ } from "@/lib/event-time";
 import { Icon } from "@/components/icons";
 
 // ── Public event share page (PIVOT §2: the growth loop) ───────
@@ -51,10 +52,11 @@ export async function generateMetadata({
   const ev = await getShareEvent(id);
   if (!ev) return { title: "Event — EliteSeek" };
 
-  const when = new Date(`${ev.date}T${ev.time}`).toLocaleDateString("en-AU", {
+  const when = eventStart(ev.date, ev.time).toLocaleDateString("en-AU", {
     weekday: "long",
     day: "numeric",
     month: "long",
+    timeZone: EVENT_TZ,
   });
   const description = [
     when,
@@ -120,8 +122,8 @@ export default async function EventSharePage({
     : { data: [] };
 
   const hostName = hostProfile?.display_name ?? creator?.full_name ?? "Host";
-  const start = new Date(`${ev.date}T${ev.time}`);
-  const ended = new Date(`${ev.date}T${ev.end_time}`) < new Date();
+  const start = eventStart(ev.date, ev.time);
+  const ended = eventEnd(ev.date, ev.end_time) < new Date();
   const spotsLeft = ev.capacity !== null ? Math.max(0, ev.capacity - memberCount) : null;
   const soldOut = spotsLeft === 0;
   const price = Number(ev.price);
@@ -187,7 +189,7 @@ export default async function EventSharePage({
         {/* Facts */}
         <div className="mt-6 space-y-2.5 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4">
           <Fact icon="calendar">
-            {start.toLocaleDateString("en-AU", { weekday: "long", day: "numeric", month: "long" })}
+            {start.toLocaleDateString("en-AU", { weekday: "long", day: "numeric", month: "long", timeZone: EVENT_TZ })}
             {" · "}
             {ev.time.slice(0, 5)}–{ev.end_time.slice(0, 5)}
           </Fact>

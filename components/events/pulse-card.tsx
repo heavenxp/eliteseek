@@ -1,25 +1,25 @@
 import Link from "next/link";
 import { VerifiedBadge } from "@/components/badges/verified-badge";
 import { Icon } from "@/components/icons";
+import { eventStart, melbourneDayDiff, EVENT_TZ } from "@/lib/event-time";
 import type { PulseEvent } from "@/app/actions/events";
 
 // "What's alive right now" — countdown chip is the heartbeat of the card.
+// All wall-clock math goes through Australia/Melbourne (lib/event-time).
 export function countdownLabel(date: string, time: string, now: Date): string {
-  const start = new Date(`${date}T${time}`);
+  const start = eventStart(date, time);
   const mins = Math.round((start.getTime() - now.getTime()) / 60000);
   if (mins <= 0) return "Happening now";
   if (mins < 60) return `Starts in ${mins}m`;
   if (mins < 12 * 60) return `Starts in ${Math.round(mins / 60)}h`;
 
-  const days = Math.floor(
-    (new Date(date).setHours(0, 0, 0, 0) - new Date(now).setHours(0, 0, 0, 0)) / 86_400_000
-  );
+  const days = melbourneDayDiff(now, start);
   const hhmm = time.slice(0, 5);
   if (days === 0) return `Tonight ${hhmm}`;
   if (days === 1) return `Tomorrow ${hhmm}`;
   if (days < 7)
-    return `${start.toLocaleDateString("en-AU", { weekday: "long" })} ${hhmm}`;
-  return start.toLocaleDateString("en-AU", { day: "numeric", month: "short" });
+    return `${start.toLocaleDateString("en-AU", { weekday: "long", timeZone: EVENT_TZ })} ${hhmm}`;
+  return start.toLocaleDateString("en-AU", { day: "numeric", month: "short", timeZone: EVENT_TZ });
 }
 
 export function PulseCard({ event, now }: { event: PulseEvent; now: Date }) {

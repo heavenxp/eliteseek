@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { calculateFees } from "@/lib/database.types";
+import { eventEnd } from "@/lib/event-time";
 
 export const runtime = "nodejs";
 
@@ -110,7 +111,7 @@ export async function GET(req: NextRequest) {
   for (const t of unscheduled ?? []) {
     const ev = Array.isArray(t.events) ? t.events[0] : t.events;
     if (!ev) continue;
-    const end = new Date(`${ev.date}T${ev.end_time}`);
+    const end = eventEnd(ev.date, ev.end_time);
     if (now < end) continue;
     await admin
       .from("event_tickets")

@@ -36,26 +36,6 @@ type Props = {
   searchable?: boolean;
 };
 
-const VISIBILITY_OPTIONS: { value: VisibilityLevel; label: string; desc: string; icon: string }[] = [
-  {
-    value: "public",
-    label: "Public",
-    desc: "All EliteSeek members can view your full profile",
-    icon: "eye",
-  },
-  {
-    value: "locked",
-    label: "Locked",
-    desc: "Members must pay or request access to see your profile",
-    icon: "lock",
-  },
-  {
-    value: "elite_only",
-    label: "Elite Only",
-    desc: "Only Elite-tier members (or approved requests) can view your profile",
-    icon: "diamond",
-  },
-];
 
 // ── Photo upload component ────────────────────────────────────
 
@@ -348,7 +328,6 @@ function CompanionSettingsForm({
   avatarUrl?: string | null;
 }) {
   const [state, formAction, isPending] = useActionState(updateCompanionSettings, null);
-  const [visibility, setVisibility] = useState<VisibilityLevel>(companion.visibility ?? "public");
 
   // Photo upload state — tracked client-side; URLs are saved via direct Supabase client
   const [currentAvatarUrl, setCurrentAvatarUrl] = useState<string | null>(avatarUrl ?? null);
@@ -438,73 +417,6 @@ function CompanionSettingsForm({
       <div className="gold-divider" />
 
       {/* ── Profile lock ── */}
-      <section>
-        <h2 className="mb-1 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
-          Profile Visibility
-        </h2>
-        <p className="mb-4 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
-          Control who can see your full profile, photos, and contact details.
-        </p>
-
-        <div className="space-y-2">
-          {VISIBILITY_OPTIONS.map((opt) => (
-            <label
-              key={opt.value}
-              className={[
-                "flex cursor-pointer items-start gap-4 rounded-xl border p-4 transition-all",
-                visibility === opt.value
-                  ? "border-white/20 bg-white/[0.04]"
-                  : "border-[rgba(255,255,255,0.07)] hover:border-white/10",
-              ].join(" ")}
-            >
-              <input
-                type="radio"
-                name="visibility"
-                value={opt.value}
-                checked={visibility === opt.value}
-                onChange={() => setVisibility(opt.value)}
-                className="sr-only"
-              />
-              <div className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border ${visibility === opt.value ? "border-white/20 bg-white/[0.07]" : "border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.02)]"}`}>
-                <Icon name={opt.icon} className={`h-4 w-4 ${visibility === opt.value ? "text-gold" : "text-muted/40"}`} />
-              </div>
-              <div className="flex-1">
-                <p className="text-sm text-foreground/90" style={{ fontFamily: "var(--font-dm-sans)" }}>
-                  {opt.label}
-                </p>
-                <p className="mt-0.5 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
-                  {opt.desc}
-                </p>
-              </div>
-            </label>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Unlock fee ── */}
-      <section>
-        <h2 className="mb-1 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
-          Profile Unlock Fee
-        </h2>
-        <p className="mb-4 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
-          Charge a one-time fee for clients to unlock your locked profile. Leave blank for free request-only access.
-        </p>
-        <div className="relative max-w-xs">
-          <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted/40" style={{ fontFamily: "var(--font-dm-sans)" }}>$</span>
-          <input
-            name="profile_unlock_fee"
-            type="number"
-            min="0"
-            step="1"
-            defaultValue={companion.profile_unlock_fee ?? ""}
-            placeholder="e.g. 25"
-            className="auth-input w-full pl-7"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
-          />
-        </div>
-      </section>
-
-      <div className="gold-divider" />
 
       {/* ── Pricing ── */}
       <section>

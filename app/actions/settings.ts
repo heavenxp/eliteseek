@@ -24,7 +24,7 @@ export async function updateCompanionSettings(
 
   if (!companion) return { error: "Profile not found." };
 
-  const visibility = formData.get("visibility") as VisibilityLevel;
+  // Locks removed 16 Jul 2026 — visibility is always public now
   const unlockFeeRaw = formData.get("profile_unlock_fee") as string;
   const subPriceRaw = formData.get("subscription_price") as string;
   const bookingRateRaw = formData.get("booking_rate_hourly") as string;
@@ -57,7 +57,7 @@ export async function updateCompanionSettings(
   const { error } = await supabase
     .from("host_profiles")
     .update({
-      visibility: visibility || "public",
+      visibility: "public",
       profile_unlock_fee: profileUnlockFee && profileUnlockFee > 0 ? profileUnlockFee : null,
       subscription_price: subscriptionPrice && subscriptionPrice > 0 ? subscriptionPrice : null,
       booking_rate_hourly: bookingRateHourly && bookingRateHourly > 0 ? bookingRateHourly : null,

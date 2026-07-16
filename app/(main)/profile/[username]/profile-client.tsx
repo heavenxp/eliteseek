@@ -497,17 +497,6 @@ export function ProfileBody({
           </div>
         )}
 
-        {/* ── Visitor lock notice ── */}
-        {!isOwner && vd && !vd.isFullyVisible && (
-          <LockNotice
-            lockStatus={vd.lockStatus}
-            accessRequestStatus={vd.accessRequestStatus}
-            companionId={companion.id}
-            profile_unlock_fee={companion.profile_unlock_fee}
-            clientTier={vd.clientTier}
-            viewerUserId={viewerUserId}
-          />
-        )}
 
         {/* ── Tabs ── */}
         <div className="sticky top-[65px] z-20 mt-6 -mx-4 bg-[rgba(8,8,16,0.95)] px-4 backdrop-blur-sm">
@@ -564,22 +553,6 @@ export function ProfileBody({
           )}
           {activeTab === "about" && <AboutTab companion={companion} />}
 
-          {/* Locked overlay — covers tab content when profile is not fully visible */}
-          {!isOwner && vd && !vd.isFullyVisible && vd.lockStatus !== "public" && (
-            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-[rgba(8,8,16,0.72)] backdrop-blur-sm">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/[0.04]">
-                <Icon name="lock" className="h-5 w-5 text-muted/40" />
-              </div>
-              <p
-                className="text-sm text-muted/50"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
-              >
-                {vd.lockStatus === "elite_only"
-                  ? "Elite access required to view content"
-                  : "Unlock this profile to view content"}
-              </p>
-            </div>
-          )}
         </div>
       </div>
 
@@ -700,148 +673,6 @@ function OptionsItem({
     </button>
   );
 }
-
-function LockNotice({
-  lockStatus,
-  accessRequestStatus,
-  companionId,
-  profile_unlock_fee,
-  clientTier,
-  viewerUserId,
-}: {
-  lockStatus: "public" | "locked" | "elite_only";
-  accessRequestStatus: string | null;
-  companionId: string;
-  profile_unlock_fee: number | null;
-  clientTier: string;
-  viewerUserId: string | null;
-}) {
-  const [state, formAction, isPending] = useActionState<AccessState, FormData>(
-    sendAccessRequest,
-    null
-  );
-  // Treat as pending if: already pending in DB, just submitted successfully, or in-flight
-  const isRequestPending =
-    accessRequestStatus === "pending" || state?.success === true || isPending;
-  const canRequest =
-    viewerUserId &&
-    (lockStatus === "locked" ||
-      (lockStatus === "elite_only" && clientTier === "silver")) &&
-    !isRequestPending &&
-    accessRequestStatus !== "approved";
-
-  return (
-    <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4">
-      <div className="flex items-start gap-3">
-        <Icon name="lock" className="mt-0.5 h-4 w-4 shrink-0 text-muted/40" />
-        <div className="flex-1">
-          <p
-            className="text-sm font-medium text-foreground/80"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
-          >
-            {lockStatus === "elite_only" ? "Elite Members Only" : "Profile Locked"}
-          </p>
-          <p
-            className="mt-0.5 text-xs text-muted/50"
-            style={{ fontFamily: "var(--font-dm-sans)" }}
-          >
-            {!viewerUserId
-              ? "Sign in to unlock this profile"
-              : lockStatus === "elite_only" && clientTier !== "elite"
-              ? clientTier === "silver"
-                ? "Request access or upgrade to Elite to view this profile"
-                : "Upgrade to Elite membership to access this profile"
-              : "Request access or pay to unlock full photos, bio, and bookings"}
-          </p>
-          {state?.error && (
-            <p
-              className="mt-1.5 text-xs text-red-400/70"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
-            >
-              {state.error}
-            </p>
-          )}
-          <div className="mt-3 flex flex-wrap gap-2">
-            {/* Guest CTA */}
-            {!viewerUserId && (
-              <Link
-                href="/login"
-                className="btn-gold rounded-lg px-4 py-1.5 text-xs"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
-              >
-                Sign in
-              </Link>
-            )}
-
-            {/* Pay-to-unlock */}
-            {viewerUserId && lockStatus === "locked" && profile_unlock_fee && (
-              <form action="/api/access/unlock" method="post">
-                <input type="hidden" name="companion_id" value={companionId} />
-                <input type="hidden" name="amount_paid" value={String(profile_unlock_fee)} />
-                <button
-                  type="submit"
-                  className="btn-gold rounded-lg px-4 py-1.5 text-xs"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
-                >
-                  Unlock · ${profile_unlock_fee}
-                </button>
-              </form>
-            )}
-
-            {/* Request access — server action, no redirect */}
-            {canRequest && (
-              <form action={formAction}>
-                <input type="hidden" name="companion_id" value={companionId} />
-                <button
-                  type="submit"
-                  disabled={isPending}
-                  className="btn-ghost rounded-lg px-4 py-1.5 text-xs disabled:opacity-50"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
-                >
-                  Request Access
-                </button>
-              </form>
-            )}
-
-            {/* Pending state */}
-            {isRequestPending && accessRequestStatus !== "declined" && (
-              <span
-                className="flex items-center gap-1.5 text-xs text-muted/50"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
-              >
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-gold/50" />
-                Request pending
-              </span>
-            )}
-
-            {/* Declined state */}
-            {accessRequestStatus === "declined" && !state?.success && (
-              <span
-                className="text-xs text-red-400/70"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
-              >
-                Access request was not approved
-              </span>
-            )}
-
-            {/* Elite upgrade CTA */}
-            {lockStatus === "elite_only" && clientTier !== "elite" && (
-              <Link
-                href="/membership"
-                className="btn-gold rounded-lg px-4 py-1.5 text-xs"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
-              >
-                Upgrade to Elite
-              </Link>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── Follow list modal ─────────────────────────────────────────
 
 const TIER_BADGE: Record<string, { label: string; cls: string }> = {
   bronze: { label: "Bronze", cls: "bg-[rgba(180,120,60,0.15)] text-[#c87941]" },

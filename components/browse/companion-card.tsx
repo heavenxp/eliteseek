@@ -34,7 +34,7 @@ export function CompanionCard({
   companion: CompanionCardType;
   clientTier?: MembershipTier;
 }) {
-  const lockLevel  = (companion.lock_level ?? "public") as LockLevel;
+  const lockLevel  = "public" as LockLevel; // locks removed 16 Jul 2026
   const isLocked   = lockLevel !== "public";
   const qualifies  = canRequest(lockLevel, clientTier);
   const lockLabel  = isLocked ? LOCK_LABELS[lockLevel as Exclude<LockLevel, "public">] : null;

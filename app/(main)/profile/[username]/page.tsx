@@ -291,11 +291,7 @@ export default async function ProfilePage({
       : stripMediaItems(p.media_urls as MediaItem[]);
   }
 
-  const isFullyVisible =
-    lockStatus === "public" ||
-    hasUnlocked ||
-    accessRequestStatus === "approved" ||
-    (lockStatus === "elite_only" && clientTier === "elite");
+  const isFullyVisible = true; // locks removed 16 Jul 2026 — membership is badges/perks, never a gate
 
   return (
     <ProfileBody

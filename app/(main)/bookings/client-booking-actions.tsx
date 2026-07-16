@@ -7,7 +7,7 @@ import {
   disputeBooking,
   cancelBookingAsClient,
 } from "@/app/actions/escrow";
-import { CANCELLATION_POLICIES, refundFraction, isCancellationPolicy } from "@/lib/cancellation";
+import { decayRefundFraction } from "@/lib/cancellation";
 import type { EscrowStatus } from "@/lib/database.types";
 
 type Props = {
@@ -16,7 +16,7 @@ type Props = {
   escrowStatus: EscrowStatus;
   releaseAt: string | null;
   scheduledAt: string;
-  cancellationPolicy: string | null;
+  cancellationPolicy?: string | null; // vestigial — curve replaced tiers
 };
 
 export function ClientBookingActions({
@@ -25,7 +25,6 @@ export function ClientBookingActions({
   escrowStatus,
   releaseAt,
   scheduledAt,
-  cancellationPolicy,
 }: Props) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
@@ -43,9 +42,8 @@ export function ClientBookingActions({
     });
   }
 
-  const policy = isCancellationPolicy(cancellationPolicy) ? cancellationPolicy : "moderate";
   const hoursUntil = (new Date(scheduledAt).getTime() - Date.now()) / 3600_000;
-  const refundPct = Math.round(refundFraction(policy, hoursUntil) * 100);
+  const refundPct = Math.round(decayRefundFraction(hoursUntil) * 100);
 
   const needsPayment = status === "confirmed" && escrowStatus === "unpaid";
   const disputeWindowOpen =
@@ -109,7 +107,7 @@ export function ClientBookingActions({
         <div className="flex flex-wrap items-center gap-2 rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] px-3 py-2">
           <p className="text-[11px] text-muted/60" style={{ fontFamily: "var(--font-dm-sans)" }}>
             {escrowStatus === "held"
-              ? `${CANCELLATION_POLICIES[policy].label} policy: you'd be refunded ${refundPct}% right now.`
+              ? `You'd be refunded ${refundPct}% right now${refundPct === 0 ? " — refunds are locked inside 48h" : refundPct < 100 ? " — the refund slides down as the booking approaches" : ""}.`
               : "Cancel this request?"}
           </p>
           <button

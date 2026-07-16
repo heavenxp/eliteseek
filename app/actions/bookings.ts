@@ -90,13 +90,6 @@ export async function createBookingRequest(
   const platformFee = +(totalAmount * 0.15).toFixed(2);
   const companionEarnings = +(totalAmount - platformFee).toFixed(2);
 
-  const { data: hostRow } = await supabase
-    .from("host_profiles")
-    .select("cancellation_policy")
-    .eq("id", companionId)
-    .single();
-  const hostPolicy = hostRow?.cancellation_policy ?? "moderate";
-
   const { data: booking, error } = await supabase
     .from("bookings")
     .insert({
@@ -111,9 +104,6 @@ export async function createBookingRequest(
       platform_fee: platformFee,
       companion_earnings: companionEarnings,
       status: "pending",
-      // Snapshot the host's cancellation policy so later changes can't
-      // retroactively alter refund terms for this booking
-      cancellation_policy: hostPolicy,
     })
     .select("id")
     .single();

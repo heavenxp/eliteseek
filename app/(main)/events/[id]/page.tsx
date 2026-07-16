@@ -4,6 +4,10 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getEvent, joinEvent, createEventTicketCheckout } from "@/app/actions/events";
 import { ShareLinkButton } from "@/components/events/share-link-button";
+import { RefundTimeline } from "@/components/events/refund-timeline";
+import { eventStart } from "@/lib/event-time";
+import { decayRefundFraction } from "@/lib/cancellation";
+import { CancelTicketButton } from "@/components/events/cancel-ticket-button";
 import { EventChat } from "./event-chat";
 import { EventActions } from "./event-actions";
 
@@ -193,6 +197,23 @@ export default async function EventPage({
           )}
         </div>
       </div>
+
+      {/* Refund timer (paid events) + ticket-holder cancel */}
+      {Number(event.price) > 0 && (
+        <div className="mb-4">
+          <RefundTimeline start={eventStart(event.date, event.time)} />
+          {isMember && !isCreator && (
+            <CancelTicketButton
+              eventId={event.id}
+              refundPctNow={Math.round(
+                decayRefundFraction(
+                  (eventStart(event.date, event.time).getTime() - Date.now()) / 3600_000
+                ) * 100
+              )}
+            />
+          )}
+        </div>
+      )}
 
       {/* Share (public events) */}
       {event.visibility === "public" && (

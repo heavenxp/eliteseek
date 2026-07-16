@@ -554,41 +554,6 @@ function CompanionSettingsForm({
 
       <div className="gold-divider" />
 
-      {/* ── Cancellation policy ── */}
-      <section>
-        <h2 className="mb-1 text-xl font-light text-foreground" style={{ fontFamily: "var(--font-cormorant)" }}>
-          Cancellation Policy
-        </h2>
-        <p className="mb-4 text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>
-          Applies when a client cancels. Each booking locks in the policy active when it was made.
-        </p>
-        <div className="space-y-2">
-          {([
-            { value: "flexible", label: "Flexible", desc: "Full refund until 24h before; 50% after" },
-            { value: "moderate", label: "Moderate", desc: "Full refund until 5 days before; 50% until 24h; none inside 24h" },
-            { value: "strict", label: "Strict", desc: "50% refund until 7 days before; none inside 7 days" },
-          ] as const).map((opt) => (
-            <label
-              key={opt.value}
-              className="flex cursor-pointer items-center gap-3 rounded-xl border border-[rgba(255,255,255,0.07)] bg-[rgba(255,255,255,0.02)] px-4 py-3 transition-colors has-[:checked]:border-white/20 has-[:checked]:bg-white/[0.04]"
-            >
-              <input
-                type="radio"
-                name="cancellation_policy"
-                value={opt.value}
-                defaultChecked={(companion.cancellation_policy ?? "moderate") === opt.value}
-                className="h-3.5 w-3.5 accent-gold"
-              />
-              <div>
-                <p className="text-sm text-foreground/80" style={{ fontFamily: "var(--font-dm-sans)" }}>{opt.label}</p>
-                <p className="text-xs text-muted/50" style={{ fontFamily: "var(--font-dm-sans)" }}>{opt.desc}</p>
-              </div>
-            </label>
-          ))}
-        </div>
-      </section>
-
-      <div className="gold-divider" />
 
       {/* ── Trusted contact (SOS) ── */}
       <section>

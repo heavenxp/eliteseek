@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { after } from "next/server";
 import { scanContent, recordModeration } from "@/lib/moderation";
-import { eventEnd } from "@/lib/event-time";
+import { eventStart, eventEnd } from "@/lib/event-time";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { notify } from "@/app/actions/notifications";
 
@@ -541,6 +541,32 @@ export async function deleteEvent(eventId: string): Promise<{ error?: string }> 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
+  // Creator cancellation refunds every held ticket 100% (PIVOT rule)
+  // before anything is deleted; blocked once any payout has released.
+  const { data: tickets } = await admin
+    .from("event_tickets")
+    .select("id, escrow_status, stripe_payment_intent_id, amount")
+    .eq("event_id", eventId);
+  if ((tickets ?? []).some((t) => t.escrow_status === "released")) {
+    return { error: "Payouts for this event have already been released — contact support to cancel." };
+  }
+  const { getStripe } = await import("@/lib/stripe");
+  const stripe = getStripe();
+  for (const t of tickets ?? []) {
+    if (["held", "release_scheduled"].includes(t.escrow_status) && t.stripe_payment_intent_id && stripe) {
+      try {
+        await stripe.refunds.create({ payment_intent: t.stripe_payment_intent_id });
+        await admin
+          .from("event_tickets")
+          .update({ escrow_status: "refunded", refunded_amount: t.amount })
+          .eq("id", t.id);
+      } catch (e) {
+        console.error(`[deleteEvent] refund failed for ticket ${t.id}:`, e);
+        return { error: "A ticket refund failed — the event was NOT deleted. Try again or contact support." };
+      }
+    }
+  }
+
   // Notify all members before deletion (cascade will remove the rows)
   const [eventRes, membersRes] = await Promise.all([
     admin.from("events").select("title").eq("id", eventId).eq("creator_id", user.id).single(),
@@ -816,4 +842,73 @@ export async function getPulseFeed(): Promise<PulseEvent[]> {
     );
   });
   return feed;
+}
+
+// ── Guest cancels their ticket: decay-curve refund, seat freed ──
+
+export async function cancelEventTicket(eventId: string): Promise<{ error?: string; refundedPct?: number }> {
+  const { getStripe } = await import("@/lib/stripe");
+  const { decayRefundFraction } = await import("@/lib/cancellation");
+  const stripe = getStripe();
+
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+
+  const admin = createAdminClient();
+  const [{ data: ticket }, { data: ev }] = await Promise.all([
+    admin
+      .from("event_tickets")
+      .select("id, amount, escrow_status, stripe_payment_intent_id, refunded_amount")
+      .eq("event_id", eventId)
+      .eq("user_id", user.id)
+      .maybeSingle(),
+    admin.from("events").select("date, time, end_time, creator_id, title").eq("id", eventId).single(),
+  ]);
+  if (!ticket || !ev) return { error: "Ticket not found." };
+  if (ticket.escrow_status !== "held") {
+    return { error: "This ticket can no longer be cancelled." };
+  }
+  if (eventEnd(ev.date, ev.end_time) < new Date()) {
+    return { error: "This event has already ended." };
+  }
+
+  const hoursUntil = (eventStart(ev.date, ev.time).getTime() - Date.now()) / 3600_000;
+  const fraction = decayRefundFraction(hoursUntil);
+  const refundAmount = +(Number(ticket.amount) * fraction).toFixed(2);
+
+  if (refundAmount > 0) {
+    if (!stripe || !ticket.stripe_payment_intent_id) {
+      return { error: "Refund isn't available right now — try again later." };
+    }
+    await stripe.refunds.create({
+      payment_intent: ticket.stripe_payment_intent_id,
+      amount: Math.round(refundAmount * 100),
+    });
+  }
+
+  // Full refund closes the ticket; a partial leaves the remainder held —
+  // the cron releases it to the creator after the event (payable already
+  // subtracts refunded_amount).
+  await admin
+    .from("event_tickets")
+    .update({
+      refunded_amount: refundAmount,
+      ...(fraction >= 1 ? { escrow_status: "refunded" } : {}),
+    })
+    .eq("id", ticket.id)
+    .eq("escrow_status", "held");
+
+  // Seat freed either way
+  await admin.from("event_members").delete().eq("event_id", eventId).eq("user_id", user.id);
+
+  await notify({
+    userId: ev.creator_id,
+    type: "event_cancelled",
+    title: "An attendee cancelled their ticket",
+    body: `${ev.title} — ${Math.round(fraction * 100)}% refunded per the refund timer; the remainder stays yours.`,
+    link: `/events/${eventId}`,
+  });
+
+  return { refundedPct: Math.round(fraction * 100) };
 }

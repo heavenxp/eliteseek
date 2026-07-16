@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getStripe, getOrigin } from "@/lib/stripe";
-import { refundFraction, isCancellationPolicy, DISPUTE_WINDOW_HOURS } from "@/lib/cancellation";
+import { decayRefundFraction, DISPUTE_WINDOW_HOURS } from "@/lib/cancellation";
 import { notify } from "@/app/actions/notifications";
 
 // ── Phase 4: Stripe-native escrow (separate charges & transfers) ──
@@ -234,7 +234,7 @@ export async function cancelBookingAsClient(bookingId: string): Promise<EscrowRe
   const { data: booking } = await supabase
     .from("bookings")
     .select(
-      "id, status, escrow_status, scheduled_at, total_amount, cancellation_policy, stripe_payment_intent_id, companion:host_profiles!companion_id (user_id)"
+      "id, status, escrow_status, scheduled_at, total_amount, stripe_payment_intent_id, companion:host_profiles!companion_id (user_id)"
     )
     .eq("id", bookingId)
     .eq("client_id", user.id)
@@ -244,11 +244,8 @@ export async function cancelBookingAsClient(bookingId: string): Promise<EscrowRe
     return { error: "This booking can no longer be cancelled." };
   }
 
-  const policy = isCancellationPolicy(booking.cancellation_policy)
-    ? booking.cancellation_policy
-    : "moderate";
   const hoursUntil = (new Date(booking.scheduled_at).getTime() - Date.now()) / 3600_000;
-  const fraction = refundFraction(policy, hoursUntil);
+  const fraction = decayRefundFraction(hoursUntil);
   const refundAmount = +(booking.total_amount * fraction).toFixed(2);
 
   if (booking.escrow_status === "held" && booking.stripe_payment_intent_id && stripe) {
@@ -264,7 +261,7 @@ export async function cancelBookingAsClient(bookingId: string): Promise<EscrowRe
       .update({
         status: "cancelled",
         cancelled_at: new Date().toISOString(),
-        cancellation_reason: `Client cancelled (${policy}: ${Math.round(fraction * 100)}% refund)`,
+        cancellation_reason: `Client cancelled (decay curve: ${Math.round(fraction * 100)}% refund)`,
         refunded_amount: refundAmount,
         // Non-refunded remainder is owed to the host — schedule its release
         ...(remainder > 0

@@ -7,6 +7,7 @@ import { createGuestTicketCheckout } from "@/app/actions/guest-tickets";
 import { VerifiedBadge } from "@/components/badges/verified-badge";
 import { eventStart, eventEnd, EVENT_TZ } from "@/lib/event-time";
 import { Icon } from "@/components/icons";
+import { RefundTimeline } from "@/components/events/refund-timeline";
 
 // ── Public event share page (PIVOT §2: the growth loop) ───────
 // Viewable with NO account; the page itself is the social link preview.
@@ -236,6 +237,13 @@ export default async function EventSharePage({
           >
             {ev.description}
           </p>
+        )}
+
+        {/* Refund timer — transparency before the CTA */}
+        {price > 0 && !ended && !soldOut && (
+          <div className="mt-6">
+            <RefundTimeline start={start} />
+          </div>
         )}
 
         {/* CTA */}

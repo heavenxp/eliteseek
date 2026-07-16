@@ -129,7 +129,8 @@ The events pivot replaces the original Phase 6 (Melbourne Launch). Tracking:
 
 ### Phase 8 — Melbourne Launch (revised)
 - [ ] 15–20 founding hosts with existing audiences; inner-Melbourne depth; online events funnel; "this week in Melbourne" launch surface
-- [ ] Ops gates (unchanged): HIVE_API_KEY, CRON_SECRET + GH Actions cron, Stripe dashboard items, dispute-resolution admin UI, USD→AUD decision, end-to-end escrow test, rename/domain decision
+- [ ] Ops gates: HIVE_API_KEY, Stripe dashboard items, dispute-resolution admin UI, USD→AUD decision, end-to-end escrow test, rename/domain decision
+- [x] ~~CRON_SECRET + GH Actions cron~~ — CLOSED 16 Jul 2026: secret live in Vercel (Production+Preview, Sensitive) and GitHub Actions; escrow-cron.yml on main firing every 30 min; manual dispatch verified end-to-end (200, {"released":0,"releaseSkipped":0,"sosNotified":0})
 
 ---
 

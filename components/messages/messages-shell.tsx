@@ -12,7 +12,7 @@ export function MessagesShell({ sidebar, children }: Props) {
   const hasConversation = pathname !== "/messages";
 
   return (
-    <div className="flex h-[calc(100dvh-80px)] md:h-[calc(100dvh-65px)]">
+    <div className="flex h-[calc(100dvh-104px)] md:h-dvh">
       {/* Sidebar — hidden on mobile when a conversation is open */}
       <div
         className={[

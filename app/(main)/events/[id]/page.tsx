@@ -101,7 +101,7 @@ export default async function EventPage({
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8 md:px-6 md:py-12">
+    <div className="mx-auto max-w-xl px-4 py-4 md:px-6 md:py-6">
       {/* Back */}
       <Link
         href="/events"

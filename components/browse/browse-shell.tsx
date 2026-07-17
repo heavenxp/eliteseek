@@ -28,7 +28,7 @@ export function BrowseShell({ children, activeFilters }: Props) {
   );
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-10">
+    <div className="mx-auto max-w-6xl px-4 py-4 md:px-6 md:py-6">
       {/* Mobile: search + filter bar */}
       <div className="mb-6 flex items-center gap-3 md:hidden">
         <SearchInput defaultValue={searchParams.get("q") ?? ""} onSearch={updateSearch} />

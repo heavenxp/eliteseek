@@ -45,9 +45,9 @@ export function CompanionCard({
     : `/companion/${companion.id}`;
 
   const card = (
-    <div className="group block overflow-hidden rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.03)] transition-all duration-300 hover:border-white/20">
+    <div className="group block overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] transition-colors hover:border-white/20">
       {/* Image area */}
-      <div className={`companion-placeholder relative h-64 w-full overflow-hidden bg-white/[0.04] ${isLocked ? "blur-[3px]" : ""}`}>
+      <div className={`companion-placeholder relative aspect-[4/5] w-full overflow-hidden bg-white/[0.04] ${isLocked ? "blur-[3px]" : ""}`}>
         {companion.cover_image_url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -89,7 +89,7 @@ export function CompanionCard({
       </div>
 
       {/* Card body */}
-      <div className={`p-4 ${isLocked ? "blur-[2px]" : ""}`}>
+      <div className={`p-3 ${isLocked ? "blur-[2px]" : ""}`}>
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
             <p className="truncate text-base font-semibold text-foreground">

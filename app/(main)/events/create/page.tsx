@@ -10,7 +10,7 @@ export default async function CreateEventPage() {
   if (!user) redirect("/login");
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8 md:px-6 md:py-12">
+    <div className="mx-auto max-w-xl px-4 py-4 md:px-6 md:py-6">
       <div className="mb-8">
         <h1
           className="text-xl font-bold tracking-tight text-foreground"

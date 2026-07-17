@@ -19,9 +19,9 @@ export default async function EventsPage() {
   const joinedEventIds = (membershipsData.data ?? []).map((m) => m.event_id as string);
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8 md:px-6 md:py-12">
+    <div className="mx-auto max-w-3xl px-4 py-4 md:px-6 md:py-6">
       {/* Header */}
-      <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1
             className="text-xl font-bold tracking-tight text-foreground"

@@ -35,7 +35,6 @@ export default async function BrowsePage({
   const tags = typeof sp.tags === "string" && sp.tags ? sp.tags.split(",").filter(Boolean) : [];
   const tier = typeof sp.tier === "string" ? sp.tier : "";
   const city = typeof sp.city === "string" ? sp.city.trim() : "";
-  const available = sp.available === "1";
   const sort = typeof sp.sort === "string" ? sp.sort : "featured";
   const page = Math.max(1, parseInt(typeof sp.page === "string" ? sp.page : "1", 10) || 1);
   const offset = (page - 1) * PAGE_SIZE;
@@ -54,7 +53,6 @@ export default async function BrowsePage({
   if (tags.length > 0) query = query.overlaps("tags", tags);
   if (tier === "verified" || tier === "select") query = query.eq("verification_tier", tier);
   if (city) query = query.ilike("location", `%${city}%`);
-  if (available) query = query.eq("is_available", true);
 
   switch (sort) {
     case "rating":
@@ -62,12 +60,6 @@ export default async function BrowsePage({
       break;
     case "newest":
       query = query.order("created_at", { ascending: false });
-      break;
-    case "price_asc":
-      query = query.order("booking_rate_hourly", { ascending: true, nullsFirst: false });
-      break;
-    case "price_desc":
-      query = query.order("booking_rate_hourly", { ascending: false, nullsFirst: false });
       break;
     default:
       query = query
@@ -87,7 +79,7 @@ export default async function BrowsePage({
   const companions = (data as CompanionCardType[] | null) ?? [];
   const totalCount = count ?? 0;
   const totalPages = Math.ceil(totalCount / PAGE_SIZE);
-  const activeFilters = (tags.length > 0 ? 1 : 0) + (tier ? 1 : 0) + (available ? 1 : 0);
+  const activeFilters = (tags.length > 0 ? 1 : 0) + (tier ? 1 : 0) + (city ? 1 : 0);
 
   const clientTier = (membershipResult.data?.membership_tier ?? "bronze") as MembershipTier;
 

@@ -4,13 +4,12 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useTransition, useCallback } from "react";
 import { Icon } from "@/components/icons";
 
-const EXPERIENCE_TAGS = ["Dinners", "Events", "Travel", "Social", "Virtual Sessions", "Galas", "Art", "Fashion"];
+const EXPERIENCE_TAGS = ["Running", "Trivia", "Art", "Languages", "Wine", "Coffee", "Yoga", "Social", "Events", "Culture", "Wellness", "Walks"];
+// Hosts are discovered by their events — never sorted by price
 const SORT_OPTIONS = [
   { value: "featured", label: "Featured" },
   { value: "rating", label: "Highest rated" },
   { value: "newest", label: "Newest" },
-  { value: "price_asc", label: "Price: low to high" },
-  { value: "price_desc", label: "Price: high to low" },
 ];
 
 export function FiltersPanel({ onClose }: { onClose?: () => void }) {
@@ -21,8 +20,7 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
 
   const currentTags = (searchParams.get("tags") ?? "").split(",").filter(Boolean);
   const currentTier = searchParams.get("tier") ?? "";
-  const currentAvailable = searchParams.get("available") === "1";
-  const currentSort = searchParams.get("sort") ?? "featured";
+    const currentSort = searchParams.get("sort") ?? "featured";
   const currentCity = searchParams.get("city") ?? "";
 
   const updateParam = useCallback(
@@ -48,7 +46,7 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
     updateParam({ tags: next.join(",") });
   };
 
-  const hasFilters = currentTags.length > 0 || currentTier || currentAvailable || currentCity;
+  const hasFilters = currentTags.length > 0 || currentTier || currentCity;
 
   const clearAll = () => {
     startTransition(() => {
@@ -145,29 +143,6 @@ export function FiltersPanel({ onClose }: { onClose?: () => void }) {
 
       <div className="gold-divider" />
 
-      {/* Availability */}
-      <div>
-        <p className="mb-2 text-xs uppercase tracking-[0.12em] text-muted/50">
-          Availability
-        </p>
-        <button
-          onClick={() => updateParam({ available: currentAvailable ? "" : "1" })}
-          className={[
-            "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 transition-all",
-            currentAvailable
-              ? "border border-white/20 bg-white/[0.04]"
-              : "border border-[rgba(255,255,255,0.05)] hover:border-white/10",
-          ].join(" ")}
-        >
-          <div className={`h-2 w-2 rounded-full ${currentAvailable ? "bg-emerald-400" : "bg-muted/30"}`} />
-          <span className={`text-sm ${currentAvailable ? "text-foreground" : "text-muted"}`}>
-            Available now
-          </span>
-          {currentAvailable && <Icon name="check" className="ml-auto h-3.5 w-3.5 text-gold" />}
-        </button>
-      </div>
-
-      <div className="gold-divider" />
 
       {/* Verification tier */}
       <div>

@@ -838,7 +838,6 @@ function AboutTab({ companion }: { companion: CompanionData }) {
   if (companion.age) rows.push(["Age", String(companion.age)]);
   if (companion.location) rows.push(["Based in", companion.location]);
   if (companion.languages.length > 0) rows.push(["Languages", companion.languages.join(", ")]);
-  if (companion.booking_rate_hourly) rows.push(["Hourly rate", `$${companion.booking_rate_hourly}`]);
 
   return (
     <div className="space-y-6">

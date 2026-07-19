@@ -60,20 +60,6 @@ export function CompanionCard({
         )}
         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[rgba(8,8,16,0.7)] to-transparent" />
 
-        {/* Top badges */}
-        <div className="absolute left-3 top-3 flex items-center gap-2">
-          {companion.is_available ? (
-            <span className="flex items-center gap-1.5 rounded-full bg-[rgba(8,8,16,0.65)] px-2.5 py-1 text-[10px] text-emerald-400 backdrop-blur-sm">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
-              Available
-            </span>
-          ) : (
-            <span className="flex items-center gap-1.5 rounded-full bg-[rgba(8,8,16,0.65)] px-2.5 py-1 text-[10px] text-muted/60 backdrop-blur-sm">
-              <span className="h-1.5 w-1.5 rounded-full bg-muted/40" />
-              Unavailable
-            </span>
-          )}
-        </div>
 
         {/* Verification seal — the primary trust mark */}
         <div className="absolute right-3 top-3">
@@ -94,9 +80,6 @@ export function CompanionCard({
           <div className="min-w-0">
             <p className="truncate text-base font-semibold text-foreground">
               {companion.display_name}
-              {companion.age && (
-                <span className="ml-1.5 text-base text-muted/50">{companion.age}</span>
-              )}
             </p>
             {companion.host_tier && companion.host_tier !== "pearl" && (
               <TierBadge type="host" tier={companion.host_tier} />

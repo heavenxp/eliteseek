@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { MagicCard } from "@/components/ui/magic-card";
+import { NumberTicker } from "@/components/ui/number-ticker";
 import { VerifiedBadge } from "@/components/badges/verified-badge";
 import { Icon } from "@/components/icons";
 import { eventStart, melbourneDayDiff, EVENT_TZ } from "@/lib/event-time";
@@ -29,10 +31,8 @@ export function PulseCard({ event, now }: { event: PulseEvent; now: Date }) {
   const urgent = countdownLabel(event.date, event.time, now);
 
   return (
-    <Link
-      href={`/events/${event.id}`}
-      className="group block overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] transition-colors hover:border-white/20"
-    >
+    <Link href={`/events/${event.id}`} className="group block">
+      <MagicCard className="overflow-hidden rounded-2xl" gradientSize={260} gradientOpacity={0.5}>
       {/* Cover */}
       <div className="relative aspect-[1.91/1] w-full overflow-hidden">
         {event.cover_image_url ? (
@@ -127,7 +127,7 @@ export function PulseCard({ event, now }: { event: PulseEvent; now: Date }) {
               </div>
             )}
             <span className="text-xs text-muted/50">
-              {event.memberCount} going
+              <NumberTicker value={event.memberCount} className="text-xs font-medium tabular-nums text-muted/70" /> going
             </span>
           </div>
 
@@ -144,6 +144,7 @@ export function PulseCard({ event, now }: { event: PulseEvent; now: Date }) {
           )}
         </div>
       </div>
+      </MagicCard>
     </Link>
   );
 }
